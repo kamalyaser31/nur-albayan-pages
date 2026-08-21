@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>صفحات نور البيان</title>
+<meta name="description" content="مجموعة صفحات نور البيان">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    background: #f5f6fa;
+    color: #2c3e50;
+    line-height: 1.8;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    background: #1e5631;
+    color: #fff;
+    text-align: center;
+    padding: 48px 20px 40px;
+  }
+
+  header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  header p {
+    margin-top: 8px;
+    font-size: 1rem;
+    opacity: 0.85;
+  }
+
+  main {
+    flex: 1;
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 20px 48px;
+  }
+
+  .count {
+    color: #7f8c8d;
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+    text-align: left;
+  }
+
+  ul.pages {
+    list-style: none;
+    background: #fff;
+    border: 1px solid #e3e6ee;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+
+  ul.pages li {
+    border-bottom: 1px solid #eef0f5;
+  }
+
+  ul.pages li:last-child {
+    border-bottom: none;
+  }
+
+  ul.pages a {
+    display: block;
+    padding: 16px 22px;
+    text-decoration: none;
+    color: #2c3e50;
+    font-size: 1.05rem;
+    transition: background 0.15s ease, padding-right 0.15s ease;
+  }
+
+  ul.pages a:hover {
+    background: #f0f7f2;
+    color: #1e5631;
+    padding-right: 30px;
+  }
+
+  ul.pages a::before {
+    content: "‹";
+    margin-left: 10px;
+    color: #1e5631;
+    font-weight: bold;
+  }
+
+  .empty {
+    text-align: center;
+    color: #95a5a6;
+    padding: 40px 20px;
+    background: #fff;
+    border: 1px dashed #d5d9e0;
+    border-radius: 12px;
+  }
+
+  footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 0.85rem;
+    color: #95a5a6;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>صفحات نور البيان</h1>
+  <p>قائمة بجميع الصفحات المتاحة</p>
+</header>
+
+<main>
+  <p class="count" id="count"></p>
+  <!-- LINKS-START -->
+  <div class="empty">لا توجد صفحات بعد — أضف ملفات HTML إلى مجلد pages ثم شغّل update_index.py</div>
+    <!-- LINKS-END -->
+</main>
+
+<footer>نور البيان</footer>
+
+<script>
+  var items = document.querySelectorAll("ul.pages li");
+  if (items.length) {
+    document.getElementById("count").textContent = "عدد الصفحات: " + items.length;
+  }
+</script>
+
+</body>
+</html>
