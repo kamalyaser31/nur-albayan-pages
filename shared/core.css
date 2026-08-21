@@ -1,0 +1,251 @@
+/**
+ * Nour Al-Bayan Interactive Platform - Shared Core Stylesheet
+ * Contains layout, animations, font definitions, and interactive game themes.
+ */
+
+body {
+    font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #f0fdf4;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+}
+
+/* Quranic and Arabic Typography */
+.quran-font,
+.quran-special-font {
+    font-family: 'Traditional Arabic', 'Amiri', serif;
+    font-weight: bold;
+}
+
+/* Word Colors */
+.c-red, .c0 { color: #dc2626; }
+.c-blue, .c1 { color: #2563eb; }
+.c-black, .c2 { color: #1e293b; }
+.c-purple { color: #9333ea; }
+.sep-bar { color: #cbd5e1; margin: 0 4px; font-weight: 300; }
+
+/* Custom Scrollbar for Wordwall Boxes */
+.custom-scrollbar::-webkit-scrollbar { width: 8px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* Game Tabs */
+.game-tab { transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.game-tab.active {
+    background-color: #10b981 !important;
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(16, 185, 129, 0.3);
+    border-color: #059669;
+}
+
+/* Wordwall Boxes */
+.wordwall-box { perspective: 1200px; cursor: pointer; }
+.wordwall-box-inner { transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
+.wordwall-box.opened .wordwall-box-inner { transform: rotateY(180deg); }
+.box-front, .box-back { backface-visibility: hidden; position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.box-back { transform: rotateY(180deg); }
+
+/* Random Cards Pile */
+.card-pile { position: relative; width: 200px; height: 280px; perspective: 1200px; }
+@media (max-width: 640px) { .card-pile { width: 160px; height: 220px; } }
+.stacked-card {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 1.5rem;
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform-style: preserve-3d;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Giant Word Overlay */
+.giant-word-overlay {
+    backdrop-filter: blur(8px);
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+@keyframes popIn {
+    0% { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Tic-Tac-Toe Game */
+.xo-board-container { width: 100%; max-width: 60vh; aspect-ratio: 1 / 1; margin: 0 auto; }
+.xo-cell-new {
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    border-radius: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(4rem, 12vmin, 8rem);
+    font-weight: 900;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1), inset 0 -3px 0 rgba(0, 0, 0, 0.05);
+}
+.xo-cell-new:active { transform: scale(0.92); box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+.xo-x { color: #f43f5e; text-shadow: 0 4px 8px rgba(244, 63, 94, 0.25); }
+.xo-o { color: #3b82f6; text-shadow: 0 4px 8px rgba(59, 130, 246, 0.25); }
+
+/* Connect 4 Game */
+.c4-board-new {
+    background: #1e40af;
+    padding: 0.8rem;
+    border-radius: 1.5rem;
+    display: inline-grid;
+    gap: 6px;
+    box-shadow: inset 0 8px 16px rgba(0, 0, 0, 0.4), 0 10px 20px rgba(0, 0, 0, 0.15);
+    border-bottom: 8px solid #172554;
+}
+.c4-cell-new {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    cursor: pointer;
+    background: #0f172a;
+    box-shadow: inset 0 6px 10px rgba(0, 0, 0, 0.8);
+    position: relative;
+    overflow: hidden;
+}
+@media(min-width: 480px) { .c4-cell-new { width: 44px; height: 44px; } }
+.c4-red-new {
+    background: radial-gradient(circle at 35% 35%, #fca5a5, #ef4444, #991b1b);
+    box-shadow: inset -3px -3px 6px rgba(0, 0, 0, 0.4), inset 3px 3px 6px rgba(255, 255, 255, 0.4);
+    animation: dropIn 0.4s forwards;
+}
+.c4-yellow-new {
+    background: radial-gradient(circle at 35% 35%, #fef08a, #eab308, #854d0e);
+    box-shadow: inset -3px -3px 6px rgba(0, 0, 0, 0.4), inset 3px 3px 6px rgba(255, 255, 255, 0.4);
+    animation: dropIn 0.4s forwards;
+}
+
+/* Memory Match Game */
+.mem-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 300px; margin: 0 auto; direction: ltr; }
+.mem-scene { width: 65px; height: 65px; perspective: 600px; }
+.mem-card { width: 100%; height: 100%; position: relative; transition: transform 0.5s; transform-style: preserve-3d; cursor: pointer; }
+.mem-card.is-flipped { transform: rotateY(180deg); }
+.mem-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+.mem-face-front { background: linear-gradient(135deg, #a855f7, #7e22ce); color: white; font-weight: 900; border: 2px solid #d8b4fe; }
+.mem-face-back { background: #ffffff; transform: rotateY(180deg); border: 2px solid #e2e8f0; }
+
+/* Word Display Layouts */
+.letter-box {
+    background: white;
+    border-radius: 3rem;
+    width: 100%;
+    max-width: 920px;
+    height: 42vh;
+    min-height: 240px;
+    max-height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(3rem, 11vh, 8rem);
+    padding: 20px;
+    line-height: 1.8;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.segmented-container {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    padding: 0.5rem;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.seg-box {
+    background: white;
+    border-radius: 1.8rem;
+    min-width: 22vmin;
+    width: 22vmin;
+    height: 30vmin;
+    max-width: 220px;
+    max-height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(5rem, 14vmin, 10rem);
+    padding: 0.5rem;
+    line-height: 1;
+    box-shadow: 0 10px 22px -8px rgba(0, 0, 0, 0.12);
+}
+
+.word-wrapper {
+    display: inline-block;
+    direction: rtl;
+    white-space: normal;
+    word-spacing: 0.2em;
+}
+
+/* Color Themes */
+.theme-green, .seg-box.theme-green { border: 8px solid #bbf7d0; box-shadow: inset 0 0 40px rgba(74, 222, 128, 0.15), 0 10px 20px rgba(0,0,0,0.05); }
+.theme-pink, .seg-box.theme-pink   { border: 8px solid #fbcfe8; box-shadow: inset 0 0 40px rgba(244, 114, 182, 0.15), 0 10px 20px rgba(0,0,0,0.05); }
+.theme-yellow, .seg-box.theme-yellow { border: 8px solid #fef08a; box-shadow: inset 0 0 40px rgba(234, 179, 8, 0.15), 0 10px 20px rgba(0,0,0,0.05); }
+.theme-blue, .seg-box.theme-blue   { border: 8px solid #bfdbfe; box-shadow: inset 0 0 40px rgba(96, 165, 250, 0.15), 0 10px 20px rgba(0,0,0,0.05); }
+
+/* Feedback Badge */
+.feedback-badge {
+    position: fixed;
+    top: 16vh;
+    left: 50%;
+    transform: translateX(-50%) scale(0.5);
+    z-index: 1000;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    opacity: 0;
+}
+.feedback-badge.active {
+    transform: translateX(-50%) scale(1.1);
+    opacity: 1;
+}
+
+/* Animations */
+@keyframes dropIn {
+    0% { transform: translateY(-300px); opacity: 0; }
+    60% { transform: translateY(15px); opacity: 1; }
+    80% { transform: translateY(-8px); }
+    100% { transform: translateY(0); }
+}
+
+.win-anim { animation: winPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) infinite alternate; }
+@keyframes winPop {
+    from { transform: scale(1); }
+    to { transform: scale(1.08) rotate(1.5deg); }
+}
+
+@keyframes pulseRed {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+.pulse-danger { animation: pulseRed 1s infinite; }
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 240px;
+    margin: 0 auto;
+    height: 160px;
+}
