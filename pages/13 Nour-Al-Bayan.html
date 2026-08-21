@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nour Al-Bayan - Segmented English Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Fredoka:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/core.css">
+</head>
+<body class="flex flex-col items-center select-none bg-emerald-50/40">
+    <script>
+        window.PAGE_CONFIG = {
+            title: 'Nour Al-Bayan',
+            subtitle: 'Segmented English Edition',
+            footer: 'Nour Al-Bayan Learning System • Segmented English Edition',
+            game3: 'memory'
+        };
+
+        const _themes = ["pink","green","blue","yellow"];
+        const R = "#ef4444", B = "#2563eb", G = "#10b981", P = "#9333ea", O = "#f97316", L = "#84cc16", D = "#1e293b";
+        const _raw = [
+            [`<span style="color:${R}">ـئِـ</span>`,"normal"],
+            [`<span style="color:${G}">ـبِـ</span>`,"normal"],
+            [`<span style="color:${B}">ـتِـ</span>`,"speed"],
+            [`<span style="color:${P}">ـثِـ</span>`,"normal"],
+            [`<span style="color:${O}">ـجِـ</span>`,"golden"],
+            [`<span style="color:${L}">ـحِـ</span>`,"normal"],
+            [`<span style="color:${R}">ـخِـ</span>`,"normal"],
+            [`<span style="color:${B}">ـدِ</span>`,"danger"],
+            [`<span style="color:${G}">ـذِ</span>`,"normal"],
+            [`<span style="color:${P}">ـرِ</span>`,"normal"],
+            [`<span style="color:${D}">ـزِ</span>`,"golden"],
+            [`<span style="color:${R}">ـسِـ</span>`,"normal"],
+            [`<span style="color:${O}">ـشِـ</span>`,"speed"],
+            [`<span style="color:${R}">صَـ</span><span style="color:${B}">ـصِـ</span>`,"normal"],
+            [`<span style="color:${R}">ضَـ</span><span style="color:${B}">ـضِـ</span>`,"normal"],
+            [`<span style="color:${R}">طَـ</span><span style="color:${B}">ـطِـ</span>`,"danger"],
+            [`<span style="color:${R}">ظَـ</span><span style="color:${B}">ـظِـ</span>`,"normal"],
+            [`<span style="color:${R}">عَـ</span><span style="color:${B}">ـعِـ</span>`,"golden"],
+            [`<span style="color:${R}">غَـ</span><span style="color:${B}">ـغِـ</span>`,"normal"],
+            [`<span style="color:${R}">فَـ</span><span style="color:${B}">ـفِـ</span>`,"speed"],
+            [`<span style="color:${R}">قَـ</span><span style="color:${B}">ـقِـ</span>`,"normal"],
+            [`<span style="color:${R}">كَـ</span><span style="color:${B}">ـكِـ</span>`,"normal"],
+            [`<span style="color:${R}">لِـ</span><span style="color:${B}">ـلَـ</span>`,"danger"],
+            [`<span style="color:${R}">مَـ</span><span style="color:${B}">ـمِـ</span>`,"normal"],
+            [`<span style="color:${R}">نَـ</span><span style="color:${B}">ـنِـ</span>`,"golden"],
+            [`<span style="color:${R}">هِـ</span><span style="color:${B}">ـهَـ</span>`,"normal"],
+            [`<span style="color:${R}">وَ</span><span style="color:${B}">وِ</span>`,"speed"],
+            [`<span style="color:${R}">يِـ</span><span style="color:${B}">ـيَـ</span>`,"normal"],
+            [`<span style="color:${R}">يَـ</span><span style="color:${B}">ـيِـ</span>`,"normal"],
+            [`<span style="color:${R}">تِـ</span><span style="color:${B}">ـبَـ</span>`,"normal"],
+            [`<span style="color:${R}">نَـ</span><span style="color:${B}">ـبِـ</span>`,"golden"],
+            [`<span style="color:${R}">غِـ</span><span style="color:${B}">ـعَـ</span>`,"danger"],
+            [`<span style="color:${R}">ضَـ</span><span style="color:${B}">ـطِـ</span>`,"speed"]
+        ];
+        const dataset = _raw.map((r,i)=>({html:r[0], t:r[1], theme:_themes[Math.floor(i/4)%4], w:[r[0].replace(/<[^>]+>/g,'')]}));
+    </script>
+    <script src="../shared/core.js"></script>
+</body>
+</html>

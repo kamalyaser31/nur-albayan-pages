@@ -433,7 +433,13 @@ const app = {
         const optGroupWords = document.createElement('optgroup'); optGroupWords.label = '📚 Reading Words';
         dataset.forEach((item, index) => {
             let plainWord = item.plain;
-            if (!plainWord && item.w) plainWord = item.w.replace(/<[^>]*>?/gm, '').replace(/&zwj;/g, '').replace(/&nbsp;/g, ' ').trim();
+            if (!plainWord) {
+                if (item.html) plainWord = item.html.replace(/<[^>]+>/g, '').replace(/&zwj;/g, '').replace(/&nbsp;/g, ' ').trim();
+                else if (Array.isArray(item.w)) plainWord = item.w.join('').replace(/<[^>]+>/g, '').replace(/&zwj;/g, '').replace(/&nbsp;/g, ' ').replace(/ـ/g, '').trim();
+                else if (typeof item.w === 'string') plainWord = item.w.replace(/<[^>]+>/g, '').replace(/&zwj;/g, '').replace(/&nbsp;/g, ' ').trim();
+                else if (item.boxes) plainWord = item.boxes.map(b => b.map(s => s[0]).join('')).join(' ').trim();
+                else if (item.groups) plainWord = item.groups.map(g => g[0]).join('').trim();
+            }
             if (!plainWord) plainWord = `Word ${index + 1}`;
             const opt = document.createElement('option'); opt.value = `word_${index}`; opt.text = `${index + 1}: ${plainWord}`; optGroupWords.appendChild(opt);
         });
@@ -457,6 +463,71 @@ const app = {
         selector.appendChild(optGroupEnd);
     },
 
+    renderWordInto(container, item) {
+        if (!container || !item) return;
+        container.innerHTML = '';
+        const currentTheme = item.theme || 'pink';
+
+        if (item.segs && Array.isArray(item.segs)) {
+            const colorClasses = ['c-red', 'c-blue', 'c-black'];
+            const wrap = document.createElement('div');
+            wrap.className = 'segmented-container';
+            item.segs.forEach((ch, i) => {
+                const sb = document.createElement('div');
+                sb.className = `seg-box theme-${currentTheme} quran-font ${colorClasses[i % 3]}`;
+                sb.innerText = ch;
+                wrap.appendChild(sb);
+            });
+            container.appendChild(wrap);
+        } else if (item.boxes && Array.isArray(item.boxes)) {
+            const wrap = document.createElement('div');
+            wrap.className = 'segmented-container';
+            item.boxes.forEach(segments => {
+                const box = document.createElement('div');
+                box.className = `letter-box quran-font theme-${currentTheme}`;
+                box.style.direction = 'rtl';
+                const inner = segments.map(([t, c]) => `<span class="color-${c}">${t}</span>`).join('');
+                box.innerHTML = `<bdi style="white-space:nowrap">${inner}</bdi>`;
+                wrap.appendChild(box);
+            });
+            container.appendChild(wrap);
+        } else if (item.multiBox && Array.isArray(item.w)) {
+            const wrap = document.createElement('div');
+            wrap.className = 'segmented-container';
+            item.w.forEach((char, i) => {
+                const box = document.createElement('div');
+                box.className = `letter-box quran-font theme-${currentTheme} color-${i % 3}`;
+                box.innerText = char;
+                wrap.appendChild(box);
+            });
+            container.appendChild(wrap);
+        } else if (item.groups && Array.isArray(item.groups)) {
+            const box = document.createElement('div');
+            box.className = `letter-box quran-font theme-${currentTheme}`;
+            box.style.direction = 'rtl';
+            box.innerHTML = item.groups.map(g => `<span class="${g[1]}" style="margin:0 .25em">${g[0]}</span>`).join('');
+            container.appendChild(box);
+        } else if (item.html) {
+            const box = document.createElement('div');
+            box.className = `letter-box quran-font theme-${currentTheme}`;
+            box.style.direction = 'rtl';
+            box.innerHTML = item.html;
+            container.appendChild(box);
+        } else if (Array.isArray(item.w)) {
+            const box = document.createElement('div');
+            box.className = `letter-box quran-font theme-${currentTheme}`;
+            box.style.direction = 'rtl';
+            const inner = item.w.map((seg, i) => `<span class="color-${i % 3}">${seg}</span>`).join('');
+            box.innerHTML = `<bdi style="white-space:nowrap">${inner}</bdi>`;
+            container.appendChild(box);
+        } else {
+            const box = document.createElement('div');
+            box.className = `letter-box theme-${currentTheme}`;
+            box.innerHTML = `<span class="word-wrapper quran-font text-center">${item.w}</span>`;
+            container.appendChild(box);
+        }
+    },
+
     render() {
         if (typeof dataset === 'undefined' || !dataset[this.idx]) return;
         this.wordRenderTime = Date.now();
@@ -469,25 +540,7 @@ const app = {
         if (navSelect) navSelect.value = `word_${this.idx}`;
         if (progText) progText.innerText = `Card ${this.idx + 1} of ${dataset.length}`;
         if (area) {
-            area.innerHTML = '';
-            const currentTheme = item.theme || 'pink';
-            if (item.segs && Array.isArray(item.segs)) {
-                const colorClasses = ['c-red', 'c-blue', 'c-black'];
-                const wrap = document.createElement('div');
-                wrap.className = 'segmented-container';
-                item.segs.forEach((ch, i) => {
-                    const sb = document.createElement('div');
-                    sb.className = `seg-box theme-${currentTheme} quran-font ${colorClasses[i % 3]}`;
-                    sb.innerText = ch;
-                    wrap.appendChild(sb);
-                });
-                area.appendChild(wrap);
-            } else {
-                const box = document.createElement('div');
-                box.className = `letter-box theme-${currentTheme}`;
-                box.innerHTML = `<span class="word-wrapper quran-font text-center">${item.w}</span>`;
-                area.appendChild(box);
-            }
+            this.renderWordInto(area, item);
         }
         if (banner) { banner.classList.add('hidden'); banner.classList.remove('pulse-danger'); }
         if (timerBox) timerBox.classList.add('hidden');
@@ -613,13 +666,7 @@ const app = {
         const infoEl = document.getElementById('revealed-info'); if (infoEl) infoEl.innerText = `${item.info || 'Card'} • #${index + 1}`;
         const giantSpan = document.getElementById('giant-arabic-word');
         if (giantSpan) {
-            if (item.segs && Array.isArray(item.segs)) {
-                const colorClasses = ['c-red', 'c-blue', 'c-black'];
-                giantSpan.innerHTML = '<div style="display:flex;flex-direction:row-reverse;justify-content:center;align-items:center;gap:0.2em;flex-wrap:wrap; padding: 10px 0;">' +
-                    item.segs.map((ch, i) => `<span class="quran-font ${colorClasses[i % 3]}" style="display:inline-block; padding:0.2em 0.1em; line-height: 1.5;">${ch}</span>`).join('') + '</div>';
-            } else {
-                giantSpan.innerHTML = item.w;
-            }
+            this.renderWordInto(giantSpan, item);
         }
         const overlay = document.getElementById('word-overlay'); if (overlay) overlay.classList.remove('hidden');
         if (triggerType === 'box' && typeof wordwallRoom !== 'undefined') {

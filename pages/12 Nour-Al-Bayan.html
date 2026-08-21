@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nour Al-Bayan - Segmented English Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Fredoka:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/core.css">
+</head>
+<body class="flex flex-col items-center select-none bg-emerald-50/40">
+    <script>
+        window.PAGE_CONFIG = {
+            title: 'Nour Al-Bayan',
+            subtitle: 'Segmented English Edition',
+            footer: 'Nour Al-Bayan Learning System • Segmented English Edition',
+            game3: 'memory'
+        };
+
+        const _themes = ["pink","green","blue","yellow"];
+        const C_R = "color-0", C_D = "color-2"; // red / dark
+        const _raw = [
+            [[["رَكَعَ",C_R],["وَسَجَدَ",C_D]],"normal"],
+            [[["دَخَلَ",C_R],["وَجَلَسَ",C_D]],"speed"],
+            [[["مَسَكَ",C_R],["فَنَظَرَ",C_D]],"normal"],
+            [[["قَنَتَ",C_D],["فَذَكَرَ",C_R]],"golden"],
+            [[["زَرَعَ",C_R],["وَحَصَدَ",C_D]],"normal"],
+            [[["عَرَفَ",C_R],["وَكَتَمَ",C_D]],"normal"],
+            [[["حَلَفَ",C_D],["فَصَدَقَ",C_R]],"danger"],
+            [[["سَأَلَ",C_R],["فَعَرَفَ",C_D]],"normal"],
+            [[["غَرَسَ",C_D],["فَنَبَتَ",C_R]],"normal"],
+            [[["خَلَقَ",C_R],["فَرَزَقَ",C_D]],"speed"],
+            [[["بَسَطَ",C_R],["فَوَهَبَ",C_D]],"normal"],
+            [[["عَبَدَ",C_D],["فَشَكَرَ",C_R]],"golden"],
+            [[["قَفَزَ",C_R],["فَوَقَعَ",C_D]],"normal"],
+            [[["عَبَسَ",C_R],["وَبَسَرَ",C_D]],"normal"],
+            [[["قَرَأَ",C_R],["وَكَتَبَ",C_D],["فَنَجَحَ",C_D]],"speed"],
+            [[["حَكَمَ",C_R],["وَعَدَلَ",C_D],["فَصَدَقَ",C_D]],"danger"],
+            [[["قَطَعَ",C_R],["وَنَشَرَ",C_D],["فَصَنَعَ",C_D]],"normal"],
+            [[["طَحَنَ",C_R],["وَنَخَلَ",C_D],["فَعَجَنَ",C_D]],"golden"]
+        ];
+        const dataset = _raw.map((r,i)=>({groups:r[0], t:r[1], theme:_themes[Math.floor(i/4)%4], w:r[0].map(g=>g[0])}));
+    </script>
+    <script src="../shared/core.js"></script>
+</body>
+</html>

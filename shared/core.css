@@ -21,9 +21,11 @@ body {
 }
 
 /* Word Colors */
-.c-red, .c0 { color: #dc2626; }
-.c-blue, .c1 { color: #2563eb; }
+.c-red, .c0, .color-0 { color: #dc2626; }
+.c-blue, .c1, .color-1 { color: #2563eb; }
 .c-black, .c2 { color: #1e293b; }
+.color-2 { color: #059669; }
+.color-3 { color: #d97706; }
 .c-purple { color: #9333ea; }
 .sep-bar { color: #cbd5e1; margin: 0 4px; font-weight: 300; }
 

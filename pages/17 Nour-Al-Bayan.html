@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nour Al-Bayan - File 17</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Fredoka:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/core.css">
+</head>
+<body class="flex flex-col items-center select-none bg-emerald-50/40">
+    <script>
+        window.PAGE_CONFIG = {
+            title: 'Nour Al-Bayan',
+            subtitle: 'Segmented English Edition',
+            footer: 'Nour Al-Bayan Learning System • Segmented English Edition',
+            game3: 'memory'
+        };
+
+        const dataset = [
+            // Row 1
+            {w: ["<span class='c2'>عَطَسَ</span>&nbsp;&nbsp;<span class='c0'>فَحَمِدَ</span>"], t: "normal"},
+            {w: ["<span class='c2'>رَكِبَ</span>&nbsp;&nbsp;<span class='c0'>وَرَدِفَ</span>"], t: "speed"},
+            {w: ["<span class='c2'>بَرِئَ</span>&nbsp;&nbsp;<span class='c0'>فَشَكَرَ</span>"], t: "normal"},
+
+            // Row 2
+            {w: ["<span class='c2'>سَكَتَ</span>&nbsp;&nbsp;<span class='c0'>فَسَلِمَ</span>"], t: "danger"},
+            {w: ["<span class='c2'>ذَكَرَ</span>&nbsp;&nbsp;<span class='c0'>فَخَشِيَ</span>"], t: "normal"},
+            {w: ["<span class='c2'>فَهِمَ</span>&nbsp;&nbsp;<span class='c0'>وَعَلِمَ</span>"], t: "golden"},
+
+            // Row 3
+            {w: ["<span class='c2'>كَرِهَ</span>&nbsp;&nbsp;<span class='c0'>وَسَخِطَ</span>"], t: "normal"},
+            {w: ["<span class='c2'>رَكَضَ</span>&nbsp;&nbsp;<span class='c0'>فَتَعِبَ</span>"], t: "speed"},
+            {w: ["<span class='c2'>مَرِضَ</span>&nbsp;&nbsp;<span class='c0'>فَصَبَرَ</span>"], t: "normal"},
+
+            // Row 4
+            {w: ["<span class='c2'>حَفِظَ</span>&nbsp;&nbsp;<span class='c0'>فَقَوِيَ</span>"], t: "danger"},
+            {w: ["<span class='c2'>عَمِلَ</span>&nbsp;&nbsp;<span class='c0'>فَرَبِحَ</span>"], t: "normal"},
+            {w: ["<span class='c2'>طَعِمَ</span>&nbsp;&nbsp;<span class='c0'>فَشَبِعَ</span>"], t: "golden"},
+
+            // Row 5
+            {w: ["<span class='c2'>فَرِحَ</span>&nbsp;&nbsp;<span class='c0'>فَضَحِكَ</span>"], t: "normal"},
+            {w: ["<span class='c2'>نَعِمَ</span>&nbsp;&nbsp;<span class='c0'>وَأَمِنَ</span>"], t: "speed"},
+            {w: ["<span class='c2'>سَهِرَ</span>&nbsp;&nbsp;<span class='c0'>فَتَعِبَ</span>"], t: "normal"},
+
+            // Row 6
+            {w: ["<span class='c2'>قَعَدَ</span>&nbsp;&nbsp;<span class='c0'>وَشَهِدَ</span>"], t: "danger"},
+            {w: ["<span class='c2'>صَدَقَ</span>&nbsp;&nbsp;<span class='c0'>فَرَبِحَ</span>"], t: "normal"},
+            {w: ["<span class='c2'>كَذَبَ</span>&nbsp;&nbsp;<span class='c0'>فَخَسِرَ</span>"], t: "golden"},
+
+            // Row 7 (3 words and 4 words)
+            {w: ["<span class='c2'>وَلِيَ</span>&nbsp;&nbsp;<span class='c0'>فَعَدَلَ</span>&nbsp;&nbsp;<span class='c2'>فَأَمِنَ</span>"], t: "normal"},
+            {w: ["<span class='c2'>عَلِمَ</span>&nbsp;&nbsp;<span class='c0'>بِكَ</span>&nbsp;&nbsp;<span class='c2'>فَأَذِنَ</span>&nbsp;&nbsp;<span class='c0'>لَكَ</span>"], t: "speed"},
+
+            // Row 8 (Full long sentence)
+            {w: ["<span class='c2'>أَكَلَ</span>&nbsp;&nbsp;<span class='c0'>وَشَرِبَ</span>&nbsp;&nbsp;<span class='c2'>-</span>&nbsp;&nbsp;<span class='c2'>فَحَمِدَ</span>&nbsp;&nbsp;<span class='c0'>وَلَبِسَ</span>&nbsp;&nbsp;<span class='c2'>-</span>&nbsp;&nbsp;<span class='c2'>وَخَرَجَ</span>&nbsp;&nbsp;<span class='c0'>لِعَمَلِهِ</span>"], t: "golden"}
+        ];
+        const _themes = ["pink","green","blue","yellow"];
+        dataset.forEach((item, i) => {
+            item.theme = _themes[Math.floor(i/4) % 4];
+            if (!item.html) {
+                if (item.w.length === 1) item.html = item.w[0];
+                else item.html = item.w.map((s,j) => `<span class="color-${j%3}">${s}</span>`).join('');
+            }
+        });
+    </script>
+    <script src="../shared/core.js"></script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nour Al-Bayan - File 18</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Fredoka:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/core.css">
+</head>
+<body class="flex flex-col items-center select-none bg-emerald-50/40">
+    <script>
+        window.PAGE_CONFIG = {
+            title: 'Nour Al-Bayan',
+            subtitle: 'Segmented English Edition',
+            footer: 'Nour Al-Bayan Learning System • Segmented English Edition',
+            game3: 'memory'
+        };
+
+        const D = "<span class='sep-bar mx-1'>-</span>";
+        const dataset = [
+            // الجزء الأول: الحروف في آخر الكلمة مع الضمة
+            {w: [`<span class='text-rose-500'>ـأُ</span>`], t: "normal"},
+            {w: [`<span class='text-indigo-900'>ـبُ</span>`], t: "speed"},
+            {w: [`<span class='text-teal-500'>ـتُ</span>`], t: "normal"},
+            {w: [`<span class='text-slate-800'>ـثُ</span>`], t: "golden"},
+            {w: [`<span class='text-rose-500'>ـجُ</span>`], t: "normal"},
+            {w: [`<span class='text-indigo-900'>ـحُ</span>`], t: "danger"},
+            {w: [`<span class='text-teal-500'>ـخُ</span>`], t: "normal"},
+            {w: [`<span class='text-slate-800'>ـدُ</span>`], t: "speed"},
+            {w: [`<span class='text-rose-500'>ـذُ</span>`], t: "normal"},
+            {w: [`<span class='text-indigo-900'>ـرُ</span>`], t: "golden"},
+
+            // الجزء الثاني: الحروف السابقة (كما هي)
+            {w: [`<span class='text-rose-500'>زَ</span>${D}<span class='text-indigo-900'>ـزِ</span>${D}<span class='text-teal-500'>ـزُ</span>`], t: "normal"},
+            {w: [`<span class='text-rose-500'>سَـ</span>${D}<span class='text-indigo-900'>ـسِـ</span>${D}<span class='text-teal-500'>ـسُ</span>`], t: "speed"},
+            {w: [`<span class='text-teal-500'>شَـ</span>${D}<span class='text-indigo-900'>ـشِـ</span>${D}<span class='text-rose-500'>ـشُ</span>`], t: "danger"},
+            {w: [`<span class='text-rose-500'>صَـ</span>${D}<span class='text-indigo-900'>ـصِـ</span>${D}<span class='text-teal-500'>ـصُ</span>`], t: "normal"},
+            {w: [`<span class='text-teal-500'>ضَـ</span>${D}<span class='text-indigo-900'>ـضِـ</span>${D}<span class='text-rose-500'>ـضُ</span>`], t: "golden"},
+            {w: [`<span class='text-rose-500'>طَـ</span>${D}<span class='text-indigo-900'>ـطِـ</span>${D}<span class='text-teal-500'>ـطُ</span>`], t: "normal"},
+            {w: [`<span class='text-teal-500'>ظَـ</span>${D}<span class='text-indigo-900'>ـظِـ</span>${D}<span class='text-rose-500'>ـظُ</span>`], t: "speed"},
+            {w: [`<span class='text-rose-500'>عَـ</span>${D}<span class='text-indigo-900'>ـعِـ</span>${D}<span class='text-teal-500'>ـعُ</span>`], t: "danger"},
+            {w: [`<span class='text-teal-500'>غَـ</span>${D}<span class='text-indigo-900'>ـغِـ</span>${D}<span class='text-rose-500'>ـغُ</span>`], t: "normal"},
+            {w: [`<span class='text-rose-500'>فَـ</span>${D}<span class='text-indigo-900'>ـفِـ</span>${D}<span class='text-teal-500'>ـفُ</span>`], t: "golden"},
+            
+            // التعديلات الجديدة تبدأ من هنا (قاف إلى ياء):
+            
+            // قاف: كسرة - ضمة - فتحة
+            {w: [`<span class='text-teal-500'>قِـ</span>${D}<span class='text-indigo-900'>ـقُـ</span>${D}<span class='text-rose-500'>ـقَ</span>`], t: "normal"},
+            // كاف: فتحة - ضمة - كسرة
+            {w: [`<span class='text-rose-500'>كَـ</span>${D}<span class='text-indigo-900'>ـكُـ</span>${D}<span class='text-teal-500'>ـكِ</span>`], t: "speed"},
+            // لام: ضمة - فتحة - كسرة
+            {w: [`<span class='text-teal-500'>لُـ</span>${D}<span class='text-indigo-900'>ـلَـ</span>${D}<span class='text-rose-500'>ـلِ</span>`], t: "danger"},
+            // ميم: كسرة - ضمة - فتحة
+            {w: [`<span class='text-rose-500'>مِـ</span>${D}<span class='text-indigo-900'>ـمُـ</span>${D}<span class='text-teal-500'>ـمَ</span>`], t: "normal"},
+            // نون: كسرة - ضمة - فتحة
+            {w: [`<span class='text-teal-500'>نِـ</span>${D}<span class='text-indigo-900'>ـنُـ</span>${D}<span class='text-rose-500'>ـنَ</span>`], t: "golden"},
+            // هاء: ضمة - فتحة - كسرة
+            {w: [`<span class='text-rose-500'>هُـ</span>${D}<span class='text-indigo-900'>ـهَـ</span>${D}<span class='text-teal-500'>ـهِ</span>`], t: "normal"},
+            // واو: كسرة - ضمة - فتحة
+            {w: [`<span class='text-teal-500'>وِ</span>${D}<span class='text-indigo-900'>ـوُ</span>${D}<span class='text-rose-500'>ـوَ</span>`], t: "speed"},
+            // ياء: فتحة - ضمة - كسرة
+            {w: [`<span class='text-rose-500'>يَـ</span>${D}<span class='text-indigo-900'>ـيُـ</span>${D}<span class='text-teal-500'>ـيِ</span>`], t: "normal"}
+        ];
+        const _themes = ["pink","green","blue","yellow"];
+        dataset.forEach((item, i) => {
+            item.theme = _themes[Math.floor(i/4) % 4];
+            if (!item.html) {
+                if (item.w.length === 1) item.html = item.w[0];
+                else item.html = item.w.map((s,j) => `<span class="color-${j%3}">${s}</span>`).join('');
+            }
+        });
+    </script>
+    <script src="../shared/core.js"></script>
+</body>
+</html>

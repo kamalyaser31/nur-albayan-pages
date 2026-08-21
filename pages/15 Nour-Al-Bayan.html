@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nour Al-Bayan - Segmented English Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Fredoka:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/core.css">
+</head>
+<body class="flex flex-col items-center select-none bg-emerald-50/40">
+    <script>
+        window.PAGE_CONFIG = {
+            title: 'Nour Al-Bayan',
+            subtitle: 'Segmented English Edition',
+            footer: 'Nour Al-Bayan Learning System • Segmented English Edition',
+            game3: 'memory'
+        };
+
+        const _themes = ["pink","green","blue","yellow"];
+        // each item: boxes = [ [ [seg, colorIdx], ... ], ... ]
+        const _raw = [
+            // Row 1-4: first 2 letters connected in box1, 3rd letter alone in box2
+            [[[["ضَ",0],["حِـ",1]],[["ـكَ",2]]],"normal"],
+            [[[["مَ",0],["رِ",1]],[["حَ",2]]],"speed"],
+            [[[["عَ",0],["مِـ",1]],[["ـلَ",2]]],"normal"],
+            [[[["عَ",0],["قِـ",1]],[["ـلَ",2]]],"normal"],
+            [[[["حَ",0],["يِـ",1]],[["ـيَ",2]]],"danger"],
+            [[[["غَ",0],["ضِـ",1]],[["ـبَ",2]]],"normal"],
+            [[[["خَ",0],["جِـ",1]],[["ـلَ",2]]],"golden"],
+            [[[["جَ",0],["هِـ",1]],[["ـلَ",2]]],"normal"],
+            [[[["أَ",0],["ذِ",1]],[["نَ",2]]],"normal"],
+            [[[["أَ",0],["لِـ",1]],[["ـفَ",2]]],"normal"],
+            [[[["صَ",0],["حِـ",1]],[["ـبَ",2]]],"speed"],
+            [[[["عَ",0],["نِـ",1]],[["ـتَ",2]]],"normal"],
+            [[[["شَ",0],["عِـ",1]],[["ـثَ",2]]],"normal"],
+            [[[["رَ",0],["قِـ",1]],[["ـبَ",2]]],"danger"],
+            [[[["دَ",0],["كِـ",1]],[["ـنَ",2]]],"normal"],
+            [[[["صَ",0],["ئِـ",1]],[["ـبَ",2]]],"golden"],
+            // Row 5-8: all three connected in single box
+            [[[["كَ",0],["ئِ",1],["بَ",2]]],"normal"],
+            [[[["بَ",0],["شِ",1],["مَ",2]]],"normal"],
+            [[[["خَ",0],["صِ",1],["بَ",2]]],"speed"],
+            [[[["دَ",0],["سِ",1],["مَ",2]]],"normal"],
+            [[[["صَ",0],["دِ",1],["ئَ",2]]],"danger"],
+            [[[["نَ",0],["ضِ",1],["جَ",2]]],"normal"],
+            [[[["قَ",0],["ضِ",1],["مَ",2]]],"normal"],
+            [[[["لَ",0],["ظِ",1],["يَ",2]]],"golden"],
+            [[[["نَ",0],["غِ",1],["صَ",2]]],"normal"],
+            [[[["لَ",0],["غِ",1],["بَ",2]]],"speed"],
+            [[[["نَ",0],["يِ",1],["لَ",2]]],"normal"],
+            [[[["دَ",0],["هِ",1],["شَ",2]]],"normal"],
+            [[[["جَ",0],["نِ",1],["فَ",2]]],"danger"],
+            [[[["دَ",0],["فِ",1],["ئَ",2]]],"normal"],
+            [[[["ظَ",0],["مِ",1],["ئَ",2]]],"normal"],
+            [[[["بَ",0],["رِ",1],["ئَ",2]]],"golden"]
+        ];
+        const dataset = _raw.map((r,i)=>({
+            boxes: r[0],
+            t: r[1],
+            theme: _themes[Math.floor(i/4)%4],
+            w: r[0].map(b => b.map(s=>s[0]).join(''))
+        }));
+    </script>
+    <script src="../shared/core.js"></script>
+</body>
+</html>

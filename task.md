@@ -2,11 +2,12 @@
 
 ## الحالة الإجمالية: مكتمل (complete)
 
-- [x] تحليل وفحص ملفات الدروس الـ19 والتحقق من التكرار والأنماط المشتركة
+- [x] تجريد وفحص ملفات الدروس الـ19 الأولى (19 إلى 37)
 - [x] استخراج الأصول المشتركة إلى `shared/core.css` و `shared/core.js`
-- [x] تجريد الصفحات الـ19 وتحديثها لترتبط بالنواة المشتركة وتوليد الواجهة تلقائياً
-- [x] التحقق الفني ومراجعة الجودة ومحاكاة التشغيل الشاملة لجميع الدروس الـ19
-- [x] تحديث فهرس الصفحات وسجل التغييرات وحالة المشروع والدليل الشامل
+- [x] تجريد الملفات الـ9 الجديدة (10 إلى 18) وربطها بالنواة المشتركة
+- [x] توسيع النواة المشتركة لدعم كافة أنماط عرض الكلمات (`segs`, `boxes`, `groups`, `html`, `multiBox`)
+- [x] التحقق الفني ومحاكاة التشغيل الشاملة لجميع الدروس الـ28 (10 إلى 37)
+- [x] تحديث فهرس الصفحات `index.html` وسجل التغييرات وحالة المشروع
 
 ## حالة الملفات (Files Status)
 
@@ -14,6 +15,15 @@
 |---|---|
 | shared/core.css | complete |
 | shared/core.js | complete |
+| pages/10 Nour-Al-Bayan.html | complete |
+| pages/11 Nour-Al-Bayan.html | complete |
+| pages/12 Nour-Al-Bayan.html | complete |
+| pages/13 Nour-Al-Bayan.html | complete |
+| pages/14- Nour-Al-Bayan.html | complete |
+| pages/15 Nour-Al-Bayan.html | complete |
+| pages/16 Nour-Al-Bayan.html | complete |
+| pages/17 Nour-Al-Bayan.html | complete |
+| pages/18 Nour-Al-Bayan.html | complete |
 | pages/19 Nour-Al-Bayan.html | complete |
 | pages/20  Nour-Al-Bayan.html | complete |
 | pages/21  Nour-Al-Bayan.html | complete |
