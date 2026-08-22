@@ -2,9 +2,17 @@ const app = {
     idx: 0, score: 0, stats: { ok: 0, err: 0 }, clock: 10.0, timer: null, wordRenderTime: 0,
     hasPlayedGame1: false, hasPlayedGame2: false, hasPlayedGame3: false, currentActiveIndex: null, pendingGame: 0, chartInstance: null,
     mistakeIndices: [], isReviewMode: false, reviewQueue: [], reviewIdx: 0, keyboardBound: false,
+    enableGameBreaks: false,
 
     init() {
         buildAppUI();
+        try {
+            const saved = localStorage.getItem('nour_enable_game_breaks');
+            if (saved !== null) this.enableGameBreaks = (saved === '1');
+        } catch(e) {}
+        const toggleEl = document.getElementById('toggle-game-breaks');
+        if (toggleEl) toggleEl.checked = this.enableGameBreaks;
+
         this.populateSelector();
         this.jumpTo('menu');
         if (typeof xoGame !== 'undefined') xoGame.init();
@@ -139,7 +147,7 @@ const app = {
                 sb.className = `seg-box theme-${currentTheme} quran-font`;
                 sb.style.direction = 'rtl';
                 const inner = segments.map(([t, c]) => `<span class="color-${c}">${t}</span>`).join('');
-                sb.innerHTML = `<bdi style="white-space:nowrap">${inner}</bdi>`;
+                this.setSafeHTML(sb, `<bdi style="white-space:nowrap">${inner}</bdi>`);
                 wrap.appendChild(sb);
             });
             container.appendChild(wrap);
@@ -157,25 +165,25 @@ const app = {
             const box = document.createElement('div');
             box.className = `letter-box quran-font theme-${currentTheme}`;
             box.style.direction = 'rtl';
-            box.innerHTML = item.groups.map(g => `<span class="${g[1]}" style="margin:0 .25em">${g[0]}</span>`).join('');
+            this.setSafeHTML(box, item.groups.map(g => `<span class="${g[1]}" style="margin:0 .25em">${g[0]}</span>`).join(''));
             container.appendChild(box);
         } else if (item.html) {
             const box = document.createElement('div');
             box.className = `letter-box quran-font theme-${currentTheme}`;
             box.style.direction = 'rtl';
-            box.innerHTML = item.html;
+            this.setSafeHTML(box, item.html);
             container.appendChild(box);
         } else if (Array.isArray(item.w)) {
             const box = document.createElement('div');
             box.className = `letter-box quran-font theme-${currentTheme}`;
             box.style.direction = 'rtl';
             const inner = item.w.map((seg, i) => `<span class="color-${i % 3}">${seg}</span>`).join('');
-            box.innerHTML = `<bdi style="white-space:nowrap">${inner}</bdi>`;
+            this.setSafeHTML(box, `<bdi style="white-space:nowrap">${inner}</bdi>`);
             container.appendChild(box);
         } else {
             const box = document.createElement('div');
             box.className = `letter-box theme-${currentTheme}`;
-            box.innerHTML = `<span class="word-wrapper quran-font text-center">${item.w}</span>`;
+            this.setSafeHTML(box, `<span class="word-wrapper quran-font text-center">${item.w}</span>`);
             container.appendChild(box);
         }
     },
@@ -197,6 +205,8 @@ const app = {
         }
         if (area) {
             this.renderWordInto(area, item);
+            area.tabIndex = -1;
+            area.focus({ preventScroll: true });
         }
         if (banner) { banner.classList.add('hidden'); banner.classList.remove('pulse-danger'); }
         if (timerBox) timerBox.classList.add('hidden');
@@ -263,11 +273,11 @@ const app = {
 
             const third1 = Math.floor(dataset.length / 3) - 1;
             const third2 = Math.floor((dataset.length * 2) / 3) - 1;
-            if (this.idx === third1 && !this.hasPlayedGame1) {
+            if (this.enableGameBreaks && this.idx === third1 && !this.hasPlayedGame1) {
                 setTimeout(() => this.jumpTo('transition_1'), 600);
-            } else if (this.idx === third2 && !this.hasPlayedGame2) {
+            } else if (this.enableGameBreaks && this.idx === third2 && !this.hasPlayedGame2) {
                 setTimeout(() => this.jumpTo('transition_2'), 600);
-            } else if (this.idx === dataset.length - 1 && !this.hasPlayedGame3) {
+            } else if (this.enableGameBreaks && this.idx === dataset.length - 1 && !this.hasPlayedGame3) {
                 setTimeout(() => this.jumpTo('transition_3'), 600);
             } else {
                 if (this.idx < dataset.length - 1) { this.idx++; setTimeout(() => this.render(), 600); }
@@ -313,6 +323,11 @@ const app = {
         if (area && dataset[this.idx]) {
             this.renderWordInto(area, dataset[this.idx]);
         }
+    },
+
+    toggleGameBreaks(enabled) {
+        this.enableGameBreaks = enabled;
+        try { localStorage.setItem('nour_enable_game_breaks', enabled ? '1' : '0'); } catch(e) {}
     },
 
     prev() { if (this.idx > 0) { this.idx--; this.render(); } },

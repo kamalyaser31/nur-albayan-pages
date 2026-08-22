@@ -19,12 +19,13 @@ const wordwallRoom = {
     renderBoxes() {
         const container = document.getElementById('box-grid');
         if (!container || typeof dataset === 'undefined') return;
-        container.innerHTML = '';
+        container.textContent = '';
         dataset.forEach((item, index) => {
             const box = document.createElement('div');
             box.className = `wordwall-box relative aspect-square w-full flex items-center justify-center rounded-2xl ${this.openedBoxes.has(index) ? 'opened opacity-50 grayscale-[50%]' : ''}`;
             box.id = `box-${index}`;
             const color = wordwallColors[index % wordwallColors.length];
+            
             box.innerHTML = `
                 <div class="wordwall-box-inner relative w-full h-full duration-500">
                     <div class="box-front rounded-2xl flex flex-col items-center justify-center text-white border-[3px] border-white/40 shadow-lg hover:scale-105 transition-transform" style="background-color: ${color}">
@@ -33,6 +34,7 @@ const wordwallRoom = {
                     </div>
                     <div class="box-back rounded-2xl flex items-center justify-center text-slate-400 bg-slate-100 border-[3px] border-slate-300 shadow-inner"><span class="text-4xl">✔</span></div>
                 </div>`;
+            
             box.onclick = () => { if (!this.openedBoxes.has(index)) app.revealWord(index, 'box'); };
             container.appendChild(box);
         });
@@ -54,10 +56,10 @@ const wheelGame = {
             this.ctx.beginPath(); this.ctx.moveTo(0, 0); this.ctx.arc(0, 0, radius - 8, i * sliceAngle, (i + 1) * sliceAngle); this.ctx.closePath();
             this.ctx.fillStyle = col; this.ctx.fill(); this.ctx.lineWidth = 2; this.ctx.strokeStyle = '#ffffff'; this.ctx.stroke();
             this.ctx.save(); this.ctx.rotate(i * sliceAngle + sliceAngle / 2);
-            const r = parseInt(col.slice(1, 3), 16) / 255;
-            const g = parseInt(col.slice(3, 5), 16) / 255;
-            const b = parseInt(col.slice(5, 7), 16) / 255;
-            const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+            const red = parseInt(col.slice(1, 3), 16) / 255;
+            const green = parseInt(col.slice(3, 5), 16) / 255;
+            const blue = parseInt(col.slice(5, 7), 16) / 255;
+            const lum = 0.2126 * red + 0.7152 * green + 0.0722 * blue;
             this.ctx.fillStyle = lum > 0.45 ? '#1a1a2e' : '#ffffff';
             this.ctx.font = fontSize; this.ctx.textAlign = 'right'; this.ctx.fillText((i + 1).toString(), radius - 25, 5); this.ctx.restore();
         }

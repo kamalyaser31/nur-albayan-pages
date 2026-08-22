@@ -58,6 +58,7 @@
     --color-quranic-red: #dc2626;
     --color-quranic-blue: #2563eb;
     --app-height: 100%;
+    --font-sans: 'Fredoka', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 /* 3. Base Reset and Body */
@@ -73,13 +74,14 @@ html, body {
     width: 100vw;
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-    font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: var(--font-sans);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -167,6 +169,7 @@ body {
 .mt-2 { margin-top: 0.5rem; }
 .mt-3 { margin-top: 0.75rem; }
 .mt-4 { margin-top: 1rem; }
+.mt-5 { margin-top: 1.25rem; }
 .mt-6 { margin-top: 1.5rem; }
 .mb-1 { margin-bottom: 0.25rem; }
 .mb-2 { margin-bottom: 0.5rem; }
@@ -224,8 +227,8 @@ body {
 .space-y-5 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.25rem; }
 
 /* Typography */
-.text-\[10px\] { font-size: 10px; }
-.text-\[11px\] { font-size: 11px; }
+.text-\[10px\] { font-size: 10px; line-height: 14px; }
+.text-\[11px\] { font-size: 11px; line-height: 16px; }
 .text-xs { font-size: 0.75rem; line-height: 1rem; }
 .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
 .text-base { font-size: 1rem; line-height: 1.5rem; }
@@ -234,10 +237,11 @@ body {
 .text-2xl { font-size: 1.5rem; line-height: 2rem; }
 .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
 .text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
-.text-5xl { font-size: 3rem; line-height: 1; }
-.text-6xl { font-size: 3.75rem; line-height: 1; }
+.text-5xl { font-size: 3rem; line-height: 1.15; }
+.text-6xl { font-size: 3.75rem; line-height: 1.15; }
 
-.font-medium { font-weight: 500; }
+.font-medium { font-weight: 600; }
+.font-semibold { font-weight: 600; }
 .font-bold { font-weight: 700; }
 .font-black { font-weight: 900; }
 .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
@@ -454,6 +458,8 @@ body {
 .transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
 .transition-transform { transition-property: transform; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
 .transition-colors { transition-property: color, background-color, border-color; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+.transition-opacity { transition-property: opacity; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+.transition-shadow { transition-property: box-shadow; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
 .duration-300 { transition-duration: 300ms; }
 .duration-500 { transition-duration: 500ms; }
 
@@ -462,6 +468,22 @@ button {
     outline: none;
     font-family: inherit;
     cursor: pointer;
+}
+button:focus {
+    outline: none;
+}
+button:focus-visible {
+    outline: 3px solid #f59e0b;
+    outline-offset: 2px;
+}
+button:disabled,
+button[disabled],
+.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+    transform: none !important;
+    box-shadow: none !important;
 }
 
 /* 3D Tactile Buttons */
@@ -515,9 +537,9 @@ button {
     .sm\:text-lg { font-size: 1.125rem; }
     .sm\:text-xl { font-size: 1.25rem; }
     .sm\:text-2xl { font-size: 1.5rem; }
-    .sm\:text-3xl { font-size: 1.875rem; }
-    .sm\:text-4xl { font-size: 2.25rem; }
-    .sm\:text-5xl { font-size: 3rem; }
+    .sm\:text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+    .sm\:text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+    .sm\:text-5xl { font-size: 3rem; line-height: 1.15; }
     .sm\:p-4 { padding: 1rem; }
     .sm\:p-6 { padding: 1.5rem; }
     .sm\:p-8 { padding: 2rem; }
@@ -538,13 +560,27 @@ button {
 
 @media (min-width: 768px) {
     .md\:grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-    .md\:text-lg { font-size: 1.125rem; }
-    .md\:text-6xl { font-size: 3.75rem; }
+    .md\:text-base { font-size: 1rem; line-height: 1.5rem; }
+    .md\:text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+    .md\:text-5xl { font-size: 3rem; line-height: 1.15; }
+    .md\:text-6xl { font-size: 3.75rem; line-height: 1.15; }
+    .md\:p-6 { padding: 1.5rem; }
+    .md\:p-8 { padding: 2rem; }
+    .md\:px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .md\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+    .md\:py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+    .md\:gap-6 { gap: 1.5rem; }
+    .md\:gap-8 { gap: 2rem; }
 }
 
 @media (min-width: 1024px) {
     .lg\:grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
     .lg\:text-6xl { font-size: 3.75rem; }
+    .lg\:p-8 { padding: 2rem; }
+    .lg\:p-10 { padding: 2.5rem; }
+    .lg\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+    .lg\:py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+    .lg\:gap-8 { gap: 2rem; }
 }
 
 /* 5. Progress Bar in Top Navigation */
@@ -737,7 +773,8 @@ button {
     line-height: 1.5;
     text-align: center;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    white-space: nowrap;
+    white-space: normal;
+    word-break: break-word;
     position: relative;
 }
 
@@ -748,19 +785,19 @@ button {
     word-spacing: 0.2em;
 }
 
-.theme-green, .seg-box.theme-green {
+.theme-green {
     border: 5px solid #10b981;
     box-shadow: 0 12px 30px -8px rgba(16, 185, 129, 0.22), inset 0 0 20px rgba(16, 185, 129, 0.04);
 }
-.theme-pink, .seg-box.theme-pink {
+.theme-pink {
     border: 5px solid #f472b6;
     box-shadow: 0 12px 30px -8px rgba(244, 114, 182, 0.22), inset 0 0 20px rgba(244, 114, 182, 0.04);
 }
-.theme-yellow, .seg-box.theme-yellow {
+.theme-yellow {
     border: 5px solid #f59e0b;
     box-shadow: 0 12px 30px -8px rgba(245, 158, 11, 0.22), inset 0 0 20px rgba(245, 158, 11, 0.04);
 }
-.theme-blue, .seg-box.theme-blue {
+.theme-blue {
     border: 5px solid #3b82f6;
     box-shadow: 0 12px 30px -8px rgba(59, 130, 246, 0.22), inset 0 0 20px rgba(59, 130, 246, 0.04);
 }
@@ -797,6 +834,17 @@ button {
 @keyframes pulseRed {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.6; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }
 .pulse-danger { animation: pulseRed 1s infinite; }
 

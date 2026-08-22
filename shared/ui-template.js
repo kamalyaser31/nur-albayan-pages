@@ -103,10 +103,10 @@ function buildAppUI() {
     <main class="flex-1 w-full max-w-5xl px-3 sm:px-4 flex flex-col justify-center items-center overflow-hidden relative">
 
         <!-- STAGE -1: MAIN MENU -->
-        <section id="main-menu-stage" class="w-full h-full flex flex-col justify-center items-center gap-4 sm:gap-5 py-4 overflow-y-auto shrink-0 custom-scrollbar">
-            <div class="text-center">
-                <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-emerald-600 drop-shadow-sm mb-1 sm:mb-2">${title}</h1>
-                <p class="text-slate-500 font-bold text-sm sm:text-base md:text-lg">${subtitle}</p>
+        <section id="main-menu-stage" class="w-full h-full flex flex-col justify-center items-center gap-3 sm:gap-4 py-3 overflow-y-auto shrink-0 custom-scrollbar">
+            <div class="text-center mb-1">
+                <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-emerald-600 drop-shadow-sm tracking-tight mb-1 leading-tight">${title}</h1>
+                <p class="text-slate-500 font-bold text-xs sm:text-sm md:text-base leading-relaxed">${subtitle}</p>
             </div>
 
             <!-- Developer & Dedication Card -->
@@ -122,14 +122,23 @@ function buildAppUI() {
                 </div>
             </div>
 
+            <!-- Mid-Lesson Game Breaks Option -->
+            <div class="w-full max-w-sm sm:max-w-md px-4 py-2 bg-emerald-50/80 border border-emerald-200 rounded-2xl flex items-center justify-between shadow-inner">
+                <label for="toggle-game-breaks" class="flex items-center gap-2 cursor-pointer text-xs sm:text-sm font-bold text-emerald-900 select-none">
+                    <span>🎮</span>
+                    <span>Enable Mid-Lesson Game Breaks</span>
+                </label>
+                <input type="checkbox" id="toggle-game-breaks" onchange="app.toggleGameBreaks(this.checked)" class="w-5 h-5 accent-emerald-600 rounded cursor-pointer" aria-label="Enable Mid-Lesson Game Breaks">
+            </div>
+
             <!-- Menu Action Buttons -->
-            <div class="grid grid-cols-1 gap-3 w-full max-w-sm sm:max-w-md px-2">
+            <div class="grid grid-cols-1 gap-2.5 w-full max-w-sm sm:max-w-md px-2">
                 ${rulesButtonHtml}
-                <button onclick="app.jumpTo('word_0')" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-black py-4 px-6 rounded-[1.5rem] text-xl shadow-[0_5px_0_#047857] active:translate-y-[5px] active:shadow-none transition-all flex items-center justify-between">
+                <button onclick="app.startChallenge()" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-black py-3.5 px-6 rounded-[1.5rem] text-lg shadow-[0_5px_0_#047857] active:translate-y-[5px] active:shadow-none transition-all flex items-center justify-between">
                     <span class="flex items-center gap-2">🚀 <span>Start Challenge</span></span>
                     <span class="text-2xl">➡</span>
                 </button>
-                <button onclick="app.jumpTo('ww_box')" class="bg-white border-4 border-amber-400 hover:bg-amber-50 text-amber-500 font-black py-3.5 px-6 rounded-[1.5rem] text-lg shadow-[0_5px_0_#d97706] active:translate-y-[5px] active:shadow-none transition-all flex items-center justify-between">
+                <button onclick="app.jumpTo('ww_box')" class="bg-white border-4 border-amber-400 hover:bg-amber-50 text-amber-500 font-black py-3 px-6 rounded-[1.5rem] text-base shadow-[0_5px_0_#d97706] active:translate-y-[5px] active:shadow-none transition-all flex items-center justify-between">
                     <span class="flex items-center gap-2">🎡 <span>Word Games</span></span>
                     <span class="text-2xl">➡</span>
                 </button>
@@ -231,12 +240,12 @@ function buildAppUI() {
                 </nav>
             </div>
 
-            <div class="flex-1 w-full flex flex-col items-center justify-center overflow-hidden relative">
-                <div id="ww-box-container" class="w-full h-full flex flex-col items-center">
+            <div class="flex-1 w-full flex flex-col items-center justify-center overflow-hidden relative min-h-0">
+                <div id="ww-box-container" class="w-full h-full flex flex-col items-center min-h-0 overflow-hidden">
                     <div class="bg-indigo-100 text-indigo-800 px-3.5 py-1 rounded-full text-xs font-bold mb-2 shrink-0 shadow-sm border border-indigo-200">
                         Tap any box to reveal the hidden word!
                     </div>
-                    <div id="box-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2.5 sm:gap-3.5 w-full max-w-5xl overflow-y-auto p-3 custom-scrollbar pb-16"></div>
+                    <div id="box-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2.5 sm:gap-3.5 w-full max-w-5xl flex-1 overflow-y-auto p-3 custom-scrollbar pb-20"></div>
                 </div>
 
                 <div id="ww-wheel-container" class="hidden w-full h-full flex flex-col justify-center items-center gap-4">

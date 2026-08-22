@@ -1,5 +1,6 @@
 # سجل التغييرات (CHANGELOG)
 
+- feat: إضافة خيار التحكم في استراحات الألعاب أثناء القراءة (`Mid-Lesson Game Breaks Toggle`)، وحل مشكلة التمرير في جدار الكلمات، وضبط تباعد الخطوط، وإدراج `.nojekyll`.
 - feat: تفكيك ملف `shared/core.js` إلى 7 وحدات برمجية مستقلة ومتخصصة (`sound.js`, `ui-template.js`, `app.js`, `games-wordwall.js`, `games-board.js`, `games-extra.js`, `rule-manager.js`) وتحديث صفحات الدروس الـ28.
 - feat: تحويل المنظومة بالكامل إلى بنية مستقلة دون إنترنت (Offline-First) عبر استبدال Play CDN بملف core.css المترجم وتوطين مكتبات Chart.js وConfetti والخطوط القرآنية في shared/vendor/.
 - feat: توحيد أسماء صفحات الدروس لتصبح بأرقامها فقط (10.html إلى 37.html) وإعادة بناء الفهرس index.html بشبكة بطاقات تفاعلية متجاوبة.

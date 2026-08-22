@@ -8,7 +8,22 @@ const ruleManager = {
         if (indicator) indicator.innerText = rulesData.length === 1 ? 'LESSON RULE' : `RULE ${this.step + 1} OF ${rulesData.length}`;
         const titleEl = document.getElementById('rule-title'); if (titleEl) titleEl.innerText = data.title;
         const descEl = document.getElementById('rule-desc'); if (descEl) descEl.innerText = data.desc;
-        const bigText = document.getElementById('rule-big-text'); if (bigText) bigText.innerHTML = data.html;
+        const bigText = document.getElementById('rule-big-text'); 
+        if (bigText) {
+            const doc = new DOMParser().parseFromString(data.html || '', 'text/html');
+            doc.querySelectorAll('script, iframe, object, embed, style, link').forEach(el => el.remove());
+            const elements = doc.body.getElementsByTagName('*');
+            for (let i = 0; i < elements.length; i++) {
+                const el = elements[i];
+                for (let j = el.attributes.length - 1; j >= 0; j--) {
+                    const attr = el.attributes[j];
+                    if (attr.name.startsWith('on') || attr.name === 'javascript:') {
+                        el.removeAttribute(attr.name);
+                    }
+                }
+            }
+            bigText.innerHTML = doc.body.innerHTML;
+        }
         const prevBtn = document.getElementById('rule-prev-btn');
         if (prevBtn) { if (this.step > 0) prevBtn.classList.remove('hidden'); else prevBtn.classList.add('hidden'); }
         const nextBtn = document.getElementById('rule-next-btn');
