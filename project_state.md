@@ -2,19 +2,27 @@
 
 ## نظرة معمارية عامة
 
-يقوم الإطار على فصل تام بين طبقتين:
+يقوم الإطار على بنية مستقلة تماماً دون إنترنت (Offline-First) مفصولة بين طبقتين:
 
 | الطبقة | الملف | المسؤولية |
 |---|---|---|
-| **النواة المشتركة** | `shared/core.css` | كل أنماط CSS وتنسيقات الخطوط والسمات اللونية |
-| **النواة المشتركة** | `shared/core.js` | كل منطق التطبيق: الألعاب، الصوت، عرض الكلمات، بناء الواجهة |
-| **محتوى الدرس** | `pages/NN Nour-Al-Bayan.html` | **بيانات الدرس فقط** + إعدادات `PAGE_CONFIG` |
+| **الأصول والمكتبات المحلية** | `shared/vendor/` | مكتبات `Chart.js` و `canvas-confetti` والخطوط (`Amiri` و `Fredoka`) محلياً |
+| **النواة المشتركة** | `shared/core.css` | كافة أنماط CSS المترجمة مسبقاً، وتعريف الخطوط، والتجاوب البصري الكامل |
+| **وحدات الجافا سكريبت المشتركة** | `shared/sound.js` | محرك الصوت (Web Audio API) والاحتفالية وثوابت الألوان |
+| **وحدات الجافا سكريبت المشتركة** | `shared/ui-template.js` | قالب HTML الكامل لحقن عناصر الواجهة عبر `buildAppUI()` |
+| **وحدات الجافا سكريبت المشتركة** | `shared/app.js` | محرك التطبيق الرئيسي (التنقل، التقييم، شريط التقدم، مراجعة الأخطاء، اختصارات المفاتيح) |
+| **وحدات الجافا سكريبت المشتركة** | `shared/games-wordwall.js` | إدارة غرف ألعاب الكلمات: فتح الصناديق، عجلة الحظ، البطاقات العشوائية |
+| **وحدات الجافا سكريبت المشتركة** | `shared/games-board.js` | ألعاب الألواح الاستراتيجية (XO و Connect 4) |
+| **وحدات الجافا سكريبت المشتركة** | `shared/games-extra.js` | ألعاب مطابقة الذاكرة وصندوق الألغاز السرية |
+| **وحدات الجافا سكريبت المشتركة** | `shared/rule-manager.js` | إدارة قواعد الدرس وتهيئة دورة حياة التطبيق (`window.onload`) |
+| **محتوى الدرس** | `pages/NN.html` | **بيانات الدرس فقط** (`PAGE_CONFIG` و `dataset`) بدون أي كود واجهة |
+| **الفهرس العام** | `index.html` | شبكة بطاقات تفاعلية متجاوبة ذاتية التحديث عبر `update_index.py` |
 
-صفحات الدروس **لا تحوي أي** CSS، ولا بنية HTML للواجهة، ولا كائنات ألعاب. `core.js` يبني الواجهة كاملةً ويُحقنها في `<body>` لحظة التحميل عبر دالة `buildAppUI()`.
+صفحات الدروس **لا تحوي أي** CSS أو روابط CDN خارجية، ولا بنية HTML للواجهة، ولا كائنات ألعاب. تُبنى الواجهة كاملةً وتُحقن في `<body>` لحظة التحميل عبر دالة `buildAppUI()`.
 
 ---
 
-## بنية صفحة الدرس المجردة (القالب الوحيد)
+## بنية صفحة الدرس المجردة (القالب المعتمد)
 
 ```html
 <!DOCTYPE html>
@@ -23,10 +31,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Nour Al-Bayan - [LESSON TOPIC]</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Fredoka:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="../shared/vendor/chart.umd.min.js"></script>
+    <script src="../shared/vendor/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="../shared/core.css">
 </head>
 <body class="flex flex-col items-center select-none bg-emerald-50/40">
@@ -35,12 +41,18 @@
         /* + مصفوفة rulesData إن وُجدت */
         const dataset = [ ... ];        /* مصفوفة الكلمات */
     </script>
-    <script src="../shared/core.js"></script>
+    <script src="../shared/sound.js"></script>
+    <script src="../shared/ui-template.js"></script>
+    <script src="../shared/app.js"></script>
+    <script src="../shared/games-wordwall.js"></script>
+    <script src="../shared/games-board.js"></script>
+    <script src="../shared/games-extra.js"></script>
+    <script src="../shared/rule-manager.js"></script>
 </body>
 </html>
 ```
 
-> **قاعدة صارمة:** لا يوجد في `<body>` سوى هذين الوسمين فقط: `<script>` للبيانات، و`<script src="../shared/core.js">`. كل شيء آخر يبنيه `core.js` تلقائياً.
+> **قاعدة صارمة:** لا يوجد في `<head>` سوى الملفات المحلية الثلاثة، ولا يوجد في `<body>` سوى وسم `<script>` للبيانات ثم وسوم الوحدات السبع بالترتيب الصارم أعلاه.
 
 ---
 
@@ -180,8 +192,16 @@ const dataset = rawWords.map((wordHTML, index) => ({
 | `memoryGame` | لعبة مطابقة البطاقات |
 | `riddlesGame` | لعبة الألغاز السرية |
 | `ruleManager` | إدارة عرض القواعد (يعمل تلقائياً عند وجود `rulesData`) |
-| `buildAppUI()` | تُبني HTML الواجهة كاملةً وتُحقن في `<body>` (تُستدعى من `app.init()`) |
+| `buildAppUI()` | تُبني HTML الواجهة كاملةً وتُحقن في `<body>` (تتضمن بطاقة المطور والدعاء في القائمة الرئيسية) |
 | `fireCelebration()` | إطلاق فرقعة الاحتفال (canvas-confetti) |
+
+---
+
+## بنية وتجاوب البطاقات والمقاطع (Card Responsive Architecture)
+
+- **البطاقة المفردة (`.letter-box`):** تُستخدم للكلمات الكاملة وHTML وgroups؛ أبعادها مرنة عبر `clamp()` مع ارتفاع متناسب لمنع اقتطاع الحركات القرآنية.
+- **صناديق المقاطع الصوتية (`.seg-box` داخل `.segmented-container`):** تُستخدم لبيانات `boxes` و `multiBox` و `segs`؛ تصطف أفقياً في سطر واحد من اليمين لليسار (`direction: rtl`) دون تكدس رأسي، مع عرض ديناميكي يستوعب المقاطع الموصولة والمنفصلة.
+- **بطاقة المطور والدعاء الثابتة:** مُدرجة في القائمة الرئيسية لكل الدروس تخليداً للحقوق والوفاء.
 
 ---
 
@@ -268,8 +288,14 @@ app.jumpTo('ww_cards');
 
 | الملف | الغرض |
 |---|---|
-| [`shared/core.js`](shared/core.js) | محرك التطبيق والألعاب وبناء الواجهة |
-| [`shared/core.css`](shared/core.css) | الأنماط والتنسيقات المشتركة |
+| [`shared/sound.js`](shared/sound.js) | محرك الصوت والاحتفالية |
+| [`shared/ui-template.js`](shared/ui-template.js) | قالب واجهة المستخدم `buildAppUI` |
+| [`shared/app.js`](shared/app.js) | المحرك التفاعلي المركزي للمنصة |
+| [`shared/games-wordwall.js`](shared/games-wordwall.js) | ألعاب جدار الكلمات والعجلة والبطاقات |
+| [`shared/games-board.js`](shared/games-board.js) | ألعاب الألواح (XO و Connect 4) |
+| [`shared/games-extra.js`](shared/games-extra.js) | ألعاب الذاكرة والألغاز |
+| [`shared/rule-manager.js`](shared/rule-manager.js) | إدارة قواعد الدرس وتهيئة التطبيق |
+| [`shared/core.css`](shared/core.css) | الأنماط والتنسيقات المشتركة والخطوط |
 | [`pages/`](pages/) | صفحات الدروس المجردة (بيانات فقط) |
 | [`update_index.py`](update_index.py) | تحديث فهرس `index.html` تلقائياً |
 | [`index.html`](index.html) | الصفحة الرئيسية بروابط الدروس |

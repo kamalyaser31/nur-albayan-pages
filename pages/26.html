@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nour Al-Bayan - Lesson 26</title>
+    <script src="../shared/vendor/chart.umd.min.js"></script>
+    <script src="../shared/vendor/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="../shared/core.css">
+</head>
+<body class="flex flex-col items-center select-none bg-emerald-50/40">
+    <script>
+window.PAGE_CONFIG = {
+            title: 'Nour Al-Bayan',
+            subtitle: 'Madd Alif Words (كلمات المد بالألف المتنوعة)',
+            footer: 'Nour Al-Bayan Learning System • Quranic Sukun Examples',
+            game3: 'memory'
+        };
+
+        const dataset = [
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>صَ&zwj;</span><span class=\'c-red\'>&zwj;وَا</span><span class=\'c-black\'>بَ</span></span>', info: 'Madd Alif Training', theme: 'green', t: 'normal'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>سَ&zwj;</span><span class=\'c-red\'>&zwj;حَا</span><span class=\'c-black\'>بَ</span></span>', info: 'Madd Alif Training', theme: 'green', t: 'speed'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>بَ&zwj;</span><span class=\'c-red\'>&zwj;نَا</span><span class=\'c-black\'>هَا</span></span>', info: 'Madd Alif Training', theme: 'green', t: 'normal'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>ذَ</span><span class=\'c-red\'>وَا</span><span class=\'c-black\'>تَا</span></span>', info: 'Madd Alif Training', theme: 'green', t: 'danger'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>قَ&zwj;</span><span class=\'c-red\'>&zwj;ضَا</span><span class=\'c-black\'>هَا</span></span>', info: 'Madd Alif Training', theme: 'green', t: 'golden'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>تَ&zwj;</span><span class=\'c-red\'>&zwj;فَا</span><span class=\'c-black\'>هَمَا</span></span>', info: 'Madd Alif Training', theme: 'green', t: 'normal'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>تَ&zwj;</span><span class=\'c-red\'>&zwj;نَا</span><span class=\'c-black\'>صَرَا</span></span>', info: 'Madd Alif Training', theme: 'green', t: 'speed'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>تَ&zwj;</span><span class=\'c-red\'>&zwj;قَا</span><span class=\'c-black\'>رَبَا</span></span>', info: 'Madd Alif Training', theme: 'green', t: 'normal'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>تَ&zwj;</span><span class=\'c-red\'>&zwj;دَا</span><span class=\'c-black\'>رَكَا</span></span>', info: 'Madd Alif Training', theme: 'green', t: 'danger'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>تَ&zwj;</span><span class=\'c-red\'>&zwj;سَا</span><span class=\'c-black\'>لَفَا</span></span>', info: 'Madd Alif Training', theme: 'green', t: 'golden'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>يُ&zwj;</span><span class=\'c-red\'>&zwj;دَا</span><span class=\'c-black\'>فِعُ</span></span>', info: 'Madd Alif Training', theme: 'pink', t: 'normal'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>يُ&zwj;</span><span class=\'c-red\'>&zwj;نَا</span><span class=\'c-black\'>قِشُ</span></span>', info: 'Madd Alif Training', theme: 'pink', t: 'speed'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>يُ&zwj;</span><span class=\'c-red\'>&zwj;خَا</span><span class=\'c-black\'>لِفُ</span></span>', info: 'Madd Alif Training', theme: 'pink', t: 'normal'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>يَتَ&zwj;</span><span class=\'c-red\'>&zwj;رَا</span><span class=\'c-black\'>جَعُ</span></span>', info: 'Madd Alif Training', theme: 'pink', t: 'danger'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>يَتَ&zwj;</span><span class=\'c-red\'>&zwj;وَا</span><span class=\'c-black\'>ضَعُ</span></span>', info: 'Madd Alif Training', theme: 'pink', t: 'golden'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>أَ</span><span class=\'c-red\'>سَا</span><span class=\'c-black\'>وِرَ</span></span>', info: 'Madd Alif Training', theme: 'pink', t: 'normal'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>أَ</span><span class=\'c-red\'>كَا</span><span class=\'c-black\'>بِرَ</span></span>', info: 'Madd Alif Training', theme: 'pink', t: 'speed'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>أَ</span><span class=\'c-red\'>حَا</span><span class=\'c-black\'>سِنُ</span></span>', info: 'Madd Alif Training', theme: 'pink', t: 'normal'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>هَ&zwj;</span><span class=\'c-red\'>&zwj;دَا</span><span class=\'c-black\'>يَا</span></span>', info: 'Madd Alif Training', theme: 'pink', t: 'danger'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>قَ&zwj;</span><span class=\'c-red\'>&zwj;ضَا</span><span class=\'c-black\'>يَا</span></span>', info: 'Madd Alif Training', theme: 'pink', t: 'golden'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>غَا</span><span class=\'c-red\'>بَا</span><span class=\'c-black\'>تُ</span></span>', info: 'Madd Alif Training', theme: 'green', t: 'normal'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>خَا</span><span class=\'c-red\'>لَا</span><span class=\'c-black\'>تُ</span></span>', info: 'Madd Alif Training', theme: 'green', t: 'speed'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-red\'>آ</span><span class=\'c-black\'>تَاهَا</span></span>', info: 'Madd Alif Training', theme: 'green', t: 'normal'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-red\'>آ</span><span class=\'c-black\'>خِرِنَا</span></span>', info: 'Madd Alif Training', theme: 'green', t: 'danger'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-red\'>آ</span><span class=\'c-black\'>ثَارَهَا</span></span>', info: 'Madd Alif Training', theme: 'green', t: 'golden'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-red\'>آ</span><span class=\'c-black\'>مَنَ</span> <span class=\'c-red\'>آ</span><span class=\'c-black\'>دَمُ</span></span>', info: 'Madd Alif Training', theme: 'green', t: 'normal'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-red\'>تَا</span><span class=\'c-black\'>بَ</span> <span class=\'c-black\'>وَأَ</span><span class=\'c-red\'>نَا</span><span class=\'c-black\'>بَ</span></span>', info: 'Madd Alif Training', theme: 'green', t: 'speed'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-red\'>هَا</span><span class=\'c-black\'>جَرَ</span> <span class=\'c-black\'>وَ</span><span class=\'c-red\'>جَا</span><span class=\'c-black\'>هَدَ</span></span>', info: 'Madd Alif Training', theme: 'green', t: 'golden'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>أَ</span><span class=\'c-red\'>قَا</span><span class=\'c-black\'>مَ</span> <span class=\'c-black\'>صَ&zwj;</span><span class=\'c-red\'>&zwj;لَا</span><span class=\'c-black\'>تَهُ</span></span>', info: 'Madd Alif Training', theme: 'yellow', t: 'normal'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>رَ</span><span class=\'c-red\'>جَا</span><span class=\'c-black\'>هُ</span> <span class=\'c-black\'>فَهَ&zwj;</span><span class=\'c-red\'>&zwj;دَا</span><span class=\'c-black\'>هُ</span></span>', info: 'Madd Alif Training', theme: 'yellow', t: 'danger'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>أَ</span><span class=\'c-red\'>جَا</span><span class=\'c-black\'>بَهُ</span> <span class=\'c-black\'>فَدَ</span><span class=\'c-red\'>عَا</span><span class=\'c-black\'>هُ</span></span>', info: 'Madd Alif Training', theme: 'yellow', t: 'speed'},
+            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>أَ</span><span class=\'c-red\'>طَا</span><span class=\'c-black\'>عَ</span> <span class=\'c-black\'>عُمَرُ</span> <span class=\'c-black\'>أَ</span><span class=\'c-red\'>بَا</span><span class=\'c-black\'>هُ</span> <span class=\'c-black\'>فَ&zwj;</span><span class=\'c-red\'>&zwj;فَا</span><span class=\'c-black\'>زَ</span> <span class=\'c-black\'>بِرِ</span><span class=\'c-red\'>ضَا</span> <span class=\'c-red\'>خَا</span><span class=\'c-black\'>لِقِهِ</span></span>', info: 'Madd Alif Training', theme: 'yellow', t: 'golden'}
+        ];
+    </script>
+        <script src="../shared/sound.js"></script>
+    <script src="../shared/ui-template.js"></script>
+    <script src="../shared/app.js"></script>
+    <script src="../shared/games-wordwall.js"></script>
+    <script src="../shared/games-board.js"></script>
+    <script src="../shared/games-extra.js"></script>
+    <script src="../shared/rule-manager.js"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nour Al-Bayan - Segmented English Edition</title>
+    <script src="../shared/vendor/chart.umd.min.js"></script>
+    <script src="../shared/vendor/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="../shared/core.css">
+</head>
+<body class="flex flex-col items-center select-none bg-emerald-50/40">
+    <script>
+window.PAGE_CONFIG = {
+            title: 'Nour Al-Bayan',
+            subtitle: 'Segmented English Edition',
+            footer: 'Nour Al-Bayan Learning System • Segmented English Edition',
+            game3: 'memory'
+        };
+
+        const _themes = ["pink","green","blue","yellow"];
+        const _raw = [
+            ["يَـ","ـئِـ","ـسَ","normal"],
+            ["حَـ","ـبِـ","ـطَ","normal"],
+            ["عَـ","ـتِـ","ـهَ","speed"],
+            ["وَ","ثِـ","ـقَ","normal"],
+            ["وَ","جِـ","ـلَ","golden"],
+            ["رَ","حِـ","ـمَ","normal"],
+            ["بَـ","ـخِـ","ـلَ","normal"],
+            ["قَـ","ـدِ","مَ","normal"],
+            ["حَـ","ـذِ","رَ","speed"],
+            ["حَـ","ـرِ","صَ","normal"],
+            ["حَـ","ـزِ","نَ","danger"],
+            ["أَ","سِـ","ـفَ","normal"],
+            ["خَـ","ـشِـ","ـيَ","normal"],
+            ["نَـ","ـصِـ","ـبَ","golden"],
+            ["رَ","ضِـ","ـيَ","normal"],
+            ["خَـ","ـطِـ","ـفَ","normal"],
+            ["حَـ","ـظِـ","ـيَ","speed"],
+            ["لَـ","ـعِـ","ـبَ","normal"],
+            ["نَـ","ـعِـ","ـمَ","normal"],
+            ["سَـ","ـغِـ","ـبَ","danger"],
+            ["حَـ","ـفِـ","ـظَ","normal"],
+            ["بَـ","ـقِـ","ـيَ","normal"],
+            ["بَـ","ـكِـ","ـمَ","golden"],
+            ["عَـ","ـلِـ","ـمَ","normal"],
+            ["سَـ","ـمِـ","ـعَ","normal"],
+            ["حَـ","ـنِـ","ـقَ","danger"],
+            ["عَـ","ـهِـ","ـدَ","normal"],
+            ["عَـ","وِ","رَ","speed"],
+            ["رَ","كِـ","ـبَ","golden"],
+            ["سَـ","ـعِـ","ـدَ","normal"],
+            ["شَـ","ـرِ","بَ","normal"],
+            ["ظَـ","ـفِـ","ـرَ","normal"]
+        ];
+        const dataset = _raw.map((r,i)=>({w:[r[0],r[1],r[2]], t:r[3], theme:_themes[Math.floor(i/4)%4]}));
+    </script>
+        <script src="../shared/sound.js"></script>
+    <script src="../shared/ui-template.js"></script>
+    <script src="../shared/app.js"></script>
+    <script src="../shared/games-wordwall.js"></script>
+    <script src="../shared/games-board.js"></script>
+    <script src="../shared/games-extra.js"></script>
+    <script src="../shared/rule-manager.js"></script>
+</body>
+</html>
