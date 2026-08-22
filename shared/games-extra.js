@@ -22,9 +22,15 @@ const memoryGame = {
     },
     renderBoard() {
         const board = document.getElementById('memory-board'); if (!board) return; board.textContent = '';
-        this.cards.forEach((icon) => {
+        this.cards.forEach((icon, idx) => {
             const scene = document.createElement('div'); scene.className = 'mem-scene';
-            const card = document.createElement('div'); card.className = 'mem-card'; card.dataset.icon = icon; card.onclick = () => this.flipCard(card);
+            const card = document.createElement('button');
+            card.type = 'button';
+            card.className = 'mem-card';
+            card.dataset.icon = icon;
+            card.setAttribute('aria-label', `Memory card ${idx + 1}, hidden`);
+            card.setAttribute('aria-pressed', 'false');
+            card.onclick = () => this.flipCard(card);
             const front = document.createElement('div'); front.className = 'mem-face mem-face-front shadow-[0_4px_0_#be123c] active:translate-y-1 active:shadow-none'; front.innerText = '❓';
             const back = document.createElement('div'); back.className = 'mem-face mem-face-back'; back.innerText = icon;
             card.appendChild(front); card.appendChild(back); scene.appendChild(card); board.appendChild(scene);
@@ -33,6 +39,8 @@ const memoryGame = {
     flipCard(card) {
         if (!this.gameActive || this.lockBoard || card === this.firstCard || card.classList.contains('is-flipped')) return;
         card.classList.add('is-flipped');
+        card.setAttribute('aria-label', `Card with ${card.dataset.icon}`);
+        card.setAttribute('aria-pressed', 'true');
         if (!this.hasFlippedCard) { this.hasFlippedCard = true; this.firstCard = card; return; }
         this.secondCard = card; this.checkForMatch();
     },
@@ -41,6 +49,10 @@ const memoryGame = {
         if (isMatch) this.disableCards(); else this.unflipCards();
     },
     disableCards() {
+        this.firstCard.setAttribute('aria-label', `Matched pair: ${this.firstCard.dataset.icon}`);
+        this.secondCard.setAttribute('aria-label', `Matched pair: ${this.secondCard.dataset.icon}`);
+        this.firstCard.disabled = true;
+        this.secondCard.disabled = true;
         this.firstCard.onclick = null; this.secondCard.onclick = null; this.matchedPairs++; this.resetBoard();
         if (this.matchedPairs === 8) {
             this.gameActive = false;
@@ -53,8 +65,16 @@ const memoryGame = {
     unflipCards() {
         this.lockBoard = true;
         setTimeout(() => {
-            if (this.firstCard) this.firstCard.classList.remove('is-flipped');
-            if (this.secondCard) this.secondCard.classList.remove('is-flipped');
+            if (this.firstCard) {
+                this.firstCard.classList.remove('is-flipped');
+                this.firstCard.setAttribute('aria-label', 'Memory card, hidden');
+                this.firstCard.setAttribute('aria-pressed', 'false');
+            }
+            if (this.secondCard) {
+                this.secondCard.classList.remove('is-flipped');
+                this.secondCard.setAttribute('aria-label', 'Memory card, hidden');
+                this.secondCard.setAttribute('aria-pressed', 'false');
+            }
             this.resetBoard();
         }, 1000);
     },

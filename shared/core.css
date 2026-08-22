@@ -469,10 +469,16 @@ button {
     font-family: inherit;
     cursor: pointer;
 }
-button:focus {
+button:focus,
+select:focus,
+input:focus,
+a:focus {
     outline: none;
 }
-button:focus-visible {
+button:focus-visible,
+select:focus-visible,
+input:focus-visible,
+a:focus-visible {
     outline: 3px solid #f59e0b;
     outline-offset: 2px;
 }

@@ -203,6 +203,17 @@ const app = {
         }
     },
 
+    getPlainWord(item) {
+        if (!item) return '';
+        if (item.plain) return item.plain;
+        if (item.html) return item.html.replace(/<[^>]+>/g, '').replace(/&zwj;/g, '').replace(/&nbsp;/g, ' ').trim();
+        if (Array.isArray(item.w)) return item.w.join('').replace(/<[^>]+>/g, '').replace(/&zwj;/g, '').replace(/&nbsp;/g, ' ').replace(/ـ/g, '').trim();
+        if (typeof item.w === 'string') return item.w.replace(/<[^>]+>/g, '').replace(/&zwj;/g, '').replace(/&nbsp;/g, ' ').trim();
+        if (item.boxes) return item.boxes.map(b => b.map(s => s[0]).join('')).join(' ').trim();
+        if (item.groups) return item.groups.map(g => g[0]).join('').trim();
+        return '';
+    },
+
     render() {
         if (typeof dataset === 'undefined' || !dataset[this.idx]) return;
         this.wordRenderTime = Date.now();
@@ -220,6 +231,8 @@ const app = {
         }
         if (area) {
             this.renderWordInto(area, item);
+            const plain = this.getPlainWord(item);
+            area.setAttribute('aria-label', `Card ${this.idx + 1} of ${dataset.length}: ${plain}`);
             area.tabIndex = -1;
             area.focus({ preventScroll: true });
         }

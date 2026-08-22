@@ -2,11 +2,21 @@ const xoGame = {
     board: ['', '', '', '', '', '', '', '', ''], currentPlayer: 'X', gameActive: true,
     init() {
         const container = document.getElementById('xo-board'); if (!container) return; container.textContent = '';
-        for (let i = 0; i < 9; i++) { let cell = document.createElement('div'); cell.className = 'xo-cell-new shadow-[0_4px_0_#047857] active:shadow-none active:translate-y-1'; cell.onclick = () => this.play(i, cell); container.appendChild(cell); }
+        for (let i = 0; i < 9; i++) {
+            let cell = document.createElement('button');
+            cell.type = 'button';
+            cell.className = 'xo-cell-new shadow-[0_4px_0_#047857] active:shadow-none active:translate-y-1';
+            cell.setAttribute('aria-label', `Cell ${i + 1}, empty`);
+            cell.onclick = () => this.play(i, cell);
+            container.appendChild(cell);
+        }
     },
     play(idx, cell) {
         if (this.board[idx] !== '' || !this.gameActive) return;
-        this.board[idx] = this.currentPlayer; cell.innerText = this.currentPlayer; cell.classList.add(this.currentPlayer === 'X' ? 'xo-x' : 'xo-o');
+        this.board[idx] = this.currentPlayer;
+        cell.innerText = this.currentPlayer;
+        cell.setAttribute('aria-label', `Cell ${idx + 1}, ${this.currentPlayer}`);
+        cell.classList.add(this.currentPlayer === 'X' ? 'xo-x' : 'xo-o');
         let winLine = this.checkWin();
         if (winLine) {
             const status = document.getElementById('xo-status'); if (status) { status.innerText = `${this.currentPlayer} Won! 🎉`; status.classList.add('text-yellow-300'); }
@@ -48,7 +58,13 @@ const c4Game = {
         this.board = Array(this.rows).fill(null).map(() => Array(this.cols).fill(null));
         for (let r = 0; r < this.rows; r++) {
             for (let c = 0; c < this.cols; c++) {
-                let cell = document.createElement('div'); cell.className = 'c4-cell-new'; cell.id = `c4-${r}-${c}`; cell.onclick = () => this.drop(c); container.appendChild(cell);
+                let cell = document.createElement('button');
+                cell.type = 'button';
+                cell.className = 'c4-cell-new';
+                cell.id = `c4-${r}-${c}`;
+                cell.setAttribute('aria-label', `Row ${r + 1}, Column ${c + 1}`);
+                cell.onclick = () => this.drop(c);
+                container.appendChild(cell);
             }
         }
     },
@@ -58,6 +74,10 @@ const c4Game = {
             if (!this.board[row][col]) {
                 this.board[row][col] = this.currentPlayer;
                 let cell = document.getElementById(`c4-${row}-${col}`);
+                if (cell) {
+                    cell.classList.add(this.currentPlayer === 'red' ? 'c4-red' : 'c4-yellow');
+                    cell.setAttribute('aria-label', `Row ${row + 1}, Column ${col + 1}, ${this.currentPlayer}`);
+                }
                 if (cell) {
                     let piece = document.createElement('div'); piece.className = `absolute inset-0 rounded-full w-full h-full ${this.currentPlayer === 'red' ? 'c4-red-new' : 'c4-yellow-new'}`; cell.appendChild(piece);
                 }

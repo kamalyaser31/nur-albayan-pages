@@ -21,13 +21,15 @@ const wordwallRoom = {
         if (!container || typeof dataset === 'undefined') return;
         container.textContent = '';
         dataset.forEach((item, index) => {
-            const box = document.createElement('div');
+            const box = document.createElement('button');
+            box.type = 'button';
             box.className = `wordwall-box relative aspect-square w-full flex items-center justify-center rounded-2xl ${this.openedBoxes.has(index) ? 'opened opacity-50 grayscale-[50%]' : ''}`;
             box.id = `box-${index}`;
+            box.setAttribute('aria-label', `Box ${index + 1}${this.openedBoxes.has(index) ? ', opened' : ', closed'}`);
             const color = wordwallColors[index % wordwallColors.length];
             
             box.innerHTML = `
-                <div class="wordwall-box-inner relative w-full h-full duration-500">
+                <div class="wordwall-box-inner relative w-full h-full duration-500" aria-hidden="true">
                     <div class="box-front rounded-2xl flex flex-col items-center justify-center text-white border-[3px] border-white/40 shadow-lg hover:scale-105 transition-transform" style="background-color: ${color}">
                         <span class="text-4xl sm:text-5xl lg:text-6xl font-black drop-shadow-md">${index + 1}</span>
                         <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-2 bg-black/20 px-3 py-1 rounded-full backdrop-blur-sm">Open</span>
@@ -35,7 +37,12 @@ const wordwallRoom = {
                     <div class="box-back rounded-2xl flex items-center justify-center text-slate-400 bg-slate-100 border-[3px] border-slate-300 shadow-inner"><span class="text-4xl">✔</span></div>
                 </div>`;
             
-            box.onclick = () => { if (!this.openedBoxes.has(index)) app.revealWord(index, 'box'); };
+            box.onclick = () => {
+                if (!this.openedBoxes.has(index)) {
+                    box.setAttribute('aria-label', `Box ${index + 1}, opened`);
+                    app.revealWord(index, 'box');
+                }
+            };
             container.appendChild(box);
         });
     },
@@ -76,6 +83,8 @@ const wheelGame = {
         const numSlices = dataset.length; const sliceAngle = (Math.PI * 2) / numSlices;
         let normalizedAngle = (Math.PI * 2.5 - (this.angle % (Math.PI * 2))) % (Math.PI * 2);
         let sliceIndex = Math.floor(normalizedAngle / sliceAngle) % numSlices;
+        const status = document.getElementById('wheel-status');
+        if (status) status.innerText = `Wheel landed on Word ${sliceIndex + 1}`;
         setTimeout(() => { app.revealWord(sliceIndex, 'wheel'); }, 400);
     }
 };
