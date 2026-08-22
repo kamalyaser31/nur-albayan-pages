@@ -123,6 +123,21 @@ const app = {
         selector.appendChild(optGroupEnd);
     },
 
+    setSafeHTML(el, htmlStr) {
+        if (!el) return;
+        const doc = new DOMParser().parseFromString(htmlStr || '', 'text/html');
+        doc.querySelectorAll('script, iframe, object, embed, style, link').forEach(e => e.remove());
+        const elements = doc.body.getElementsByTagName('*');
+        for (let i = 0; i < elements.length; i++) {
+            const child = elements[i];
+            for (let j = child.attributes.length - 1; j >= 0; j--) {
+                const attr = child.attributes[j];
+                if (attr.name.startsWith('on') || attr.name === 'javascript:') child.removeAttribute(attr.name);
+            }
+        }
+        el.innerHTML = doc.body.innerHTML;
+    },
+
     renderWordInto(container, item) {
         if (!container || !item) return;
         container.innerHTML = '';
