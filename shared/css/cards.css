@@ -1,0 +1,72 @@
+/**
+ * Nour Al-Bayan Interactive Platform - Word Display Cards & Themes
+ * Full word box, segmented letters container (.segmented-container, .seg-box), and border themes.
+ */
+
+.letter-box,
+.seg-box {
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    transition: all 0.3s var(--ease-bounce);
+}
+
+.letter-box {
+    border-radius: 2.25rem;
+    width: 100%;
+    max-width: 720px;
+    height: clamp(190px, 35vh, 340px);
+    min-height: 180px;
+    flex-direction: column;
+    font-size: clamp(3.2rem, 8.5vw, 6.5rem);
+    padding: 1rem 1.5rem;
+    line-height: 1.6;
+}
+
+.segmented-container {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(8px, 2.2vw, 22px);
+    padding: 0.5rem;
+    width: 100%;
+    max-width: 860px;
+    flex-wrap: nowrap;
+}
+
+.seg-box {
+    border-radius: 2rem;
+    min-width: clamp(85px, 18vw, 190px);
+    max-width: 280px;
+    flex: 0 1 auto;
+    height: clamp(180px, 34vh, 300px);
+    min-height: 160px;
+    font-size: clamp(3.2rem, 8vw, 6.2rem);
+    padding: 0.5rem 1.5rem;
+    line-height: 1.5;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.word-wrapper {
+    display: inline-block;
+    direction: rtl;
+    white-space: normal;
+    word-spacing: 0.2em;
+}
+
+.theme-green,
+.theme-pink,
+.theme-yellow,
+.theme-blue {
+    border: 5px solid var(--theme-color);
+    box-shadow: 0 12px 30px -8px rgba(var(--theme-rgb), 0.22), inset 0 0 20px rgba(var(--theme-rgb), 0.04);
+}
+.theme-green  { --theme-color: #10b981; --theme-rgb: 16, 185, 129; }
+.theme-pink   { --theme-color: #f472b6; --theme-rgb: 244, 114, 182; }
+.theme-yellow { --theme-color: #f59e0b; --theme-rgb: 245, 158, 11; }
+.theme-blue   { --theme-color: #3b82f6; --theme-rgb: 59, 130, 246; }

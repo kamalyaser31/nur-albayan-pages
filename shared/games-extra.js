@@ -12,12 +12,16 @@ const memoryGame = {
         this.shuffleCards(); this.renderBoard();
         this.matchedPairs = 0; this.hasFlippedCard = false; this.lockBoard = false; this.firstCard = null; this.secondCard = null; this.gameActive = true;
         const status = document.getElementById('memory-status'); if (status) { status.textContent = "Find all matching pairs! 🧠"; status.classList.remove('text-yellow-300'); }
-        let resumeBtn = document.getElementById('memory-resume-btn');
-        if (resumeBtn) { resumeBtn.textContent = "Skip to Wordwall ⏭️"; resumeBtn.classList.remove('animate-bounce', 'bg-emerald-400', 'text-white'); resumeBtn.classList.add('bg-yellow-400', 'text-purple-900'); }
+        if (typeof app !== 'undefined') app.setGameResumeState('memory-resume-btn', false, '', "Skip to Wordwall ⏭️");
     },
     shuffleCards() {
-        for (let i = this.cards.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1)); [this.cards[i], this.cards[j]] = [this.cards[j], this.cards[i]];
+        if (typeof app !== 'undefined' && typeof app.shuffle === 'function') {
+            app.shuffle(this.cards);
+        } else {
+            for (let i = this.cards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [this.cards[i], this.cards[j]] = [this.cards[j], this.cards[i]];
+            }
         }
     },
     renderBoard() {
@@ -58,8 +62,7 @@ const memoryGame = {
             this.gameActive = false;
             const status = document.getElementById('memory-status'); if (status) { status.textContent = "🏆 Fantastic! You matched them all!"; status.classList.add('text-yellow-300'); }
             fireCelebration();
-            let resumeBtn = document.getElementById('memory-resume-btn');
-            if (resumeBtn) { resumeBtn.textContent = "Wordwall Games 🎡"; resumeBtn.classList.add('animate-bounce', 'bg-emerald-400', 'text-white'); resumeBtn.classList.remove('bg-yellow-400', 'text-purple-900'); }
+            if (typeof app !== 'undefined') app.setGameResumeState('memory-resume-btn', true, "Wordwall Games 🎡");
         }
     },
     unflipCards() {
@@ -92,8 +95,7 @@ const riddlesGame = {
     init() { this.idx = 0; },
     reset() {
         this.init();
-        let resumeBtn = document.getElementById('riddles-resume-btn');
-        if (resumeBtn) { resumeBtn.textContent = "Skip to Wordwall ⏭️"; resumeBtn.classList.remove('animate-bounce', 'bg-emerald-400', 'text-white'); resumeBtn.classList.add('bg-yellow-400', 'text-purple-900'); }
+        if (typeof app !== 'undefined') app.setGameResumeState('riddles-resume-btn', false, '', "Skip to Wordwall ⏭️");
         this.loadNext();
     },
     loadNext() {
@@ -101,8 +103,7 @@ const riddlesGame = {
             fireCelebration();
             const qEl = document.getElementById('riddle-question'); if (qEl) qEl.innerText = "🏆 Unbelievable! You solved all the riddles and earned the Quran Genius Badge!";
             const optsDiv = document.getElementById('riddle-options'); if (optsDiv) optsDiv.textContent = '';
-            let resumeBtn = document.getElementById('riddles-resume-btn');
-            if (resumeBtn) { resumeBtn.textContent = "Wordwall Room 🎡"; resumeBtn.classList.add('animate-bounce', 'bg-emerald-400', 'text-white'); resumeBtn.classList.remove('bg-yellow-400', 'text-purple-900'); }
+            if (typeof app !== 'undefined') app.setGameResumeState('riddles-resume-btn', true, "Wordwall Room 🎡");
             return;
         }
         const riddle = this.data[this.idx];

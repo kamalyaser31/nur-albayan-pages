@@ -1,0 +1,38 @@
+/**
+ * Nour Al-Bayan Interactive Platform - UI Components
+ * Navigation progress bar, feedback badge, and chart container.
+ */
+
+#progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3.5px;
+    background: linear-gradient(90deg, #10b981, #d97706);
+    border-radius: 0 3px 3px 0;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 40;
+}
+
+.feedback-badge {
+    position: fixed;
+    top: 14vh;
+    left: 50%;
+    transform: translateX(-50%) scale(0.5);
+    z-index: 1000;
+    pointer-events: none;
+    transition: all 0.3s var(--ease-bounce);
+    opacity: 0;
+}
+.feedback-badge.active {
+    transform: translateX(-50%) scale(1.1);
+    opacity: 1;
+}
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 220px;
+    margin: 0 auto;
+    height: 150px;
+}

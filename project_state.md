@@ -7,11 +7,13 @@
 | الطبقة | الملف | المسؤولية |
 |---|---|---|
 | **الأصول والمكتبات المحلية** | `shared/vendor/` | مكتبات `Chart.js` و `canvas-confetti` والخطوط (`Amiri` و `Fredoka`) محلياً |
-| **النواة المشتركة** | `shared/core.css` | كافة أنماط CSS المترجمة مسبقاً، وتعريف الخطوط، والتجاوب البصري الكامل |
+| **المجمّع الرئيسي للتنسيق** | `shared/core.css` | ملف الاستيراد المركزي (@import) المجمّع لكافة وحدات CSS التسع |
+| **وحدات التنسيق المشتركة** | `shared/css/` | 9 وحدات تخصصية (`tokens`, `base`, `utilities`, `typography`, `cards`, `components`, `games-wordwall`, `games-board`, `animations`) |
+| **الوحدات المساعدة المفككة** | `shared/css/utilities/` | 8 وحدات مساعدة دقيقة (`layout`, `spacing`, `text`, `colors`, `borders`, `effects`, `buttons`, `responsive`) |
 | **وحدات الجافا سكريبت المشتركة** | `shared/sound.js` | محرك الصوت (Web Audio API) والاحتفالية وثوابت الألوان |
 | **وحدات الجافا سكريبت المشتركة** | `shared/ui-template.js` | قالب HTML الكامل لحقن عناصر الواجهة عبر `buildAppUI()` |
 | **وحدات الجافا سكريبت المشتركة** | `shared/app.js` | محرك التطبيق الرئيسي (التنقل، التقييم، شريط التقدم، مراجعة الأخطاء، اختصارات المفاتيح) |
-| **وحدات الجافا سكريبت المشتركة** | `shared/games-wordwall.js` | إدارة غرف ألعاب الكلمات: فتح الصناديق، عجلة الحظ، البطاقات العشوائية |
+| **وحدات الجافا سكريبت المشتركة** | `shared/games-wordwall.js` | إدارة غرف ألعاب الكلمات: الصناديق، الستائر، سلَّم الارتقاء، عجلة الحظ، البطاقات العشوائية |
 | **وحدات الجافا سكريبت المشتركة** | `shared/games-board.js` | ألعاب الألواح الاستراتيجية (XO و Connect 4) |
 | **وحدات الجافا سكريبت المشتركة** | `shared/games-extra.js` | ألعاب مطابقة الذاكرة وصندوق الألغاز السرية |
 | **وحدات الجافا سكريبت المشتركة** | `shared/rule-manager.js` | إدارة قواعد الدرس وتهيئة دورة حياة التطبيق (`window.onload`) |
@@ -176,24 +178,24 @@ const dataset = rawWords.map((wordHTML, index) => ({
 
 ---
 
-## الكائنات المُوفَّرة في `core.js`
+## الكائنات المُوفَّرة في الوحدات المشتركة (`shared/*.js`)
 
 جميعها متاحة عالمياً دون تعريف إضافي في صفحة الدرس:
 
-| الكائن | الدور |
-|---|---|
-| `app` | المحرك الرئيسي: عرض الكلمات، النقاط، التنقل، الانتقال بين المراحل |
-| `Sound` | محرك الصوت (Web Audio API): `.golden()`, `.danger()`, `.flip()`, `.nav()`, إلخ |
-| `wordwallRoom` | إدارة غرفة الألعاب الثلاثة (Open Box, Spin Wheel, Random Cards) |
-| `wheelGame` | لعبة عجلة الحظ (Canvas) |
-| `cardsGame` | لعبة الأوراق العشوائية |
-| `xoGame` | لعبة XO (Tic-Tac-Toe) |
-| `c4Game` | لعبة Connect 4 |
-| `memoryGame` | لعبة مطابقة البطاقات |
-| `riddlesGame` | لعبة الألغاز السرية |
-| `ruleManager` | إدارة عرض القواعد (يعمل تلقائياً عند وجود `rulesData`) |
-| `buildAppUI()` | تُبني HTML الواجهة كاملةً وتُحقن في `<body>` (تتضمن بطاقة المطور والدعاء في القائمة الرئيسية) |
-| `fireCelebration()` | إطلاق فرقعة الاحتفال (canvas-confetti) |
+| الكائن | الوحدة المصدرية | الدور |
+|---|---|---|
+| `app` | `shared/app.js` | المحرك الرئيسي: عرض الكلمات، النقاط، التنقل، شريط التقدم، المراجعة الذكية للأخطاء |
+| `Sound` | `shared/sound.js` | محرك الصوت (Web Audio API): توليد ترددات الحركات والتفاعل والاحتفال |
+| `wordwallRoom` | `shared/games-wordwall.js` | إدارة غرفة الألعاب (الصناديق، الستار، سلَّم الارتقاء، عجلة الحظ، الأوراق العشوائية) |
+| `wheelGame` | `shared/games-wordwall.js` | لعبة عجلة الحظ (Canvas) |
+| `cardsGame` | `shared/games-wordwall.js` | لعبة الأوراق العشوائية |
+| `xoGame` | `shared/games-board.js` | لعبة XO (Tic-Tac-Toe) |
+| `c4Game` | `shared/games-board.js` | لعبة Connect 4 |
+| `memoryGame` | `shared/games-extra.js` | لعبة مطابقة البطاقات |
+| `riddlesGame` | `shared/games-extra.js` | لعبة الألغاز السرية |
+| `ruleManager` | `shared/rule-manager.js` | إدارة عرض القواعد وتهيئة دورة الحياة (`window.onload`) |
+| `buildAppUI()` | `shared/ui-template.js` | بناء HTML الواجهة كاملةً وحقنها في `<body>` |
+| `fireCelebration()` | `shared/sound.js` | إطلاق فرقعة الاحتفال (canvas-confetti) |
 
 ---
 
@@ -256,18 +258,15 @@ app.jumpTo('ww_cards');
 |---|---|---|
 | `dataset is not defined` | لم يتم استخراج المصفوفة كاملاً | أعد القراءة، ابحث عن `const dataset` في الكود الأصلي |
 | `themes is not defined` | توقف الاستخراج قبل تعريف `themes` | ابدأ الاستخراج من أول متغير وسيط (themes, rawData...) لا من `dataset` |
-| `ruleManager is not defined` | أُدرج `const ruleManager` في كتلة البيانات عن طريق الخطأ | احذفه من صفحة الدرس؛ `core.js` يوفره بالفعل |
-| `Identifier 'dataset' has already been declared` | كُرِّرت `dataset` مرتين أو أن `core.js` يعرفها أيضاً | تأكد أن `core.js` لا يعرِّف `dataset` وأن صفحة الدرس تعرفها مرة واحدة |
-| `Sound.nav is not a function` | نسخة قديمة من `core.js` | تحقق من أن `Sound` في `core.js` تحوي الدوال: `nav, tap, drop, win, success, fail` |
+| `ruleManager is not defined` | أُدرج `const ruleManager` في كتلة البيانات عن طريق الخطأ أو نسيان استدعاء `rule-manager.js` | احذفه من صفحة الدرس؛ وحدة `rule-manager.js` توفره تلقائياً |
+| `Identifier 'dataset' has already been declared` | كُرِّرت `dataset` مرتين | تأكد أن صفحة الدرس تعرفها مرة واحدة فقط في كتلة البيانات |
 
 ---
 
 ## ملاحظات الترقيم والتسمية
 
-- ملفات الدروس مسماة: `NN Nour-Al-Bayan.html` حيث `NN` رقم الدرس (10–37)
-- بعضها بامتداد `.HTML` (حروف كبيرة): 22، 23، 24 — احتفظ بهذا الاسم كما هو
-- بعضها مسافة مزدوجة بعد الرقم: 20، 21، 22، 23، 24، 25، 26، 28، 29، 30، 33، 34، 35 — احتفظ بها كما هي
-- بعد إضافة صفحة جديدة، شغّل `python update_index.py` لتحديث `index.html` تلقائياً
+- ملفات الدروس مسماة بأرقامها المجردة: `NN.html` حيث `NN` رقم الدرس (من `10.html` إلى `37.html`).
+- بعد إضافة أو تعديل أي صفحة درس، شغّل `python update_index.py` لتحديث `index.html` تلقائياً.
 
 ---
 
@@ -291,11 +290,13 @@ app.jumpTo('ww_cards');
 | [`shared/sound.js`](shared/sound.js) | محرك الصوت والاحتفالية |
 | [`shared/ui-template.js`](shared/ui-template.js) | قالب واجهة المستخدم `buildAppUI` |
 | [`shared/app.js`](shared/app.js) | المحرك التفاعلي المركزي للمنصة |
-| [`shared/games-wordwall.js`](shared/games-wordwall.js) | ألعاب جدار الكلمات والعجلة والبطاقات |
+| [`shared/games-wordwall.js`](shared/games-wordwall.js) | ألعاب جدار الكلمات (الصناديق، الستائر، سلَّم الارتقاء، العجلة، البطاقات) |
 | [`shared/games-board.js`](shared/games-board.js) | ألعاب الألواح (XO و Connect 4) |
 | [`shared/games-extra.js`](shared/games-extra.js) | ألعاب الذاكرة والألغاز |
 | [`shared/rule-manager.js`](shared/rule-manager.js) | إدارة قواعد الدرس وتهيئة التطبيق |
-| [`shared/core.css`](shared/core.css) | الأنماط والتنسيقات المشتركة والخطوط |
+| [`shared/core.css`](shared/core.css) | المجمّع الرئيسي لملفات التنسيق (@import) |
+| [`shared/css/`](shared/css/) | وحدات التنسيق التسع المفككة والمتخصصة |
 | [`pages/`](pages/) | صفحات الدروس المجردة (بيانات فقط) |
+| [`validate_assets.py`](validate_assets.py) | فحص سلامة الأصول والخطوط واستيرادات CSS آلياً |
 | [`update_index.py`](update_index.py) | تحديث فهرس `index.html` تلقائياً |
 | [`index.html`](index.html) | الصفحة الرئيسية بروابط الدروس |

@@ -8,8 +8,6 @@ from pathlib import Path
 ROOT = Path(__file__).parent
 PAGES_DIR = ROOT / "pages"
 INDEX = ROOT / "index.html"
-START = "<!-- LINKS-START -->"
-END = "<!-- LINKS-END -->"
 
 
 def extract_page_info(file_path: Path):
@@ -73,10 +71,6 @@ def build_index_template(cards_html: str, count: int) -> str:
     flex-direction: column;
     overflow-x: hidden;
     overflow-y: auto;
-  }}
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
     -webkit-font-smoothing: antialiased;
   }}
 

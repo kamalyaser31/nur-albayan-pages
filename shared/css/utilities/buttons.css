@@ -1,0 +1,73 @@
+/**
+ * Nour Al-Bayan Interactive Platform - Utilities: Buttons & Tactile States
+ * Button resets, focus-visible indicators, disabled state, 3D shadows, active and hover animations.
+ */
+
+button {
+    border: none;
+    outline: none;
+    font-family: inherit;
+    cursor: pointer;
+}
+button:focus,
+select:focus,
+input:focus,
+a:focus {
+    outline: none;
+}
+button:focus-visible,
+select:focus-visible,
+input:focus-visible,
+a:focus-visible {
+    outline: 3px solid #f59e0b;
+    outline-offset: 2px;
+}
+button:disabled,
+button[disabled],
+.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* 3D Tactile Buttons */
+.shadow-\[0_4px_0_\#3730a3\] { box-shadow: 0 4px 0 #3730a3; }
+.shadow-\[0_4px_0_\#047857\] { box-shadow: 0 4px 0 #047857; }
+.shadow-\[0_4px_0_\#be123c\] { box-shadow: 0 4px 0 #be123c; }
+.shadow-\[0_5px_0_\#047857\] { box-shadow: 0 5px 0 #047857; }
+.shadow-\[0_5px_0_\#d97706\] { box-shadow: 0 5px 0 #d97706; }
+.shadow-\[0_5px_0_\#ca8a04\] { box-shadow: 0 5px 0 #ca8a04; }
+.shadow-\[0_5px_0_\#be123c\] { box-shadow: 0 5px 0 #be123c; }
+
+.active\:translate-y-1:active { transform: translateY(0.25rem); }
+.active\:translate-y-\[5px\]:active { transform: translateY(5px); }
+.active\:shadow-none:active { box-shadow: none !important; }
+.active\:scale-95:active { transform: scale(0.95); }
+
+.hover\:scale-105:hover { transform: scale(1.05); }
+.hover\:scale-110:hover { transform: scale(1.1); }
+.hover\:-translate-y-0\.5:hover { transform: translateY(-0.125rem); }
+.hover\:-translate-y-6:hover { transform: translateY(-1.5rem); }
+.hover\:rotate-2:hover { transform: rotate(2deg); }
+
+.hover\:bg-white\/30:hover { background-color: rgba(255, 255, 255, 0.3); }
+.hover\:bg-slate-50:hover { background-color: #f8fafc; }
+.hover\:bg-slate-100:hover { background-color: #f1f5f9; }
+.hover\:bg-slate-300:hover { background-color: #cbd5e1; }
+.hover\:bg-slate-900:hover { background-color: #0f172a; }
+.hover\:bg-black:hover { background-color: #000000; }
+.hover\:bg-emerald-600:hover { background-color: #059669; }
+.hover\:bg-amber-50:hover { background-color: #fffbeb; }
+.hover\:bg-amber-200:hover { background-color: #fde68a; }
+.hover\:bg-yellow-300:hover { background-color: #fde047; }
+.hover\:bg-rose-100:hover { background-color: #ffe4e6; }
+.hover\:bg-rose-200:hover { background-color: #fecdd3; }
+.hover\:bg-rose-600:hover { background-color: #e11d48; }
+.hover\:bg-indigo-700:hover { background-color: #4338ca; }
+.hover\:bg-purple-200:hover { background-color: #e9d5ff; }
+.hover\:bg-purple-800\/60:hover { background-color: rgba(107, 33, 168, 0.6); }
+.hover\:bg-blue-800\/60:hover { background-color: rgba(30, 64, 175, 0.6); }
+
+.hover\:text-rose-600:hover { color: #e11d48; }

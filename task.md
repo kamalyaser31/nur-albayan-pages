@@ -14,8 +14,15 @@
 - [x] التحول للاستقلال التام دون إنترنت (Offline-First) واستبدال Play CDN بـ `core.css` المترجم محلياً
 - [x] توفير مكتبات `Chart.js` و `canvas-confetti` وخطوط `Amiri` و `Fredoka` محلياً داخل `shared/vendor/`
 - [x] إعادة تصميم صفحة الفهرس `index.html` بشبكة بطاقات تفاعلية متجاوبة وجميلة
-- [x] إدراج اختصارات لوحة المفاتيح والوصول الشامل (ARIA) ونمط المراجعة الذكية للأخطاء وشريط التقدم التفاعلي
-- [x] التحقق الفني الثلاثي الشامل (Pass 1 Node Simulation, Pass 2 Offline Audit, Pass 3 Index & A11y)
+- [x] إضافة مظهر «الستار» التفاعلي لغرفة ألعاب الكلمات بإعادة استخدام آلية الصناديق دون تكرار للكود
+- [x] تطوير وهندسة قالب «سلَّم الارتقاء» (Mastery Ladder) بخياري 5 و10 درجات والصعود عند الصواب والهبوط عند الخطأ
+- [x] ضبط وتأكيد وصولية المعلم الكفيف وقارئات الشاشة عبر ARIA Live Regions واختصارات لوحة المفاتيح
+- [x] تطهير وتوحيد الدوال البرمجية المكررة في كامل المنظومة (Function Deduplication & 100% DRY)
+- [x] تنقية واختزال تكرارات ملف التنسيقات `core.css` وضبط السمات اللونية
+- [x] تطهير الأكواد الميتة (Dead Code Elimination) عبر 5 مراحل منهجية شاملة
+- [x] التدقيق الشامل للمستودع وإصلاح خطأ صياغة صفحة 31 وترقية وصولية المراجعة الذكية renderReview وتحديث التوثيق
+- [x] تفكيك ملف التنسيقات المشترك إلى 9 وحدات تخصصية في `shared/css/` وبناء سكربت التدقيق الآلي `validate_assets.py`
+- [x] تفكيك وحدة التنسيقات المساعدة `utilities.css` إلى 8 وحدات فرعية دقيقة في `shared/css/utilities/`
 - [x] تحديث سجل التغييرات وحالة المشروع والتوثيق
 
 ## حالة الملفات (Files Status)
@@ -23,6 +30,24 @@
 | الملف | الحالة |
 |---|---|
 | shared/core.css | complete |
+| shared/css/tokens.css | complete |
+| shared/css/base.css | complete |
+| shared/css/utilities.css | complete |
+| shared/css/utilities/layout.css | complete |
+| shared/css/utilities/spacing.css | complete |
+| shared/css/utilities/text.css | complete |
+| shared/css/utilities/colors.css | complete |
+| shared/css/utilities/borders.css | complete |
+| shared/css/utilities/effects.css | complete |
+| shared/css/utilities/buttons.css | complete |
+| shared/css/utilities/responsive.css | complete |
+| shared/css/typography.css | complete |
+| shared/css/cards.css | complete |
+| shared/css/components.css | complete |
+| shared/css/games-wordwall.css | complete |
+| shared/css/games-board.css | complete |
+| shared/css/animations.css | complete |
+| validate_assets.py | complete |
 | shared/sound.js | complete |
 | shared/ui-template.js | complete |
 | shared/app.js | complete |
