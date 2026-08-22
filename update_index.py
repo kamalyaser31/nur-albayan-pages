@@ -33,10 +33,10 @@ def extract_page_info(file_path: Path):
 
 
 def build_card(file_name: str, num: int, desc: str) -> str:
-    return f"""    <a href="pages/{file_name}" class="lesson-card" aria-label="Lesson {num}: {desc}">
+    return f"""    <a href="pages/{file_name}" class="lesson-card" aria-label="Nour Al-Bayan Page {num}: {desc}">
       <div class="card-num">{num}</div>
       <div class="card-info">
-        <span class="card-badge">Lesson {num}</span>
+        <span class="card-badge">Page {num}</span>
         <h2 class="card-title">{desc}</h2>
       </div>
       <div class="card-arrow" aria-hidden="true">➡</div>
@@ -51,6 +51,7 @@ def build_index_template(cards_html: str, count: int) -> str:
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>صفحات نور البيان التفاعلية</title>
 <meta name="description" content="منظومة صفحات نور البيان التفاعلية لتعليم القراءة وضبط الحركات والقرآن الكريم">
+<link rel="stylesheet" href="shared/core.css">
 <style>
   :root {{
     --primary: #047857;
@@ -64,20 +65,15 @@ def build_index_template(cards_html: str, count: int) -> str:
     --border-color: #e2e8f0;
   }}
 
-  * {{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }}
-
   body {{
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background-color: var(--bg);
-    background-image: radial-gradient(#dcfce7 1.2px, transparent 1.2px), radial-gradient(#f0fdf4 1.2px, #f8fafc 1.2px);
-    background-size: 32px 32px;
-    background-position: 0 0, 16px 16px;
     color: var(--text-main);
     line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }}
     min-height: 100vh;
     display: flex;
     flex-direction: column;
