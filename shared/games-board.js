@@ -21,8 +21,7 @@ const xoGame = {
         if (winLine) {
             const status = document.getElementById('xo-status'); if (status) { status.innerText = `${this.currentPlayer} Won! 🎉`; status.classList.add('text-yellow-300'); }
             this.gameActive = false; fireCelebration();
-            let resumeBtn = document.getElementById('xo-resume-btn');
-            if (resumeBtn) { resumeBtn.textContent = "Continue Reading 📖"; resumeBtn.classList.add('animate-bounce', 'bg-emerald-400', 'text-white'); resumeBtn.classList.remove('bg-yellow-400', 'text-teal-900'); }
+            if (typeof app !== 'undefined') app.setGameResumeState('xo-resume-btn', true, "Continue Reading 📖");
             const container = document.getElementById('xo-board');
             if (container) { const cells = container.children; winLine.forEach(i => { if (cells[i]) cells[i].classList.add('win-anim'); }); }
             return;
@@ -30,8 +29,7 @@ const xoGame = {
         if (!this.board.includes('')) {
             const status = document.getElementById('xo-status'); if (status) status.innerText = "Draw Game! 🤝";
             this.gameActive = false;
-            let resumeBtn = document.getElementById('xo-resume-btn');
-            if (resumeBtn) { resumeBtn.textContent = "Continue Reading 📖"; resumeBtn.classList.add('bg-emerald-400', 'text-white'); resumeBtn.classList.remove('bg-yellow-400', 'text-teal-900'); }
+            if (typeof app !== 'undefined') app.setGameResumeState('xo-resume-btn', true, "Continue Reading 📖");
             return;
         }
         this.currentPlayer = this.currentPlayer === 'X' ? 'O' : 'X';
@@ -45,8 +43,7 @@ const xoGame = {
     reset() {
         this.board = ['', '', '', '', '', '', '', '', '']; this.currentPlayer = 'X'; this.gameActive = true;
         const status = document.getElementById('xo-status'); if (status) { status.innerText = 'Player X Turn!'; status.classList.remove('text-yellow-300'); }
-        let resumeBtn = document.getElementById('xo-resume-btn');
-        if (resumeBtn) { resumeBtn.textContent = "Skip & Read ⏭️"; resumeBtn.classList.remove('animate-bounce', 'bg-emerald-400', 'text-white'); resumeBtn.classList.add('bg-yellow-400', 'text-teal-900'); }
+        if (typeof app !== 'undefined') app.setGameResumeState('xo-resume-btn', false, '', "Skip & Read ⏭️");
         this.init();
     }
 };
@@ -86,8 +83,7 @@ const c4Game = {
                     let colorName = this.currentPlayer === 'red' ? 'Red 🔴' : 'Yellow 🟡';
                     const status = document.getElementById('c4-status'); if (status) { status.textContent = `${colorName} Wins! 🎉`; status.className = 'text-yellow-300'; }
                     this.gameActive = false;
-                    let resumeBtn = document.getElementById('c4-resume-btn');
-                    if (resumeBtn) { resumeBtn.textContent = "Continue Reading 📖"; resumeBtn.classList.add('animate-bounce', 'bg-emerald-400', 'text-white'); resumeBtn.classList.remove('bg-yellow-400', 'text-blue-900'); }
+                    if (typeof app !== 'undefined') app.setGameResumeState('c4-resume-btn', true, "Continue Reading 📖");
                     setTimeout(() => {
                         fireCelebration();
                         winCells.forEach(([wr, wc]) => {
@@ -100,8 +96,7 @@ const c4Game = {
                 if (this.board.every(r => r.every(c => c !== null))) {
                     const status = document.getElementById('c4-status'); if (status) status.textContent = "Draw Game! 🤝";
                     this.gameActive = false;
-                    let resumeBtn = document.getElementById('c4-resume-btn');
-                    if (resumeBtn) { resumeBtn.textContent = "Continue Reading 📖"; resumeBtn.classList.add('bg-emerald-400', 'text-white'); resumeBtn.classList.remove('bg-yellow-400', 'text-blue-900'); }
+                    if (typeof app !== 'undefined') app.setGameResumeState('c4-resume-btn', true, "Continue Reading 📖");
                     return;
                 }
                 this.currentPlayer = this.currentPlayer === 'red' ? 'yellow' : 'red';
@@ -128,8 +123,7 @@ const c4Game = {
     reset() {
         this.currentPlayer = 'red'; this.gameActive = true;
         const status = document.getElementById('c4-status'); if (status) status.innerText = `Your Turn! Drop a red piece`;
-        let resumeBtn = document.getElementById('c4-resume-btn');
-        if (resumeBtn) { resumeBtn.textContent = "Skip & Read ⏭️"; resumeBtn.classList.remove('animate-bounce', 'bg-emerald-400', 'text-white'); resumeBtn.classList.add('bg-yellow-400', 'text-blue-900'); }
+        if (typeof app !== 'undefined') app.setGameResumeState('c4-resume-btn', false, '', "Skip & Read ⏭️");
         this.init();
     }
 };

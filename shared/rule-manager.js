@@ -9,20 +9,8 @@ const ruleManager = {
         const titleEl = document.getElementById('rule-title'); if (titleEl) titleEl.innerText = data.title;
         const descEl = document.getElementById('rule-desc'); if (descEl) descEl.innerText = data.desc;
         const bigText = document.getElementById('rule-big-text'); 
-        if (bigText) {
-            const doc = new DOMParser().parseFromString(data.html || '', 'text/html');
-            doc.querySelectorAll('script, iframe, object, embed, style, link').forEach(el => el.remove());
-            const elements = doc.body.getElementsByTagName('*');
-            for (let i = 0; i < elements.length; i++) {
-                const el = elements[i];
-                for (let j = el.attributes.length - 1; j >= 0; j--) {
-                    const attr = el.attributes[j];
-                    if (attr.name.startsWith('on') || attr.name === 'javascript:') {
-                        el.removeAttribute(attr.name);
-                    }
-                }
-            }
-            bigText.innerHTML = doc.body.innerHTML;
+        if (bigText && typeof app !== 'undefined') {
+            app.setSafeHTML(bigText, data.html || '');
         }
         const prevBtn = document.getElementById('rule-prev-btn');
         if (prevBtn) { if (this.step > 0) prevBtn.classList.remove('hidden'); else prevBtn.classList.add('hidden'); }

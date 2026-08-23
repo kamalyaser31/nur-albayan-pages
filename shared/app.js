@@ -1,5 +1,5 @@
 const app = {
-    idx: 0, score: 0, stats: { ok: 0, err: 0 }, clock: 10.0, timer: null, wordRenderTime: 0,
+    idx: 0, score: 0, stats: { ok: 0, err: 0 }, clock: 10.0, timer: null,
     hasPlayedGame1: false, hasPlayedGame2: false, hasPlayedGame3: false, currentActiveIndex: null, pendingGame: 0, chartInstance: null,
     mistakeIndices: [], isReviewMode: false, reviewQueue: [], reviewIdx: 0, keyboardBound: false,
     enableGameBreaks: false,
@@ -37,6 +37,15 @@ const app = {
                     return;
                 }
 
+                const wwStage = document.getElementById('wordwall-stage');
+                const isWordwall = wwStage && !wwStage.classList.contains('hidden');
+                if (isWordwall && typeof wordwallRoom !== 'undefined' && wordwallRoom.mode === 'ladder' && typeof ladderGame !== 'undefined') {
+                    if (e.key === '1' || e.key === 'ArrowDown') ladderGame.grade(false);
+                    else if (e.key === '2' || e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ladderGame.grade(true); }
+                    else if (e.key === 'r' || e.key === 'R') ladderGame.reset();
+                    return;
+                }
+
                 if (isLearning) {
                     if (e.key === 'ArrowRight' || e.key === 'PageUp') app.prev();
                     else if (e.key === '1' || e.key === 'ArrowDown') app.evaluate(false);
@@ -71,6 +80,8 @@ const app = {
         else if (val === 'game_memory') { const s = document.getElementById('memory-stage'); if (s) { s.classList.remove('hidden'); if (typeof memoryGame !== 'undefined') memoryGame.init(); } }
         else if (val === 'game_riddles') { const s = document.getElementById('riddles-stage'); if (s) { s.classList.remove('hidden'); if (typeof riddlesGame !== 'undefined') riddlesGame.reset(); } }
         else if (val === 'ww_box') { const s = document.getElementById('wordwall-stage'); if (s) s.classList.remove('hidden'); if (typeof wordwallRoom !== 'undefined') wordwallRoom.switchMode('box'); }
+        else if (val === 'ww_curtain') { const s = document.getElementById('wordwall-stage'); if (s) s.classList.remove('hidden'); if (typeof wordwallRoom !== 'undefined') wordwallRoom.switchMode('curtain'); }
+        else if (val === 'ww_ladder') { const s = document.getElementById('wordwall-stage'); if (s) s.classList.remove('hidden'); if (typeof wordwallRoom !== 'undefined') wordwallRoom.switchMode('ladder'); }
         else if (val === 'ww_wheel') { const s = document.getElementById('wordwall-stage'); if (s) s.classList.remove('hidden'); if (typeof wordwallRoom !== 'undefined') wordwallRoom.switchMode('wheel'); }
         else if (val === 'ww_cards') { const s = document.getElementById('wordwall-stage'); if (s) s.classList.remove('hidden'); if (typeof wordwallRoom !== 'undefined') wordwallRoom.switchMode('cards'); }
         else if (val === 'summary') { this.finishToSummary(); }
@@ -92,15 +103,7 @@ const app = {
         if (typeof rulesData !== 'undefined' && rulesData.length > 0) createOpt('rules', '📖 Lesson Rules');
         const optGroupWords = document.createElement('optgroup'); optGroupWords.label = '📚 Reading Words';
         dataset.forEach((item, index) => {
-            let plainWord = item.plain;
-            if (!plainWord) {
-                if (item.html) plainWord = item.html.replace(/<[^>]+>/g, '').replace(/&zwj;/g, '').replace(/&nbsp;/g, ' ').trim();
-                else if (Array.isArray(item.w)) plainWord = item.w.join('').replace(/<[^>]+>/g, '').replace(/&zwj;/g, '').replace(/&nbsp;/g, ' ').replace(/ـ/g, '').trim();
-                else if (typeof item.w === 'string') plainWord = item.w.replace(/<[^>]+>/g, '').replace(/&zwj;/g, '').replace(/&nbsp;/g, ' ').trim();
-                else if (item.boxes) plainWord = item.boxes.map(b => b.map(s => s[0]).join('')).join(' ').trim();
-                else if (item.groups) plainWord = item.groups.map(g => g[0]).join('').trim();
-            }
-            if (!plainWord) plainWord = `Word ${index + 1}`;
+            const plainWord = this.getPlainWord(item) || `Word ${index + 1}`;
             const opt = document.createElement('option'); opt.value = `word_${index}`; opt.text = `${index + 1}: ${plainWord}`; optGroupWords.appendChild(opt);
         });
         selector.appendChild(optGroupWords);
@@ -115,12 +118,23 @@ const app = {
         selector.appendChild(optGroupGames);
         const optGroupWW = document.createElement('optgroup'); optGroupWW.label = '🧩 Wordwall Activities';
         const w1 = document.createElement('option'); w1.value = 'ww_box'; w1.text = '🎁 Open The Box'; optGroupWW.appendChild(w1);
+        const w1b = document.createElement('option'); w1b.value = 'ww_curtain'; w1b.text = '🎭 Curtain Reveal'; optGroupWW.appendChild(w1b);
+        const w1c = document.createElement('option'); w1c.value = 'ww_ladder'; w1c.text = '🪜 Mastery Ladder'; optGroupWW.appendChild(w1c);
         const w2 = document.createElement('option'); w2.value = 'ww_wheel'; w2.text = '🎡 Spin The Wheel'; optGroupWW.appendChild(w2);
         const w3 = document.createElement('option'); w3.value = 'ww_cards'; w3.text = '🃏 Random Cards'; optGroupWW.appendChild(w3);
         selector.appendChild(optGroupWW);
         const optGroupEnd = document.createElement('optgroup'); optGroupEnd.label = '🏆 Finish Line';
         const e1 = document.createElement('option'); e1.value = 'summary'; e1.text = '📊 Final Summary'; optGroupEnd.appendChild(e1);
         selector.appendChild(optGroupEnd);
+    },
+
+    shuffle(arr) {
+        if (!Array.isArray(arr)) return arr;
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
     },
 
     setSafeHTML(el, htmlStr) {
@@ -216,19 +230,13 @@ const app = {
 
     render() {
         if (typeof dataset === 'undefined' || !dataset[this.idx]) return;
-        this.wordRenderTime = Date.now();
         const item = dataset[this.idx];
         const area = document.getElementById('word-display-area');
         const banner = document.getElementById('status-banner');
         const timerBox = document.getElementById('challenge-timer');
         const navSelect = document.getElementById('example-navigator');
-        const progText = document.getElementById('progress-text');
-        const pBar = document.getElementById('progress-bar');
         if (navSelect) navSelect.value = `word_${this.idx}`;
-        if (progText) progText.innerText = `Card ${this.idx + 1} of ${dataset.length}`;
-        if (pBar && typeof dataset !== 'undefined' && dataset.length > 0) {
-            pBar.style.width = `${((this.idx + 1) / dataset.length) * 100}%`;
-        }
+        this.updateProgress(this.idx + 1, dataset.length, 'Card');
         if (area) {
             this.renderWordInto(area, item);
             const plain = this.getPlainWord(item);
@@ -240,7 +248,7 @@ const app = {
         if (timerBox) timerBox.classList.add('hidden');
         clearInterval(this.timer);
         if (item.t === 'golden') {
-            Sound.golden();
+            Sound.playChime();
             if (banner) {
                 banner.innerText = "🌟 Golden Word! (+10)";
                 banner.className = "text-center py-1 px-4 rounded-full font-bold text-white shadow-md w-fit bg-amber-500 block animate-bounce uppercase tracking-wide text-xs shrink-0";
@@ -275,6 +283,13 @@ const app = {
         }, 100);
     },
 
+    updateProgress(current, total, prefix = 'Card') {
+        const progText = document.getElementById('progress-text');
+        const pBar = document.getElementById('progress-bar');
+        if (progText) progText.innerText = `${prefix} ${current} of ${total}`;
+        if (pBar && total > 0) pBar.style.width = `${(current / total) * 100}%`;
+    },
+
     evaluate(isCorrect) {
         if (typeof dataset === 'undefined' || !dataset[this.idx]) return;
         const item = dataset[this.idx];
@@ -285,7 +300,7 @@ const app = {
             this.score += points;
             const feedbacks = ['Excellent! 🌟', 'Awesome! 🏆', 'Hero! 🧠', 'Great Job! ❤️⭐', 'Very Good! ⭐', 'Genius! 🎓', 'Perfect! 👏', '⭐⭐⭐⭐⭐', '❤️❤️❤️❤️❤️'];
             const randomFeedback = feedbacks[Math.floor(Math.random() * feedbacks.length)];
-            this.showBadge(randomFeedback, '#10b981', true);
+            this.triggerFeedback(randomFeedback, '#10b981', true);
 
             if (this.isReviewMode) {
                 this.reviewIdx++;
@@ -318,7 +333,7 @@ const app = {
             }
             let points = (type === 'danger') ? -5 : -2;
             this.score += points; if (this.score < 0) this.score = 0;
-            this.showBadge('Try Again! 🔄', '#f43f5e', false);
+            this.triggerFeedback('Try Again! 🔄', '#f43f5e', false);
         }
         const scoreEl = document.getElementById('score-val'); if (scoreEl) scoreEl.innerText = this.score;
     },
@@ -342,14 +357,16 @@ const app = {
         const stage = document.getElementById('learning-stage');
         if (stage) stage.classList.remove('hidden');
         const area = document.getElementById('word-display-area');
-        const progText = document.getElementById('progress-text');
-        const pBar = document.getElementById('progress-bar');
         const banner = document.getElementById('status-banner');
         if (banner) banner.classList.add('hidden');
-        if (progText) progText.innerText = `Review ${this.reviewIdx + 1} of ${this.reviewQueue.length}`;
-        if (pBar) pBar.style.width = `${((this.reviewIdx + 1) / this.reviewQueue.length) * 100}%`;
+        this.updateProgress(this.reviewIdx + 1, this.reviewQueue.length, 'Review');
         if (area && dataset[this.idx]) {
-            this.renderWordInto(area, dataset[this.idx]);
+            const item = dataset[this.idx];
+            this.renderWordInto(area, item);
+            const plain = this.getPlainWord(item);
+            area.setAttribute('aria-label', `Review Card ${this.reviewIdx + 1} of ${this.reviewQueue.length}: ${plain}`);
+            area.tabIndex = -1;
+            area.focus({ preventScroll: true });
         }
     },
 
@@ -360,14 +377,35 @@ const app = {
 
     prev() { if (this.idx > 0) { this.idx--; this.render(); } },
 
-    showBadge(txt, color, playSound = false) {
-        if (playSound) { playCelebrationSound(); if (typeof confetti === 'function') confetti({ particleCount: 40, spread: 50, origin: { y: 0.2 } }); }
+    triggerFeedback(txt, color, playSound = false) {
+        if (playSound) {
+            if (typeof Sound !== 'undefined') Sound.playChime();
+            if (typeof confetti === 'function') confetti({ particleCount: 40, spread: 50, origin: { y: 0.2 } });
+        }
         const badge = document.getElementById('badge-ui'); if (!badge) return;
         badge.innerText = txt; badge.style.color = color; badge.style.borderColor = color; badge.classList.add('active'); badge.style.opacity = '1';
         setTimeout(() => { badge.classList.remove('active'); badge.style.opacity = '0'; }, 1200);
     },
 
-    triggerFeedback(txt, color, playSound = false) { this.showBadge(txt, color, playSound); },
+    setGameResumeState(btnId, isFinished, targetText = 'Continue Reading 📖', defaultText = 'Skip & Read ⏭️') {
+        const btn = document.getElementById(btnId);
+        if (!btn) return;
+        const defaultTextColors = {
+            'xo-resume-btn': 'text-teal-900',
+            'c4-resume-btn': 'text-blue-900',
+            'memory-resume-btn': 'text-purple-900',
+            'riddles-resume-btn': 'text-purple-900'
+        };
+        if (isFinished) {
+            btn.textContent = targetText;
+            btn.classList.add('animate-bounce', 'bg-emerald-400', 'text-white');
+            btn.classList.remove('bg-yellow-400', 'text-teal-900', 'text-blue-900', 'text-purple-900');
+        } else {
+            btn.textContent = defaultText;
+            btn.classList.remove('animate-bounce', 'bg-emerald-400', 'text-white');
+            btn.classList.add('bg-yellow-400', defaultTextColors[btnId]);
+        }
+    },
 
     showGameTransition(gameNum) {
         this.pendingGame = gameNum;

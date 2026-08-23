@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nour Al-Bayan - Page 39</title>
+    <script src="../shared/vendor/chart.umd.min.js"></script>
+    <script src="../shared/vendor/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="../shared/core.css">
+</head>
+<body class="flex flex-col items-center select-none bg-emerald-50/40">
+    <script>
+        window.PAGE_CONFIG = {
+            title: 'Nour Al-Bayan',
+            subtitle: 'Page 39 • Quranic Sukun (السكون القرآني)',
+            footer: 'Nour Al-Bayan Learning System • Page 39 (Quranic Sukun / السكون القرآني)',
+            game3: 'memory'
+        };
+
+        const dataset = [
+            // Row 1
+            {w: "<span dir='rtl'><span class='c-black'>بَ . بِ . بُ</span></span>", info: "Sukun", theme: "green", t: "normal"},
+            {w: "<span dir='rtl'><span class='c-black'>أَ</span><span class='c-red'>ب\u06E1</span></span>", info: "Sukun", theme: "green", t: "speed"},
+            {w: "<span dir='rtl'><span class='c-black'>تَا ـ تِى ـ تُو</span></span>", info: "Sukun", theme: "pink", t: "normal"},
+            {w: "<span dir='rtl'><span class='c-black'>أَ</span><span class='c-red'>ت\u06E1</span></span>", info: "Sukun", theme: "pink", t: "normal"},
+            // Row 2
+            {w: "<span dir='rtl'><span class='c-black'>ثَ . ثِ . ثُ</span></span>", info: "Sukun", theme: "blue", t: "normal"},
+            {w: "<span dir='rtl'><span class='c-black'>أَ</span><span class='c-red'>ث\u06E1</span></span>", info: "Sukun", theme: "blue", t: "speed"},
+            {w: "<span dir='rtl'><span class='c-black'>جَا ـ جِيـ ـ جُو</span></span>", info: "Sukun", theme: "yellow", t: "normal"},
+            {w: "<span dir='rtl'><span class='c-black'>أَ</span><span class='c-red'>ج\u06E1</span></span>", info: "Sukun", theme: "yellow", t: "danger"},
+            // Row 3
+            {w: "<span dir='rtl'><span class='c-black'>حَـ - حِـ - حُ</span></span>", info: "Sukun", theme: "green", t: "normal"},
+            {w: "<span dir='rtl'><span class='c-black'>بَ</span><span class='c-red'>ح\u06E1</span></span>", info: "Sukun", theme: "green", t: "golden"},
+            {w: "<span dir='rtl'><span class='c-black'>خَا ـ خِيـ ـ خُو</span></span>", info: "Sukun", theme: "pink", t: "normal"},
+            {w: "<span dir='rtl'><span class='c-black'>أَ</span><span class='c-red'>خ\u06E1</span></span>", info: "Sukun", theme: "pink", t: "speed"},
+            // Row 4
+            {w: "<span dir='rtl'><span class='c-black'>عَـ - ـعِـ - ـعُ</span></span>", info: "Sukun", theme: "blue", t: "normal"},
+            {w: "<span dir='rtl'><span class='c-black'>أَ</span><span class='c-red'>ع\u06E1</span></span>", info: "Sukun", theme: "blue", t: "danger"},
+            {w: "<span dir='rtl'><span class='c-black'>لَا ـ لِيـ ـ لُو</span></span>", info: "Sukun", theme: "yellow", t: "normal"},
+            {w: "<span dir='rtl'><span class='c-black'>أَ</span><span class='c-red'>ل\u06E1</span></span>", info: "Sukun", theme: "yellow", t: "golden"},
+            // Row 5
+            {w: "<span dir='rtl'><span class='c-black'>أَ</span><span class='c-red'>ن\u06E1</span></span>", info: "Sukun", theme: "pink", t: "normal"},
+            {w: "<span dir='rtl'><span class='c-black'>هَ</span><span class='c-red'>ب\u06E1</span></span>", info: "Sukun", theme: "pink", t: "speed"},
+            {w: "<span dir='rtl'><span class='c-black'>قَ</span><span class='c-red'>ط\u06E1</span></span>", info: "Sukun", theme: "pink", t: "normal"},
+            {w: "<span dir='rtl'><span class='c-black'>بَ</span><span class='c-red'>س\u06E1</span></span>", info: "Sukun", theme: "pink", t: "danger"},
+            {w: "<span dir='rtl'><span class='c-black'>صَ</span><span class='c-red'>ه\u06E1</span></span>", info: "Sukun", theme: "pink", t: "golden"},
+            // Row 6
+            {w: "<span dir='rtl'><span class='c-black'>صِ</span><span class='c-red'>ل\u06E1</span></span>", info: "Sukun", theme: "green", t: "normal"},
+            {w: "<span dir='rtl'><span class='c-black'>سِ</span><span class='c-red'>ر\u06E1</span></span>", info: "Sukun", theme: "green", t: "speed"},
+            {w: "<span dir='rtl'><span class='c-black'>إِ</span><span class='c-red'>ذ\u06E1</span></span>", info: "Sukun", theme: "green", t: "normal"},
+            {w: "<span dir='rtl'><span class='c-black'>عِ</span><span class='c-red'>ظ\u06E1</span></span>", info: "Sukun", theme: "green", t: "danger"},
+            {w: "<span dir='rtl'><span class='c-black'>هِ</span><span class='c-red'>م\u06E1</span></span>", info: "Sukun", theme: "green", t: "normal"},
+            // Row 7
+            {w: "<span dir='rtl'><span class='c-black'>ذُ</span><span class='c-red'>ق\u06E1</span></span>", info: "Sukun", theme: "blue", t: "normal"},
+            {w: "<span dir='rtl'><span class='c-black'>شُ</span><span class='c-red'>د\u06E1</span></span>", info: "Sukun", theme: "blue", t: "speed"},
+            {w: "<span dir='rtl'><span class='c-black'>رُ</span><span class='c-red'>ج\u06E1</span></span>", info: "Sukun", theme: "blue", t: "golden"},
+            {w: "<span dir='rtl'><span class='c-black'>فُ</span><span class='c-red'>ز\u06E1</span></span>", info: "Sukun", theme: "blue", t: "normal"},
+            {w: "<span dir='rtl'><span class='c-black'>كُ</span><span class='c-red'>ل\u06E1</span></span>", info: "Sukun", theme: "blue", t: "danger"},
+            // Row 8
+            {w: "<span dir='rtl'><span class='c-black'>رِ</span><span class='c-red'>ك\u06E1</span></span>", info: "Sukun", theme: "yellow", t: "normal"},
+            {w: "<span dir='rtl'><span class='c-black'>عِ</span><span class='c-red'>ش\u06E1</span></span>", info: "Sukun", theme: "yellow", t: "speed"},
+            {w: "<span dir='rtl'><span class='c-black'>صُ</span><span class='c-red'>غ\u06E1</span></span>", info: "Sukun", theme: "yellow", t: "normal"},
+            {w: "<span dir='rtl'><span class='c-black'>كَ</span><span class='c-red'>ى\u06E1</span></span>", info: "Sukun", theme: "yellow", t: "danger"},
+            {w: "<span dir='rtl'><span class='c-black'>لَ</span><span class='c-red'>و\u06E1</span></span>", info: "Sukun", theme: "yellow", t: "golden"}
+        ];
+    </script>
+    <script src="../shared/sound.js"></script>
+    <script src="../shared/ui-template.js"></script>
+    <script src="../shared/app.js"></script>
+    <script src="../shared/games-wordwall.js"></script>
+    <script src="../shared/games-board.js"></script>
+    <script src="../shared/games-extra.js"></script>
+    <script src="../shared/rule-manager.js"></script>
+</body>
+</html>

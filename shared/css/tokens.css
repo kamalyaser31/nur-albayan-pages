@@ -1,0 +1,19 @@
+/**
+ * Nour Al-Bayan Interactive Platform - Central Design Tokens
+ * Variables for colors, typography, and animation easing.
+ */
+
+:root {
+    --color-primary: #047857;
+    --color-primary-light: #059669;
+    --color-accent: #d97706;
+    --color-accent-light: #f59e0b;
+    --color-bg: #fcfbf9;
+    --color-bg-green: #f0fdf4;
+    --color-quranic-red: #dc2626;
+    --color-quranic-blue: #2563eb;
+    --app-height: 100%;
+    --font-sans: 'Fredoka', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --ease-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+}

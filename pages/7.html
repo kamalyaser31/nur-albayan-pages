@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nour Al-Bayan - Page 7</title>
+    <script src="../shared/vendor/chart.umd.min.js"></script>
+    <script src="../shared/vendor/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="../shared/core.css">
+</head>
+<body class="flex flex-col items-center select-none bg-emerald-50/40">
+    <script>
+        window.PAGE_CONFIG = {
+            title: 'Nour Al-Bayan',
+            subtitle: 'Page 7 • Letters Comparison (مقارنة الحروف)',
+            footer: 'Nour Al-Bayan Learning System • Page 7 (Letters Comparison / مقارنة الحروف)',
+            game3: 'memory'
+        };
+
+        const dataset = [
+            // --- السطر الأول ---
+            { info: "Similar in Shape (متشابهة في الشكل)", w: "<span class='c-blue'>بَـ</span> <span class='c-red'>-</span> <span class='c-black'>نَـ</span>", plain: "بَـ - نَـ", theme: "pink", t: "normal" },
+            { info: "Similar in Shape (متشابهة في الشكل)", w: "<span class='c-blue'>تَـ</span> <span class='c-red'>-</span> <span class='c-black'>يَـ</span>", plain: "تَـ - يَـ", theme: "pink", t: "normal" },
+            { info: "Similar in Shape (متشابهة في الشكل)", w: "<span class='c-blue'>ثَـ</span> <span class='c-red'>-</span> <span class='c-black'>شَـ</span>", plain: "ثَـ - شَـ", theme: "pink", t: "speed" },
+            { info: "Similar in Shape (متشابهة في الشكل)", w: "<span class='c-blue'>جَـ</span> <span class='c-red'>-</span> <span class='c-black'>خَـ</span>", plain: "جَـ - خَـ", theme: "pink", t: "normal" },
+            { info: "Similar in Shape (متشابهة في الشكل)", w: "<span class='c-blue'>زَ</span> <span class='c-red'>-</span> <span class='c-black'>رَ</span>", plain: "زَ - رَ", theme: "pink", t: "golden" },
+
+            // --- السطر الثاني ---
+            { info: "Similar in Shape (متشابهة في الشكل)", w: "<span class='c-blue'>ذَ</span> <span class='c-red'>-</span> <span class='c-black'>دَ</span>", plain: "ذَ - دَ", theme: "pink", t: "normal" },
+            { info: "Similar in Shape (متشابهة في الشكل)", w: "<span class='c-blue'>ضَـ</span> <span class='c-red'>-</span> <span class='c-black'>صَـ</span>", plain: "ضَـ - صَـ", theme: "pink", t: "danger" },
+            { info: "Similar in Shape (متشابهة في الشكل)", w: "<span class='c-blue'>ظَـ</span> <span class='c-red'>-</span> <span class='c-black'>طَـ</span>", plain: "ظَـ - طَـ", theme: "pink", t: "normal" },
+            { info: "Similar in Shape (متشابهة في الشكل)", w: "<span class='c-blue'>غَـ</span> <span class='c-red'>-</span> <span class='c-black'>عَـ</span>", plain: "غَـ - عَـ", theme: "pink", t: "speed" },
+            { info: "Similar in Shape (متشابهة في الشكل)", w: "<span class='c-blue'>شَـ</span> <span class='c-red'>-</span> <span class='c-black'>سَـ</span>", plain: "شَـ - سَـ", theme: "pink", t: "normal" },
+
+            // --- السطر الثالث ---
+            { info: "Similar in Shape (متشابهة في الشكل)", w: "<span class='c-blue'>ـفـَ</span> <span class='c-red'>-</span> <span class='c-black'>ـقـَ</span>", plain: "ـفـَ - ـقـَ", theme: "yellow", t: "normal" },
+            { info: "Similar in Shape (متشابهة في الشكل)", w: "<span class='c-blue'>لَ</span> <span class='c-red'>-</span> <span class='c-black'>كَ</span>", plain: "لَ - كَ", theme: "yellow", t: "golden" },
+            { info: "Similar in Shape (متشابهة في الشكل)", w: "<span class='c-blue'>ةَ</span> <span class='c-red'>-</span> <span class='c-black'>هَ</span>", plain: "ةَ - هَ", theme: "yellow", t: "normal" },
+            { info: "Similar in Shape (متشابهة في الشكل)", w: "<span class='c-blue'>ـأَ</span> <span class='c-red'>-</span> <span class='c-black'>ـلـَ</span>", plain: "ـأَ - ـلـَ", theme: "yellow", t: "speed" },
+            { info: "Similar in Shape (متشابهة في الشكل)", w: "<span class='c-blue'>ـعَ</span> <span class='c-red'>-</span> <span class='c-black'>ـغَ</span>", plain: "ـعَ - ـغَ", theme: "yellow", t: "normal" },
+
+            // --- السطر الرابع ---
+            { info: "Similar in Shape (متشابهة في الشكل)", w: "<span class='c-blue'>ـةَ</span> <span class='c-red'>-</span> <span class='c-black'>ـهَ</span>", plain: "ـةَ - ـهَ", theme: "yellow", t: "normal" },
+            { info: "Similar in Shape (متشابهة في الشكل)", w: "<span class='c-blue'>نَـ</span> <span class='c-red'>-</span> <span class='c-black'>ـذَ</span>", plain: "نَـ - ـذَ", theme: "yellow", t: "danger" },
+            { info: "Similar in Shape (متشابهة في الشكل)", w: "<span class='c-blue'>ـفـَ</span> <span class='c-red'>-</span> <span class='c-black'>ـغـَ</span>", plain: "ـفـَ - ـغـَ", theme: "yellow", t: "normal" },
+            { info: "Similar in Shape (متشابهة في الشكل)", w: "<span class='c-blue'>ـعـَ</span> <span class='c-red'>-</span> <span class='c-black'>ـغـَ</span>", plain: "ـعـَ - ـغـَ", theme: "yellow", t: "speed" },
+            { info: "Similar in Shape (متشابهة في الشكل)", w: "<span class='c-blue'>ءَ</span> <span class='c-red'>-</span> <span class='c-black'>عَـ</span>", plain: "ءَ - عَـ", theme: "yellow", t: "golden" },
+
+            // --- السطر الخامس ---
+            { info: "Similar in Pronunciation (متشابهة في النطق)", w: "<span class='c-blue'>قَـ</span> <span class='c-red'>-</span> <span class='c-black'>كَـ</span>", plain: "قَـ - كَـ", theme: "blue", t: "normal" },
+            { info: "Similar in Pronunciation (متشابهة في النطق)", w: "<span class='c-blue'>زَ</span> <span class='c-red'>-</span> <span class='c-black'>ذَ</span>", plain: "زَ - ذَ", theme: "blue", t: "speed" },
+            { info: "Similar in Pronunciation (متشابهة في النطق)", w: "<span class='c-blue'>ثَـ</span> <span class='c-red'>-</span> <span class='c-black'>سَـ</span>", plain: "ثَـ - سَـ", theme: "blue", t: "normal" },
+            { info: "Similar in Pronunciation (متشابهة في النطق)", w: "<span class='c-blue'>ظَـ</span> <span class='c-red'>-</span> <span class='c-black'>ذَ</span>", plain: "ظَـ - ذَ", theme: "blue", t: "danger" },
+            { info: "Similar in Pronunciation (متشابهة في النطق)", w: "<span class='c-blue'>ةَ</span> <span class='c-red'>-</span> <span class='c-black'>دَ</span>", plain: "ةَ - دَ", theme: "blue", t: "normal" },
+
+            // --- السطر السادس ---
+            { info: "Similar in Pronunciation (متشابهة في النطق)", w: "<span class='c-blue'>ضَـ</span> <span class='c-red'>-</span> <span class='c-black'>دَ</span>", plain: "ضَـ - دَ", theme: "blue", t: "golden" },
+            { info: "Similar in Pronunciation (متشابهة في النطق)", w: "<span class='c-blue'>سَـ</span> <span class='c-red'>-</span> <span class='c-black'>صَـ</span>", plain: "سَـ - صَـ", theme: "blue", t: "normal" },
+            { info: "Similar in Pronunciation (متشابهة في النطق)", w: "<span class='c-blue'>فَـ</span> <span class='c-red'>-</span> <span class='c-black'>ثَـ</span>", plain: "فَـ - ثَـ", theme: "blue", t: "speed" },
+            { info: "Similar in Pronunciation (متشابهة في النطق)", w: "<span class='c-blue'>طَـ</span> <span class='c-red'>-</span> <span class='c-black'>ـةَ</span>", plain: "طَـ - ـةَ", theme: "blue", t: "normal" },
+            { info: "Similar in Pronunciation (متشابهة في النطق)", w: "<span class='c-blue'>لَ</span> <span class='c-red'>-</span> <span class='c-black'>رَ</span>", plain: "لَ - رَ", theme: "blue", t: "normal" },
+
+            // --- السطر السابع ---
+            { info: "Similar in Pronunciation (متشابهة في النطق)", w: "<span class='c-blue'>ظَـ</span> <span class='c-red'>-</span> <span class='c-black'>زَ</span>", plain: "ظَـ - زَ", theme: "pink", t: "danger" },
+            { info: "Similar in Pronunciation (متشابهة في النطق)", w: "<span class='c-blue'>غَـ</span> <span class='c-red'>-</span> <span class='c-black'>خَـ</span>", plain: "غَـ - خَـ", theme: "pink", t: "normal" },
+            { info: "Similar in Pronunciation (متشابهة في النطق)", w: "<span class='c-blue'>عَـ</span> <span class='c-red'>-</span> <span class='c-black'>حَـ</span>", plain: "عَـ - حَـ", theme: "pink", t: "speed" },
+            { info: "Similar in Pronunciation (متشابهة في النطق)", w: "<span class='c-blue'>أَ</span> <span class='c-red'>-</span> <span class='c-black'>ـهـَ</span>", plain: "أَ - ـهـَ", theme: "pink", t: "golden" },
+            { info: "Similar in Pronunciation (متشابهة في النطق)", w: "<span class='c-blue'>ذَ</span> <span class='c-red'>-</span> <span class='c-black'>ثَ</span>", plain: "ذَ - ثَ", theme: "pink", t: "normal" },
+            { info: "Similar in Pronunciation (متشابهة في النطق)", w: "<span class='c-blue'>ـهَ</span> <span class='c-red'>-</span> <span class='c-black'>حَ</span>", plain: "ـهَ - حَ", theme: "pink", t: "normal" }
+        ];
+    </script>
+    <script src="../shared/sound.js"></script>
+    <script src="../shared/ui-template.js"></script>
+    <script src="../shared/app.js"></script>
+    <script src="../shared/games-wordwall.js"></script>
+    <script src="../shared/games-board.js"></script>
+    <script src="../shared/games-extra.js"></script>
+    <script src="../shared/rule-manager.js"></script>
+</body>
+</html>

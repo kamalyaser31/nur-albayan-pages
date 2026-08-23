@@ -1,0 +1,77 @@
+/**
+ * Nour Al-Bayan Interactive Platform - Base & Font Setup
+ * Offline-first local font declarations, resets, and root layout.
+ */
+
+/* 1. Local Font Declarations */
+@font-face {
+    font-family: 'Amiri';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../vendor/fonts/amiri-regular.woff2') format('woff2');
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Amiri';
+    font-style: normal;
+    font-weight: 700;
+    src: url('../vendor/fonts/amiri-bold.woff2') format('woff2');
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Fredoka';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../vendor/fonts/fredoka-regular.woff2') format('woff2');
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Fredoka';
+    font-style: normal;
+    font-weight: 600;
+    src: url('../vendor/fonts/fredoka-semibold.woff2') format('woff2');
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Fredoka';
+    font-style: normal;
+    font-weight: 700;
+    src: url('../vendor/fonts/fredoka-bold.woff2') format('woff2');
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Fredoka';
+    font-style: normal;
+    font-weight: 900;
+    src: url('../vendor/fonts/fredoka-black.woff2') format('woff2');
+    font-display: swap;
+}
+
+/* 2. Base Reset and Body */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    height: 100dvh;
+    width: 100vw;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: var(--font-sans);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    user-select: none;
+    background-color: #f0fdf4;
+    background-image: radial-gradient(#dcfce7 1px, transparent 1px), radial-gradient(#f0fdf4 1px, #f0fdf4 1px);
+    background-size: 40px 40px;
+    background-position: 0 0, 20px 20px;
+}

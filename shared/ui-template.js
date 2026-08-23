@@ -6,7 +6,7 @@ function buildAppUI() {
     const subtitle = cfg.subtitle || 'Harakat & Reading Practice';
     const footerText = cfg.footer || 'Nour Al-Bayan Learning System';
     const hasRules = (typeof rulesData !== 'undefined' && rulesData.length > 0) || (cfg.rules && cfg.rules.length > 0);
-    const game3Type = cfg.game3 || (document.getElementById('riddles-stage') || typeof riddlesGame !== 'undefined' ? 'riddles' : (hasRules ? 'riddles' : 'memory'));
+    const game3Type = cfg.game3 || (typeof riddlesGame !== 'undefined' ? 'riddles' : (hasRules ? 'riddles' : 'memory'));
 
     const rulesButtonHtml = hasRules ? `
         <button onclick="app.jumpTo('rules')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3.5 px-6 rounded-[1.5rem] text-lg shadow-[0_4px_0_#3730a3] active:translate-y-1 active:shadow-none transition-all flex items-center justify-between" aria-label="Open Lesson Rules">
@@ -227,14 +227,20 @@ function buildAppUI() {
                 <h2 class="text-xl sm:text-2xl font-black text-emerald-600 drop-shadow-sm flex items-center gap-2">
                     <span>🎡</span> Games Room
                 </h2>
-                <nav class="bg-white p-1 rounded-2xl shadow-sm border border-slate-200 flex gap-1.5">
-                    <button onclick="wordwallRoom.switchMode('box')" id="tab-box" class="game-tab active py-1.5 px-3.5 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent">
+                <nav class="bg-white p-1 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap gap-1">
+                    <button onclick="wordwallRoom.switchMode('box')" id="tab-box" class="game-tab active py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" aria-label="Open Boxes game">
                         <span class="text-base sm:text-lg">🎁</span> <span class="hidden sm:inline">Box</span>
                     </button>
-                    <button onclick="wordwallRoom.switchMode('wheel')" id="tab-wheel" class="game-tab py-1.5 px-3.5 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent">
+                    <button onclick="wordwallRoom.switchMode('curtain')" id="tab-curtain" class="game-tab py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" aria-label="Curtain Reveal game">
+                        <span class="text-base sm:text-lg">🎭</span> <span class="hidden sm:inline">Curtain</span>
+                    </button>
+                    <button onclick="wordwallRoom.switchMode('ladder')" id="tab-ladder" class="game-tab py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" aria-label="Mastery Ladder game">
+                        <span class="text-base sm:text-lg">🪜</span> <span class="hidden sm:inline">Ladder</span>
+                    </button>
+                    <button onclick="wordwallRoom.switchMode('wheel')" id="tab-wheel" class="game-tab py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" aria-label="Spin the wheel game">
                         <span class="text-base sm:text-lg">🎡</span> <span class="hidden sm:inline">Wheel</span>
                     </button>
-                    <button onclick="wordwallRoom.switchMode('cards')" id="tab-cards" class="game-tab py-1.5 px-3.5 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent">
+                    <button onclick="wordwallRoom.switchMode('cards')" id="tab-cards" class="game-tab py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" aria-label="Random cards game">
                         <span class="text-base sm:text-lg">🃏</span> <span class="hidden sm:inline">Cards</span>
                     </button>
                 </nav>
@@ -242,10 +248,53 @@ function buildAppUI() {
 
             <div class="flex-1 w-full flex flex-col items-center justify-center overflow-hidden relative min-h-0">
                 <div id="ww-box-container" class="w-full h-full flex flex-col items-center min-h-0 overflow-hidden">
-                    <div class="bg-indigo-100 text-indigo-800 px-3.5 py-1 rounded-full text-xs font-bold mb-2 shrink-0 shadow-sm border border-indigo-200">
+                    <div id="box-prompt-text" class="bg-indigo-100 text-indigo-800 px-3.5 py-1 rounded-full text-xs font-bold mb-2 shrink-0 shadow-sm border border-indigo-200">
                         Tap any box to reveal the hidden word!
                     </div>
                     <div id="box-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2.5 sm:gap-3.5 w-full max-w-5xl flex-1 overflow-y-auto p-3 custom-scrollbar pb-20"></div>
+                </div>
+
+                <div id="ww-ladder-container" class="hidden w-full h-full flex flex-col items-center justify-between p-2 max-w-4xl mx-auto overflow-y-auto custom-scrollbar" role="region" aria-label="Mastery Ladder Game">
+                    <!-- Live Region for Blind Teacher: Announces step and word -->
+                    <div id="ladder-live-announcer" class="sr-only" aria-live="assertive" aria-atomic="true"></div>
+
+                    <!-- Header with Round Selector & Step Counter -->
+                    <div class="w-full flex justify-between items-center bg-white/80 border border-slate-200 rounded-2xl px-4 py-2 shrink-0 shadow-sm">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-black text-slate-500 uppercase tracking-wider">Round:</span>
+                            <button id="ladder-btn-5" onclick="ladderGame.setTarget(5)" class="py-1 px-3.5 rounded-full font-bold text-xs bg-emerald-500 text-white shadow-sm transition-all" aria-label="5 steps round">5 Steps</button>
+                            <button id="ladder-btn-10" onclick="ladderGame.setTarget(10)" class="py-1 px-3.5 rounded-full font-bold text-xs bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" aria-label="10 steps round">10 Steps</button>
+                        </div>
+                        <span id="ladder-step-indicator" class="text-xs sm:text-sm font-black text-emerald-700 bg-emerald-100/80 px-3 py-1 rounded-full" aria-live="polite">الدرجة 0 من 5</span>
+                    </div>
+
+                    <!-- Main Play Area: Ladder Visualization on Left, Big Word Card on Right -->
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-3 w-full flex-1 my-2 min-h-0 items-center">
+                        <div class="md:col-span-4 flex flex-col gap-1.5 w-full max-h-[260px] md:max-h-[340px] overflow-y-auto custom-scrollbar p-2 bg-slate-100/80 rounded-2xl border border-slate-200" id="ladder-rungs" role="region" aria-label="Ladder Steps">
+                        </div>
+
+                        <div class="md:col-span-8 flex flex-col justify-center items-center bg-white border-4 border-emerald-400 rounded-3xl shadow-xl p-4 min-h-[180px] md:min-h-[280px] w-full">
+                            <div id="ladder-word-display" class="w-full flex-1 flex items-center justify-center text-center" role="region" aria-label="Current Challenge Word" aria-live="polite">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Control & Grading Buttons -->
+                    <div class="w-full max-w-md shrink-0 space-y-2 pb-1">
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="ladderGame.grade(false)" class="bg-rose-500 hover:bg-rose-600 text-white py-3 rounded-2xl text-base font-black shadow-[0_4px_0_#be123c] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2" aria-label="Mark Missed, Step Down">
+                                ❌ Missed (1)
+                            </button>
+                            <button onclick="ladderGame.grade(true)" class="bg-emerald-500 hover:bg-emerald-600 text-white py-3 rounded-2xl text-base font-black shadow-[0_4px_0_#047857] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2" aria-label="Mark Correct, Step Up">
+                                ✔ Correct (2)
+                            </button>
+                        </div>
+                        <div class="flex justify-center">
+                            <button id="ladder-reset-btn" onclick="ladderGame.reset()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 py-1.5 px-6 rounded-full text-xs font-bold transition-colors shadow-sm" aria-label="Restart Round">
+                                Restart Round 🔄
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <div id="ww-wheel-container" class="hidden w-full h-full flex flex-col justify-center items-center gap-4" role="region" aria-label="Spin the wheel game">
@@ -268,7 +317,7 @@ function buildAppUI() {
                     <div class="card-pile flex justify-center items-center shrink-0 mt-2">
                         <div class="stacked-card bg-rose-700 border-[3px] border-white/50 transform rotate-6 translate-x-4 translate-y-3" aria-hidden="true"></div>
                         <div class="stacked-card bg-rose-500 border-[3px] border-white/70 transform -rotate-3 -translate-x-3 -translate-y-2" aria-hidden="true"></div>
-                        <button type="button" onclick="cardsGame.next()" id="active-deck-card" class="stacked-card bg-gradient-to-br from-rose-500 to-pink-600 border-4 border-white flex flex-col items-center justify-center text-white cursor-pointer hover:-translate-y-6 hover:rotate-2 transition-all duration-300 z-10 shadow-2xl" aria-label="Deal a random word card">
+                        <button type="button" onclick="cardsGame.dealNextCard()" id="active-deck-card" class="stacked-card bg-gradient-to-br from-rose-500 to-pink-600 border-4 border-white flex flex-col items-center justify-center text-white cursor-pointer hover:-translate-y-6 hover:rotate-2 transition-all duration-300 z-10 shadow-2xl" aria-label="Deal a random word card">
                             <span class="text-6xl drop-shadow-md" aria-hidden="true">🃏</span>
                             <span class="font-black mt-4 text-xs tracking-[0.2em] bg-black/20 px-3.5 py-1 rounded-full">DEAL</span>
                         </button>

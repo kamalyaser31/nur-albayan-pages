@@ -1,0 +1,59 @@
+/**
+ * Nour Al-Bayan Interactive Platform - Wordwall & Stage Games
+ * Game tabs, 3D rotating boxes, Curtain box theme, Mastery ladder, and card piles.
+ */
+
+.game-tab { transition: all 0.25s var(--ease-bounce); }
+.game-tab.active {
+    background-color: #10b981 !important;
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
+    border-color: #059669;
+}
+
+.wordwall-box { perspective: 1200px; cursor: pointer; }
+.wordwall-box-inner { transition: transform 0.6s var(--ease-standard); transform-style: preserve-3d; }
+.wordwall-box.opened .wordwall-box-inner { transform: rotateY(180deg); }
+.box-front, .box-back { backface-visibility: hidden; position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.box-back { transform: rotateY(180deg); }
+
+/* Curtain Box Theme */
+.curtain-box { perspective: 1200px; }
+.curtain-bg {
+    background: linear-gradient(135deg, var(--curtain-color, #e11d48) 0%, #881337 100%);
+    box-shadow: inset 0 0 18px rgba(0,0,0,0.35), 0 8px 16px rgba(0,0,0,0.15);
+    position: relative;
+}
+.curtain-drape {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(90deg, transparent 0, transparent 10px, rgba(0,0,0,0.15) 10px, rgba(0,0,0,0.15) 20px);
+    pointer-events: none;
+}
+
+/* Mastery Ladder */
+.ladder-rung {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06);
+    user-select: none;
+}
+.scale-102 { transform: scale(1.02); }
+
+.card-pile { position: relative; width: 190px; height: 260px; perspective: 1200px; }
+@media (max-width: 640px) { .card-pile { width: 150px; height: 210px; } }
+.stacked-card {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 1.5rem;
+    transition: all 0.5s var(--ease-bounce);
+    transform-style: preserve-3d;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+}
+
+.giant-word-overlay {
+    animation: popIn 0.35s var(--ease-bounce) forwards;
+}

@@ -1,0 +1,13 @@
+/**
+ * Nour Al-Bayan Interactive Platform - Precompiled CSS Utilities Aggregator
+ * Imports all granular utility modules.
+ */
+
+@import url('utilities/layout.css');
+@import url('utilities/spacing.css');
+@import url('utilities/text.css');
+@import url('utilities/colors.css');
+@import url('utilities/borders.css');
+@import url('utilities/effects.css');
+@import url('utilities/buttons.css');
+@import url('utilities/responsive.css');

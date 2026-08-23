@@ -30,18 +30,22 @@ const Sound = {
         gainNode.gain.exponentialRampToValueAtTime(0.001, now + d);
         osc.start(now); osc.stop(now + d);
     },
-    nav() { this.tone(520, 0.05); },
-    tap() { this.tone(600, 0.04); },
-    golden() { this.playChime(); },
     danger() { this.tone(220, 0.3, 'sawtooth'); },
-    flip() { this.tone(440, 0.08, 'triangle'); },
-    drop() { this.tone(300, 0.08); },
-    win() { this.playChime(); },
-    success() { this.playChime(); },
-    fail() { this.tone(180, 0.25, 'sawtooth'); }
+    fail() { this.tone(180, 0.25, 'sawtooth'); },
+    stepUp(step = 1, max = 5) {
+        const freqs = [392, 440, 493.88, 523.25, 587.33, 659.25, 698.46, 783.99, 880, 987.77, 1046.50];
+        const f = freqs[Math.min(step, freqs.length - 1)] || (392 + step * 45);
+        this.tone(f, 0.16, 'triangle');
+    },
+    stepDown() {
+        const ctx = this.getCtx(); if (!ctx) return;
+        const now = ctx.currentTime, osc = ctx.createOscillator(), gainNode = ctx.createGain();
+        osc.type = 'sine'; osc.frequency.setValueAtTime(330, now); osc.frequency.linearRampToValueAtTime(220, now + 0.18);
+        osc.connect(gainNode); gainNode.connect(ctx.destination);
+        gainNode.gain.setValueAtTime(0.15, now); gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+        osc.start(now); osc.stop(now + 0.18);
+    }
 };
-
-function playCelebrationSound() { Sound.playChime(); }
 
 function fireCelebration() {
     if (typeof confetti !== 'function') return;
