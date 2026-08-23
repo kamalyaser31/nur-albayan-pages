@@ -1,5 +1,14 @@
-.backups/
+# Agent State & Documentation Files
+task.md
+project_state.md
+CHANGELOG.md
+
+# Staging & Temporary Dirs
+new pages/
 .tmp/
+.backups/
+
+# Python & Environment
 __pycache__/
 *.pyc
 .DS_Store

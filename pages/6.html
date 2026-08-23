@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nour Al-Bayan - Page 6 • Letter Shapes (أشكال الحروف)</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f0fdfa;
+            background-image: radial-gradient(#cbd5e1 2px, transparent 2px);
+            background-size: 30px 30px;
+        }
+
+        .amiri-font {
+            font-family: 'Amiri', serif;
+        }
+
+        .letter-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .letter-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .highlight {
+            color: #ef4444;
+            font-weight: bold;
+        }
+
+        @keyframes bounce-scale {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .animate-bounce-scale {
+            animation: bounce-scale 0.5s ease-in-out;
+        }
+
+        @keyframes star-float {
+            0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100px) scale(2) rotate(45deg); opacity: 0; }
+        }
+        .animate-star-float {
+            animation: star-float 1s ease-out forwards;
+        }
+        
+        @keyframes border-pulse {
+            0%, 100% { border-color: #a855f7; box-shadow: 0 0 15px rgba(168, 85, 247, 0.5); }
+            50% { border-color: #fcd34d; box-shadow: 0 0 30px rgba(252, 211, 77, 0.8); }
+        }
+        .golden-border {
+            animation: border-pulse 1.5s infinite;
+        }
+    </style>
+</head>
+<body class="h-screen w-screen overflow-hidden flex flex-col">
+
+    <!-- Top Navigation Bar -->
+    <div class="flex-none h-16 w-full bg-white shadow-md flex justify-between items-center px-2 md:px-6 border-b-4 border-indigo-500 z-20 relative">
+        <button id="prevBtn" class="bg-indigo-500 hover:bg-indigo-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-1 px-3 md:py-2 md:px-4 rounded-lg shadow transition-transform hover:scale-105 flex items-center text-sm md:text-base">
+            ⬅️ Prev
+        </button>
+        
+        <select id="letterSelect" class="mx-2 md:mx-4 flex-grow max-w-sm text-center text-lg md:text-xl py-1 px-2 bg-indigo-50 border-2 border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 font-bold text-indigo-800 cursor-pointer" dir="ltr">
+            <!-- Options populated by JS -->
+        </select>
+        
+        <button id="nextBtn" class="bg-indigo-500 hover:bg-indigo-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-1 px-3 md:py-2 md:px-4 rounded-lg shadow transition-transform hover:scale-105 flex items-center text-sm md:text-base">
+            Next ➡️
+        </button>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow flex items-center justify-center p-2 md:p-4 min-h-0 w-full relative overflow-hidden">
+        
+        <!-- 1. HOME SLIDE -->
+        <div id="homeSlide" class="w-full h-full flex flex-col items-center justify-center text-center max-w-4xl mx-auto">
+            <div class="text-5xl md:text-7xl mb-2">🌟🎈</div>
+            <h1 class="text-3xl md:text-5xl font-black text-indigo-600 mb-2 drop-shadow-sm">
+                Arabic Letters Heroes 🦸‍♂️
+            </h1>
+            <p class="text-lg md:text-xl text-gray-600 font-bold mb-4">Let's learn letter shapes in words!</p>
+            
+            <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl px-4 py-3 shadow-sm text-indigo-800 font-bold text-sm md:text-lg mb-4 w-full max-w-2xl transform transition hover:scale-105">
+                <p dir="rtl" class="mb-1">🤲 نسألكم الدعاء لوالدي وأخي بالرحمة والمغفرة 🤲</p>
+                <p dir="ltr" class="text-indigo-600 opacity-90">🤲 Please pray for my father and brother for mercy and forgiveness 🤲</p>
+            </div>
+
+            <div class="bg-white rounded-2xl p-3 md:p-4 mb-6 border border-pink-200 shadow-md inline-block text-gray-700 font-bold text-base md:text-lg w-full max-w-md">
+                <p class="mb-1 text-indigo-700 text-xl font-black">👨‍🏫 Sheikh Gehad Elsayad</p>
+                <p class="mb-1 text-gray-600">📞 01147992249</p>
+                <p class="text-gray-600">✉️ gehadnagah789@gmail.com</p>
+            </div>
+
+            <button id="startBtn" class="bg-green-500 hover:bg-green-600 text-white font-black py-3 px-8 rounded-full shadow-xl text-xl md:text-2xl transition-transform hover:scale-105 animate-bounce-scale">
+                Start Learning 🚀
+            </button>
+        </div>
+
+        <!-- 2. LEARNING SECTION -->
+        <div id="learningSection" class="hidden w-full h-full max-w-6xl grid grid-cols-3 gap-2 md:gap-6" dir="rtl">
+            <div class="letter-card bg-white rounded-3xl shadow-xl border-t-8 border-green-400 flex flex-col items-center justify-center h-full p-2 md:p-6 text-center">
+                <div class="bg-green-100 text-green-800 px-3 py-1 md:px-6 md:py-2 rounded-full font-bold text-sm md:text-lg mb-4 shadow-sm">Start 🏁</div>
+                <div id="shapeStart" class="text-5xl md:text-8xl mb-2 amiri-font text-gray-800" dir="rtl"></div>
+                <div class="w-3/4 h-px bg-gray-200 my-4"></div>
+                <div id="wordStart" class="text-4xl md:text-7xl amiri-font text-gray-800 mt-2" dir="rtl"></div>
+            </div>
+
+            <div class="letter-card bg-white rounded-3xl shadow-xl border-t-8 border-yellow-400 flex flex-col items-center justify-center h-full p-2 md:p-6 text-center">
+                <div class="bg-yellow-100 text-yellow-800 px-3 py-1 md:px-6 md:py-2 rounded-full font-bold text-sm md:text-lg mb-4 shadow-sm">Middle 🔗</div>
+                <div id="shapeMiddle" class="text-5xl md:text-8xl mb-2 amiri-font text-gray-800" dir="rtl"></div>
+                <div class="w-3/4 h-px bg-gray-200 my-4"></div>
+                <div id="wordMiddle" class="text-4xl md:text-7xl amiri-font text-gray-800 mt-2" dir="rtl"></div>
+            </div>
+
+            <div class="letter-card bg-white rounded-3xl shadow-xl border-t-8 border-pink-400 flex flex-col items-center justify-center h-full p-2 md:p-6 text-center">
+                <div class="bg-pink-100 text-pink-800 px-3 py-1 md:px-6 md:py-2 rounded-full font-bold text-sm md:text-lg mb-4 shadow-sm">End 🛑</div>
+                <div id="shapeEnd" class="text-5xl md:text-8xl mb-2 amiri-font text-gray-800" dir="rtl"></div>
+                <div class="w-3/4 h-px bg-gray-200 my-4"></div>
+                <div id="wordEnd" class="text-4xl md:text-7xl amiri-font text-gray-800 mt-2" dir="rtl"></div>
+            </div>
+        </div>
+
+        <!-- 3. QUIZ SECTION -->
+        <div id="quizSection" class="hidden w-full h-full max-w-4xl bg-white rounded-3xl shadow-2xl border-4 p-4 md:p-8 flex flex-col justify-center items-center relative transition-all duration-300">
+            
+            <div class="absolute top-4 left-4 md:left-8 bg-gray-100 px-4 py-2 rounded-xl shadow-inner font-black text-xl md:text-2xl text-gray-700 flex items-center gap-2">
+                <span id="timerDisplay">⏳ 10s</span>
+            </div>
+            
+            <div class="absolute top-4 right-4 md:right-8 bg-green-100 px-4 py-2 rounded-xl shadow-inner font-black text-xl md:text-2xl text-green-700 flex items-center gap-2 transition-transform" id="scoreContainer">
+                🏆 Score: <span id="scoreDisplay">0</span>
+            </div>
+
+            <div id="qTypeBadge" class="absolute -top-5 left-1/2 transform -translate-x-1/2 text-white font-black text-lg md:text-2xl px-6 md:px-10 py-1 rounded-full shadow-md whitespace-nowrap">
+                Challenge Time!
+            </div>
+            
+            <div id="quizContainer" class="w-full flex flex-col items-center justify-center mt-12 md:mt-8">
+                <h3 class="text-lg md:text-2xl font-bold text-gray-500 mb-4 text-center">Choose the correct shape quickly!</h3>
+                <div id="quizWord" class="text-6xl md:text-8xl amiri-font font-bold text-gray-800 mb-8 tracking-wider text-center" dir="rtl"></div>
+                <div id="quizOptions" class="flex justify-center items-center gap-3 md:gap-6 flex-wrap flex-row-reverse" dir="rtl"></div>
+                <div id="quizFeedback" class="mt-4 md:mt-8 text-2xl md:text-4xl font-bold h-10 transition-all text-center"></div>
+                <button id="nextQuizBtn" class="hidden mt-4 md:mt-6 bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-10 rounded-full shadow-lg transition-transform hover:scale-105">
+                    Next Question ➡️
+                </button>
+            </div>
+
+            <div id="quizComplete" class="hidden w-full flex flex-col items-center justify-center text-center">
+                <div class="text-7xl md:text-9xl mb-4">🎉👑🎉</div>
+                <h2 class="text-4xl md:text-5xl font-black text-green-600 mb-2">You are a hero!</h2>
+                <p class="text-2xl md:text-3xl font-bold text-gray-700 mb-6">Final Score: <span id="finalScoreDisplay" class="text-indigo-600">0</span> 🏆</p>
+                <button id="backToLettersFromQuizBtn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg text-xl md:text-2xl transition-transform hover:scale-105">
+                    Continue Journey ➡️
+                </button>
+            </div>
+        </div>
+
+        <!-- 4. FUN BREAK (TIC-TAC-TOE) -->
+        <div id="gameSectionTTT" class="hidden w-full h-full max-w-2xl bg-white rounded-3xl shadow-2xl border-4 border-blue-400 p-4 md:p-8 flex flex-col justify-center items-center relative transition-all duration-300">
+            <div class="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white font-black text-xl md:text-2xl px-8 py-1 rounded-full shadow-md whitespace-nowrap">
+                Fun Break! 🎮
+            </div>
+            
+            <h2 class="text-3xl md:text-4xl font-black text-indigo-600 mb-2 text-center">Tic-Tac-Toe</h2>
+            <div id="gameTurnTTT" class="text-xl md:text-2xl font-bold text-gray-600 mb-6">Player 🌟's Turn</div>
+
+            <div id="ticTacToeBoard" class="grid grid-cols-3 gap-2 md:gap-4 w-full max-w-sm aspect-square mb-6"></div>
+
+            <div id="gameResultTTT" class="hidden text-3xl font-black text-center mb-6 h-10"></div>
+
+            <div class="flex gap-4">
+                <button id="resetGameBtnTTT" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-transform hover:scale-105 flex items-center gap-2">
+                    Play Again 🔄
+                </button>
+            </div>
+        </div>
+
+        <!-- 5. FUN BREAK (CONNECT FOUR) -->
+        <div id="gameSectionC4" class="hidden w-full h-full max-w-3xl bg-white rounded-3xl shadow-2xl border-4 border-purple-400 p-2 md:p-8 flex flex-col justify-center items-center relative transition-all duration-300">
+            <div class="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-purple-500 text-white font-black text-xl md:text-2xl px-8 py-1 rounded-full shadow-md whitespace-nowrap">
+                Fun Break! 🎮
+            </div>
+            
+            <h2 class="text-3xl md:text-4xl font-black text-purple-600 mb-2 text-center mt-6 md:mt-0">Connect Four</h2>
+            <div id="gameTurnC4" class="text-xl md:text-2xl font-bold text-gray-600 mb-4 text-center">Player 🌟's Turn</div>
+
+            <div class="bg-blue-600 p-2 md:p-4 rounded-2xl shadow-inner mb-4 w-full max-w-lg mx-auto">
+                <div id="connectFourBoard" class="grid grid-cols-7 gap-1 md:gap-2"></div>
+            </div>
+
+            <div id="gameResultC4" class="hidden text-2xl md:text-3xl font-black text-center mb-4 h-10"></div>
+
+            <div class="flex gap-4">
+                <button id="resetGameBtnC4" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 md:py-3 px-6 rounded-full shadow-lg transition-transform hover:scale-105 flex items-center gap-2 text-lg">
+                    Play Again 🔄
+                </button>
+            </div>
+        </div>
+
+        <!-- 6. FUN BREAK (MEMORY PUZZLE) -->
+        <div id="gameSectionMem" class="hidden w-full h-full max-w-3xl bg-white rounded-3xl shadow-2xl border-4 border-orange-400 p-4 md:p-8 flex flex-col justify-center items-center relative transition-all duration-300">
+            <div class="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-orange-500 text-white font-black text-xl md:text-2xl px-8 py-1 rounded-full shadow-md whitespace-nowrap">
+                Fun Break! 🧩
+            </div>
+            
+            <h2 class="text-3xl md:text-4xl font-black text-orange-600 mb-2 text-center">Memory Match</h2>
+            <div id="gameTurnMem" class="text-xl md:text-2xl font-bold text-gray-600 mb-4 text-center">Find all the matching pairs!</div>
+
+            <div id="memoryBoard" class="grid grid-cols-4 gap-2 md:gap-4 w-full max-w-md aspect-[4/3] mb-6">
+                <!-- 12 Cards injected by JS -->
+            </div>
+
+            <div id="gameResultMem" class="hidden text-3xl font-black text-center mb-6 h-10"></div>
+
+            <div class="flex gap-4">
+                <button id="resetGameBtnMem" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-transform hover:scale-105 flex items-center gap-2">
+                    Play Again 🔄
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        const h = (letter) => `<span class="highlight">${letter}</span>`;
+        const qh = (letter) => `<span class="text-green-500">${letter}</span>`;
+
+        const alphabetData = [
+            { letter: 'أ', start: { s: 'أ', w: `${h('أ')}رنب` }, middle: { s: 'ـأ', w: `فـ${h('ـأ')}ر` }, end: { s: 'ـأ &nbsp; أ &nbsp; ء', w: `مخبـ${h('ـأ')}` } },
+            { letter: 'ب', start: { s: 'بـ', w: `${h('بـ')}قرة` }, middle: { s: 'ـبـ', w: `حـ${h('ـبـ')}ل` }, end: { s: 'ـب &nbsp; ب', w: `كلـ${h('ـب')}` } },
+            { letter: 'ت', start: { s: 'تـ', w: `${h('تـ')}فاحة` }, middle: { s: 'ـتـ', w: `كـ${h('ـتـ')}اب` }, end: { s: 'ـت &nbsp; ت &nbsp; ـة &nbsp; ة', w: `بنـ${h('ـت')}` } },
+            { letter: 'ث', start: { s: 'ثـ', w: `${h('ثـ')}علب` }, middle: { s: 'ـثـ', w: `مـ${h('ـثـ')}لث` }, end: { s: 'ـث &nbsp; ث', w: `محرا${h('ث')}` } },
+            { letter: 'ج', start: { s: 'جـ', w: `${h('جـ')}مل` }, middle: { s: 'ـجـ', w: `شـ${h('ـجـ')}رة` }, end: { s: 'ـج &nbsp; ج', w: `ثلـ${h('ـج')}` } },
+            { letter: 'ح', start: { s: 'حـ', w: `${h('حـ')}صان` }, middle: { s: 'ـحـ', w: `لـ${h('ـحـ')}م` }, end: { s: 'ـح &nbsp; ح', w: `ملـ${h('ـح')}` } },
+            { letter: 'خ', start: { s: 'خـ', w: `${h('خـ')}روف` }, middle: { s: 'ـخـ', w: `نـ${h('ـخـ')}لة` }, end: { s: 'ـخ &nbsp; خ', w: `بطيـ${h('ـخ')}` } },
+            { letter: 'د', start: { s: 'د', w: `${h('د')}يك` }, middle: { s: 'ـد', w: `مـ${h('ـد')}رسة` }, end: { s: 'ـد &nbsp; د', w: `يـ${h('ـد')}` } },
+            { letter: 'ذ', start: { s: 'ذ', w: `${h('ذ')}رة` }, middle: { s: 'ـذ', w: `بـ${h('ـذ')}ور` }, end: { s: 'ـذ &nbsp; ذ', w: `قنفـ${h('ـذ')}` } },
+            { letter: 'ر', start: { s: 'ر', w: `${h('ر')}مان` }, middle: { s: 'ـر', w: `خـ${h('ـر')}وف` }, end: { s: 'ـر &nbsp; ر', w: `قـ${h('ـر')}د` } },
+            { letter: 'ز', start: { s: 'ز', w: `${h('ز')}رافة` }, middle: { s: 'ـز', w: `جـ${h('ـز')}ر` }, end: { s: 'ـز &nbsp; ز', w: `مو${h('ز')}` } },
+            { letter: 'س', start: { s: 'سـ', w: `${h('سـ')}مكة` }, middle: { s: 'ـسـ', w: `تمـ${h('ـسـ')}اح` }, end: { s: 'ـس &nbsp; س', w: `شمـ${h('ـس')}` } },
+            { letter: 'ش', start: { s: 'شـ', w: `${h('شـ')}جرة` }, middle: { s: 'ـشـ', w: `مـ${h('ـشـ')}ط` }, end: { s: 'ـش &nbsp; ش', w: `عـ${h('ـش')}` } },
+            { letter: 'ص', start: { s: 'صـ', w: `${h('صـ')}قر` }, middle: { s: 'ـصـ', w: `عـ${h('ـصـ')}فور` }, end: { s: 'ـص &nbsp; ص', w: `مقـ${h('ـص')}` } },
+            { letter: 'ض', start: { s: 'ضـ', w: `${h('ضـ')}فدع` }, middle: { s: 'ـضـ', w: `مـ${h('ـضـ')}رب` }, end: { s: 'ـض &nbsp; ض', w: `أبيـ${h('ـض')}` } },
+            { letter: 'ط', start: { s: 'طـ', w: `${h('طـ')}ائرة` }, middle: { s: 'ـطـ', w: `مـ${h('ـطـ')}ر` }, end: { s: 'ـط &nbsp; ط', w: `قـ${h('ـط')}` } },
+            { letter: 'ظ', start: { s: 'ظـ', w: `${h('ظـ')}رف` }, middle: { s: 'ـظـ', w: `مـ${h('ـظـ')}لة` }, end: { s: 'ـظ &nbsp; ظ', w: `حافـ${h('ـظ')}` } },
+            { letter: 'ع', start: { s: 'عـ', w: `${h('عـ')}نب` }, middle: { s: 'ـعـ', w: `ثـ${h('ـعـ')}لب` }, end: { s: 'ـع &nbsp; ع', w: `ضفد${h('ع')}` } },
+            { letter: 'غ', start: { s: 'غـ', w: `${h('غـ')}سالة` }, middle: { s: 'ـغـ', w: `ببـ${h('ـغـ')}اء` }, end: { s: 'ـغ &nbsp; غ', w: `صمـ${h('ـغ')}` } },
+            { letter: 'ف', start: { s: 'فـ', w: `${h('فـ')}يل` }, middle: { s: 'ـفـ', w: `تـ${h('ـفـ')}احة` }, end: { s: 'ـف &nbsp; ف', w: `هاتـ${h('ـف')}` } },
+            { letter: 'ق', start: { s: 'قـ', w: `${h('قـ')}رد` }, middle: { s: 'ـقـ', w: `صـ${h('ـقـ')}ر` }, end: { s: 'ـق &nbsp; ق', w: `طبـ${h('ـق')}` } },
+            { letter: 'ك', start: { s: 'كـ', w: `${h('كـ')}لب` }, middle: { s: 'ـكـ', w: `سـ${h('ـكـ')}ين` }, end: { s: 'ـك &nbsp; ك', w: `سمـ${h('ـك')}` } },
+            { letter: 'ل', start: { s: 'لـ', w: `${h('لـ')}يمون` }, middle: { s: 'ـلـ', w: `قـ${h('ـلـ')}م` }, end: { s: 'ـل &nbsp; ل', w: `جمـ${h('ـل')}` } },
+            { letter: 'م', start: { s: 'مـ', w: `${h('مـ')}وز` }, middle: { s: 'ـمـ', w: `شـ${h('ـمـ')}س` }, end: { s: 'ـم &nbsp; م', w: `قلـ${h('ـم')}` } },
+            { letter: 'ن', start: { s: 'نـ', w: `${h('نـ')}مر` }, middle: { s: 'ـنـ', w: `عـ${h('ـنـ')}ب` }, end: { s: 'ـن &nbsp; ن', w: `عيـ${h('ـن')}` } },
+            { letter: 'هـ', start: { s: 'هـ', w: `${h('هـ')}رم` }, middle: { s: 'ـهـ', w: `فـ${h('ـهـ')}د` }, end: { s: 'ـه &nbsp; ـة &nbsp; ه &nbsp; ة', w: `وجـ${h('ـه')}` } },
+            { letter: 'و', start: { s: 'و', w: `${h('و')}ردة` }, middle: { s: 'ـو', w: `حـ${h('ـو')}ت` }, end: { s: 'ـو &nbsp; و', w: `دلـ${h('ـو')}` } },
+            { letter: 'ي', start: { s: 'يـ', w: `${h('يـ')}د` }, middle: { s: 'ـيـ', w: `لـ${h('ـيـ')}مون` }, end: { s: 'ـي &nbsp; ي &nbsp; ى', w: `كرسـ${h('ـي')}` } }
+        ];
+
+        const quizzes = [
+            {
+                groupName: "Group 1 Quiz (أ - ج)",
+                questions: [
+                    { word: "___ رنب", answer: "أ", options: ["أ", "ـأ", "ا"], full: `${qh('أ')}رنب` },
+                    { word: "فـ ___ ر", answer: "ـأ", options: ["أ", "ـأ", "ا"], full: `فـ${qh('ـأ')}ر` },
+                    { word: "مخبـ ___", answer: "ـأ", options: ["أ", "ـأ", "ا"], full: `مخبـ${qh('ـأ')}` },
+                    { word: "___ ـقرة", answer: "بـ", options: ["بـ", "ـبـ", "ـب"], full: `${qh('بـ')}قرة` },
+                    { word: "حـ ___ ـل", answer: "ـبـ", options: ["بـ", "ـبـ", "ـب"], full: `حـ${qh('ـبـ')}ل` },
+                    { word: "كلـ ___", answer: "ـب", options: ["بـ", "ـبـ", "ـب"], full: `كلـ${qh('ـب')}` },
+                    { word: "___ ـفاحة", answer: "تـ", options: ["تـ", "ـتـ", "ـت"], full: `${qh('تـ')}فاحة` },
+                    { word: "كـ ___ ـاب", answer: "ـتـ", options: ["تـ", "ـتـ", "ـت"], full: `كـ${qh('ـتـ')}اب` },
+                    { word: "بنـ ___", answer: "ـت", options: ["تـ", "ـتـ", "ـت"], full: `بنـ${qh('ـت')}` },
+                    { word: "___ ـعلب", answer: "ثـ", options: ["ثـ", "ـثـ", "ـث"], full: `${qh('ثـ')}علب` },
+                    { word: "مـ ___ ـلث", answer: "ـثـ", options: ["ثـ", "ـثـ", "ـث"], full: `مـ${qh('ـثـ')}لث` },
+                    { word: "محرا ___", answer: "ث", options: ["ثـ", "ـثـ", "ث"], full: `محرا${qh('ث')}` },
+                    { word: "___ ـمل", answer: "جـ", options: ["جـ", "ـجـ", "ـج"], full: `${qh('جـ')}مل` },
+                    { word: "شـ ___ ـرة", answer: "ـجـ", options: ["جـ", "ـجـ", "ـج"], full: `شـ${qh('ـجـ')}رة` },
+                    { word: "ثلـ ___", answer: "ـج", options: ["جـ", "ـجـ", "ـج"], full: `ثلـ${qh('ـج')}` }
+                ]
+            },
+            {
+                groupName: "Group 2 Quiz (ح - ر)",
+                questions: [
+                    { word: "___ ـصان", answer: "حـ", options: ["حـ", "ـحـ", "ـح"], full: `${qh('حـ')}صان` },
+                    { word: "لـ ___ ـم", answer: "ـحـ", options: ["حـ", "ـحـ", "ـح"], full: `لـ${qh('ـحـ')}م` },
+                    { word: "ملـ ___", answer: "ـح", options: ["حـ", "ـحـ", "ـح"], full: `ملـ${qh('ـح')}` },
+                    { word: "___ ـروف", answer: "خـ", options: ["خـ", "ـخـ", "ـخ"], full: `${qh('خـ')}روف` },
+                    { word: "نـ ___ ـلة", answer: "ـخـ", options: ["خـ", "ـخـ", "ـخ"], full: `نـ${qh('ـخـ')}لة` },
+                    { word: "بطيـ ___", answer: "ـخ", options: ["خـ", "ـخـ", "ـخ"], full: `بطيـ${qh('ـخ')}` },
+                    { word: "___ يك", answer: "د", options: ["د", "ـد", "دـ"], full: `${qh('د')}يك` },
+                    { word: "مـ ___ رسة", answer: "ـد", options: ["د", "ـد", "دـ"], full: `مـ${qh('ـد')}رسة` },
+                    { word: "يـ ___", answer: "ـد", options: ["د", "ـد", "دـ"], full: `يـ${qh('ـد')}` },
+                    { word: "___ رة", answer: "ذ", options: ["ذ", "ـذ", "ذـ"], full: `${qh('ذ')}رة` },
+                    { word: "بـ ___ ور", answer: "ـذ", options: ["ذ", "ـذ", "ذـ"], full: `بـ${qh('ـذ')}ور` },
+                    { word: "قنفـ ___", answer: "ـذ", options: ["ذ", "ـذ", "ذـ"], full: `قنفـ${qh('ـذ')}` },
+                    { word: "___ مان", answer: "ر", options: ["ر", "ـر", "رـ"], full: `${qh('ر')}مان` },
+                    { word: "خـ ___ وف", answer: "ـر", options: ["ر", "ـر", "رـ"], full: `خـ${qh('ـر')}وف` },
+                    { word: "قـ ___ د", answer: "ـر", options: ["ر", "ـر", "رـ"], full: `قـ${qh('ـر')}د` }
+                ]
+            },
+            {
+                groupName: "Group 3 Quiz (ز - ض)",
+                questions: [
+                    { word: "___ رافة", answer: "ز", options: ["ز", "ـز", "زـ"], full: `${qh('ز')}رافة` },
+                    { word: "جـ ___ ر", answer: "ـز", options: ["ز", "ـز", "زـ"], full: `جـ${qh('ـز')}ر` },
+                    { word: "مو ___", answer: "ز", options: ["ز", "ـز", "زـ"], full: `مو${qh('ز')}` },
+                    { word: "___ ـمكة", answer: "سـ", options: ["سـ", "ـسـ", "ـس"], full: `${qh('سـ')}مكة` },
+                    { word: "تمـ ___ ـاح", answer: "ـسـ", options: ["سـ", "ـسـ", "ـس"], full: `تمـ${qh('ـسـ')}اح` },
+                    { word: "شمـ ___", answer: "ـس", options: ["سـ", "ـسـ", "ـس"], full: `شمـ${qh('ـس')}` },
+                    { word: "___ ـجرة", answer: "شـ", options: ["شـ", "ـشـ", "ـش"], full: `${qh('شـ')}جرة` },
+                    { word: "مـ ___ ـط", answer: "ـشـ", options: ["شـ", "ـشـ", "ـش"], full: `مـ${qh('ـشـ')}ط` },
+                    { word: "عـ ___", answer: "ـش", options: ["شـ", "ـشـ", "ـش"], full: `عـ${qh('ـش')}` },
+                    { word: "___ ـقر", answer: "صـ", options: ["صـ", "ـصـ", "ـص"], full: `${qh('صـ')}قر` },
+                    { word: "عـ ___ ـفور", answer: "ـصـ", options: ["صـ", "ـصـ", "ـص"], full: `عـ${qh('ـصـ')}فور` },
+                    { word: "مقـ ___", answer: "ـص", options: ["صـ", "ـصـ", "ـص"], full: `مقـ${qh('ـص')}` },
+                    { word: "___ ـفدع", answer: "ضـ", options: ["ضـ", "ـضـ", "ـض"], full: `${qh('ضـ')}فدع` },
+                    { word: "مـ ___ ـرب", answer: "ـضـ", options: ["ضـ", "ـضـ", "ـض"], full: `مـ${qh('ـضـ')}رب` },
+                    { word: "أبيـ ___", answer: "ـض", options: ["ضـ", "ـضـ", "ـض"], full: `أبيـ${qh('ـض')}` }
+                ]
+            },
+            {
+                groupName: "Group 4 Quiz (ط - ف)",
+                questions: [
+                    { word: "___ ـائرة", answer: "طـ", options: ["طـ", "ـطـ", "ـط"], full: `${qh('طـ')}ائرة` },
+                    { word: "مـ ___ ـر", answer: "ـطـ", options: ["طـ", "ـطـ", "ـط"], full: `مـ${qh('ـطـ')}ر` },
+                    { word: "قـ ___", answer: "ـط", options: ["طـ", "ـطـ", "ـط"], full: `قـ${qh('ـط')}` },
+                    { word: "___ ـرف", answer: "ظـ", options: ["ظـ", "ـظـ", "ـظ"], full: `${qh('ظـ')}رف` },
+                    { word: "مـ ___ ـلة", answer: "ـظـ", options: ["ظـ", "ـظـ", "ـظ"], full: `مـ${qh('ـظـ')}لة` },
+                    { word: "حافـ ___", answer: "ـظ", options: ["ظـ", "ـظـ", "ـظ"], full: `حافـ${qh('ـظ')}` },
+                    { word: "___ ـنب", answer: "عـ", options: ["عـ", "ـعـ", "ع"], full: `${qh('عـ')}نب` },
+                    { word: "ثـ ___ ـلب", answer: "ـعـ", options: ["عـ", "ـعـ", "ع"], full: `ثـ${qh('ـعـ')}لب` },
+                    { word: "ضفد ___", answer: "ع", options: ["عـ", "ـعـ", "ع"], full: `ضفد${qh('ع')}` },
+                    { word: "___ ـسالة", answer: "غـ", options: ["غـ", "ـغـ", "ـغ"], full: `${qh('غـ')}سالة` },
+                    { word: "ببـ ___ ـاء", answer: "ـغـ", options: ["غـ", "ـغـ", "ـغ"], full: `ببـ${qh('ـغـ')}اء` },
+                    { word: "صمـ ___", answer: "ـغ", options: ["غـ", "ـغـ", "ـغ"], full: `صمـ${qh('ـغ')}` },
+                    { word: "___ ـيل", answer: "فـ", options: ["فـ", "ـفـ", "ـف"], full: `${qh('فـ')}يل` },
+                    { word: "تـ ___ ـاحة", answer: "ـفـ", options: ["فـ", "ـفـ", "ـف"], full: `تـ${qh('ـفـ')}احة` },
+                    { word: "هاتـ ___", answer: "ـف", options: ["فـ", "ـفـ", "ـف"], full: `هاتـ${qh('ـف')}` }
+                ]
+            },
+            {
+                groupName: "Group 5 Quiz (ق - ن)",
+                questions: [
+                    { word: "___ ـرد", answer: "قـ", options: ["قـ", "ـقـ", "ـق"], full: `${qh('قـ')}رد` },
+                    { word: "صـ ___ ـر", answer: "ـقـ", options: ["قـ", "ـقـ", "ـق"], full: `صـ${qh('ـقـ')}ر` },
+                    { word: "طبـ ___", answer: "ـق", options: ["قـ", "ـقـ", "ـق"], full: `طبـ${qh('ـق')}` },
+                    { word: "___ ـلب", answer: "كـ", options: ["كـ", "ـكـ", "ـك"], full: `${qh('كـ')}لب` },
+                    { word: "سـ ___ ـين", answer: "ـكـ", options: ["كـ", "ـكـ", "ـك"], full: `سـ${qh('ـكـ')}ين` },
+                    { word: "سمـ ___", answer: "ـك", options: ["كـ", "ـكـ", "ـك"], full: `سمـ${qh('ـك')}` },
+                    { word: "___ ـيمون", answer: "لـ", options: ["لـ", "ـلـ", "ـل"], full: `${qh('لـ')}يمون` },
+                    { word: "قـ ___ ـم", answer: "ـلـ", options: ["لـ", "ـلـ", "ـل"], full: `قـ${qh('ـلـ')}م` },
+                    { word: "جمـ ___", answer: "ـل", options: ["لـ", "ـلـ", "ـل"], full: `جمـ${qh('ـل')}` },
+                    { word: "___ ـوز", answer: "مـ", options: ["مـ", "ـمـ", "ـم"], full: `${qh('مـ')}وز` },
+                    { word: "شـ ___ ـس", answer: "ـمـ", options: ["مـ", "ـمـ", "ـم"], full: `شـ${qh('ـمـ')}س` },
+                    { word: "قلـ ___", answer: "ـم", options: ["مـ", "ـمـ", "ـم"], full: `قلـ${qh('ـم')}` },
+                    { word: "___ ـمر", answer: "نـ", options: ["نـ", "ـنـ", "ـن"], full: `${qh('نـ')}مر` },
+                    { word: "عـ ___ ـب", answer: "ـنـ", options: ["نـ", "ـنـ", "ـن"], full: `عـ${qh('ـنـ')}ب` },
+                    { word: "عيـ ___", answer: "ـن", options: ["نـ", "ـنـ", "ـن"], full: `عيـ${qh('ـن')}` }
+                ]
+            },
+            {
+                groupName: "Group 6 Quiz (هـ - ي)",
+                questions: [
+                    { word: "___ ـرم", answer: "هـ", options: ["هـ", "ـهـ", "ـه"], full: `${qh('هـ')}رم` },
+                    { word: "فـ ___ ـد", answer: "ـهـ", options: ["هـ", "ـهـ", "ـه"], full: `فـ${qh('ـهـ')}د` },
+                    { word: "وجـ ___", answer: "ـه", options: ["هـ", "ـهـ", "ـه"], full: `وجـ${qh('ـه')}` },
+                    { word: "___ ردة", answer: "و", options: ["و", "ـو", "وـ"], full: `${qh('و')}ردة` },
+                    { word: "حـ ___ ت", answer: "ـو", options: ["و", "ـو", "وـ"], full: `حـ${qh('ـو')}ت` },
+                    { word: "دلـ ___", answer: "ـو", options: ["و", "ـو", "وـ"], full: `دلـ${qh('ـو')}` },
+                    { word: "___ ـد", answer: "يـ", options: ["يـ", "ـيـ", "ـي"], full: `${qh('يـ')}د` },
+                    { word: "لـ ___ ـمون", answer: "ـيـ", options: ["يـ", "ـيـ", "ـي"], full: `لـ${qh('ـيـ')}مون` },
+                    { word: "كرسـ ___", answer: "ـي", options: ["يـ", "ـيـ", "ـي"], full: `كرسـ${qh('ـي')}` }
+                ]
+            }
+        ];
+
+        let score = 0;
+        let timerInterval;
+        let timeLeft = 10;
+        let currentQType = 'normal';
+        let audioCtx = null;
+
+        const selectEl = document.getElementById('letterSelect');
+        const homeSlide = document.getElementById('homeSlide');
+        const learningSection = document.getElementById('learningSection');
+        const quizSection = document.getElementById('quizSection');
+        const gameSectionTTT = document.getElementById('gameSectionTTT');
+        const gameSectionC4 = document.getElementById('gameSectionC4');
+        const gameSectionMem = document.getElementById('gameSectionMem');
+        
+        let currentQuizQuestions = [];
+        let currentQuestionIndex = 0;
+
+        function getAudioContext() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            return audioCtx;
+        }
+
+        function playTickSound(urgent = false) {
+            const ctx = getAudioContext();
+            if (!ctx) return;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(urgent ? 1000 : 600, ctx.currentTime);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            gain.gain.setValueAtTime(0, ctx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.1, ctx.currentTime + 0.01);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.05);
+        }
+
+        function playSuccessSound() {
+            const ctx = getAudioContext();
+            if (!ctx) return;
+            const playTone = (freq, startTime, duration) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                gain.gain.setValueAtTime(0, startTime);
+                gain.gain.linearRampToValueAtTime(0.3, startTime + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+                osc.start(startTime);
+                osc.stop(startTime + duration);
+            };
+            const now = ctx.currentTime;
+            playTone(523.25, now, 0.4);       
+            playTone(659.25, now + 0.1, 0.4); 
+            playTone(783.99, now + 0.2, 0.4); 
+            playTone(1046.50, now + 0.3, 0.6); 
+        }
+
+        function playWrongSound() {
+            const ctx = getAudioContext();
+            if (!ctx) return;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(200, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(50, ctx.currentTime + 0.3);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            gain.gain.setValueAtTime(0.3, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.3);
+        }
+
+        document.body.addEventListener('click', getAudioContext, { once: true });
+
+        function init() {
+            populateDropdown();
+            handleSelectionChange();
+            
+            selectEl.addEventListener('change', handleSelectionChange);
+
+            document.getElementById('prevBtn').addEventListener('click', () => {
+                if (selectEl.selectedIndex > 0) {
+                    selectEl.selectedIndex--;
+                    handleSelectionChange();
+                }
+            });
+            document.getElementById('nextBtn').addEventListener('click', () => {
+                if (selectEl.selectedIndex < selectEl.options.length - 1) {
+                    selectEl.selectedIndex++;
+                    handleSelectionChange();
+                }
+            });
+            
+            document.getElementById('startBtn').addEventListener('click', () => {
+                getAudioContext();
+                selectEl.selectedIndex = 1; 
+                handleSelectionChange();
+            });
+
+            document.getElementById('backToLettersFromQuizBtn').addEventListener('click', () => {
+                if (selectEl.selectedIndex < selectEl.options.length - 1) {
+                    selectEl.selectedIndex++;
+                    handleSelectionChange();
+                }
+            });
+        }
+
+        function populateDropdown() {
+            let html = `<option value="home">🏠 Home (الرئيسية)</option>`;
+            let quizCounter = 0;
+
+            alphabetData.forEach((item, index) => {
+                html += `<option value="letter_${index}">Letter ${item.letter}</option>`;
+                if ((index + 1) % 5 === 0 || index === alphabetData.length - 1) {
+                    if (quizCounter < quizzes.length) {
+                        html += `<option value="quiz_${quizCounter}" class="font-bold text-yellow-600 bg-yellow-50">🎯 ${quizzes[quizCounter].groupName}</option>`;
+                        // Add ALL THREE games to the dropdown
+                        html += `<option value="game_ttt_${quizCounter}" class="font-bold text-blue-600 bg-blue-50">🎮 Break: Tic-Tac-Toe</option>`;
+                        html += `<option value="game_c4_${quizCounter}" class="font-bold text-purple-600 bg-purple-50">🎮 Break: Connect 4</option>`;
+                        html += `<option value="game_mem_${quizCounter}" class="font-bold text-orange-600 bg-orange-50">🧩 Break: Memory Match</option>`;
+                        quizCounter++;
+                    }
+                }
+            });
+            selectEl.innerHTML = html;
+        }
+
+        function hideAllSections() {
+            homeSlide.classList.add('hidden');
+            learningSection.classList.add('hidden');
+            quizSection.classList.add('hidden');
+            gameSectionTTT.classList.add('hidden');
+            gameSectionC4.classList.add('hidden');
+            gameSectionMem.classList.add('hidden');
+        }
+
+        function handleSelectionChange() {
+            const val = selectEl.value;
+            clearInterval(timerInterval); 
+            
+            document.getElementById('prevBtn').disabled = selectEl.selectedIndex === 0;
+            document.getElementById('nextBtn').disabled = selectEl.selectedIndex === selectEl.options.length - 1;
+
+            hideAllSections();
+
+            if (val === 'home') {
+                homeSlide.classList.remove('hidden');
+            } else if (val.startsWith('letter_')) {
+                const index = parseInt(val.replace('letter_', ''));
+                showLetter(alphabetData[index]);
+            } else if (val.startsWith('quiz_')) {
+                const index = parseInt(val.replace('quiz_', ''));
+                startQuiz(quizzes[index]);
+            } else if (val.startsWith('game_ttt_')) {
+                showGameTTT();
+            } else if (val.startsWith('game_c4_')) {
+                showGameC4();
+            } else if (val.startsWith('game_mem_')) {
+                showGameMem();
+            }
+        }
+
+        function showLetter(data) {
+            learningSection.classList.remove('hidden');
+            document.getElementById('shapeStart').innerHTML = data.start.s;
+            document.getElementById('wordStart').innerHTML = data.start.w;
+            document.getElementById('shapeMiddle').innerHTML = data.middle.s;
+            document.getElementById('wordMiddle').innerHTML = data.middle.w;
+            document.getElementById('shapeEnd').innerHTML = data.end.s;
+            document.getElementById('wordEnd').innerHTML = data.end.w;
+            
+            const cards = document.querySelectorAll('.letter-card');
+            cards.forEach(card => {
+                card.classList.remove('animate-bounce-scale');
+                void card.offsetWidth; 
+                card.classList.add('animate-bounce-scale');
+            });
+        }
+
+        // --- Quiz Gamification Logic ---
+        function updateScoreUI(pointsAdded) {
+            const display = document.getElementById('scoreDisplay');
+            const container = document.getElementById('scoreContainer');
+            display.innerText = score;
+            
+            container.classList.remove('animate-bounce-scale', 'bg-green-100', 'bg-red-100', 'text-green-700', 'text-red-700');
+            void container.offsetWidth;
+            
+            if (pointsAdded >= 0) {
+                container.classList.add('animate-bounce-scale', 'bg-green-100', 'text-green-700');
+            } else {
+                container.classList.add('animate-bounce-scale', 'bg-red-100', 'text-red-700');
+            }
+        }
+
+        function startQuiz(quizObj) {
+            getAudioContext();
+            score = 0;
+            updateScoreUI(0);
+            
+            quizSection.classList.remove('hidden');
+            document.getElementById('quizContainer').classList.remove('hidden');
+            document.getElementById('quizComplete').classList.add('hidden');
+            
+            currentQuizQuestions = quizObj.questions;
+            currentQuestionIndex = 0;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            clearInterval(timerInterval);
+            const q = currentQuizQuestions[currentQuestionIndex];
+            
+            document.getElementById('quizWord').innerHTML = q.word;
+            document.getElementById('quizFeedback').innerHTML = '';
+            document.getElementById('nextQuizBtn').classList.add('hidden');
+            
+            const rand = Math.random();
+            const badge = document.getElementById('qTypeBadge');
+            
+            quizSection.classList.remove('border-yellow-400', 'border-purple-500', 'border-red-500', 'golden-border');
+            
+            if (rand < 0.15) {
+                currentQType = 'golden';
+                quizSection.classList.add('golden-border', 'border-purple-500');
+                badge.innerHTML = "🌟 Golden Question (+10) 🌟";
+                badge.className = "absolute -top-5 left-1/2 transform -translate-x-1/2 bg-purple-500 text-white font-black text-lg md:text-2xl px-6 md:px-10 py-1 rounded-full shadow-md whitespace-nowrap animate-pulse";
+            } else if (rand < 0.30) {
+                currentQType = 'trap';
+                quizSection.classList.add('border-red-500');
+                badge.innerHTML = "💣 Trap! Be Careful (-5) 💣";
+                badge.className = "absolute -top-5 left-1/2 transform -translate-x-1/2 bg-red-500 text-white font-black text-lg md:text-2xl px-6 md:px-10 py-1 rounded-full shadow-md whitespace-nowrap";
+            } else {
+                currentQType = 'normal';
+                quizSection.classList.add('border-yellow-400');
+                badge.innerHTML = "Challenge Time! 🏆";
+                badge.className = "absolute -top-5 left-1/2 transform -translate-x-1/2 bg-yellow-400 text-white font-black text-lg md:text-2xl px-6 md:px-10 py-1 rounded-full shadow-md whitespace-nowrap";
+            }
+
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = '';
+            
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "relative text-4xl md:text-6xl amiri-font font-bold bg-white border-4 border-indigo-200 text-indigo-700 py-3 px-6 md:py-4 md:px-8 rounded-2xl hover:bg-indigo-50 hover:border-indigo-400 transition-all shadow-md focus:outline-none";
+                btn.innerHTML = opt;
+                btn.onclick = () => checkAnswer(opt, q.answer, btn);
+                optionsContainer.appendChild(btn);
+            });
+
+            timeLeft = 10;
+            const timerDisplay = document.getElementById('timerDisplay');
+            timerDisplay.innerText = `⏳ ${timeLeft}s`;
+            timerDisplay.classList.remove('text-red-600', 'animate-pulse');
+            
+            playTickSound();
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.innerText = `⏳ ${timeLeft}s`;
+                
+                if (timeLeft <= 3 && timeLeft > 0) {
+                    timerDisplay.classList.add('text-red-600', 'animate-pulse');
+                    playTickSound(true); 
+                } else if (timeLeft > 0) {
+                    playTickSound(false); 
+                }
+                
+                if (timeLeft <= 0) handleTimeout(q.answer);
+            }, 1000);
+        }
+
+        function handleTimeout(correctAnswer) {
+            clearInterval(timerInterval);
+            const allBtns = document.querySelectorAll('#quizOptions button');
+            allBtns.forEach(b => b.disabled = true);
+            
+            let penalty = (currentQType === 'trap') ? -5 : -2;
+            score = Math.max(0, score + penalty);
+            updateScoreUI(penalty);
+
+            playWrongSound();
+            
+            const feedback = document.getElementById('quizFeedback');
+            feedback.innerHTML = `⏰ Time Out! It was <span class="text-green-500">${correctAnswer}</span>`;
+            feedback.className = "mt-4 md:mt-8 text-2xl md:text-4xl font-bold text-red-500 transition-all text-center";
+            
+            document.getElementById('nextQuizBtn').classList.remove('hidden');
+        }
+
+        function createEffects(element, shapes) {
+            for (let i = 0; i < 8; i++) {
+                const shape = document.createElement('div');
+                shape.innerHTML = shapes[Math.floor(Math.random() * shapes.length)];
+                shape.style.position = 'absolute';
+                shape.style.left = (Math.random() * 80 + 10) + '%';
+                shape.style.top = '50%';
+                shape.style.fontSize = (Math.random() * 2 + 1) + 'rem';
+                shape.style.pointerEvents = 'none';
+                shape.className = 'animate-star-float';
+                element.appendChild(shape);
+                setTimeout(() => shape.remove(), 1000);
+            }
+        }
+
+        function checkAnswer(selected, correct, btnEl) {
+            clearInterval(timerInterval);
+            const feedback = document.getElementById('quizFeedback');
+            const allBtns = document.querySelectorAll('#quizOptions button');
+            allBtns.forEach(b => b.disabled = true);
+            
+            if (selected === correct) {
+                let pts = 5;
+                if (currentQType === 'golden') pts = 10;
+                else if (currentQType === 'trap') pts = 2;
+                score += pts;
+                updateScoreUI(pts);
+
+                btnEl.classList.remove('border-indigo-200', 'text-indigo-700');
+                btnEl.classList.add('bg-green-400', 'border-green-500', 'text-white', 'animate-bounce-scale');
+                
+                const praises = ["Perfect! 🌟", "Excellent! 💖", "Smart! 🧠", "Genius! 👑", "Awesome! 🚀"];
+                feedback.innerHTML = praises[Math.floor(Math.random() * praises.length)];
+                feedback.className = "mt-4 md:mt-8 text-2xl md:text-4xl font-bold text-green-500 transition-all text-center";
+                
+                playSuccessSound();
+                createEffects(btnEl, ['⭐', '💖', '🌟', '🎉', '🚀']);
+                
+                const q = currentQuizQuestions[currentQuestionIndex];
+                document.getElementById('quizWord').innerHTML = q.full;
+                
+                document.getElementById('nextQuizBtn').classList.remove('hidden');
+            } else {
+                let penalty = (currentQType === 'trap') ? -5 : -2;
+                score = Math.max(0, score + penalty);
+                updateScoreUI(penalty);
+
+                btnEl.classList.remove('border-indigo-200', 'text-indigo-700');
+                btnEl.classList.add('bg-red-400', 'border-red-500', 'text-white');
+                feedback.innerHTML = 'Try Again ❌';
+                feedback.className = "mt-4 md:mt-8 text-2xl md:text-4xl font-bold text-red-500 transition-all text-center";
+                
+                playWrongSound();
+                
+                setTimeout(() => {
+                    allBtns.forEach(b => b.disabled = false);
+                    btnEl.classList.remove('bg-red-400', 'border-red-500', 'text-white');
+                    btnEl.classList.add('border-indigo-200', 'text-indigo-700');
+                    feedback.innerHTML = '';
+                    
+                    timerInterval = setInterval(() => {
+                        timeLeft--;
+                        document.getElementById('timerDisplay').innerText = `⏳ ${timeLeft}s`;
+                        if (timeLeft <= 3 && timeLeft > 0) {
+                            document.getElementById('timerDisplay').classList.add('text-red-600', 'animate-pulse');
+                            playTickSound(true);
+                        } else if (timeLeft > 0) {
+                            playTickSound(false);
+                        }
+                        if (timeLeft <= 0) handleTimeout(correct);
+                    }, 1000);
+                }, 1500);
+            }
+        }
+
+        document.getElementById('nextQuizBtn').addEventListener('click', () => {
+            getAudioContext();
+            currentQuestionIndex++;
+            if (currentQuestionIndex < currentQuizQuestions.length) {
+                loadQuestion();
+            } else {
+                document.getElementById('quizContainer').classList.add('hidden');
+                document.getElementById('quizComplete').classList.remove('hidden');
+                document.getElementById('finalScoreDisplay').innerText = score;
+                playSuccessSound();
+            }
+        });
+
+        // --- Tic-Tac-Toe Logic ---
+        let tttCurrentPlayer = '🌟';
+        let tttBoard = new Array(9).fill('');
+        let tttActive = false;
+
+        function showGameTTT() {
+            gameSectionTTT.classList.remove('hidden');
+            initGameTTT();
+        }
+
+        function initGameTTT() {
+            tttCurrentPlayer = '🌟';
+            tttBoard.fill('');
+            tttActive = true;
+            
+            document.getElementById('gameResultTTT').classList.add('hidden');
+            const turnEl = document.getElementById('gameTurnTTT');
+            turnEl.innerText = `Player ${tttCurrentPlayer}'s Turn`;
+            turnEl.classList.remove('hidden');
+
+            const boardEl = document.getElementById('ticTacToeBoard');
+            boardEl.innerHTML = '';
+
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('button');
+                cell.className = 'bg-blue-50 border-4 border-blue-200 rounded-2xl text-6xl md:text-8xl flex items-center justify-center hover:bg-blue-100 transition-colors duration-200 aspect-square shadow-sm focus:outline-none';
+                cell.onclick = () => handleCellClickTTT(i, cell);
+                boardEl.appendChild(cell);
+            }
+        }
+
+        function handleCellClickTTT(index, cellEl) {
+            if (tttBoard[index] !== '' || !tttActive) return;
+
+            tttBoard[index] = tttCurrentPlayer;
+            cellEl.innerText = tttCurrentPlayer;
+            cellEl.classList.add('animate-bounce-scale', 'bg-white');
+            cellEl.classList.remove('bg-blue-50');
+            
+            getAudioContext();
+            playTickSound();
+
+            checkWinTTT();
+        }
+
+        function checkWinTTT() {
+            const winConditions = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                [0, 4, 8], [2, 4, 6]            
+            ];
+
+            let roundWon = false;
+            for (let i = 0; i < winConditions.length; i++) {
+                const [a, b, c] = winConditions[i];
+                if (tttBoard[a] && tttBoard[a] === tttBoard[b] && tttBoard[a] === tttBoard[c]) {
+                    roundWon = true;
+                    const cells = document.getElementById('ticTacToeBoard').children;
+                    cells[a].classList.add('border-green-400', 'bg-green-100');
+                    cells[b].classList.add('border-green-400', 'bg-green-100');
+                    cells[c].classList.add('border-green-400', 'bg-green-100');
+                    break;
+                }
+            }
+
+            const resultEl = document.getElementById('gameResultTTT');
+            const turnEl = document.getElementById('gameTurnTTT');
+
+            if (roundWon) {
+                tttActive = false;
+                turnEl.classList.add('hidden');
+                resultEl.innerHTML = `Player ${tttCurrentPlayer} Wins! 🎉`;
+                resultEl.className = 'text-3xl font-black text-center mb-6 text-green-500 animate-bounce-scale h-10';
+                resultEl.classList.remove('hidden');
+                playSuccessSound();
+                return;
+            }
+
+            if (!tttBoard.includes('')) {
+                tttActive = false;
+                turnEl.classList.add('hidden');
+                resultEl.innerHTML = `It's a Draw! 🤝`;
+                resultEl.className = 'text-3xl font-black text-center mb-6 text-yellow-500 h-10';
+                resultEl.classList.remove('hidden');
+                playWrongSound(); 
+                return;
+            }
+
+            tttCurrentPlayer = tttCurrentPlayer === '🌟' ? '🎈' : '🌟';
+            turnEl.innerText = `Player ${tttCurrentPlayer}'s Turn`;
+        }
+
+        document.getElementById('resetGameBtnTTT').addEventListener('click', initGameTTT);
+
+        // --- Connect Four Logic ---
+        let c4CurrentPlayer = '🌟';
+        let c4Board = new Array(42).fill('');
+        let c4Active = false;
+
+        function showGameC4() {
+            gameSectionC4.classList.remove('hidden');
+            initGameC4();
+        }
+
+        function initGameC4() {
+            c4CurrentPlayer = '🌟';
+            c4Board.fill('');
+            c4Active = true;
+            
+            document.getElementById('gameResultC4').classList.add('hidden');
+            const turnEl = document.getElementById('gameTurnC4');
+            turnEl.innerText = `Player ${c4CurrentPlayer}'s Turn`;
+            turnEl.classList.remove('hidden');
+
+            const boardEl = document.getElementById('connectFourBoard');
+            boardEl.innerHTML = '';
+
+            for (let i = 0; i < 42; i++) {
+                const cell = document.createElement('button');
+                cell.className = 'w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 bg-blue-50 rounded-full flex items-center justify-center text-xl md:text-3xl shadow-inner transition-all duration-200 focus:outline-none hover:bg-gray-200 cursor-pointer';
+                cell.onclick = () => handleCellClickC4(i % 7);
+                cell.onmouseenter = () => highlightColumn(i % 7, true);
+                cell.onmouseleave = () => highlightColumn(i % 7, false);
+                boardEl.appendChild(cell);
+            }
+        }
+
+        function highlightColumn(col, isHover) {
+            if (!c4Active) return;
+            const boardEl = document.getElementById('connectFourBoard');
+            for (let r = 0; r < 6; r++) {
+                const index = r * 7 + col;
+                if (c4Board[index] === '') {
+                    if (isHover) boardEl.children[index].classList.replace('bg-blue-50', 'bg-gray-200');
+                    else boardEl.children[index].classList.replace('bg-gray-200', 'bg-blue-50');
+                }
+            }
+        }
+
+        function handleCellClickC4(col) {
+            if (!c4Active) return;
+
+            let targetRow = -1;
+            for (let r = 5; r >= 0; r--) {
+                if (c4Board[r * 7 + col] === '') {
+                    targetRow = r;
+                    break;
+                }
+            }
+
+            if (targetRow === -1) return;
+
+            const index = targetRow * 7 + col;
+            c4Board[index] = c4CurrentPlayer;
+            
+            const cellEl = document.getElementById('connectFourBoard').children[index];
+            cellEl.innerText = c4CurrentPlayer;
+            cellEl.classList.add('animate-bounce-scale');
+            cellEl.classList.remove('bg-blue-50', 'bg-gray-200', 'hover:bg-gray-200');
+            
+            if (c4CurrentPlayer === '🌟') {
+                cellEl.classList.add('bg-yellow-100');
+            } else {
+                cellEl.classList.add('bg-red-100');
+            }
+            
+            getAudioContext();
+            playTickSound();
+
+            if (checkWinC4(targetRow, col)) {
+                c4Active = false;
+                const resultEl = document.getElementById('gameResultC4');
+                const turnEl = document.getElementById('gameTurnC4');
+                turnEl.classList.add('hidden');
+                resultEl.innerHTML = `Player ${c4CurrentPlayer} Wins! 🎉`;
+                resultEl.className = 'text-2xl md:text-3xl font-black text-center mb-4 text-green-500 animate-bounce-scale h-10';
+                resultEl.classList.remove('hidden');
+                playSuccessSound();
+                return;
+            }
+
+            if (!c4Board.includes('')) {
+                c4Active = false;
+                const resultEl = document.getElementById('gameResultC4');
+                const turnEl = document.getElementById('gameTurnC4');
+                turnEl.classList.add('hidden');
+                resultEl.innerHTML = `It's a Draw! 🤝`;
+                resultEl.className = 'text-2xl md:text-3xl font-black text-center mb-4 text-yellow-500 h-10';
+                resultEl.classList.remove('hidden');
+                playWrongSound(); 
+                return;
+            }
+
+            c4CurrentPlayer = c4CurrentPlayer === '🌟' ? '🎈' : '🌟';
+            document.getElementById('gameTurnC4').innerText = `Player ${c4CurrentPlayer}'s Turn`;
+        }
+
+        function checkWinC4(row, col) {
+            const directions = [
+                [0, 1], [1, 0], [1, 1], [1, -1]
+            ];
+            const player = c4Board[row * 7 + col];
+
+            for (const [dr, dc] of directions) {
+                let count = 1;
+                let winningCells = [[row, col]];
+
+                let r = row + dr;
+                let c = col + dc;
+                while (r >= 0 && r < 6 && c >= 0 && c < 7 && c4Board[r * 7 + c] === player) {
+                    count++;
+                    winningCells.push([r, c]);
+                    r += dr;
+                    c += dc;
+                }
+
+                r = row - dr;
+                c = col - dc;
+                while (r >= 0 && r < 6 && c >= 0 && c < 7 && c4Board[r * 7 + c] === player) {
+                    count++;
+                    winningCells.push([r, c]);
+                    r -= dr;
+                    c -= dc;
+                }
+
+                if (count >= 4) {
+                    const boardEl = document.getElementById('connectFourBoard');
+                    winningCells.forEach(([wr, wc]) => {
+                        const idx = wr * 7 + wc;
+                        boardEl.children[idx].classList.add('border-4', 'border-green-500', 'animate-pulse');
+                    });
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        document.getElementById('resetGameBtnC4').addEventListener('click', initGameC4);
+
+        // --- Memory Match Puzzle Logic ---
+        const memEmojis = ['🌟', '🎈', '🦸‍♂️', '🚀', '👑', '🎯'];
+        let memBoard = [];
+        let flippedIndices = [];
+        let matchedPairs = 0;
+        let memActive = false;
+
+        function showGameMem() {
+            gameSectionMem.classList.remove('hidden');
+            initGameMem();
+        }
+
+        function initGameMem() {
+            // Duplicate and shuffle emojis
+            memBoard = [...memEmojis, ...memEmojis].sort(() => Math.random() - 0.5);
+            flippedIndices = [];
+            matchedPairs = 0;
+            memActive = true;
+
+            document.getElementById('gameResultMem').classList.add('hidden');
+            document.getElementById('gameTurnMem').classList.remove('hidden');
+
+            const boardEl = document.getElementById('memoryBoard');
+            boardEl.innerHTML = '';
+
+            for (let i = 0; i < 12; i++) {
+                const card = document.createElement('button');
+                card.className = 'bg-orange-100 border-4 border-orange-300 rounded-2xl text-4xl md:text-5xl flex items-center justify-center hover:bg-orange-200 transition-all duration-300 aspect-square shadow-sm focus:outline-none';
+                card.innerHTML = '<span class="opacity-0">❓</span>'; // Hide text initially
+                card.onclick = () => handleCardClickMem(i, card);
+                boardEl.appendChild(card);
+            }
+        }
+
+        function handleCardClickMem(index, cardEl) {
+            if (!memActive) return;
+            if (flippedIndices.length >= 2) return; // wait for check
+            if (flippedIndices.includes(index)) return; // already flipped
+            if (cardEl.classList.contains('matched')) return; // already matched
+
+            getAudioContext();
+            playTickSound();
+
+            // Flip Card
+            flippedIndices.push(index);
+            cardEl.innerHTML = memBoard[index];
+            cardEl.classList.add('bg-white', 'border-orange-500', 'animate-bounce-scale');
+            cardEl.classList.remove('bg-orange-100', 'hover:bg-orange-200');
+
+            if (flippedIndices.length === 2) {
+                setTimeout(checkMatchMem, 800);
+            }
+        }
+
+        function checkMatchMem() {
+            const [idx1, idx2] = flippedIndices;
+            const boardEl = document.getElementById('memoryBoard');
+            const card1 = boardEl.children[idx1];
+            const card2 = boardEl.children[idx2];
+
+            if (memBoard[idx1] === memBoard[idx2]) {
+                // Match
+                card1.classList.add('matched', 'border-green-400', 'bg-green-100');
+                card1.classList.remove('border-orange-500');
+                card2.classList.add('matched', 'border-green-400', 'bg-green-100');
+                card2.classList.remove('border-orange-500');
+                
+                matchedPairs++;
+                flippedIndices = [];
+                
+                if (matchedPairs === 6) {
+                    memActive = false;
+                    const resultEl = document.getElementById('gameResultMem');
+                    document.getElementById('gameTurnMem').classList.add('hidden');
+                    resultEl.innerHTML = `You Win! 🎉`;
+                    resultEl.className = 'text-3xl font-black text-center mb-6 text-green-500 animate-bounce-scale h-10';
+                    resultEl.classList.remove('hidden');
+                    playSuccessSound();
+                } else {
+                    // Small click for partial success
+                    playTickSound(true);
+                }
+            } else {
+                // No Match
+                playWrongSound();
+                card1.innerHTML = '<span class="opacity-0">❓</span>';
+                card2.innerHTML = '<span class="opacity-0">❓</span>';
+                
+                card1.classList.remove('bg-white', 'border-orange-500', 'animate-bounce-scale');
+                card1.classList.add('bg-orange-100', 'hover:bg-orange-200');
+                
+                card2.classList.remove('bg-white', 'border-orange-500', 'animate-bounce-scale');
+                card2.classList.add('bg-orange-100', 'hover:bg-orange-200');
+                
+                flippedIndices = [];
+            }
+        }
+
+        document.getElementById('resetGameBtnMem').addEventListener('click', initGameMem);
+
+        window.onload = init;
+    </script>
+</body>
+</html>
