@@ -195,45 +195,16 @@
     background: #ffffff;
   }
 
-  .settings-btn {
-    position: absolute;
-    top: 18px;
-    left: 20px;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    color: #ffffff;
-    font-size: 0.85rem;
-    font-weight: 800;
-    padding: 8px 16px;
-    border-radius: 9999px;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-  }
-  .settings-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: translateY(-1px);
-  }
-  @media (max-width: 640px) {
-    .settings-btn {
-      position: static;
-      margin-bottom: 12px;
-    }
+  footer p {
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: #94a3b8;
   }
 </style>
 </head>
 <body>
 
 <header>
-  <button onclick="if(typeof settingsManager!=='undefined')settingsManager.open()" class="settings-btn" aria-label="إعدادات المعلم والمنظومة" title="إعدادات المعلم">
-    <span style="font-size: 1.1rem;">⚙️</span>
-    <span>إعدادات المعلم</span>
-  </button>
   <h1>صفحات نور البيان التفاعلية</h1>
   <p>المنظومة التعليمية الرقمية الشاملة لضبط قراءة الكلمات والقرآن الكريم</p>
   <div class="stats-pill" id="count">
@@ -517,6 +488,5 @@
   <p>تطوير الشيخ جهاد الصياد • نسألكم الدعاء لوالده ولأخيه محمد رحمهما الله</p>
 </footer>
 
-<script src="shared/settings.js"></script>
 </body>
 </html>

@@ -208,19 +208,20 @@ def process_pages(pages_dir: Path, output_dir: Path, page_range: str = None, com
 
 
 def main():
+    root = Path(__file__).resolve().parent.parent
     parser = argparse.ArgumentParser(
         description="استخراج بيانات وقواعد وكلمات صفحات نور البيان إلى ملفات JSON مستقلة ومجمعة."
     )
     parser.add_argument(
         "--pages-dir",
         type=Path,
-        default=Path("pages"),
+        default=root / "pages",
         help="مسار مجلد صفحات HTML الأصلية (الافتراضي: pages)"
     )
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=Path("data"),
+        default=root / "data",
         help="مسار المجلد الفرعي لتصدير ملفات JSON (الافتراضي: data)"
     )
     parser.add_argument(

@@ -81,7 +81,7 @@ def update_html_pages(pages_dir: pathlib.Path):
     print(f"\nاكتمل تحديث {updated_count} صفحة لاستدعاء core.js الموحد.")
 
 def main():
-    root_dir = pathlib.Path(__file__).parent.resolve()
+    root_dir = pathlib.Path(__file__).resolve().parent.parent
     shared_dir = root_dir / "shared"
     pages_dir = root_dir / "pages"
 

@@ -9,7 +9,7 @@ import re
 import pathlib
 
 def validate():
-    root = pathlib.Path(__file__).parent.resolve()
+    root = pathlib.Path(__file__).resolve().parent.parent
     errors = []
     warnings = []
     

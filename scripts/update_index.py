@@ -5,7 +5,7 @@
 import re
 from pathlib import Path
 
-ROOT = Path(__file__).parent
+ROOT = Path(__file__).resolve().parent.parent
 PAGES_DIR = ROOT / "pages"
 INDEX = ROOT / "index.html"
 
