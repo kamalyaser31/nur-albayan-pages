@@ -390,6 +390,12 @@ const app = {
     setGameResumeState(btnId, isFinished, targetText = 'Continue Reading 📖', defaultText = 'Skip & Read ⏭️') {
         const btn = document.getElementById(btnId);
         if (!btn) return;
+        const defaultTextColors = {
+            'xo-resume-btn': 'text-teal-900',
+            'c4-resume-btn': 'text-blue-900',
+            'memory-resume-btn': 'text-purple-900',
+            'riddles-resume-btn': 'text-purple-900'
+        };
         if (isFinished) {
             btn.textContent = targetText;
             btn.classList.add('animate-bounce', 'bg-emerald-400', 'text-white');
@@ -397,7 +403,7 @@ const app = {
         } else {
             btn.textContent = defaultText;
             btn.classList.remove('animate-bounce', 'bg-emerald-400', 'text-white');
-            btn.classList.add('bg-yellow-400');
+            btn.classList.add('bg-yellow-400', defaultTextColors[btnId]);
         }
     },
 
