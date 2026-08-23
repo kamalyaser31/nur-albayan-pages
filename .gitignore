@@ -3,8 +3,9 @@ task.md
 project_state.md
 CHANGELOG.md
 
-# Staging, Extracted Data & Temporary Dirs
+# Staging, Extracted Data, Internal Scripts & Temporary Dirs
 data/
+scripts/
 new pages/
 .tmp/
 .backups/
