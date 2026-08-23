@@ -1,0 +1,366 @@
+{
+  "page": 19,
+  "file": "19.html",
+  "type": "standard_lesson",
+  "config": {
+    "title": "Nour Al-Bayan",
+    "subtitle": "Page 19 • Harakat (الضمة • الكسرة • الفتحة)",
+    "footer": "Nour Al-Bayan Learning System • Page 19 (Harakat (الضمة • الكسرة • الفتحة))",
+    "game3": "memory"
+  },
+  "rules": [],
+  "dataset": [
+    {
+      "segs": [
+        "أُ",
+        "ذِ",
+        "نَ"
+      ],
+      "plain": "أُذِنَ",
+      "info": "Harakat Examples",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "segs": [
+        "بُـ",
+        "ـهِـ",
+        "ـتَ"
+      ],
+      "plain": "بُهِتَ",
+      "info": "Harakat Examples",
+      "theme": "pink",
+      "t": "speed"
+    },
+    {
+      "segs": [
+        "تُـ",
+        "ـلِـ",
+        "ـيَ"
+      ],
+      "plain": "تُلِيَ",
+      "info": "Harakat Examples",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "segs": [
+        "ثُـ",
+        "ـقِـ",
+        "ـبَ"
+      ],
+      "plain": "ثُقِبَ",
+      "info": "Harakat Examples",
+      "theme": "pink",
+      "t": "golden"
+    },
+    {
+      "segs": [
+        "جُـ",
+        "ـمِـ",
+        "ـعَ"
+      ],
+      "plain": "جُمِعَ",
+      "info": "Harakat Examples",
+      "theme": "green",
+      "t": "danger"
+    },
+    {
+      "segs": [
+        "حُـ",
+        "ـمِـ",
+        "ـدَ"
+      ],
+      "plain": "حُمِدَ",
+      "info": "Harakat Examples",
+      "theme": "green",
+      "t": "normal"
+    },
+    {
+      "segs": [
+        "خُـ",
+        "ـلِـ",
+        "ـقَ"
+      ],
+      "plain": "خُلِقَ",
+      "info": "Harakat Examples",
+      "theme": "green",
+      "t": "golden"
+    },
+    {
+      "segs": [
+        "دُ",
+        "عِـ",
+        "ـيَ"
+      ],
+      "plain": "دُعِيَ",
+      "info": "Harakat Examples",
+      "theme": "green",
+      "t": "normal"
+    },
+    {
+      "segs": [
+        "ذُ",
+        "بِـ",
+        "ـحَ"
+      ],
+      "plain": "ذُبِحَ",
+      "info": "Harakat Examples",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "segs": [
+        "رُ",
+        "حِـ",
+        "ـمَ"
+      ],
+      "plain": "رُحِمَ",
+      "info": "Harakat Examples",
+      "theme": "yellow",
+      "t": "speed"
+    },
+    {
+      "segs": [
+        "زُ",
+        "رِ",
+        "عَ"
+      ],
+      "plain": "زُرِعَ",
+      "info": "Harakat Examples",
+      "theme": "yellow",
+      "t": "danger"
+    },
+    {
+      "segs": [
+        "سُـ",
+        "ـئِـ",
+        "ـلَ"
+      ],
+      "plain": "سُئِلَ",
+      "info": "Harakat Examples",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "segs": [
+        "شُـ",
+        "ـكِـ",
+        "ـرَ"
+      ],
+      "plain": "شُكِرَ",
+      "info": "Harakat Examples",
+      "theme": "blue",
+      "t": "normal"
+    },
+    {
+      "segs": [
+        "صُـ",
+        "ـعِـ",
+        "ـقَ"
+      ],
+      "plain": "صُعِقَ",
+      "info": "Harakat Examples",
+      "theme": "blue",
+      "t": "golden"
+    },
+    {
+      "segs": [
+        "ضُـ",
+        "ـرِ",
+        "بَ"
+      ],
+      "plain": "ضُرِبَ",
+      "info": "Harakat Examples",
+      "theme": "blue",
+      "t": "normal"
+    },
+    {
+      "segs": [
+        "طُـ",
+        "ـرِ",
+        "حَ"
+      ],
+      "plain": "طُرِحَ",
+      "info": "Harakat Examples",
+      "theme": "blue",
+      "t": "speed"
+    },
+    {
+      "segs": [
+        "ظُـ",
+        "ـلِـ",
+        "ـمَ"
+      ],
+      "plain": "ظُلِمَ",
+      "info": "Harakat Examples",
+      "theme": "pink",
+      "t": "danger"
+    },
+    {
+      "segs": [
+        "عُـ",
+        "ـتِـ",
+        "ـقَ"
+      ],
+      "plain": "عُتِقَ",
+      "info": "Harakat Examples",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "segs": [
+        "غُـ",
+        "ـلِـ",
+        "ـبَ"
+      ],
+      "plain": "غُلِبَ",
+      "info": "Harakat Examples",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "segs": [
+        "فُـ",
+        "ـعِـ",
+        "ـلَ"
+      ],
+      "plain": "فُعِلَ",
+      "info": "Harakat Examples",
+      "theme": "pink",
+      "t": "golden"
+    },
+    {
+      "segs": [
+        "قُـ",
+        "ـتِـ",
+        "ـلَ"
+      ],
+      "plain": "قُتِلَ",
+      "info": "Harakat Examples",
+      "theme": "green",
+      "t": "normal"
+    },
+    {
+      "segs": [
+        "كُـ",
+        "ـتِـ",
+        "ـبَ"
+      ],
+      "plain": "كُتِبَ",
+      "info": "Harakat Examples",
+      "theme": "green",
+      "t": "speed"
+    },
+    {
+      "segs": [
+        "لُـ",
+        "ـعِـ",
+        "ـنَ"
+      ],
+      "plain": "لُعِنَ",
+      "info": "Harakat Examples",
+      "theme": "green",
+      "t": "golden"
+    },
+    {
+      "segs": [
+        "مُـ",
+        "ـنِـ",
+        "ـعَ"
+      ],
+      "plain": "مُنِعَ",
+      "info": "Harakat Examples",
+      "theme": "green",
+      "t": "danger"
+    },
+    {
+      "segs": [
+        "نُـ",
+        "ـسِـ",
+        "ـيَ"
+      ],
+      "plain": "نُسِيَ",
+      "info": "Harakat Examples",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "segs": [
+        "هُـ",
+        "ـدِ",
+        "يَ"
+      ],
+      "plain": "هُدِيَ",
+      "info": "Harakat Examples",
+      "theme": "yellow",
+      "t": "golden"
+    },
+    {
+      "segs": [
+        "وُ",
+        "جِـ",
+        "ـدَ"
+      ],
+      "plain": "وُجِدَ",
+      "info": "Harakat Examples",
+      "theme": "yellow",
+      "t": "speed"
+    },
+    {
+      "segs": [
+        "وُ",
+        "ضِـ",
+        "ـعَ"
+      ],
+      "plain": "وُضِعَ",
+      "info": "Harakat Examples",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "segs": [
+        "شُـ",
+        "ـرِ",
+        "بَ"
+      ],
+      "plain": "شُرِبَ",
+      "info": "Harakat Examples",
+      "theme": "blue",
+      "t": "golden"
+    },
+    {
+      "segs": [
+        "رُ",
+        "سِـ",
+        "ـمَ"
+      ],
+      "plain": "رُسِمَ",
+      "info": "Harakat Examples",
+      "theme": "blue",
+      "t": "normal"
+    },
+    {
+      "segs": [
+        "فُـ",
+        "ـتِـ",
+        "ـحَ"
+      ],
+      "plain": "فُتِحَ",
+      "info": "Harakat Examples",
+      "theme": "blue",
+      "t": "danger"
+    },
+    {
+      "segs": [
+        "دُ",
+        "بِـ",
+        "ـغَ"
+      ],
+      "plain": "دُبِغَ",
+      "info": "Harakat Examples",
+      "theme": "blue",
+      "t": "speed"
+    }
+  ]
+}

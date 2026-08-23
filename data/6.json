@@ -1,0 +1,1307 @@
+{
+  "page": 6,
+  "file": "6.html",
+  "type": "alphabet_shapes",
+  "config": {
+    "title": "Nour Al-Bayan",
+    "subtitle": "Page 6 • Letter Shapes (أشكال الحروف)",
+    "footer": "Nour Al-Bayan Learning System • Page 6 (Letter Shapes)",
+    "game3": "memory"
+  },
+  "rules": [],
+  "dataset": [],
+  "alphabetData": [
+    {
+      "letter": "أ",
+      "start": {
+        "s": "أ",
+        "w": "<span class=\"highlight\">أ</span>رنب"
+      },
+      "middle": {
+        "s": "ـأ",
+        "w": "فـ<span class=\"highlight\">ـأ</span>ر"
+      },
+      "end": {
+        "s": "ـأ &nbsp; أ &nbsp; ء",
+        "w": "مخبـ<span class=\"highlight\">ـأ</span>"
+      }
+    },
+    {
+      "letter": "ب",
+      "start": {
+        "s": "بـ",
+        "w": "<span class=\"highlight\">بـ</span>قرة"
+      },
+      "middle": {
+        "s": "ـبـ",
+        "w": "حـ<span class=\"highlight\">ـبـ</span>ل"
+      },
+      "end": {
+        "s": "ـب &nbsp; ب",
+        "w": "كلـ<span class=\"highlight\">ـب</span>"
+      }
+    },
+    {
+      "letter": "ت",
+      "start": {
+        "s": "تـ",
+        "w": "<span class=\"highlight\">تـ</span>فاحة"
+      },
+      "middle": {
+        "s": "ـتـ",
+        "w": "كـ<span class=\"highlight\">ـتـ</span>اب"
+      },
+      "end": {
+        "s": "ـت &nbsp; ت &nbsp; ـة &nbsp; ة",
+        "w": "بنـ<span class=\"highlight\">ـت</span>"
+      }
+    },
+    {
+      "letter": "ث",
+      "start": {
+        "s": "ثـ",
+        "w": "<span class=\"highlight\">ثـ</span>علب"
+      },
+      "middle": {
+        "s": "ـثـ",
+        "w": "مـ<span class=\"highlight\">ـثـ</span>لث"
+      },
+      "end": {
+        "s": "ـث &nbsp; ث",
+        "w": "محرا<span class=\"highlight\">ث</span>"
+      }
+    },
+    {
+      "letter": "ج",
+      "start": {
+        "s": "جـ",
+        "w": "<span class=\"highlight\">جـ</span>مل"
+      },
+      "middle": {
+        "s": "ـجـ",
+        "w": "شـ<span class=\"highlight\">ـجـ</span>رة"
+      },
+      "end": {
+        "s": "ـج &nbsp; ج",
+        "w": "ثلـ<span class=\"highlight\">ـج</span>"
+      }
+    },
+    {
+      "letter": "ح",
+      "start": {
+        "s": "حـ",
+        "w": "<span class=\"highlight\">حـ</span>صان"
+      },
+      "middle": {
+        "s": "ـحـ",
+        "w": "لـ<span class=\"highlight\">ـحـ</span>م"
+      },
+      "end": {
+        "s": "ـح &nbsp; ح",
+        "w": "ملـ<span class=\"highlight\">ـح</span>"
+      }
+    },
+    {
+      "letter": "خ",
+      "start": {
+        "s": "خـ",
+        "w": "<span class=\"highlight\">خـ</span>روف"
+      },
+      "middle": {
+        "s": "ـخـ",
+        "w": "نـ<span class=\"highlight\">ـخـ</span>لة"
+      },
+      "end": {
+        "s": "ـخ &nbsp; خ",
+        "w": "بطيـ<span class=\"highlight\">ـخ</span>"
+      }
+    },
+    {
+      "letter": "د",
+      "start": {
+        "s": "د",
+        "w": "<span class=\"highlight\">د</span>يك"
+      },
+      "middle": {
+        "s": "ـد",
+        "w": "مـ<span class=\"highlight\">ـد</span>رسة"
+      },
+      "end": {
+        "s": "ـد &nbsp; د",
+        "w": "يـ<span class=\"highlight\">ـد</span>"
+      }
+    },
+    {
+      "letter": "ذ",
+      "start": {
+        "s": "ذ",
+        "w": "<span class=\"highlight\">ذ</span>رة"
+      },
+      "middle": {
+        "s": "ـذ",
+        "w": "بـ<span class=\"highlight\">ـذ</span>ور"
+      },
+      "end": {
+        "s": "ـذ &nbsp; ذ",
+        "w": "قنفـ<span class=\"highlight\">ـذ</span>"
+      }
+    },
+    {
+      "letter": "ر",
+      "start": {
+        "s": "ر",
+        "w": "<span class=\"highlight\">ر</span>مان"
+      },
+      "middle": {
+        "s": "ـر",
+        "w": "خـ<span class=\"highlight\">ـر</span>وف"
+      },
+      "end": {
+        "s": "ـر &nbsp; ر",
+        "w": "قـ<span class=\"highlight\">ـر</span>د"
+      }
+    },
+    {
+      "letter": "ز",
+      "start": {
+        "s": "ز",
+        "w": "<span class=\"highlight\">ز</span>رافة"
+      },
+      "middle": {
+        "s": "ـز",
+        "w": "جـ<span class=\"highlight\">ـز</span>ر"
+      },
+      "end": {
+        "s": "ـز &nbsp; ز",
+        "w": "مو<span class=\"highlight\">ز</span>"
+      }
+    },
+    {
+      "letter": "س",
+      "start": {
+        "s": "سـ",
+        "w": "<span class=\"highlight\">سـ</span>مكة"
+      },
+      "middle": {
+        "s": "ـسـ",
+        "w": "تمـ<span class=\"highlight\">ـسـ</span>اح"
+      },
+      "end": {
+        "s": "ـس &nbsp; س",
+        "w": "شمـ<span class=\"highlight\">ـس</span>"
+      }
+    },
+    {
+      "letter": "ش",
+      "start": {
+        "s": "شـ",
+        "w": "<span class=\"highlight\">شـ</span>جرة"
+      },
+      "middle": {
+        "s": "ـشـ",
+        "w": "مـ<span class=\"highlight\">ـشـ</span>ط"
+      },
+      "end": {
+        "s": "ـش &nbsp; ش",
+        "w": "عـ<span class=\"highlight\">ـش</span>"
+      }
+    },
+    {
+      "letter": "ص",
+      "start": {
+        "s": "صـ",
+        "w": "<span class=\"highlight\">صـ</span>قر"
+      },
+      "middle": {
+        "s": "ـصـ",
+        "w": "عـ<span class=\"highlight\">ـصـ</span>فور"
+      },
+      "end": {
+        "s": "ـص &nbsp; ص",
+        "w": "مقـ<span class=\"highlight\">ـص</span>"
+      }
+    },
+    {
+      "letter": "ض",
+      "start": {
+        "s": "ضـ",
+        "w": "<span class=\"highlight\">ضـ</span>فدع"
+      },
+      "middle": {
+        "s": "ـضـ",
+        "w": "مـ<span class=\"highlight\">ـضـ</span>رب"
+      },
+      "end": {
+        "s": "ـض &nbsp; ض",
+        "w": "أبيـ<span class=\"highlight\">ـض</span>"
+      }
+    },
+    {
+      "letter": "ط",
+      "start": {
+        "s": "طـ",
+        "w": "<span class=\"highlight\">طـ</span>ائرة"
+      },
+      "middle": {
+        "s": "ـطـ",
+        "w": "مـ<span class=\"highlight\">ـطـ</span>ر"
+      },
+      "end": {
+        "s": "ـط &nbsp; ط",
+        "w": "قـ<span class=\"highlight\">ـط</span>"
+      }
+    },
+    {
+      "letter": "ظ",
+      "start": {
+        "s": "ظـ",
+        "w": "<span class=\"highlight\">ظـ</span>رف"
+      },
+      "middle": {
+        "s": "ـظـ",
+        "w": "مـ<span class=\"highlight\">ـظـ</span>لة"
+      },
+      "end": {
+        "s": "ـظ &nbsp; ظ",
+        "w": "حافـ<span class=\"highlight\">ـظ</span>"
+      }
+    },
+    {
+      "letter": "ع",
+      "start": {
+        "s": "عـ",
+        "w": "<span class=\"highlight\">عـ</span>نب"
+      },
+      "middle": {
+        "s": "ـعـ",
+        "w": "ثـ<span class=\"highlight\">ـعـ</span>لب"
+      },
+      "end": {
+        "s": "ـع &nbsp; ع",
+        "w": "ضفد<span class=\"highlight\">ع</span>"
+      }
+    },
+    {
+      "letter": "غ",
+      "start": {
+        "s": "غـ",
+        "w": "<span class=\"highlight\">غـ</span>سالة"
+      },
+      "middle": {
+        "s": "ـغـ",
+        "w": "ببـ<span class=\"highlight\">ـغـ</span>اء"
+      },
+      "end": {
+        "s": "ـغ &nbsp; غ",
+        "w": "صمـ<span class=\"highlight\">ـغ</span>"
+      }
+    },
+    {
+      "letter": "ف",
+      "start": {
+        "s": "فـ",
+        "w": "<span class=\"highlight\">فـ</span>يل"
+      },
+      "middle": {
+        "s": "ـفـ",
+        "w": "تـ<span class=\"highlight\">ـفـ</span>احة"
+      },
+      "end": {
+        "s": "ـف &nbsp; ف",
+        "w": "هاتـ<span class=\"highlight\">ـف</span>"
+      }
+    },
+    {
+      "letter": "ق",
+      "start": {
+        "s": "قـ",
+        "w": "<span class=\"highlight\">قـ</span>رد"
+      },
+      "middle": {
+        "s": "ـقـ",
+        "w": "صـ<span class=\"highlight\">ـقـ</span>ر"
+      },
+      "end": {
+        "s": "ـق &nbsp; ق",
+        "w": "طبـ<span class=\"highlight\">ـق</span>"
+      }
+    },
+    {
+      "letter": "ك",
+      "start": {
+        "s": "كـ",
+        "w": "<span class=\"highlight\">كـ</span>لب"
+      },
+      "middle": {
+        "s": "ـكـ",
+        "w": "سـ<span class=\"highlight\">ـكـ</span>ين"
+      },
+      "end": {
+        "s": "ـك &nbsp; ك",
+        "w": "سمـ<span class=\"highlight\">ـك</span>"
+      }
+    },
+    {
+      "letter": "ل",
+      "start": {
+        "s": "لـ",
+        "w": "<span class=\"highlight\">لـ</span>يمون"
+      },
+      "middle": {
+        "s": "ـلـ",
+        "w": "قـ<span class=\"highlight\">ـلـ</span>م"
+      },
+      "end": {
+        "s": "ـل &nbsp; ل",
+        "w": "جمـ<span class=\"highlight\">ـل</span>"
+      }
+    },
+    {
+      "letter": "م",
+      "start": {
+        "s": "مـ",
+        "w": "<span class=\"highlight\">مـ</span>وز"
+      },
+      "middle": {
+        "s": "ـمـ",
+        "w": "شـ<span class=\"highlight\">ـمـ</span>س"
+      },
+      "end": {
+        "s": "ـم &nbsp; م",
+        "w": "قلـ<span class=\"highlight\">ـم</span>"
+      }
+    },
+    {
+      "letter": "ن",
+      "start": {
+        "s": "نـ",
+        "w": "<span class=\"highlight\">نـ</span>مر"
+      },
+      "middle": {
+        "s": "ـنـ",
+        "w": "عـ<span class=\"highlight\">ـنـ</span>ب"
+      },
+      "end": {
+        "s": "ـن &nbsp; ن",
+        "w": "عيـ<span class=\"highlight\">ـن</span>"
+      }
+    },
+    {
+      "letter": "هـ",
+      "start": {
+        "s": "هـ",
+        "w": "<span class=\"highlight\">هـ</span>رم"
+      },
+      "middle": {
+        "s": "ـهـ",
+        "w": "فـ<span class=\"highlight\">ـهـ</span>د"
+      },
+      "end": {
+        "s": "ـه &nbsp; ـة &nbsp; ه &nbsp; ة",
+        "w": "وجـ<span class=\"highlight\">ـه</span>"
+      }
+    },
+    {
+      "letter": "و",
+      "start": {
+        "s": "و",
+        "w": "<span class=\"highlight\">و</span>ردة"
+      },
+      "middle": {
+        "s": "ـو",
+        "w": "حـ<span class=\"highlight\">ـو</span>ت"
+      },
+      "end": {
+        "s": "ـو &nbsp; و",
+        "w": "دلـ<span class=\"highlight\">ـو</span>"
+      }
+    },
+    {
+      "letter": "ي",
+      "start": {
+        "s": "يـ",
+        "w": "<span class=\"highlight\">يـ</span>د"
+      },
+      "middle": {
+        "s": "ـيـ",
+        "w": "لـ<span class=\"highlight\">ـيـ</span>مون"
+      },
+      "end": {
+        "s": "ـي &nbsp; ي &nbsp; ى",
+        "w": "كرسـ<span class=\"highlight\">ـي</span>"
+      }
+    }
+  ],
+  "quizzes": [
+    {
+      "groupName": "Group 1 Quiz (أ - ج)",
+      "questions": [
+        {
+          "word": "___ رنب",
+          "answer": "أ",
+          "options": [
+            "أ",
+            "ـأ",
+            "ا"
+          ],
+          "full": "<span class=\"text-green-500\">أ</span>رنب"
+        },
+        {
+          "word": "فـ ___ ر",
+          "answer": "ـأ",
+          "options": [
+            "أ",
+            "ـأ",
+            "ا"
+          ],
+          "full": "فـ<span class=\"text-green-500\">ـأ</span>ر"
+        },
+        {
+          "word": "مخبـ ___",
+          "answer": "ـأ",
+          "options": [
+            "أ",
+            "ـأ",
+            "ا"
+          ],
+          "full": "مخبـ<span class=\"text-green-500\">ـأ</span>"
+        },
+        {
+          "word": "___ ـقرة",
+          "answer": "بـ",
+          "options": [
+            "بـ",
+            "ـبـ",
+            "ـب"
+          ],
+          "full": "<span class=\"text-green-500\">بـ</span>قرة"
+        },
+        {
+          "word": "حـ ___ ـل",
+          "answer": "ـبـ",
+          "options": [
+            "بـ",
+            "ـبـ",
+            "ـب"
+          ],
+          "full": "حـ<span class=\"text-green-500\">ـبـ</span>ل"
+        },
+        {
+          "word": "كلـ ___",
+          "answer": "ـب",
+          "options": [
+            "بـ",
+            "ـبـ",
+            "ـب"
+          ],
+          "full": "كلـ<span class=\"text-green-500\">ـب</span>"
+        },
+        {
+          "word": "___ ـفاحة",
+          "answer": "تـ",
+          "options": [
+            "تـ",
+            "ـتـ",
+            "ـت"
+          ],
+          "full": "<span class=\"text-green-500\">تـ</span>فاحة"
+        },
+        {
+          "word": "كـ ___ ـاب",
+          "answer": "ـتـ",
+          "options": [
+            "تـ",
+            "ـتـ",
+            "ـت"
+          ],
+          "full": "كـ<span class=\"text-green-500\">ـتـ</span>اب"
+        },
+        {
+          "word": "بنـ ___",
+          "answer": "ـت",
+          "options": [
+            "تـ",
+            "ـتـ",
+            "ـت"
+          ],
+          "full": "بنـ<span class=\"text-green-500\">ـت</span>"
+        },
+        {
+          "word": "___ ـعلب",
+          "answer": "ثـ",
+          "options": [
+            "ثـ",
+            "ـثـ",
+            "ـث"
+          ],
+          "full": "<span class=\"text-green-500\">ثـ</span>علب"
+        },
+        {
+          "word": "مـ ___ ـلث",
+          "answer": "ـثـ",
+          "options": [
+            "ثـ",
+            "ـثـ",
+            "ـث"
+          ],
+          "full": "مـ<span class=\"text-green-500\">ـثـ</span>لث"
+        },
+        {
+          "word": "محرا ___",
+          "answer": "ث",
+          "options": [
+            "ثـ",
+            "ـثـ",
+            "ث"
+          ],
+          "full": "محرا<span class=\"text-green-500\">ث</span>"
+        },
+        {
+          "word": "___ ـمل",
+          "answer": "جـ",
+          "options": [
+            "جـ",
+            "ـجـ",
+            "ـج"
+          ],
+          "full": "<span class=\"text-green-500\">جـ</span>مل"
+        },
+        {
+          "word": "شـ ___ ـرة",
+          "answer": "ـجـ",
+          "options": [
+            "جـ",
+            "ـجـ",
+            "ـج"
+          ],
+          "full": "شـ<span class=\"text-green-500\">ـجـ</span>رة"
+        },
+        {
+          "word": "ثلـ ___",
+          "answer": "ـج",
+          "options": [
+            "جـ",
+            "ـجـ",
+            "ـج"
+          ],
+          "full": "ثلـ<span class=\"text-green-500\">ـج</span>"
+        }
+      ]
+    },
+    {
+      "groupName": "Group 2 Quiz (ح - ر)",
+      "questions": [
+        {
+          "word": "___ ـصان",
+          "answer": "حـ",
+          "options": [
+            "حـ",
+            "ـحـ",
+            "ـح"
+          ],
+          "full": "<span class=\"text-green-500\">حـ</span>صان"
+        },
+        {
+          "word": "لـ ___ ـم",
+          "answer": "ـحـ",
+          "options": [
+            "حـ",
+            "ـحـ",
+            "ـح"
+          ],
+          "full": "لـ<span class=\"text-green-500\">ـحـ</span>م"
+        },
+        {
+          "word": "ملـ ___",
+          "answer": "ـح",
+          "options": [
+            "حـ",
+            "ـحـ",
+            "ـح"
+          ],
+          "full": "ملـ<span class=\"text-green-500\">ـح</span>"
+        },
+        {
+          "word": "___ ـروف",
+          "answer": "خـ",
+          "options": [
+            "خـ",
+            "ـخـ",
+            "ـخ"
+          ],
+          "full": "<span class=\"text-green-500\">خـ</span>روف"
+        },
+        {
+          "word": "نـ ___ ـلة",
+          "answer": "ـخـ",
+          "options": [
+            "خـ",
+            "ـخـ",
+            "ـخ"
+          ],
+          "full": "نـ<span class=\"text-green-500\">ـخـ</span>لة"
+        },
+        {
+          "word": "بطيـ ___",
+          "answer": "ـخ",
+          "options": [
+            "خـ",
+            "ـخـ",
+            "ـخ"
+          ],
+          "full": "بطيـ<span class=\"text-green-500\">ـخ</span>"
+        },
+        {
+          "word": "___ يك",
+          "answer": "د",
+          "options": [
+            "د",
+            "ـد",
+            "دـ"
+          ],
+          "full": "<span class=\"text-green-500\">د</span>يك"
+        },
+        {
+          "word": "مـ ___ رسة",
+          "answer": "ـد",
+          "options": [
+            "د",
+            "ـد",
+            "دـ"
+          ],
+          "full": "مـ<span class=\"text-green-500\">ـد</span>رسة"
+        },
+        {
+          "word": "يـ ___",
+          "answer": "ـد",
+          "options": [
+            "د",
+            "ـد",
+            "دـ"
+          ],
+          "full": "يـ<span class=\"text-green-500\">ـد</span>"
+        },
+        {
+          "word": "___ رة",
+          "answer": "ذ",
+          "options": [
+            "ذ",
+            "ـذ",
+            "ذـ"
+          ],
+          "full": "<span class=\"text-green-500\">ذ</span>رة"
+        },
+        {
+          "word": "بـ ___ ور",
+          "answer": "ـذ",
+          "options": [
+            "ذ",
+            "ـذ",
+            "ذـ"
+          ],
+          "full": "بـ<span class=\"text-green-500\">ـذ</span>ور"
+        },
+        {
+          "word": "قنفـ ___",
+          "answer": "ـذ",
+          "options": [
+            "ذ",
+            "ـذ",
+            "ذـ"
+          ],
+          "full": "قنفـ<span class=\"text-green-500\">ـذ</span>"
+        },
+        {
+          "word": "___ مان",
+          "answer": "ر",
+          "options": [
+            "ر",
+            "ـر",
+            "رـ"
+          ],
+          "full": "<span class=\"text-green-500\">ر</span>مان"
+        },
+        {
+          "word": "خـ ___ وف",
+          "answer": "ـر",
+          "options": [
+            "ر",
+            "ـر",
+            "رـ"
+          ],
+          "full": "خـ<span class=\"text-green-500\">ـر</span>وف"
+        },
+        {
+          "word": "قـ ___ د",
+          "answer": "ـر",
+          "options": [
+            "ر",
+            "ـر",
+            "رـ"
+          ],
+          "full": "قـ<span class=\"text-green-500\">ـر</span>د"
+        }
+      ]
+    },
+    {
+      "groupName": "Group 3 Quiz (ز - ض)",
+      "questions": [
+        {
+          "word": "___ رافة",
+          "answer": "ز",
+          "options": [
+            "ز",
+            "ـز",
+            "زـ"
+          ],
+          "full": "<span class=\"text-green-500\">ز</span>رافة"
+        },
+        {
+          "word": "جـ ___ ر",
+          "answer": "ـز",
+          "options": [
+            "ز",
+            "ـز",
+            "زـ"
+          ],
+          "full": "جـ<span class=\"text-green-500\">ـز</span>ر"
+        },
+        {
+          "word": "مو ___",
+          "answer": "ز",
+          "options": [
+            "ز",
+            "ـز",
+            "زـ"
+          ],
+          "full": "مو<span class=\"text-green-500\">ز</span>"
+        },
+        {
+          "word": "___ ـمكة",
+          "answer": "سـ",
+          "options": [
+            "سـ",
+            "ـسـ",
+            "ـس"
+          ],
+          "full": "<span class=\"text-green-500\">سـ</span>مكة"
+        },
+        {
+          "word": "تمـ ___ ـاح",
+          "answer": "ـسـ",
+          "options": [
+            "سـ",
+            "ـسـ",
+            "ـس"
+          ],
+          "full": "تمـ<span class=\"text-green-500\">ـسـ</span>اح"
+        },
+        {
+          "word": "شمـ ___",
+          "answer": "ـس",
+          "options": [
+            "سـ",
+            "ـسـ",
+            "ـس"
+          ],
+          "full": "شمـ<span class=\"text-green-500\">ـس</span>"
+        },
+        {
+          "word": "___ ـجرة",
+          "answer": "شـ",
+          "options": [
+            "شـ",
+            "ـشـ",
+            "ـش"
+          ],
+          "full": "<span class=\"text-green-500\">شـ</span>جرة"
+        },
+        {
+          "word": "مـ ___ ـط",
+          "answer": "ـشـ",
+          "options": [
+            "شـ",
+            "ـشـ",
+            "ـش"
+          ],
+          "full": "مـ<span class=\"text-green-500\">ـشـ</span>ط"
+        },
+        {
+          "word": "عـ ___",
+          "answer": "ـش",
+          "options": [
+            "شـ",
+            "ـشـ",
+            "ـش"
+          ],
+          "full": "عـ<span class=\"text-green-500\">ـش</span>"
+        },
+        {
+          "word": "___ ـقر",
+          "answer": "صـ",
+          "options": [
+            "صـ",
+            "ـصـ",
+            "ـص"
+          ],
+          "full": "<span class=\"text-green-500\">صـ</span>قر"
+        },
+        {
+          "word": "عـ ___ ـفور",
+          "answer": "ـصـ",
+          "options": [
+            "صـ",
+            "ـصـ",
+            "ـص"
+          ],
+          "full": "عـ<span class=\"text-green-500\">ـصـ</span>فور"
+        },
+        {
+          "word": "مقـ ___",
+          "answer": "ـص",
+          "options": [
+            "صـ",
+            "ـصـ",
+            "ـص"
+          ],
+          "full": "مقـ<span class=\"text-green-500\">ـص</span>"
+        },
+        {
+          "word": "___ ـفدع",
+          "answer": "ضـ",
+          "options": [
+            "ضـ",
+            "ـضـ",
+            "ـض"
+          ],
+          "full": "<span class=\"text-green-500\">ضـ</span>فدع"
+        },
+        {
+          "word": "مـ ___ ـرب",
+          "answer": "ـضـ",
+          "options": [
+            "ضـ",
+            "ـضـ",
+            "ـض"
+          ],
+          "full": "مـ<span class=\"text-green-500\">ـضـ</span>رب"
+        },
+        {
+          "word": "أبيـ ___",
+          "answer": "ـض",
+          "options": [
+            "ضـ",
+            "ـضـ",
+            "ـض"
+          ],
+          "full": "أبيـ<span class=\"text-green-500\">ـض</span>"
+        }
+      ]
+    },
+    {
+      "groupName": "Group 4 Quiz (ط - ف)",
+      "questions": [
+        {
+          "word": "___ ـائرة",
+          "answer": "طـ",
+          "options": [
+            "طـ",
+            "ـطـ",
+            "ـط"
+          ],
+          "full": "<span class=\"text-green-500\">طـ</span>ائرة"
+        },
+        {
+          "word": "مـ ___ ـر",
+          "answer": "ـطـ",
+          "options": [
+            "طـ",
+            "ـطـ",
+            "ـط"
+          ],
+          "full": "مـ<span class=\"text-green-500\">ـطـ</span>ر"
+        },
+        {
+          "word": "قـ ___",
+          "answer": "ـط",
+          "options": [
+            "طـ",
+            "ـطـ",
+            "ـط"
+          ],
+          "full": "قـ<span class=\"text-green-500\">ـط</span>"
+        },
+        {
+          "word": "___ ـرف",
+          "answer": "ظـ",
+          "options": [
+            "ظـ",
+            "ـظـ",
+            "ـظ"
+          ],
+          "full": "<span class=\"text-green-500\">ظـ</span>رف"
+        },
+        {
+          "word": "مـ ___ ـلة",
+          "answer": "ـظـ",
+          "options": [
+            "ظـ",
+            "ـظـ",
+            "ـظ"
+          ],
+          "full": "مـ<span class=\"text-green-500\">ـظـ</span>لة"
+        },
+        {
+          "word": "حافـ ___",
+          "answer": "ـظ",
+          "options": [
+            "ظـ",
+            "ـظـ",
+            "ـظ"
+          ],
+          "full": "حافـ<span class=\"text-green-500\">ـظ</span>"
+        },
+        {
+          "word": "___ ـنب",
+          "answer": "عـ",
+          "options": [
+            "عـ",
+            "ـعـ",
+            "ع"
+          ],
+          "full": "<span class=\"text-green-500\">عـ</span>نب"
+        },
+        {
+          "word": "ثـ ___ ـلب",
+          "answer": "ـعـ",
+          "options": [
+            "عـ",
+            "ـعـ",
+            "ع"
+          ],
+          "full": "ثـ<span class=\"text-green-500\">ـعـ</span>لب"
+        },
+        {
+          "word": "ضفد ___",
+          "answer": "ع",
+          "options": [
+            "عـ",
+            "ـعـ",
+            "ع"
+          ],
+          "full": "ضفد<span class=\"text-green-500\">ع</span>"
+        },
+        {
+          "word": "___ ـسالة",
+          "answer": "غـ",
+          "options": [
+            "غـ",
+            "ـغـ",
+            "ـغ"
+          ],
+          "full": "<span class=\"text-green-500\">غـ</span>سالة"
+        },
+        {
+          "word": "ببـ ___ ـاء",
+          "answer": "ـغـ",
+          "options": [
+            "غـ",
+            "ـغـ",
+            "ـغ"
+          ],
+          "full": "ببـ<span class=\"text-green-500\">ـغـ</span>اء"
+        },
+        {
+          "word": "صمـ ___",
+          "answer": "ـغ",
+          "options": [
+            "غـ",
+            "ـغـ",
+            "ـغ"
+          ],
+          "full": "صمـ<span class=\"text-green-500\">ـغ</span>"
+        },
+        {
+          "word": "___ ـيل",
+          "answer": "فـ",
+          "options": [
+            "فـ",
+            "ـفـ",
+            "ـف"
+          ],
+          "full": "<span class=\"text-green-500\">فـ</span>يل"
+        },
+        {
+          "word": "تـ ___ ـاحة",
+          "answer": "ـفـ",
+          "options": [
+            "فـ",
+            "ـفـ",
+            "ـف"
+          ],
+          "full": "تـ<span class=\"text-green-500\">ـفـ</span>احة"
+        },
+        {
+          "word": "هاتـ ___",
+          "answer": "ـف",
+          "options": [
+            "فـ",
+            "ـفـ",
+            "ـف"
+          ],
+          "full": "هاتـ<span class=\"text-green-500\">ـف</span>"
+        }
+      ]
+    },
+    {
+      "groupName": "Group 5 Quiz (ق - ن)",
+      "questions": [
+        {
+          "word": "___ ـرد",
+          "answer": "قـ",
+          "options": [
+            "قـ",
+            "ـقـ",
+            "ـق"
+          ],
+          "full": "<span class=\"text-green-500\">قـ</span>رد"
+        },
+        {
+          "word": "صـ ___ ـر",
+          "answer": "ـقـ",
+          "options": [
+            "قـ",
+            "ـقـ",
+            "ـق"
+          ],
+          "full": "صـ<span class=\"text-green-500\">ـقـ</span>ر"
+        },
+        {
+          "word": "طبـ ___",
+          "answer": "ـق",
+          "options": [
+            "قـ",
+            "ـقـ",
+            "ـق"
+          ],
+          "full": "طبـ<span class=\"text-green-500\">ـق</span>"
+        },
+        {
+          "word": "___ ـلب",
+          "answer": "كـ",
+          "options": [
+            "كـ",
+            "ـكـ",
+            "ـك"
+          ],
+          "full": "<span class=\"text-green-500\">كـ</span>لب"
+        },
+        {
+          "word": "سـ ___ ـين",
+          "answer": "ـكـ",
+          "options": [
+            "كـ",
+            "ـكـ",
+            "ـك"
+          ],
+          "full": "سـ<span class=\"text-green-500\">ـكـ</span>ين"
+        },
+        {
+          "word": "سمـ ___",
+          "answer": "ـك",
+          "options": [
+            "كـ",
+            "ـكـ",
+            "ـك"
+          ],
+          "full": "سمـ<span class=\"text-green-500\">ـك</span>"
+        },
+        {
+          "word": "___ ـيمون",
+          "answer": "لـ",
+          "options": [
+            "لـ",
+            "ـلـ",
+            "ـل"
+          ],
+          "full": "<span class=\"text-green-500\">لـ</span>يمون"
+        },
+        {
+          "word": "قـ ___ ـم",
+          "answer": "ـلـ",
+          "options": [
+            "لـ",
+            "ـلـ",
+            "ـل"
+          ],
+          "full": "قـ<span class=\"text-green-500\">ـلـ</span>م"
+        },
+        {
+          "word": "جمـ ___",
+          "answer": "ـل",
+          "options": [
+            "لـ",
+            "ـلـ",
+            "ـل"
+          ],
+          "full": "جمـ<span class=\"text-green-500\">ـل</span>"
+        },
+        {
+          "word": "___ ـوز",
+          "answer": "مـ",
+          "options": [
+            "مـ",
+            "ـمـ",
+            "ـم"
+          ],
+          "full": "<span class=\"text-green-500\">مـ</span>وز"
+        },
+        {
+          "word": "شـ ___ ـس",
+          "answer": "ـمـ",
+          "options": [
+            "مـ",
+            "ـمـ",
+            "ـم"
+          ],
+          "full": "شـ<span class=\"text-green-500\">ـمـ</span>س"
+        },
+        {
+          "word": "قلـ ___",
+          "answer": "ـم",
+          "options": [
+            "مـ",
+            "ـمـ",
+            "ـم"
+          ],
+          "full": "قلـ<span class=\"text-green-500\">ـم</span>"
+        },
+        {
+          "word": "___ ـمر",
+          "answer": "نـ",
+          "options": [
+            "نـ",
+            "ـنـ",
+            "ـن"
+          ],
+          "full": "<span class=\"text-green-500\">نـ</span>مر"
+        },
+        {
+          "word": "عـ ___ ـب",
+          "answer": "ـنـ",
+          "options": [
+            "نـ",
+            "ـنـ",
+            "ـن"
+          ],
+          "full": "عـ<span class=\"text-green-500\">ـنـ</span>ب"
+        },
+        {
+          "word": "عيـ ___",
+          "answer": "ـن",
+          "options": [
+            "نـ",
+            "ـنـ",
+            "ـن"
+          ],
+          "full": "عيـ<span class=\"text-green-500\">ـن</span>"
+        }
+      ]
+    },
+    {
+      "groupName": "Group 6 Quiz (هـ - ي)",
+      "questions": [
+        {
+          "word": "___ ـرم",
+          "answer": "هـ",
+          "options": [
+            "هـ",
+            "ـهـ",
+            "ـه"
+          ],
+          "full": "<span class=\"text-green-500\">هـ</span>رم"
+        },
+        {
+          "word": "فـ ___ ـد",
+          "answer": "ـهـ",
+          "options": [
+            "هـ",
+            "ـهـ",
+            "ـه"
+          ],
+          "full": "فـ<span class=\"text-green-500\">ـهـ</span>د"
+        },
+        {
+          "word": "وجـ ___",
+          "answer": "ـه",
+          "options": [
+            "هـ",
+            "ـهـ",
+            "ـه"
+          ],
+          "full": "وجـ<span class=\"text-green-500\">ـه</span>"
+        },
+        {
+          "word": "___ ردة",
+          "answer": "و",
+          "options": [
+            "و",
+            "ـو",
+            "وـ"
+          ],
+          "full": "<span class=\"text-green-500\">و</span>ردة"
+        },
+        {
+          "word": "حـ ___ ت",
+          "answer": "ـو",
+          "options": [
+            "و",
+            "ـو",
+            "وـ"
+          ],
+          "full": "حـ<span class=\"text-green-500\">ـو</span>ت"
+        },
+        {
+          "word": "دلـ ___",
+          "answer": "ـو",
+          "options": [
+            "و",
+            "ـو",
+            "وـ"
+          ],
+          "full": "دلـ<span class=\"text-green-500\">ـو</span>"
+        },
+        {
+          "word": "___ ـد",
+          "answer": "يـ",
+          "options": [
+            "يـ",
+            "ـيـ",
+            "ـي"
+          ],
+          "full": "<span class=\"text-green-500\">يـ</span>د"
+        },
+        {
+          "word": "لـ ___ ـمون",
+          "answer": "ـيـ",
+          "options": [
+            "يـ",
+            "ـيـ",
+            "ـي"
+          ],
+          "full": "لـ<span class=\"text-green-500\">ـيـ</span>مون"
+        },
+        {
+          "word": "كرسـ ___",
+          "answer": "ـي",
+          "options": [
+            "يـ",
+            "ـيـ",
+            "ـي"
+          ],
+          "full": "كرسـ<span class=\"text-green-500\">ـي</span>"
+        }
+      ]
+    }
+  ]
+}

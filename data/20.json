@@ -1,0 +1,206 @@
+{
+  "page": 20,
+  "file": "20.html",
+  "type": "standard_lesson",
+  "config": {
+    "title": "Nour Al-Bayan",
+    "subtitle": "Page 20 • Harakat Examples (أمثلة الحركات)",
+    "footer": "Nour Al-Bayan Learning System • Page 20 (Harakat Examples (أمثلة الحركات))",
+    "game3": "memory"
+  },
+  "rules": [],
+  "dataset": [
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>بُ&zwj;</span><span class='c1'>&zwj;سِـ</span><span class='sep-bar'>|</span><span class='c2'>ـطَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>وُ</span><span class='c1'>زِ</span><span class='sep-bar'>|</span><span class='c2'>نَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "pink",
+      "t": "speed"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>سُ&zwj;</span><span class='c1'>&zwj;كِـ</span><span class='sep-bar'>|</span><span class='c2'>ـنَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>خُ&zwj;</span><span class='c1'>&zwj;بِـ</span><span class='sep-bar'>|</span><span class='c2'>ـزَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>أُ</span><span class='c1'>سِـ</span><span class='sep-bar'>|</span><span class='c2'>ـرَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "green",
+      "t": "danger"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>بُ&zwj;</span><span class='c1'>&zwj;ذِ</span><span class='sep-bar'>|</span><span class='c2'>لَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "green",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>تُ&zwj;</span><span class='c1'>&zwj;رِ</span><span class='sep-bar'>|</span><span class='c2'>كَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "green",
+      "t": "golden"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>ثُ&zwj;</span><span class='c1'>&zwj;بِـ</span><span class='sep-bar'>|</span><span class='c2'>ـتَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "green",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>جُ&zwj;</span><span class='c1'>&zwj;بِـ</span><span class='sep-bar'>|</span><span class='c2'>ـرَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>حُ&zwj;</span><span class='c1'>&zwj;رِ</span><span class='sep-bar'>|</span><span class='c2'>ثَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "yellow",
+      "t": "speed"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>خُ&zwj;</span><span class='c1'>&zwj;لِـ</span><span class='sep-bar'>|</span><span class='c2'>ـصَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>دُ</span><span class='c1'>خِـ</span><span class='sep-bar'>|</span><span class='c2'>ـلَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>ذُ</span><span class='c1'>كِـ</span><span class='sep-bar'>|</span><span class='c2'>ـرَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "blue",
+      "t": "danger"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>رُ</span><span class='c1'>فِـ</span><span class='sep-bar'>|</span><span class='c2'>ـعَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "blue",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>زُ</span><span class='c1'>جِـ</span><span class='sep-bar'>|</span><span class='c2'>ـرَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "blue",
+      "t": "golden"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>سُ&zwj;</span><span class='c1'>&zwj;هِـ</span><span class='sep-bar'>|</span><span class='c2'>ـمَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "blue",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>شُ&zwj;</span><span class='c1'>&zwj;رِ</span><span class='c2'>حَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>صُ&zwj;</span><span class='c1'>&zwj;لِ&zwj;</span><span class='c2'>&zwj;بَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "pink",
+      "t": "speed"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>ضُ&zwj;</span><span class='c1'>&zwj;بِ&zwj;</span><span class='c2'>&zwj;طَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>عُ&zwj;</span><span class='c1'>&zwj;هِ&zwj;</span><span class='c2'>&zwj;دَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>لُ&zwj;</span><span class='c1'>&zwj;بِ&zwj;</span><span class='c2'>&zwj;سَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "green",
+      "t": "danger"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>مُ&zwj;</span><span class='c1'>&zwj;حِ&zwj;</span><span class='c2'>&zwj;صَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "green",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>نُ&zwj;</span><span class='c1'>&zwj;هِ&zwj;</span><span class='c2'>&zwj;ضَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "green",
+      "t": "golden"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>هُ&zwj;</span><span class='c1'>&zwj;بِ&zwj;</span><span class='c2'>&zwj;شَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "green",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>وُ</span><span class='c1'>قِ&zwj;</span><span class='c2'>&zwj;فَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>شُ&zwj;</span><span class='c1'>&zwj;حِ&zwj;</span><span class='c2'>&zwj;ذَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "yellow",
+      "t": "speed"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>رَ</span><span class='c1'>ؤُ</span><span class='c2'>فَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>يَ&zwj;</span><span class='c1'>&zwj;ثِ&zwj;</span><span class='c2'>&zwj;قُ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>كَ&zwj;</span><span class='c1'>&zwj;مُ&zwj;</span><span class='c2'>&zwj;لَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "blue",
+      "t": "danger"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>فَ&zwj;</span><span class='c1'>&zwj;صُ&zwj;</span><span class='c2'>&zwj;حَ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "blue",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>مَ&zwj;</span><span class='c1'>&zwj;رَ</span><span class='c2'>حُ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "blue",
+      "t": "golden"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c0'>زَ</span><span class='c1'>مَ&zwj;</span><span class='c2'>&zwj;نُ</span></span>",
+      "info": "Harakat Examples",
+      "theme": "blue",
+      "t": "normal"
+    }
+  ]
+}

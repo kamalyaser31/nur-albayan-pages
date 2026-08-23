@@ -1,0 +1,176 @@
+{
+  "page": 36,
+  "file": "36.html",
+  "type": "standard_lesson",
+  "config": {
+    "title": "Nour Al-Bayan",
+    "subtitle": "Page 36 • General Madd Training 1 (تدريبات المدود ١)",
+    "footer": "Nour Al-Bayan Learning System • Page 36 (General Madd Training 1 (تدريبات المدود ١))",
+    "game3": "memory"
+  },
+  "rules": [],
+  "dataset": [
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>حَدِيثُ مُ</span><span class='c-red'>و</span><span class='c-black'>سَ</span><span class='c-red'>ىٰ</span></span>",
+      "info": "General Madd",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>ءَ</span><span class='c-red'>ا</span><span class='c-black'>مَنُ</span><span class='c-red'>و</span><span class='c-black'>اْ وَعَمِلُ</span><span class='c-red'>و</span><span class='c-black'>اْ</span></span>",
+      "info": "General Madd",
+      "theme": "pink",
+      "t": "speed"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>وَلَ</span><span class='c-red'>ا</span> <span class='c-black'>يَكَ</span><span class='c-red'>ا</span><span class='c-black'>دُ يُبِ</span><span class='c-red'>ي</span><span class='c-black'>نُ</span></span>",
+      "info": "General Madd",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>فَغُلِبُ</span><span class='c-red'>و</span><span class='c-black'>اْ هُنَ</span><span class='c-red'>ا</span><span class='c-black'>لِكَ</span></span>",
+      "info": "General Madd",
+      "theme": "green",
+      "t": "danger"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>فِ</span><span class='c-red'>ي</span><span class='c-black'>هَا فَوَ</span><span class='c-red'>ٰ</span><span class='c-black'>كِهُ</span></span>",
+      "info": "General Madd",
+      "theme": "green",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>سَتَجِدُ</span><span class='c-red'>و</span><span class='c-black'>نَ ءَ</span><span class='c-red'>ا</span><span class='c-black'>خَرِ</span><span class='c-red'>ي</span><span class='c-black'>نَ</span></span>",
+      "info": "General Madd",
+      "theme": "green",
+      "t": "golden"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>فَيَكِ</span><span class='c-red'>ي</span><span class='c-black'>دُ</span><span class='c-red'>و</span><span class='c-black'>اْ لَكَ</span></span>",
+      "info": "General Madd",
+      "theme": "blue",
+      "t": "speed"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>صَدَقُ</span><span class='c-red'>و</span><span class='c-black'>اْ مَ</span><span class='c-red'>ا</span> <span class='c-black'>عَـ</span><span class='c-red'>ٰ</span><span class='c-black'>هَدُ</span><span class='c-red'>و</span><span class='c-black'>اْ</span></span>",
+      "info": "General Madd",
+      "theme": "blue",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>نَسِيَ</span><span class='c-red'>ا</span> <span class='c-black'>حُ</span><span class='c-red'>و</span><span class='c-black'>تَهُمَ</span><span class='c-red'>ا</span></span>",
+      "info": "General Madd",
+      "theme": "blue",
+      "t": "danger"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>قَ</span><span class='c-red'>ا</span><span class='c-black'>لُ</span><span class='c-red'>و</span><span class='c-black'>اْ بَلَ</span><span class='c-red'>ىٰ</span></span>",
+      "info": "General Madd",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>هَـ</span><span class='c-red'>ٰ</span><span class='c-black'>ذِهِ</span><span class='c-red'>ۦ</span> <span class='c-black'>بِضَـ</span><span class='c-red'>ٰ</span><span class='c-black'>عَتُنَ</span><span class='c-red'>ا</span></span>",
+      "info": "General Madd",
+      "theme": "yellow",
+      "t": "speed"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>فِ</span><span class='c-red'>ي</span><span class='c-black'>هَا مَعَـ</span><span class='c-red'>ٰ</span><span class='c-black'>يِشَ</span></span>",
+      "info": "General Madd",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>وَمَ</span><span class='c-red'>ا</span> <span class='c-black'>كَ</span><span class='c-red'>ا</span><span class='c-black'>نُ</span><span class='c-red'>و</span><span class='c-black'>اْ سَـ</span><span class='c-red'>ٰ</span><span class='c-black'>بِقِ</span><span class='c-red'>ي</span><span class='c-black'>نَ</span></span>",
+      "info": "General Madd",
+      "theme": "pink",
+      "t": "golden"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>قَ</span><span class='c-red'>ا</span><span class='c-black'>لُ</span><span class='c-red'>و</span><span class='c-black'>اْ تَقَ</span><span class='c-red'>ا</span><span class='c-black'>سَمُ</span><span class='c-red'>و</span><span class='c-black'>اْ</span></span>",
+      "info": "General Madd",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>وَطُ</span><span class='c-red'>و</span><span class='c-black'>رِ سِ</span><span class='c-red'>ي</span><span class='c-black'>نِ</span><span class='c-red'>ي</span><span class='c-black'>نَ</span></span>",
+      "info": "General Madd",
+      "theme": "pink",
+      "t": "danger"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>يُرِ</span><span class='c-red'>ي</span><span class='c-black'>دُ</span><span class='c-red'>و</span><span class='c-black'>اْ خِيَ</span><span class='c-red'>ا</span><span class='c-black'>نَتَكَ</span></span>",
+      "info": "General Madd",
+      "theme": "green",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>فِ</span><span class='c-red'>ي</span><span class='c-black'>هَا رَوَ</span><span class='c-red'>ٰ</span><span class='c-black'>سِىَ</span></span>",
+      "info": "General Madd",
+      "theme": "green",
+      "t": "speed"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>كَ</span><span class='c-red'>ا</span><span class='c-black'>نُ</span><span class='c-red'>و</span><span class='c-black'>اْ يُسَـ</span><span class='c-red'>ٰ</span><span class='c-black'>رِعُ</span><span class='c-red'>و</span><span class='c-black'>نَ</span></span>",
+      "info": "General Madd",
+      "theme": "green",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>إِلَـ</span><span class='c-red'>ٰ</span><span class='c-black'>هَهُ</span><span class='c-red'>ۥ</span> <span class='c-black'>هَوَ</span><span class='c-red'>ا</span><span class='c-black'>هُ</span></span>",
+      "info": "General Madd",
+      "theme": "blue",
+      "t": "golden"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>وَبَـ</span><span class='c-red'>ٰ</span><span class='c-black'>رَكَ فِ</span><span class='c-red'>ي</span><span class='c-black'>هَا</span></span>",
+      "info": "General Madd",
+      "theme": "blue",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>هَـ</span><span class='c-red'>ٰ</span><span class='c-black'>هُنَ</span><span class='c-red'>ا</span> <span class='c-black'>قَـ</span><span class='c-red'>ٰ</span><span class='c-black'>عِدُ</span><span class='c-red'>و</span><span class='c-black'>نَ</span></span>",
+      "info": "General Madd",
+      "theme": "blue",
+      "t": "danger"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>فَلَ</span><span class='c-red'>ا</span> <span class='c-black'>رَفَثَ وَلَ</span><span class='c-red'>ا</span> <span class='c-black'>فُسُ</span><span class='c-red'>و</span><span class='c-black'>قَ</span></span>",
+      "info": "General Madd",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>لَسَـ</span><span class='c-red'>ٰ</span><span class='c-black'>حِرَ</span><span class='c-red'>ٰ</span><span class='c-black'>نِ يُرِ</span><span class='c-red'>ي</span><span class='c-black'>دَ</span><span class='c-red'>ا</span><span class='c-black'>نِ</span></span>",
+      "info": "General Madd",
+      "theme": "yellow",
+      "t": "speed"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>فَلَ</span><span class='c-red'>ا</span> <span class='c-black'>تَلُ</span><span class='c-red'>و</span><span class='c-black'>مُ</span><span class='c-red'>و</span><span class='c-black'>نِ</span><span class='c-red'>ى</span> <span class='c-black'>وَلُ</span><span class='c-red'>و</span><span class='c-black'>مُ</span><span class='c-red'>و</span><span class='c-black'>اْ</span></span>",
+      "info": "General Madd",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>لَ</span><span class='c-red'>ا</span> <span class='c-black'>تَقُ</span><span class='c-red'>و</span><span class='c-black'>لُ</span><span class='c-red'>و</span><span class='c-black'>اْ رَ</span><span class='c-red'>ٰ</span><span class='c-black'>عِنَ</span><span class='c-red'>ا</span></span>",
+      "info": "General Madd",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>فَسَلَكَهُ</span><span class='c-red'>ۥ</span> <span class='c-black'>يَنَـ</span><span class='c-red'>ٰ</span><span class='c-black'>بِ</span><span class='c-red'>ي</span><span class='c-black'>عَ</span></span>",
+      "info": "General Madd",
+      "theme": "green",
+      "t": "speed"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>تَرَكَ ءَ</span><span class='c-red'>ا</span><span class='c-black'>لُ مُ</span><span class='c-red'>و</span><span class='c-black'>سَ</span><span class='c-red'>ىٰ</span></span>",
+      "info": "General Madd",
+      "theme": "blue",
+      "t": "golden"
+    }
+  ]
+}

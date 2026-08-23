@@ -1,0 +1,152 @@
+{
+  "page": 22,
+  "file": "22.html",
+  "type": "standard_lesson",
+  "config": {
+    "title": "Nour Al-Bayan",
+    "subtitle": "Page 22 • Mutaharrik Word Pairs (أمثلة الكلمات المتحركة)",
+    "footer": "Nour Al-Bayan Learning System • Page 22 (Mutaharrik Word Pairs (أمثلة الكلمات المتحركة))",
+    "game3": "memory"
+  },
+  "rules": [],
+  "dataset": [
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-blue'>سَجَدَ</span> <span class='c-red'>فَخَشَعَ</span></span>",
+      "info": "Mutaharrik Pairs",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>قَرَأَ</span> <span class='c-blue'>كُتُبَهُ</span></span>",
+      "info": "Mutaharrik Pairs",
+      "theme": "pink",
+      "t": "speed"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>تُلِيَ</span> <span class='c-black'>فَفُهِمَ</span></span>",
+      "info": "Mutaharrik Pairs",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>قُرِئَ</span> <span class='c-blue'>وَكُتِبَ</span></span>",
+      "info": "Mutaharrik Pairs",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>وَقَفَ</span> <span class='c-red'>وَيَقِفُ</span></span>",
+      "info": "Mutaharrik Pairs",
+      "theme": "pink",
+      "t": "golden"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>لُبِسَ</span> <span class='c-black'>وَخُلِعَ</span></span>",
+      "info": "Mutaharrik Pairs",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>جُرِحَ</span> <span class='c-red'>وَشُفِيَ</span></span>",
+      "info": "Mutaharrik Pairs",
+      "theme": "pink",
+      "t": "danger"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>جُمِعَ</span> <span class='c-blue'>وَقُسِمَ</span></span>",
+      "info": "Mutaharrik Pairs",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-blue'>بُعِثَ</span> <span class='c-red'>وَحُشِرَ</span></span>",
+      "info": "Mutaharrik Pairs",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-blue'>قُطِعَ</span> <span class='c-red'>فَوَصَلَ</span></span>",
+      "info": "Mutaharrik Pairs",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>رُزِقَ</span> <span class='c-black'>فَحَمِدَ</span></span>",
+      "info": "Mutaharrik Pairs",
+      "theme": "yellow",
+      "t": "speed"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>رَضِيَ</span> <span class='c-blue'>وَفَرِحَ</span></span>",
+      "info": "Mutaharrik Pairs",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>كُتِبَ</span> <span class='c-red'>وَرَقُكَ</span></span>",
+      "info": "Mutaharrik Pairs",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>حَسُنَ</span> <span class='c-blue'>عَمَلُكَ</span></span>",
+      "info": "Mutaharrik Pairs",
+      "theme": "yellow",
+      "t": "golden"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-blue'>خَلُصَ</span> <span class='c-red'>عَسَلُكَ</span></span>",
+      "info": "Mutaharrik Pairs",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>أُكِلَ</span> <span class='c-blue'>بَلَحُكَ</span></span>",
+      "info": "Mutaharrik Pairs",
+      "theme": "yellow",
+      "t": "danger"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>فُقِدَ</span> <span class='c-black'>وَوُجِدَ</span></span>",
+      "info": "Mutaharrik Pairs",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>شَكَرَ</span> <span class='c-black'>وَشُكِرَ</span></span>",
+      "info": "Mutaharrik Pairs",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>نَظُفَ</span> <span class='c-red'>جَسَدُكَ</span></span>",
+      "info": "Mutaharrik Pairs",
+      "theme": "blue",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>وَزَنَ</span> <span class='c-blue'>وَيَزِنُ</span></span>",
+      "info": "Mutaharrik Pairs",
+      "theme": "blue",
+      "t": "speed"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-blue'>جَمُلَ</span> <span class='c-red'>ثَمَرُكَ</span></span>",
+      "info": "Mutaharrik Pairs",
+      "theme": "blue",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>قُطِفَ</span> <span class='c-blue'>عِنَبُكَ</span> <span class='c-black'>فَأُكِلَ</span></span>",
+      "info": "Mutaharrik Pairs",
+      "theme": "green",
+      "t": "golden"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>شَرِبَ</span> <span class='c-blue'>عُمَرُ</span> <span class='c-black'>لَبَنَهُ</span></span>",
+      "info": "Mutaharrik Pairs",
+      "theme": "green",
+      "t": "normal"
+    }
+  ]
+}

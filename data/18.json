@@ -1,0 +1,238 @@
+{
+  "page": 18,
+  "file": "18.html",
+  "type": "standard_lesson",
+  "config": {
+    "title": "Nour Al-Bayan",
+    "subtitle": "Page 18 • Segmented Letters (الحروف المجزأة)",
+    "footer": "Nour Al-Bayan Learning System • Page 18 (Segmented Letters (الحروف المجزأة))",
+    "game3": "memory"
+  },
+  "rules": [],
+  "dataset": [
+    {
+      "w": [
+        "<span class='text-rose-500'>ـأُ</span>"
+      ],
+      "t": "normal",
+      "theme": "pink",
+      "html": "<span class='text-rose-500'>ـأُ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-indigo-900'>ـبُ</span>"
+      ],
+      "t": "speed",
+      "theme": "pink",
+      "html": "<span class='text-indigo-900'>ـبُ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-teal-500'>ـتُ</span>"
+      ],
+      "t": "normal",
+      "theme": "pink",
+      "html": "<span class='text-teal-500'>ـتُ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-slate-800'>ـثُ</span>"
+      ],
+      "t": "golden",
+      "theme": "pink",
+      "html": "<span class='text-slate-800'>ـثُ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-rose-500'>ـجُ</span>"
+      ],
+      "t": "normal",
+      "theme": "green",
+      "html": "<span class='text-rose-500'>ـجُ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-indigo-900'>ـحُ</span>"
+      ],
+      "t": "danger",
+      "theme": "green",
+      "html": "<span class='text-indigo-900'>ـحُ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-teal-500'>ـخُ</span>"
+      ],
+      "t": "normal",
+      "theme": "green",
+      "html": "<span class='text-teal-500'>ـخُ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-slate-800'>ـدُ</span>"
+      ],
+      "t": "speed",
+      "theme": "green",
+      "html": "<span class='text-slate-800'>ـدُ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-rose-500'>ـذُ</span>"
+      ],
+      "t": "normal",
+      "theme": "blue",
+      "html": "<span class='text-rose-500'>ـذُ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-indigo-900'>ـرُ</span>"
+      ],
+      "t": "golden",
+      "theme": "blue",
+      "html": "<span class='text-indigo-900'>ـرُ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-rose-500'>زَ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـزِ</span><span class='sep-bar mx-1'>-</span><span class='text-teal-500'>ـزُ</span>"
+      ],
+      "t": "normal",
+      "theme": "blue",
+      "html": "<span class='text-rose-500'>زَ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـزِ</span><span class='sep-bar mx-1'>-</span><span class='text-teal-500'>ـزُ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-rose-500'>سَـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـسِـ</span><span class='sep-bar mx-1'>-</span><span class='text-teal-500'>ـسُ</span>"
+      ],
+      "t": "speed",
+      "theme": "blue",
+      "html": "<span class='text-rose-500'>سَـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـسِـ</span><span class='sep-bar mx-1'>-</span><span class='text-teal-500'>ـسُ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-teal-500'>شَـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـشِـ</span><span class='sep-bar mx-1'>-</span><span class='text-rose-500'>ـشُ</span>"
+      ],
+      "t": "danger",
+      "theme": "yellow",
+      "html": "<span class='text-teal-500'>شَـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـشِـ</span><span class='sep-bar mx-1'>-</span><span class='text-rose-500'>ـشُ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-rose-500'>صَـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـصِـ</span><span class='sep-bar mx-1'>-</span><span class='text-teal-500'>ـصُ</span>"
+      ],
+      "t": "normal",
+      "theme": "yellow",
+      "html": "<span class='text-rose-500'>صَـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـصِـ</span><span class='sep-bar mx-1'>-</span><span class='text-teal-500'>ـصُ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-teal-500'>ضَـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـضِـ</span><span class='sep-bar mx-1'>-</span><span class='text-rose-500'>ـضُ</span>"
+      ],
+      "t": "golden",
+      "theme": "yellow",
+      "html": "<span class='text-teal-500'>ضَـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـضِـ</span><span class='sep-bar mx-1'>-</span><span class='text-rose-500'>ـضُ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-rose-500'>طَـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـطِـ</span><span class='sep-bar mx-1'>-</span><span class='text-teal-500'>ـطُ</span>"
+      ],
+      "t": "normal",
+      "theme": "yellow",
+      "html": "<span class='text-rose-500'>طَـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـطِـ</span><span class='sep-bar mx-1'>-</span><span class='text-teal-500'>ـطُ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-teal-500'>ظَـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـظِـ</span><span class='sep-bar mx-1'>-</span><span class='text-rose-500'>ـظُ</span>"
+      ],
+      "t": "speed",
+      "theme": "pink",
+      "html": "<span class='text-teal-500'>ظَـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـظِـ</span><span class='sep-bar mx-1'>-</span><span class='text-rose-500'>ـظُ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-rose-500'>عَـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـعِـ</span><span class='sep-bar mx-1'>-</span><span class='text-teal-500'>ـعُ</span>"
+      ],
+      "t": "danger",
+      "theme": "pink",
+      "html": "<span class='text-rose-500'>عَـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـعِـ</span><span class='sep-bar mx-1'>-</span><span class='text-teal-500'>ـعُ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-teal-500'>غَـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـغِـ</span><span class='sep-bar mx-1'>-</span><span class='text-rose-500'>ـغُ</span>"
+      ],
+      "t": "normal",
+      "theme": "pink",
+      "html": "<span class='text-teal-500'>غَـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـغِـ</span><span class='sep-bar mx-1'>-</span><span class='text-rose-500'>ـغُ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-rose-500'>فَـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـفِـ</span><span class='sep-bar mx-1'>-</span><span class='text-teal-500'>ـفُ</span>"
+      ],
+      "t": "golden",
+      "theme": "pink",
+      "html": "<span class='text-rose-500'>فَـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـفِـ</span><span class='sep-bar mx-1'>-</span><span class='text-teal-500'>ـفُ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-teal-500'>قِـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـقُـ</span><span class='sep-bar mx-1'>-</span><span class='text-rose-500'>ـقَ</span>"
+      ],
+      "t": "normal",
+      "theme": "green",
+      "html": "<span class='text-teal-500'>قِـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـقُـ</span><span class='sep-bar mx-1'>-</span><span class='text-rose-500'>ـقَ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-rose-500'>كَـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـكُـ</span><span class='sep-bar mx-1'>-</span><span class='text-teal-500'>ـكِ</span>"
+      ],
+      "t": "speed",
+      "theme": "green",
+      "html": "<span class='text-rose-500'>كَـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـكُـ</span><span class='sep-bar mx-1'>-</span><span class='text-teal-500'>ـكِ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-teal-500'>لُـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـلَـ</span><span class='sep-bar mx-1'>-</span><span class='text-rose-500'>ـلِ</span>"
+      ],
+      "t": "danger",
+      "theme": "green",
+      "html": "<span class='text-teal-500'>لُـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـلَـ</span><span class='sep-bar mx-1'>-</span><span class='text-rose-500'>ـلِ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-rose-500'>مِـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـمُـ</span><span class='sep-bar mx-1'>-</span><span class='text-teal-500'>ـمَ</span>"
+      ],
+      "t": "normal",
+      "theme": "green",
+      "html": "<span class='text-rose-500'>مِـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـمُـ</span><span class='sep-bar mx-1'>-</span><span class='text-teal-500'>ـمَ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-teal-500'>نِـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـنُـ</span><span class='sep-bar mx-1'>-</span><span class='text-rose-500'>ـنَ</span>"
+      ],
+      "t": "golden",
+      "theme": "blue",
+      "html": "<span class='text-teal-500'>نِـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـنُـ</span><span class='sep-bar mx-1'>-</span><span class='text-rose-500'>ـنَ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-rose-500'>هُـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـهَـ</span><span class='sep-bar mx-1'>-</span><span class='text-teal-500'>ـهِ</span>"
+      ],
+      "t": "normal",
+      "theme": "blue",
+      "html": "<span class='text-rose-500'>هُـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـهَـ</span><span class='sep-bar mx-1'>-</span><span class='text-teal-500'>ـهِ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-teal-500'>وِ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـوُ</span><span class='sep-bar mx-1'>-</span><span class='text-rose-500'>ـوَ</span>"
+      ],
+      "t": "speed",
+      "theme": "blue",
+      "html": "<span class='text-teal-500'>وِ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـوُ</span><span class='sep-bar mx-1'>-</span><span class='text-rose-500'>ـوَ</span>"
+    },
+    {
+      "w": [
+        "<span class='text-rose-500'>يَـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـيُـ</span><span class='sep-bar mx-1'>-</span><span class='text-teal-500'>ـيِ</span>"
+      ],
+      "t": "normal",
+      "theme": "blue",
+      "html": "<span class='text-rose-500'>يَـ</span><span class='sep-bar mx-1'>-</span><span class='text-indigo-900'>ـيُـ</span><span class='sep-bar mx-1'>-</span><span class='text-teal-500'>ـيِ</span>"
+    }
+  ]
+}

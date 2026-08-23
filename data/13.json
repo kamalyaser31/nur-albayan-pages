@@ -1,0 +1,278 @@
+{
+  "page": 13,
+  "file": "13.html",
+  "type": "standard_lesson",
+  "config": {
+    "title": "Nour Al-Bayan",
+    "subtitle": "Page 13 • Segmented Letters (الحروف المجزأة)",
+    "footer": "Nour Al-Bayan Learning System • Page 13 (Segmented Letters (الحروف المجزأة))",
+    "game3": "memory"
+  },
+  "rules": [],
+  "dataset": [
+    {
+      "html": "<span style=\"color:#ef4444\">ـئِـ</span>",
+      "t": "normal",
+      "theme": "pink",
+      "w": [
+        "ـئِـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#10b981\">ـبِـ</span>",
+      "t": "normal",
+      "theme": "pink",
+      "w": [
+        "ـبِـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#2563eb\">ـتِـ</span>",
+      "t": "speed",
+      "theme": "pink",
+      "w": [
+        "ـتِـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#9333ea\">ـثِـ</span>",
+      "t": "normal",
+      "theme": "pink",
+      "w": [
+        "ـثِـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#f97316\">ـجِـ</span>",
+      "t": "golden",
+      "theme": "green",
+      "w": [
+        "ـجِـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#84cc16\">ـحِـ</span>",
+      "t": "normal",
+      "theme": "green",
+      "w": [
+        "ـحِـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#ef4444\">ـخِـ</span>",
+      "t": "normal",
+      "theme": "green",
+      "w": [
+        "ـخِـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#2563eb\">ـدِ</span>",
+      "t": "danger",
+      "theme": "green",
+      "w": [
+        "ـدِ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#10b981\">ـذِ</span>",
+      "t": "normal",
+      "theme": "blue",
+      "w": [
+        "ـذِ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#9333ea\">ـرِ</span>",
+      "t": "normal",
+      "theme": "blue",
+      "w": [
+        "ـرِ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#1e293b\">ـزِ</span>",
+      "t": "golden",
+      "theme": "blue",
+      "w": [
+        "ـزِ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#ef4444\">ـسِـ</span>",
+      "t": "normal",
+      "theme": "blue",
+      "w": [
+        "ـسِـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#f97316\">ـشِـ</span>",
+      "t": "speed",
+      "theme": "yellow",
+      "w": [
+        "ـشِـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#ef4444\">صَـ</span><span style=\"color:#2563eb\">ـصِـ</span>",
+      "t": "normal",
+      "theme": "yellow",
+      "w": [
+        "صَــصِـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#ef4444\">ضَـ</span><span style=\"color:#2563eb\">ـضِـ</span>",
+      "t": "normal",
+      "theme": "yellow",
+      "w": [
+        "ضَــضِـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#ef4444\">طَـ</span><span style=\"color:#2563eb\">ـطِـ</span>",
+      "t": "danger",
+      "theme": "yellow",
+      "w": [
+        "طَــطِـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#ef4444\">ظَـ</span><span style=\"color:#2563eb\">ـظِـ</span>",
+      "t": "normal",
+      "theme": "pink",
+      "w": [
+        "ظَــظِـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#ef4444\">عَـ</span><span style=\"color:#2563eb\">ـعِـ</span>",
+      "t": "golden",
+      "theme": "pink",
+      "w": [
+        "عَــعِـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#ef4444\">غَـ</span><span style=\"color:#2563eb\">ـغِـ</span>",
+      "t": "normal",
+      "theme": "pink",
+      "w": [
+        "غَــغِـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#ef4444\">فَـ</span><span style=\"color:#2563eb\">ـفِـ</span>",
+      "t": "speed",
+      "theme": "pink",
+      "w": [
+        "فَــفِـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#ef4444\">قَـ</span><span style=\"color:#2563eb\">ـقِـ</span>",
+      "t": "normal",
+      "theme": "green",
+      "w": [
+        "قَــقِـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#ef4444\">كَـ</span><span style=\"color:#2563eb\">ـكِـ</span>",
+      "t": "normal",
+      "theme": "green",
+      "w": [
+        "كَــكِـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#ef4444\">لِـ</span><span style=\"color:#2563eb\">ـلَـ</span>",
+      "t": "danger",
+      "theme": "green",
+      "w": [
+        "لِــلَـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#ef4444\">مَـ</span><span style=\"color:#2563eb\">ـمِـ</span>",
+      "t": "normal",
+      "theme": "green",
+      "w": [
+        "مَــمِـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#ef4444\">نَـ</span><span style=\"color:#2563eb\">ـنِـ</span>",
+      "t": "golden",
+      "theme": "blue",
+      "w": [
+        "نَــنِـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#ef4444\">هِـ</span><span style=\"color:#2563eb\">ـهَـ</span>",
+      "t": "normal",
+      "theme": "blue",
+      "w": [
+        "هِــهَـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#ef4444\">وَ</span><span style=\"color:#2563eb\">وِ</span>",
+      "t": "speed",
+      "theme": "blue",
+      "w": [
+        "وَوِ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#ef4444\">يِـ</span><span style=\"color:#2563eb\">ـيَـ</span>",
+      "t": "normal",
+      "theme": "blue",
+      "w": [
+        "يِــيَـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#ef4444\">يَـ</span><span style=\"color:#2563eb\">ـيِـ</span>",
+      "t": "normal",
+      "theme": "yellow",
+      "w": [
+        "يَــيِـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#ef4444\">تِـ</span><span style=\"color:#2563eb\">ـبَـ</span>",
+      "t": "normal",
+      "theme": "yellow",
+      "w": [
+        "تِــبَـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#ef4444\">نَـ</span><span style=\"color:#2563eb\">ـبِـ</span>",
+      "t": "golden",
+      "theme": "yellow",
+      "w": [
+        "نَــبِـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#ef4444\">غِـ</span><span style=\"color:#2563eb\">ـعَـ</span>",
+      "t": "danger",
+      "theme": "yellow",
+      "w": [
+        "غِــعَـ"
+      ]
+    },
+    {
+      "html": "<span style=\"color:#ef4444\">ضَـ</span><span style=\"color:#2563eb\">ـطِـ</span>",
+      "t": "speed",
+      "theme": "pink",
+      "w": [
+        "ضَــطِـ"
+      ]
+    }
+  ]
+}

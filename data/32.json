@@ -1,0 +1,217 @@
+{
+  "page": 32,
+  "file": "32.html",
+  "type": "standard_lesson",
+  "config": {
+    "title": "Nour Al-Bayan",
+    "subtitle": "Page 32 • Short vs Long Vowels (الحركات والمدود)",
+    "footer": "Nour Al-Bayan Learning System • Page 32 (Short vs Long Vowels (الحركات والمدود))",
+    "game3": "riddles"
+  },
+  "rules": [
+    {
+      "title": "Nour Al-Bayan",
+      "desc": "Fatha, Kasra, and Damma are short vowels. They take 1 beat.",
+      "html": "<span class='c-black'>ب</span><span class='c-red'>َ</span> <span class='text-slate-300 text-2xl mx-3'>-</span> <span class='c-black'>ب</span><span class='c-red'>ِ</span> <span class='text-slate-300 text-2xl mx-3'>-</span> <span class='c-black'>ب</span><span class='c-red'>ُ</span>"
+    },
+    {
+      "title": "Nour Al-Bayan",
+      "desc": "Alif, Yaa, and Waw are Madd letters. They stretch the sound to 2 beats.",
+      "html": "<span class='c-black'>ب</span><span class='c-red'>َا</span> <span class='text-slate-300 text-xl mx-2'>-</span> <span class='c-black'>ب</span><span class='c-red'>ِي</span> <span class='text-slate-300 text-xl mx-2'>-</span> <span class='c-black'>ب</span><span class='c-red'>ُو</span>"
+    }
+  ],
+  "dataset": [
+    {
+      "w": "<span class='c-black'>أ</span><span class='c-red'>ُ</span> &nbsp;&nbsp;&nbsp; <span class='c-black'>أ</span><span class='c-red'>ُو</span>",
+      "info": "Short vs Long Vowel (Damma)",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='c-black'>ب</span><span class='c-red'>ُ</span> &nbsp;&nbsp;&nbsp; <span class='c-black'>ب</span><span class='c-red'>ُو</span>",
+      "info": "Short vs Long Vowel (Damma)",
+      "theme": "pink",
+      "t": "speed"
+    },
+    {
+      "w": "<span class='c-black'>ت</span><span class='c-red'>ُ</span> &nbsp;&nbsp;&nbsp; <span class='c-black'>ت</span><span class='c-red'>ُو</span>",
+      "info": "Short vs Long Vowel (Damma)",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='c-black'>ث</span><span class='c-red'>ُ</span> &nbsp;&nbsp;&nbsp; <span class='c-black'>ث</span><span class='c-red'>ُو</span>",
+      "info": "Short vs Long Vowel (Damma)",
+      "theme": "pink",
+      "t": "danger"
+    },
+    {
+      "w": "<span class='c-black'>ج</span><span class='c-red'>ُ</span><span class='c-black'>ـ</span> &nbsp;&nbsp;&nbsp; <span class='c-black'>ج</span><span class='c-red'>ُو</span>",
+      "info": "Short vs Long Vowel (Damma)",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='c-black'>ح</span><span class='c-red'>ُ</span><span class='c-black'>ـ</span> &nbsp;&nbsp;&nbsp; <span class='c-black'>ح</span><span class='c-red'>ُو</span>",
+      "info": "Short vs Long Vowel (Damma)",
+      "theme": "pink",
+      "t": "golden"
+    },
+    {
+      "w": "<span class='c-black'>خ</span><span class='c-red'>ُ</span><span class='c-black'>ـ</span> &nbsp;&nbsp;&nbsp; <span class='c-black'>خ</span><span class='c-red'>ُو</span>",
+      "info": "Short vs Long Vowel (Damma)",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='c-black'>د</span><span class='c-red'>ُ</span> &nbsp;&nbsp;&nbsp; <span class='c-black'>د</span><span class='c-red'>ُو</span>",
+      "info": "Short vs Long Vowel (Damma)",
+      "theme": "pink",
+      "t": "speed"
+    },
+    {
+      "w": "<span class='c-black'>ذ</span><span class='c-red'>ُ</span> &nbsp;&nbsp;&nbsp; <span class='c-black'>ذ</span><span class='c-red'>ُو</span>",
+      "info": "Short vs Long Vowel (Damma)",
+      "theme": "blue",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='c-black'>ر</span><span class='c-red'>ُ</span> &nbsp;&nbsp;&nbsp; <span class='c-black'>ر</span><span class='c-red'>ُو</span>",
+      "info": "Short vs Long Vowel (Damma)",
+      "theme": "blue",
+      "t": "danger"
+    },
+    {
+      "w": "<span class='c-black'>ز</span><span class='c-red'>ُ</span> &nbsp;&nbsp;&nbsp; <span class='c-black'>ز</span><span class='c-red'>ُو</span>",
+      "info": "Short vs Long Vowel (Damma)",
+      "theme": "blue",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='c-black'>س</span><span class='c-red'>ُ</span><span class='c-black'>ـ</span> &nbsp;&nbsp;&nbsp; <span class='c-black'>س</span><span class='c-red'>ُو</span>",
+      "info": "Short vs Long Vowel (Damma)",
+      "theme": "blue",
+      "t": "golden"
+    },
+    {
+      "w": "<span class='c-black'>ش</span><span class='c-red'>َـا</span> &nbsp;&nbsp; <span class='c-black'>ش</span><span class='c-red'>ِى</span> &nbsp;&nbsp; <span class='c-black'>ش</span><span class='c-red'>ُـو</span>",
+      "info": "Madd Letters (Alif, Yaa, Waw)",
+      "theme": "blue",
+      "t": "speed"
+    },
+    {
+      "w": "<span class='c-black'>ص</span><span class='c-red'>َـا</span> &nbsp;&nbsp; <span class='c-black'>ص</span><span class='c-red'>ِى</span> &nbsp;&nbsp; <span class='c-black'>ص</span><span class='c-red'>ُـو</span>",
+      "info": "Madd Letters (Alif, Yaa, Waw)",
+      "theme": "blue",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='c-black'>ض</span><span class='c-red'>َـا</span> &nbsp;&nbsp; <span class='c-black'>ض</span><span class='c-red'>ِى</span> &nbsp;&nbsp; <span class='c-black'>ض</span><span class='c-red'>ُـو</span>",
+      "info": "Madd Letters (Alif, Yaa, Waw)",
+      "theme": "blue",
+      "t": "danger"
+    },
+    {
+      "w": "<span class='c-black'>ط</span><span class='c-red'>َـا</span> &nbsp;&nbsp; <span class='c-black'>ط</span><span class='c-red'>ِى</span> &nbsp;&nbsp; <span class='c-black'>ط</span><span class='c-red'>ُـو</span>",
+      "info": "Madd Letters (Alif, Yaa, Waw)",
+      "theme": "blue",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='c-black'>ظ</span><span class='c-red'>َـا</span> &nbsp;&nbsp; <span class='c-black'>ظ</span><span class='c-red'>ِى</span> &nbsp;&nbsp; <span class='c-black'>ظ</span><span class='c-red'>ُـو</span>",
+      "info": "Madd Letters (Alif, Yaa, Waw)",
+      "theme": "yellow",
+      "t": "golden"
+    },
+    {
+      "w": "<span class='c-black'>ع</span><span class='c-red'>َـا</span> &nbsp;&nbsp; <span class='c-black'>ع</span><span class='c-red'>ِى</span> &nbsp;&nbsp; <span class='c-black'>ع</span><span class='c-red'>ُـو</span>",
+      "info": "Madd Letters (Alif, Yaa, Waw)",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='c-black'>غ</span><span class='c-red'>َـا</span> &nbsp;&nbsp; <span class='c-black'>غ</span><span class='c-red'>ِى</span> &nbsp;&nbsp; <span class='c-black'>غ</span><span class='c-red'>ُـو</span>",
+      "info": "Madd Letters (Alif, Yaa, Waw)",
+      "theme": "yellow",
+      "t": "speed"
+    },
+    {
+      "w": "<span class='c-black'>ف</span><span class='c-red'>َـا</span> &nbsp;&nbsp; <span class='c-black'>ف</span><span class='c-red'>ِى</span> &nbsp;&nbsp; <span class='c-black'>ف</span><span class='c-red'>ُـو</span>",
+      "info": "Madd Letters (Alif, Yaa, Waw)",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='c-black'>ق</span><span class='c-red'>ِـيـ</span> &nbsp;&nbsp; <span class='c-black'>ق</span><span class='c-red'>ُـو</span> &nbsp;&nbsp; <span class='c-black'>ق</span><span class='c-red'>َـا</span>",
+      "info": "Madd Letters (Alif, Yaa, Waw)",
+      "theme": "yellow",
+      "t": "danger"
+    },
+    {
+      "w": "<span class='c-black'>ك</span><span class='c-red'>ُـو</span> &nbsp;&nbsp; <span class='c-black'>ك</span><span class='c-red'>َـا</span> &nbsp;&nbsp; <span class='c-black'>ك</span><span class='c-red'>ِـيـ</span>",
+      "info": "Madd Letters (Alif, Yaa, Waw)",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='c-black'>ل</span><span class='c-red'>َا</span> &nbsp;&nbsp; <span class='c-black'>ل</span><span class='c-red'>ُـو</span> &nbsp;&nbsp; <span class='c-black'>ل</span><span class='c-red'>ِـيـ</span>",
+      "info": "Madd Letters (Alif, Yaa, Waw)",
+      "theme": "yellow",
+      "t": "golden"
+    },
+    {
+      "w": "<span class='c-black'>م</span><span class='c-red'>ُـو</span> &nbsp;&nbsp; <span class='c-black'>م</span><span class='c-red'>َـا</span> &nbsp;&nbsp; <span class='c-black'>م</span><span class='c-red'>ِـيـ</span>",
+      "info": "Madd Letters (Alif, Yaa, Waw)",
+      "theme": "yellow",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='c-black'>ن</span><span class='c-red'>َـا</span> &nbsp;&nbsp; <span class='c-black'>ن</span><span class='c-red'>ِى</span> &nbsp;&nbsp; <span class='c-black'>ن</span><span class='c-red'>ُـو</span>",
+      "info": "Madd Letters (Alif, Yaa, Waw)",
+      "theme": "green",
+      "t": "speed"
+    },
+    {
+      "w": "<span class='c-black'>ه</span><span class='c-red'>ُـو</span> &nbsp;&nbsp; <span class='c-black'>ه</span><span class='c-red'>َـا</span> &nbsp;&nbsp; <span class='c-black'>ه</span><span class='c-red'>ِـيـ</span>",
+      "info": "Madd Letters (Alif, Yaa, Waw)",
+      "theme": "green",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='c-black'>و</span><span class='c-red'>ِى</span> &nbsp;&nbsp; <span class='c-black'>و</span><span class='c-red'>ُو</span> &nbsp;&nbsp; <span class='c-black'>و</span><span class='c-red'>َا</span>",
+      "info": "Madd Letters (Alif, Yaa, Waw)",
+      "theme": "green",
+      "t": "danger"
+    },
+    {
+      "w": "<span class='c-black'>ي</span><span class='c-red'>َـا</span> &nbsp;&nbsp; <span class='c-black'>ي</span><span class='c-red'>ِى</span> &nbsp;&nbsp; <span class='c-black'>ي</span><span class='c-red'>ُـو</span>",
+      "info": "Madd Letters (Alif, Yaa, Waw)",
+      "theme": "green",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='c-black'>ب</span><span class='c-red'>ِـيـ</span> &nbsp;&nbsp; <span class='c-black'>ث</span><span class='c-red'>َـا</span> &nbsp;&nbsp; <span class='c-black'>ظ</span><span class='c-red'>ُـو</span>",
+      "info": "Mixed Review",
+      "theme": "green",
+      "t": "golden"
+    },
+    {
+      "w": "<span class='c-black'>ت</span><span class='c-red'>َـا</span> &nbsp;&nbsp; <span class='c-black'>إ</span><span class='c-red'>ِى</span> &nbsp;&nbsp; <span class='c-black'>ض</span><span class='c-red'>ُـو</span>",
+      "info": "Mixed Review",
+      "theme": "green",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='c-black'>ك</span><span class='c-red'>ُـو</span> &nbsp;&nbsp; <span class='c-black'>ر</span><span class='c-red'>َا</span> &nbsp;&nbsp; <span class='c-black'>د</span><span class='c-red'>ِيـ</span>",
+      "info": "Mixed Review",
+      "theme": "green",
+      "t": "speed"
+    },
+    {
+      "w": "<span class='c-black'>س</span><span class='c-red'>َـا</span> &nbsp;&nbsp; <span class='c-black'>خ</span><span class='c-red'>ِى</span> &nbsp;&nbsp; <span class='c-black'>ع</span><span class='c-red'>ُـو</span>",
+      "info": "Mixed Review",
+      "theme": "green",
+      "t": "normal"
+    }
+  ]
+}

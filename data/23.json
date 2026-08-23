@@ -1,0 +1,98 @@
+{
+  "page": 23,
+  "file": "23.html",
+  "type": "standard_lesson",
+  "config": {
+    "title": "Nour Al-Bayan",
+    "subtitle": "Page 23 • Reading Sentences (جمل القراءة)",
+    "footer": "Nour Al-Bayan Learning System • Page 23 (Reading Sentences (جمل القراءة))",
+    "game3": "memory"
+  },
+  "rules": [],
+  "dataset": [
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>عُمَرُ</span></span>",
+      "info": "Reading Sentences",
+      "theme": "pink",
+      "t": "golden"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>خَرَجَ</span> <span class='c-blue'>عُمَرُ</span> <span class='c-black'>وَدَخَلَ</span></span>",
+      "info": "Reading Sentences",
+      "theme": "green",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>وَبَسَطَ</span> <span class='c-blue'>فُرُشَهُ</span> <span class='c-black'>فَقَعَدَ</span></span>",
+      "info": "Reading Sentences",
+      "theme": "green",
+      "t": "speed"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>شَرِبَ</span> <span class='c-black'>فَذَهَبَ</span> <span class='c-blue'>ظَمَؤُهُ</span></span>",
+      "info": "Reading Sentences",
+      "theme": "green",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>نَصَبَ</span> <span class='c-blue'>سُرُرَهُ</span> <span class='c-black'>بِغُرَفِهِ</span></span>",
+      "info": "Reading Sentences",
+      "theme": "green",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>مَرِضَ</span> <span class='c-black'>فَضَعُفَ</span> <span class='c-blue'>بَدَنُهُ</span></span>",
+      "info": "Reading Sentences",
+      "theme": "green",
+      "t": "danger"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>رَكِبَ</span> <span class='c-black'>جَمَلَهُ</span> <span class='c-blue'>لِيَصِلَ</span> <span class='c-black'>رَحِمَهُ</span></span>",
+      "info": "Reading Sentences",
+      "theme": "green",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>كَرَمُ</span></span>",
+      "info": "Reading Sentences",
+      "theme": "green",
+      "t": "golden"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>كَتَبَ</span> <span class='c-blue'>وَرَقَهُ</span> <span class='c-black'>بِقَلَمِهِ</span></span>",
+      "info": "Reading Sentences",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>وَقَرَأَ</span> <span class='c-blue'>كُتُبَهُ</span> <span class='c-black'>فَعَلِمَ</span></span>",
+      "info": "Reading Sentences",
+      "theme": "pink",
+      "t": "speed"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>وَسَلَكَ</span> <span class='c-black'>طُرُقَ</span> <span class='c-blue'>سَلَفِهِ</span> <span class='c-black'>فَهُدِيَ</span></span>",
+      "info": "Reading Sentences",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>وَنَجَحَ</span> <span class='c-blue'>وَلَدُهُ</span> <span class='c-black'>فَفَرِحَ</span></span>",
+      "info": "Reading Sentences",
+      "theme": "pink",
+      "t": "normal"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-black'>ظُلِمَ</span> <span class='c-blue'>فَصَبَرَ</span> <span class='c-red'>فَنُصِرَ</span></span>",
+      "info": "Reading Sentences",
+      "theme": "pink",
+      "t": "danger"
+    },
+    {
+      "w": "<span class='quran-special-font' dir='rtl'><span class='c-red'>كَمُلَ</span> <span class='c-blue'>أَدَبُهُ</span> <span class='c-black'>فَحَسُنَ</span> <span class='c-blue'>خُلُقُهُ</span></span>",
+      "info": "Reading Sentences",
+      "theme": "pink",
+      "t": "golden"
+    }
+  ]
+}

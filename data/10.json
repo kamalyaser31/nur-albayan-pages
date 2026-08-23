@@ -1,0 +1,302 @@
+{
+  "page": 10,
+  "file": "10.html",
+  "type": "standard_lesson",
+  "config": {
+    "title": "Nour Al-Bayan",
+    "subtitle": "Page 10 • Segmented Letters (الحروف المجزأة)",
+    "footer": "Nour Al-Bayan Learning System • Page 10 (Segmented Letters (الحروف المجزأة))",
+    "game3": "memory"
+  },
+  "rules": [],
+  "dataset": [
+    {
+      "w": [
+        "صَعَـ",
+        "ـدَ"
+      ],
+      "t": "normal",
+      "multiBox": true,
+      "theme": "pink"
+    },
+    {
+      "w": [
+        "وَلَـ",
+        "ـهَ"
+      ],
+      "t": "speed",
+      "multiBox": true,
+      "theme": "pink"
+    },
+    {
+      "w": [
+        "فَطَـ",
+        "ـمَ"
+      ],
+      "t": "normal",
+      "multiBox": true,
+      "theme": "pink"
+    },
+    {
+      "w": [
+        "شَغَـ",
+        "ـفَ"
+      ],
+      "t": "normal",
+      "multiBox": true,
+      "theme": "pink"
+    },
+    {
+      "w": [
+        "مَضَـ",
+        "ـغَ"
+      ],
+      "t": "golden",
+      "multiBox": true,
+      "theme": "green"
+    },
+    {
+      "w": [
+        "نَفَـ",
+        "ـخَ"
+      ],
+      "t": "normal",
+      "multiBox": true,
+      "theme": "green"
+    },
+    {
+      "w": [
+        "شَفَـ",
+        "ـعَ"
+      ],
+      "t": "danger",
+      "multiBox": true,
+      "theme": "green"
+    },
+    {
+      "w": [
+        "شَرَ",
+        "حَ"
+      ],
+      "t": "normal",
+      "multiBox": true,
+      "theme": "green"
+    },
+    {
+      "w": [
+        "قَذَ",
+        "فَ"
+      ],
+      "t": "normal",
+      "multiBox": true,
+      "theme": "blue"
+    },
+    {
+      "w": [
+        "سَقَـ",
+        "ـطَ"
+      ],
+      "t": "speed",
+      "multiBox": true,
+      "theme": "blue"
+    },
+    {
+      "w": [
+        "خَلَـ",
+        "ـقَ"
+      ],
+      "t": "normal",
+      "multiBox": true,
+      "theme": "blue"
+    },
+    {
+      "w": [
+        "كَسَـ",
+        "ـرَ"
+      ],
+      "t": "normal",
+      "multiBox": true,
+      "theme": "blue"
+    },
+    {
+      "w": [
+        "شَكَـ",
+        "ـرَ"
+      ],
+      "t": "golden",
+      "multiBox": true,
+      "theme": "yellow"
+    },
+    {
+      "w": [
+        "مَلَـ",
+        "ـكَ"
+      ],
+      "t": "normal",
+      "multiBox": true,
+      "theme": "yellow"
+    },
+    {
+      "w": [
+        "لَطَـ",
+        "ـمَ"
+      ],
+      "t": "danger",
+      "multiBox": true,
+      "theme": "yellow"
+    },
+    {
+      "w": [
+        "حَلَـ",
+        "ـفَ"
+      ],
+      "t": "normal",
+      "multiBox": true,
+      "theme": "yellow"
+    },
+    {
+      "w": [
+        "قَفَـ",
+        "ـلَ"
+      ],
+      "t": "speed",
+      "multiBox": true,
+      "theme": "pink"
+    },
+    {
+      "w": [
+        "مَلَـ",
+        "ـأَ"
+      ],
+      "t": "normal",
+      "multiBox": true,
+      "theme": "pink"
+    },
+    {
+      "w": [
+        "هَمَـ",
+        "ـسَ"
+      ],
+      "t": "normal",
+      "multiBox": true,
+      "theme": "pink"
+    },
+    {
+      "w": [
+        "هَجَـ",
+        "ـمَ"
+      ],
+      "t": "golden",
+      "multiBox": true,
+      "theme": "pink"
+    },
+    {
+      "w": [
+        "نَشَـ",
+        "ـأَ"
+      ],
+      "t": "danger",
+      "multiBox": true,
+      "theme": "green"
+    },
+    {
+      "w": [
+        "مَنَـ",
+        "ـحَ"
+      ],
+      "t": "normal",
+      "multiBox": true,
+      "theme": "green"
+    },
+    {
+      "w": [
+        "سَكَـ",
+        "ـنَ"
+      ],
+      "t": "speed",
+      "multiBox": true,
+      "theme": "green"
+    },
+    {
+      "w": [
+        "هَتَـ",
+        "ـفَ"
+      ],
+      "t": "normal",
+      "multiBox": true,
+      "theme": "green"
+    },
+    {
+      "w": [
+        "نَهَـ",
+        "ـبَ"
+      ],
+      "t": "normal",
+      "multiBox": true,
+      "theme": "blue"
+    },
+    {
+      "w": [
+        "نَدَ",
+        "هَ"
+      ],
+      "t": "golden",
+      "multiBox": true,
+      "theme": "blue"
+    },
+    {
+      "w": [
+        "يَنَـ",
+        "ـعَ"
+      ],
+      "t": "normal",
+      "multiBox": true,
+      "theme": "blue"
+    },
+    {
+      "w": [
+        "دَيَـ",
+        "ـنَ"
+      ],
+      "t": "danger",
+      "multiBox": true,
+      "theme": "blue"
+    },
+    {
+      "w": [
+        "يَفَـ",
+        "ـعَ"
+      ],
+      "t": "speed",
+      "multiBox": true,
+      "theme": "yellow"
+    },
+    {
+      "w": [
+        "وَعَـ",
+        "ـزَ"
+      ],
+      "t": "normal",
+      "multiBox": true,
+      "theme": "yellow"
+    },
+    {
+      "w": [
+        "صَنَـ",
+        "ـعَ"
+      ],
+      "t": "normal",
+      "multiBox": true,
+      "theme": "yellow"
+    },
+    {
+      "w": [
+        "صَمَـ",
+        "ـدَ"
+      ],
+      "t": "golden",
+      "multiBox": true,
+      "theme": "yellow"
+    }
+  ]
+}
