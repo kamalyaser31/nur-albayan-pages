@@ -6,8 +6,9 @@ const memoryGame = {
         ['⚽', '🏀', '🏈', '⚾', '🎾', '🏐', '🏓', '🎱'],
         ['🌞', '🌝', '🌛', '🌜', '🌙', '⭐', '🌟', '☄️']
     ],
-    currentSetIndex: 0, cards: [], hasFlippedCard: false, lockBoard: false, firstCard: null, secondCard: null, matchedPairs: 0, gameActive: true,
+    currentSetIndex: 0, cards: [], hasFlippedCard: false, lockBoard: false, firstCard: null, secondCard: null, matchedPairs: 0, gameActive: true, flipTimer: null,
     init() {
+        if (this.flipTimer) { clearTimeout(this.flipTimer); this.flipTimer = null; }
         this.cards = [...this.iconSets[this.currentSetIndex], ...this.iconSets[this.currentSetIndex]];
         this.shuffleCards(); this.renderBoard();
         this.matchedPairs = 0; this.hasFlippedCard = false; this.lockBoard = false; this.firstCard = null; this.secondCard = null; this.gameActive = true;
@@ -67,7 +68,8 @@ const memoryGame = {
     },
     unflipCards() {
         this.lockBoard = true;
-        setTimeout(() => {
+        if (this.flipTimer) clearTimeout(this.flipTimer);
+        this.flipTimer = setTimeout(() => {
             if (this.firstCard) {
                 this.firstCard.classList.remove('is-flipped');
                 this.firstCard.setAttribute('aria-label', 'Memory card, hidden');
@@ -79,21 +81,29 @@ const memoryGame = {
                 this.secondCard.setAttribute('aria-pressed', 'false');
             }
             this.resetBoard();
+            this.flipTimer = null;
         }, 1000);
     },
     resetBoard() { [this.hasFlippedCard, this.lockBoard] = [false, false]; [this.firstCard, this.secondCard] = [null, null]; },
-    reset() { this.currentSetIndex = (this.currentSetIndex + 1) % this.iconSets.length; this.init(); }
+    reset() {
+        if (this.flipTimer) { clearTimeout(this.flipTimer); this.flipTimer = null; }
+        this.currentSetIndex = (this.currentSetIndex + 1) % this.iconSets.length;
+        this.init();
+    }
 };
 
 const riddlesGame = {
     idx: 0,
+    isAnswering: false,
+    timer: null,
     data: [
         { questionText: "What speaks all languages in the world but has no tongue?", options: ["A telephone", "An echo", "A book", "A flag"], answerIndex: 1 },
         { questionText: "What gets larger the more you take away from it, and smaller if you add to it?", options: ["A hole", "Time", "Age", "Money"], answerIndex: 0 },
         { questionText: "What has many teeth but cannot bite?", options: ["A crocodile", "A saw", "A comb", "A key"], answerIndex: 2 }
     ],
-    init() { this.idx = 0; },
+    init() { this.idx = 0; this.isAnswering = false; },
     reset() {
+        if (this.timer) { clearTimeout(this.timer); this.timer = null; }
         this.init();
         if (typeof app !== 'undefined') app.setGameResumeState('riddles-resume-btn', false, '', "Skip to Wordwall ⏭️");
         this.loadNext();
@@ -121,19 +131,31 @@ const riddlesGame = {
         }
     },
     check(selectedIdx, btn) {
+        if (this.isAnswering) return;
+        this.isAnswering = true;
         const correctIdx = this.data[this.idx].answerIndex;
         const fb = document.getElementById('riddle-feedback');
         if (selectedIdx === correctIdx) {
-            btn.classList.replace('bg-white/20', 'bg-emerald-500');
-            if (fb) fb.innerText = "Genius correct answer! Excellent 👏";
+            btn.classList.remove('bg-white/20');
+            btn.classList.add('bg-emerald-500');
+            if (fb) { fb.innerText = "Genius correct answer! Excellent 👏"; fb.className = "text-lg sm:text-xl font-bold h-8 text-emerald-400 mt-3"; }
             if (typeof confetti === 'function') confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 } });
-            setTimeout(() => { this.idx++; this.loadNext(); }, 1500);
+            this.timer = setTimeout(() => {
+                this.idx++;
+                this.isAnswering = false;
+                this.timer = null;
+                this.loadNext();
+            }, 1500);
         } else {
-            btn.classList.replace('bg-white/20', 'bg-rose-500');
-            if (fb) { fb.innerText = "Oops! Think again!"; fb.classList.replace('text-emerald-400', 'text-rose-400'); }
-            setTimeout(() => {
-                btn.classList.replace('bg-rose-500', 'bg-white/20');
-                if (fb) { fb.innerText = ""; fb.classList.replace('text-rose-400', 'text-emerald-400'); }
+            btn.classList.remove('bg-white/20');
+            btn.classList.add('bg-rose-500');
+            if (fb) { fb.innerText = "Oops! Think again!"; fb.className = "text-lg sm:text-xl font-bold h-8 text-rose-400 mt-3"; }
+            this.timer = setTimeout(() => {
+                btn.classList.remove('bg-rose-500');
+                btn.classList.add('bg-white/20');
+                if (fb) { fb.innerText = ""; fb.className = "text-lg sm:text-xl font-bold h-8 text-emerald-400 mt-3"; }
+                this.isAnswering = false;
+                this.timer = null;
             }, 1000);
         }
     }

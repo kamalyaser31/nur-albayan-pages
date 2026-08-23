@@ -1,15 +1,21 @@
 const app = {
-    idx: 0, score: 0, stats: { ok: 0, err: 0 }, clock: 10.0, timer: null,
+    idx: 0, score: 0, stats: { ok: 0, err: 0 }, clock: 10.0, timer: null, feedbackTimer: null,
     hasPlayedGame1: false, hasPlayedGame2: false, hasPlayedGame3: false, currentActiveIndex: null, pendingGame: 0, chartInstance: null,
     mistakeIndices: [], isReviewMode: false, reviewQueue: [], reviewIdx: 0, keyboardBound: false,
     enableGameBreaks: false,
 
     init() {
         buildAppUI();
-        try {
-            const saved = localStorage.getItem('nour_enable_game_breaks');
-            if (saved !== null) this.enableGameBreaks = (saved === '1');
-        } catch(e) {}
+        if (typeof settingsManager !== 'undefined') {
+            const s = settingsManager.get();
+            this.enableGameBreaks = !!s.gameBreaksEnabled;
+            settingsManager.apply(s);
+        } else {
+            try {
+                const saved = localStorage.getItem('nb_teacher_settings') || localStorage.getItem('nour_enable_game_breaks');
+                if (saved !== null) this.enableGameBreaks = (saved === '1' || JSON.parse(saved).gameBreaksEnabled);
+            } catch(e) {}
+        }
         const toggleEl = document.getElementById('toggle-game-breaks');
         if (toggleEl) toggleEl.checked = this.enableGameBreaks;
 
@@ -25,6 +31,9 @@ const app = {
         if (!this.keyboardBound) {
             this.keyboardBound = true;
             document.addEventListener('keydown', (e) => {
+                // حظر التفاعل بالمفاتيح السريعة إذا كان التركيز داخل حقل إدخال
+                if (e.target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
+
                 const overlay = document.getElementById('word-overlay');
                 const isOverlayOpen = overlay && !overlay.classList.contains('hidden');
                 const learningStage = document.getElementById('learning-stage');
@@ -56,6 +65,9 @@ const app = {
     },
 
     hideAll() {
+        if (this.timer) { clearInterval(this.timer); this.timer = null; }
+        if (this.feedbackTimer) { clearTimeout(this.feedbackTimer); this.feedbackTimer = null; }
+        this.closeOverlay();
         ['main-menu-stage', 'rule-stage', 'game-transition-stage', 'learning-stage', 'xo-stage', 'c4-stage', 'memory-stage', 'riddles-stage', 'wordwall-stage', 'summary-screen'].forEach(id => {
             const el = document.getElementById(id); if (el) el.classList.add('hidden');
         });
@@ -89,7 +101,9 @@ const app = {
     },
 
     startChallenge() {
-        this.idx = 0; this.score = 0; this.stats = { ok: 0, err: 0 }; this.hasPlayedGame1 = false; this.hasPlayedGame2 = false; this.hasPlayedGame3 = false;
+        this.idx = 0; this.score = 0; this.stats = { ok: 0, err: 0 };
+        this.hasPlayedGame1 = false; this.hasPlayedGame2 = false; this.hasPlayedGame3 = false;
+        this.mistakeIndices = []; this.isReviewMode = false; this.reviewQueue = []; this.reviewIdx = 0;
         const scoreEl = document.getElementById('score-val'); if (scoreEl) scoreEl.innerText = '0';
         this.jumpTo('word_0');
     },
@@ -98,38 +112,52 @@ const app = {
         const selector = document.getElementById('example-navigator');
         if (!selector || typeof dataset === 'undefined') return;
         selector.innerHTML = '';
-        const createOpt = (val, text) => { const opt = document.createElement('option'); opt.value = val; opt.text = text; selector.appendChild(opt); };
-        createOpt('menu', '🏠 Main Menu');
-        if (typeof rulesData !== 'undefined' && rulesData.length > 0) createOpt('rules', '📖 Lesson Rules');
-        const optGroupWords = document.createElement('optgroup'); optGroupWords.label = '📚 Reading Words';
-        dataset.forEach((item, index) => {
-            const plainWord = this.getPlainWord(item) || `Word ${index + 1}`;
-            const opt = document.createElement('option'); opt.value = `word_${index}`; opt.text = `${index + 1}: ${plainWord}`; optGroupWords.appendChild(opt);
-        });
-        selector.appendChild(optGroupWords);
-        const optGroupGames = document.createElement('optgroup'); optGroupGames.label = '🎮 Break Games';
-        const g1 = document.createElement('option'); g1.value = 'game_xo'; g1.text = '❌ Tic-Tac-Toe'; optGroupGames.appendChild(g1);
-        const g2 = document.createElement('option'); g2.value = 'game_c4'; g2.text = '🔴 Connect 4'; optGroupGames.appendChild(g2);
-        if (document.getElementById('riddles-stage')) {
-            const g3 = document.createElement('option'); g3.value = 'game_riddles'; g3.text = '👑 Secret Riddles'; optGroupGames.appendChild(g3);
-        } else {
-            const g3 = document.createElement('option'); g3.value = 'game_memory'; g3.text = '🧠 Memory Match'; optGroupGames.appendChild(g3);
+
+        const mainGroup = document.createElement('optgroup');
+        mainGroup.label = "📌 Overview & Rules (نظرة عامة والقواعد)";
+        const menuOpt = document.createElement('option');
+        menuOpt.value = 'menu';
+        menuOpt.textContent = '🏠 Main Menu (القائمة الرئيسية)';
+        mainGroup.appendChild(menuOpt);
+
+        if (typeof rulesData !== 'undefined' && rulesData.length > 0) {
+            const ruleOpt = document.createElement('option');
+            ruleOpt.value = 'rules';
+            ruleOpt.textContent = '📖 Rules & Introduction (القواعد والشرح)';
+            mainGroup.appendChild(ruleOpt);
         }
-        selector.appendChild(optGroupGames);
-        const optGroupWW = document.createElement('optgroup'); optGroupWW.label = '🧩 Wordwall Activities';
-        const w1 = document.createElement('option'); w1.value = 'ww_box'; w1.text = '🎁 Open The Box'; optGroupWW.appendChild(w1);
-        const w1b = document.createElement('option'); w1b.value = 'ww_curtain'; w1b.text = '🎭 Curtain Reveal'; optGroupWW.appendChild(w1b);
-        const w1c = document.createElement('option'); w1c.value = 'ww_ladder'; w1c.text = '🪜 Mastery Ladder'; optGroupWW.appendChild(w1c);
-        const w2 = document.createElement('option'); w2.value = 'ww_wheel'; w2.text = '🎡 Spin The Wheel'; optGroupWW.appendChild(w2);
-        const w3 = document.createElement('option'); w3.value = 'ww_cards'; w3.text = '🃏 Random Cards'; optGroupWW.appendChild(w3);
-        selector.appendChild(optGroupWW);
-        const optGroupEnd = document.createElement('optgroup'); optGroupEnd.label = '🏆 Finish Line';
-        const e1 = document.createElement('option'); e1.value = 'summary'; e1.text = '📊 Final Summary'; optGroupEnd.appendChild(e1);
-        selector.appendChild(optGroupEnd);
+        selector.appendChild(mainGroup);
+
+        const cardGroup = document.createElement('optgroup');
+        cardGroup.label = "🔤 Word & Letter Cards (بطاقات الكلمات والحروف)";
+        dataset.forEach((item, index) => {
+            const opt = document.createElement('option');
+            opt.value = `word_${index}`;
+            const plain = this.getPlainWord(item);
+            opt.textContent = `Card ${index + 1}: ${plain}`;
+            cardGroup.appendChild(opt);
+        });
+        selector.appendChild(cardGroup);
+
+        const gamesGroup = document.createElement('optgroup');
+        gamesGroup.label = "🎮 Mini-Games & Challenges (الألعاب والتحديات)";
+        const g1 = document.createElement('option'); g1.value = 'game_xo'; g1.textContent = '🕹️ Tic-Tac-Toe (إكس-أو)'; gamesGroup.appendChild(g1);
+        const g2 = document.createElement('option'); g2.value = 'game_c4'; g2.textContent = '🕹️ Connect 4 (أربعة في خط)'; gamesGroup.appendChild(g2);
+        const g3 = document.createElement('option'); g3.value = 'game_memory'; g3.textContent = '🧠 Memory Match (الذاكرة)'; gamesGroup.appendChild(g3);
+        const g4 = document.createElement('option'); g4.value = 'game_riddles'; g4.textContent = '❓ Secret Riddles (الألغاز)'; gamesGroup.appendChild(g4);
+        selector.appendChild(gamesGroup);
+
+        const wwGroup = document.createElement('optgroup');
+        wwGroup.label = "🌟 Wordwall Zone (حائط الألعاب التفاعلية)";
+        const w1 = document.createElement('option'); w1.value = 'ww_box'; w1.textContent = '📦 Open The Box (افتح الصندوق)'; wwGroup.appendChild(w1);
+        const w2 = document.createElement('option'); w2.value = 'ww_curtain'; w2.textContent = '🎭 Curtain Reveal (كشف الستار)'; wwGroup.appendChild(w2);
+        const w3 = document.createElement('option'); w3.value = 'ww_ladder'; w3.textContent = '🪜 Mastery Ladder (سلم الإتقان)'; wwGroup.appendChild(w3);
+        const w4 = document.createElement('option'); w4.value = 'ww_wheel'; w4.textContent = '🎡 Spin The Wheel (عجلة الكلمات)'; wwGroup.appendChild(w4);
+        const w5 = document.createElement('option'); w5.value = 'ww_cards'; w5.textContent = '🎴 Random Cards (البطاقات العشوائية)'; wwGroup.appendChild(w5);
+        selector.appendChild(wwGroup);
     },
 
     shuffle(arr) {
-        if (!Array.isArray(arr)) return arr;
         for (let i = arr.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [arr[i], arr[j]] = [arr[j], arr[i]];
@@ -137,19 +165,29 @@ const app = {
         return arr;
     },
 
+    // تعقيم وتطهير نصوص HTML ضد هجمات XSS مع حماية كاملة للمخططات
     setSafeHTML(el, htmlStr) {
         if (!el) return;
-        const doc = new DOMParser().parseFromString(htmlStr || '', 'text/html');
-        doc.querySelectorAll('script, iframe, object, embed, style, link').forEach(e => e.remove());
-        const elements = doc.body.getElementsByTagName('*');
+        const template = document.createElement('template');
+        template.innerHTML = htmlStr || '';
+        const content = template.content;
+
+        content.querySelectorAll('script, iframe, object, embed, style, link, svg, math, base, meta, form').forEach(e => e.remove());
+
+        const elements = content.querySelectorAll('*');
         for (let i = 0; i < elements.length; i++) {
             const child = elements[i];
             for (let j = child.attributes.length - 1; j >= 0; j--) {
                 const attr = child.attributes[j];
-                if (attr.name.startsWith('on') || attr.name === 'javascript:') child.removeAttribute(attr.name);
+                const name = attr.name.toLowerCase();
+                const val = attr.value.replace(/\s+/g, '').toLowerCase();
+
+                if (name.startsWith('on') || val.includes('javascript:') || val.includes('data:text/html') || val.includes('vbscript:')) {
+                    child.removeAttribute(attr.name);
+                }
             }
         }
-        el.innerHTML = doc.body.innerHTML;
+        el.replaceChildren(content);
     },
 
     renderWordInto(container, item) {
@@ -246,7 +284,8 @@ const app = {
         }
         if (banner) { banner.classList.add('hidden'); banner.classList.remove('pulse-danger'); }
         if (timerBox) timerBox.classList.add('hidden');
-        clearInterval(this.timer);
+        if (this.timer) { clearInterval(this.timer); this.timer = null; }
+
         if (item.t === 'golden') {
             Sound.playChime();
             if (banner) {
@@ -273,12 +312,18 @@ const app = {
     },
 
     startClock() {
-        this.clock = 10.0;
+        let dur = 10.0;
+        if (typeof settingsManager !== 'undefined') {
+            const s = settingsManager.get();
+            if (s.timerDuration) dur = parseFloat(s.timerDuration);
+        }
+        this.clock = dur;
         const el = document.getElementById('timer-val');
         if (el) el.innerText = this.clock.toFixed(1);
+        if (this.timer) clearInterval(this.timer);
         this.timer = setInterval(() => {
-            this.clock -= 0.1;
-            if (this.clock <= 0) { this.clock = 0; clearInterval(this.timer); }
+            this.clock = Math.max(0, this.clock - 0.1);
+            if (this.clock <= 0) { clearInterval(this.timer); this.timer = null; }
             if (el) el.innerText = this.clock.toFixed(1);
         }, 100);
     },
@@ -316,11 +361,11 @@ const app = {
 
             const third1 = Math.floor(dataset.length / 3) - 1;
             const third2 = Math.floor((dataset.length * 2) / 3) - 1;
-            if (this.enableGameBreaks && this.idx === third1 && !this.hasPlayedGame1) {
+            if (this.enableGameBreaks && this.idx === third1 && !this.hasPlayedGame1 && dataset.length >= 3) {
                 setTimeout(() => this.jumpTo('transition_1'), 600);
-            } else if (this.enableGameBreaks && this.idx === third2 && !this.hasPlayedGame2) {
+            } else if (this.enableGameBreaks && this.idx === third2 && !this.hasPlayedGame2 && dataset.length >= 3) {
                 setTimeout(() => this.jumpTo('transition_2'), 600);
-            } else if (this.enableGameBreaks && this.idx === dataset.length - 1 && !this.hasPlayedGame3) {
+            } else if (this.enableGameBreaks && this.idx === dataset.length - 1 && !this.hasPlayedGame3 && dataset.length >= 3) {
                 setTimeout(() => this.jumpTo('transition_3'), 600);
             } else {
                 if (this.idx < dataset.length - 1) { this.idx++; setTimeout(() => this.render(), 600); }
@@ -352,16 +397,14 @@ const app = {
             this.finishToSummary();
             return;
         }
-        this.idx = this.reviewQueue[this.reviewIdx];
-        this.hideAll();
-        const stage = document.getElementById('learning-stage');
-        if (stage) stage.classList.remove('hidden');
+        const origIndex = this.reviewQueue[this.reviewIdx];
+        const item = dataset[origIndex];
         const area = document.getElementById('word-display-area');
-        const banner = document.getElementById('status-banner');
-        if (banner) banner.classList.add('hidden');
-        this.updateProgress(this.reviewIdx + 1, this.reviewQueue.length, 'Review');
-        if (area && dataset[this.idx]) {
-            const item = dataset[this.idx];
+        this.hideAll();
+        const stage = document.getElementById('learning-stage'); if (stage) stage.classList.remove('hidden');
+        this.updateProgress(this.reviewIdx + 1, this.reviewQueue.length, 'Mistake Review');
+
+        if (area) {
             this.renderWordInto(area, item);
             const plain = this.getPlainWord(item);
             area.setAttribute('aria-label', `Review Card ${this.reviewIdx + 1} of ${this.reviewQueue.length}: ${plain}`);
@@ -372,10 +415,18 @@ const app = {
 
     toggleGameBreaks(enabled) {
         this.enableGameBreaks = enabled;
-        try { localStorage.setItem('nour_enable_game_breaks', enabled ? '1' : '0'); } catch(e) {}
+        if (typeof settingsManager !== 'undefined') {
+            settingsManager.save({ gameBreaksEnabled: enabled });
+        }
     },
 
-    prev() { if (this.idx > 0) { this.idx--; this.render(); } },
+    prev() {
+        if (this.isReviewMode) {
+            if (this.reviewIdx > 0) { this.reviewIdx--; this.renderReview(); }
+        } else {
+            if (this.idx > 0) { this.idx--; this.render(); }
+        }
+    },
 
     triggerFeedback(txt, color, playSound = false) {
         if (playSound) {
@@ -384,7 +435,12 @@ const app = {
         }
         const badge = document.getElementById('badge-ui'); if (!badge) return;
         badge.innerText = txt; badge.style.color = color; badge.style.borderColor = color; badge.classList.add('active'); badge.style.opacity = '1';
-        setTimeout(() => { badge.classList.remove('active'); badge.style.opacity = '0'; }, 1200);
+        if (this.feedbackTimer) clearTimeout(this.feedbackTimer);
+        this.feedbackTimer = setTimeout(() => {
+            badge.classList.remove('active');
+            badge.style.opacity = '0';
+            this.feedbackTimer = null;
+        }, 1200);
     },
 
     setGameResumeState(btnId, isFinished, targetText = 'Continue Reading 📖', defaultText = 'Skip & Read ⏭️') {
@@ -413,24 +469,15 @@ const app = {
         let gameName = "";
         if (gameNum === 1) gameName = "Tic-Tac-Toe";
         if (gameNum === 2) gameName = "Connect 4";
-        if (gameNum === 3) gameName = document.getElementById('riddles-stage') ? "Secret Riddles" : "Memory Match";
-        const nameEl = document.getElementById('transition-game-name'); if (nameEl) nameEl.innerText = gameName;
-        const skipBtn = document.getElementById('btn-skip-game');
-        if (skipBtn) skipBtn.innerHTML = gameNum === 3 ? "⏭️ Skip to Wordwall" : "⏭️ Skip & Read";
-        const playBtn = document.getElementById('btn-play-game');
-        if (playBtn) {
-            playBtn.onclick = () => {
-                if (this.pendingGame === 1) this.jumpTo('game_xo');
-                else if (this.pendingGame === 2) this.jumpTo('game_c4');
-                else if (this.pendingGame === 3) {
-                    if (document.getElementById('riddles-stage')) this.jumpTo('game_riddles');
-                    else this.jumpTo('game_memory');
-                }
-            };
-        }
+        if (gameNum === 3) gameName = "Wordwall Arena";
+        const titleEl = document.getElementById('game-title'); if (titleEl) titleEl.innerText = gameName;
     },
 
-    skipGameAndResume() { this.resume(this.pendingGame); },
+    enterGame() {
+        if (this.pendingGame === 1) this.jumpTo('game_xo');
+        else if (this.pendingGame === 2) this.jumpTo('game_c4');
+        else if (this.pendingGame === 3) this.playWordwall();
+    },
 
     resume(gameNum) {
         if (gameNum === 1) this.hasPlayedGame1 = true;
@@ -451,8 +498,13 @@ const app = {
         if (giantSpan) {
             this.renderWordInto(giantSpan, item);
         }
-        const overlay = document.getElementById('word-overlay'); if (overlay) overlay.classList.remove('hidden');
-        if (triggerType === 'box' && typeof wordwallRoom !== 'undefined') {
+        const overlay = document.getElementById('word-overlay');
+        if (overlay) {
+            overlay.classList.remove('hidden');
+            const closeBtn = overlay.querySelector('button');
+            if (closeBtn) closeBtn.focus();
+        }
+        if ((triggerType === 'box' || triggerType === 'curtain') && typeof wordwallRoom !== 'undefined') {
             const boxEl = document.getElementById(`box-${index}`); if (boxEl) boxEl.classList.add('opened');
             wordwallRoom.openedBoxes.add(index);
         }
@@ -462,7 +514,13 @@ const app = {
 
     gradeResult(isCorrect) {
         if (isCorrect) { this.score += 5; this.stats.ok++; this.triggerFeedback('Magnificent! ❤️⭐', '#10b981', true); }
-        else { this.stats.err++; this.triggerFeedback('Keep Trying! ⭐', '#f43f5e', false); }
+        else {
+            this.stats.err++;
+            if (this.currentActiveIndex !== null && !this.mistakeIndices.includes(this.currentActiveIndex)) {
+                this.mistakeIndices.push(this.currentActiveIndex);
+            }
+            this.triggerFeedback('Keep Trying! ⭐', '#f43f5e', false);
+        }
         const scoreEl = document.getElementById('score-val'); if (scoreEl) scoreEl.innerText = this.score;
         this.closeOverlay();
     },
@@ -491,3 +549,12 @@ const app = {
         });
     }
 };
+
+// تشغيل التطبيق تلقائياً عند جاهزية DOM
+if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof app !== 'undefined') {
+            app.init();
+        }
+    });
+}

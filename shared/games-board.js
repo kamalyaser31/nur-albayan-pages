@@ -7,7 +7,10 @@ const xoGame = {
             cell.type = 'button';
             cell.className = 'xo-cell-new shadow-[0_4px_0_#047857] active:shadow-none active:translate-y-1';
             cell.setAttribute('aria-label', `Cell ${i + 1}, empty`);
-            cell.onclick = () => this.play(i, cell);
+            cell.onclick = () => {
+                if (typeof gameAI !== 'undefined' && gameAI.mode === 'computer' && this.currentPlayer === 'O') return;
+                this.play(i, cell);
+            };
             container.appendChild(cell);
         }
     },
@@ -33,7 +36,15 @@ const xoGame = {
             return;
         }
         this.currentPlayer = this.currentPlayer === 'X' ? 'O' : 'X';
-        const status = document.getElementById('xo-status'); if (status) { status.innerText = `Player ${this.currentPlayer} Turn`; status.classList.remove('text-yellow-300'); }
+        const isComp = typeof gameAI !== 'undefined' && gameAI.mode === 'computer';
+        const status = document.getElementById('xo-status');
+        if (status) {
+            status.innerText = (isComp && this.currentPlayer === 'O') ? 'الكمبيوتر يفكر... 🤖' : `Player ${this.currentPlayer} Turn`;
+            status.classList.remove('text-yellow-300');
+        }
+        if (isComp && this.currentPlayer === 'O' && this.gameActive) {
+            setTimeout(() => { if (typeof gameAI !== 'undefined') gameAI.makeXOMove(); }, 450);
+        }
     },
     checkWin() {
         const winCond = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
@@ -44,6 +55,7 @@ const xoGame = {
         this.board = ['', '', '', '', '', '', '', '', '']; this.currentPlayer = 'X'; this.gameActive = true;
         const status = document.getElementById('xo-status'); if (status) { status.innerText = 'Player X Turn!'; status.classList.remove('text-yellow-300'); }
         if (typeof app !== 'undefined') app.setGameResumeState('xo-resume-btn', false, '', "Skip & Read ⏭️");
+        if (typeof gameAI !== 'undefined') gameAI.updateUI();
         this.init();
     }
 };
@@ -60,10 +72,14 @@ const c4Game = {
                 cell.className = 'c4-cell-new';
                 cell.id = `c4-${r}-${c}`;
                 cell.setAttribute('aria-label', `Row ${r + 1}, Column ${c + 1}`);
-                cell.onclick = () => this.drop(c);
+                cell.onclick = () => {
+                    if (typeof gameAI !== 'undefined' && gameAI.mode === 'computer' && this.currentPlayer === 'yellow') return;
+                    this.drop(c);
+                };
                 container.appendChild(cell);
             }
         }
+        if (typeof gameAI !== 'undefined') gameAI.updateUI();
     },
     drop(col) {
         if (!this.gameActive) return;
@@ -80,12 +96,12 @@ const c4Game = {
                 }
                 let winCells = this.checkWin(row, col);
                 if (winCells) {
-                    let colorName = this.currentPlayer === 'red' ? 'Red 🔴' : 'Yellow 🟡';
-                    const status = document.getElementById('c4-status'); if (status) { status.textContent = `${colorName} Wins! 🎉`; status.className = 'text-yellow-300'; }
+                    let winnerName = this.currentPlayer === 'red' ? 'Red 🔴' : (typeof gameAI !== 'undefined' && gameAI.mode === 'computer' ? 'الكمبيوتر 🤖' : 'Yellow 🟡');
+                    const status = document.getElementById('c4-status'); if (status) { status.textContent = `${winnerName} Wins! 🎉`; status.className = 'text-yellow-300'; }
                     this.gameActive = false;
                     if (typeof app !== 'undefined') app.setGameResumeState('c4-resume-btn', true, "Continue Reading 📖");
                     setTimeout(() => {
-                        fireCelebration();
+                        if (this.currentPlayer === 'red') fireCelebration();
                         winCells.forEach(([wr, wc]) => {
                             const cEl = document.getElementById(`c4-${wr}-${wc}`); if (cEl && cEl.firstElementChild) cEl.firstElementChild.classList.add('win-anim');
                         });
@@ -100,8 +116,14 @@ const c4Game = {
                     return;
                 }
                 this.currentPlayer = this.currentPlayer === 'red' ? 'yellow' : 'red';
-                let nextColorName = this.currentPlayer === 'red' ? 'Red 🔴' : 'Yellow 🟡';
-                const status = document.getElementById('c4-status'); if (status) status.innerText = `${nextColorName}'s Turn`;
+                const isComp = typeof gameAI !== 'undefined' && gameAI.mode === 'computer';
+                const status = document.getElementById('c4-status');
+                if (status) {
+                    status.innerText = (isComp && this.currentPlayer === 'yellow') ? 'الكمبيوتر يفكر... 🤖' : (this.currentPlayer === 'red' ? "Red's Turn 🔴" : "Yellow's Turn 🟡");
+                }
+                if (isComp && this.currentPlayer === 'yellow' && this.gameActive) {
+                    setTimeout(() => { if (typeof gameAI !== 'undefined') gameAI.makeC4Move(); }, 450);
+                }
                 return;
             }
         }

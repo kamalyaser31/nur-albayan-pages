@@ -1,10 +1,19 @@
+function escapeHTML(str) {
+    return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 function buildAppUI() {
     if (document.getElementById('learning-stage')) return; // Already exists
 
     const cfg = window.PAGE_CONFIG || {};
-    const title = cfg.title || document.title || 'Nour Al-Bayan';
-    const subtitle = cfg.subtitle || 'Harakat & Reading Practice';
-    const footerText = cfg.footer || 'Nour Al-Bayan Learning System';
+    const title = escapeHTML(cfg.title || document.title || 'Nour Al-Bayan');
+    const subtitle = escapeHTML(cfg.subtitle || 'Harakat & Reading Practice');
+    const footerText = escapeHTML(cfg.footer || 'Nour Al-Bayan Learning System');
     const hasRules = (typeof rulesData !== 'undefined' && rulesData.length > 0) || (cfg.rules && cfg.rules.length > 0);
     const game3Type = cfg.game3 || (typeof riddlesGame !== 'undefined' ? 'riddles' : (hasRules ? 'riddles' : 'memory'));
 
@@ -78,7 +87,7 @@ function buildAppUI() {
                     <span class="text-slate-400 text-[10px] sm:text-xs font-black uppercase tracking-wider">Score</span>
                     <span id="score-val" class="text-base sm:text-lg font-black text-emerald-600 leading-none" aria-live="polite" aria-label="Current score">0</span>
                 </div>
-                <div id="challenge-timer" class="hidden bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full font-mono font-bold text-xs shadow-inner" role="timer" aria-live="polite">
+                <div id="challenge-timer" class="hidden bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full font-mono font-bold text-xs shadow-inner" role="timer">
                     ⏱ <span id="timer-val">10.0</span>s
                 </div>
             </div>
@@ -92,10 +101,13 @@ function buildAppUI() {
                 <button onclick="app.triggerFeedback('Excellent! 🏆', '#10b981', true)" class="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-md font-black text-[10px] sm:text-xs hover:bg-emerald-200 transition-colors" aria-label="Excellent praise">Excellent</button>
             </div>
 
-            <!-- Dropdown Navigator -->
-            <div id="selector-wrapper" class="flex items-center bg-slate-50 px-2 sm:px-3 py-1 rounded-full border border-slate-200 max-w-[130px] sm:max-w-[200px]">
-                <select id="example-navigator" onchange="app.jumpTo(this.value)" class="bg-transparent text-emerald-700 font-bold text-xs sm:text-sm outline-none cursor-pointer w-full text-center truncate" aria-label="Lesson section navigator">
-                </select>
+            <!-- Dropdown Navigator & Settings Button -->
+            <div class="flex items-center gap-1.5">
+                <div id="selector-wrapper" class="flex items-center bg-slate-50 px-2 sm:px-3 py-1 rounded-full border border-slate-200 max-w-[130px] sm:max-w-[200px]">
+                    <select id="example-navigator" onchange="app.jumpTo(this.value)" class="bg-transparent text-emerald-700 font-bold text-xs sm:text-sm outline-none cursor-pointer w-full text-center truncate" aria-label="Lesson section navigator">
+                    </select>
+                </div>
+                <button onclick="if(typeof settingsManager!=='undefined')settingsManager.open()" class="p-1.5 sm:p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition-colors shadow-sm text-sm sm:text-base leading-none" aria-label="Open Teacher Settings" title="Teacher Settings">⚙️</button>
             </div>
         </div>
     </header>
@@ -189,8 +201,15 @@ function buildAppUI() {
 
         <!-- STAGE 2: MIDPOINT GAME 1 (TIC-TAC-TOE) -->
         <section id="xo-stage" class="hidden w-full h-full flex flex-col justify-center items-center text-center p-2 sm:p-4 rounded-[2.5rem] text-white bg-gradient-to-br from-teal-600 via-emerald-600 to-green-700 relative overflow-hidden shrink-0 z-10">
-            <div class="relative z-10 flex flex-col items-center justify-center h-full w-full max-w-3xl gap-2 sm:gap-4">
-                <h2 class="text-3xl sm:text-4xl font-black text-yellow-300 drop-shadow-md">Tic-Tac-Toe! 🎮</h2>
+            <div class="relative z-10 flex flex-col items-center justify-center h-full w-full max-w-3xl gap-2 sm:gap-3">
+                <div class="flex flex-col items-center gap-1">
+                    <h2 class="text-3xl sm:text-4xl font-black text-yellow-300 drop-shadow-md">Tic-Tac-Toe! 🎮</h2>
+                    <!-- Controls Toolbar -->
+                    <div class="flex items-center justify-center gap-2 mt-1" role="toolbar" aria-label="Game mode and difficulty">
+                        <button id="xo-mode-btn" onclick="if(typeof gameAI!=='undefined')gameAI.toggleMode('xo')" class="bg-emerald-500/80 hover:bg-emerald-500 text-white border border-emerald-300/40 px-3.5 py-1.5 rounded-full font-bold text-xs shadow-sm transition-all" aria-label="Toggle computer or teacher mode">🤖 ضد الكمبيوتر</button>
+                        <button id="xo-diff-btn" onclick="if(typeof gameAI!=='undefined')gameAI.toggleDifficulty()" class="bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold px-3 py-1.5 rounded-full text-xs shadow-sm transition-all" aria-label="Toggle difficulty level">مستوى: سهل 😊</button>
+                    </div>
+                </div>
                 <div class="xo-board-container mt-1">
                     <div id="xo-board" class="grid grid-cols-3 gap-2.5 sm:gap-3 bg-white/20 p-3 sm:p-4 rounded-[2rem] backdrop-blur-md shadow-inner border border-white/25 w-full h-full"></div>
                 </div>
@@ -207,7 +226,14 @@ function buildAppUI() {
         <!-- STAGE 3B: MIDPOINT GAME 2 (CONNECT 4) -->
         <section id="c4-stage" class="hidden w-full h-full flex flex-col justify-center items-center text-center p-3 sm:p-4 rounded-[2.5rem] shadow-xl text-white bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-700 relative overflow-hidden shrink-0 z-10">
             <div class="relative z-10 flex flex-col items-center gap-2 sm:gap-3">
-                <h2 class="text-2xl sm:text-3xl font-black text-yellow-300 drop-shadow-md">Connect 4 🔴🟡</h2>
+                <div class="flex flex-col items-center gap-1">
+                    <h2 class="text-2xl sm:text-3xl font-black text-yellow-300 drop-shadow-md">Connect 4 🔴🟡</h2>
+                    <!-- Controls Toolbar -->
+                    <div class="flex items-center justify-center gap-2 mt-1" role="toolbar" aria-label="Game mode and difficulty">
+                        <button id="c4-mode-btn" onclick="if(typeof gameAI!=='undefined')gameAI.toggleMode('c4')" class="bg-sky-500/80 hover:bg-sky-500 text-white border border-sky-300/40 px-3.5 py-1.5 rounded-full font-bold text-xs shadow-sm transition-all" aria-label="Toggle computer or teacher mode">🤖 ضد الكمبيوتر</button>
+                        <button id="c4-diff-btn" onclick="if(typeof gameAI!=='undefined')gameAI.toggleDifficulty()" class="bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold px-3 py-1.5 rounded-full text-xs shadow-sm transition-all" aria-label="Toggle difficulty level">مستوى: سهل 😊</button>
+                    </div>
+                </div>
                 <div id="c4-board-container" class="c4-board-new grid-cols-7 mx-auto mt-1"></div>
                 <div class="bg-black/20 py-1.5 px-6 rounded-full inline-block backdrop-blur-sm border border-white/10 shadow-sm mt-2">
                     <h3 id="c4-status" class="text-xs sm:text-sm font-bold text-white tracking-wide">Select any column</h3>

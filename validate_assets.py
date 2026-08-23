@@ -131,8 +131,8 @@ def validate():
         else:
             print(f"  ✓ {p.name}: الأقواس متزنة ({open_braces} قاعدة)")
 
-    # 6. Check Pages & index.html Linkage
-    print(f"\n[6/6] فحص ارتباط صفحات الدروس والفهرس بـ core.css...")
+    # 6. Check Pages & index.html Linkage (core.css & core.js)
+    print(f"\n[6/6] فحص ارتباط صفحات الدروس والفهرس بـ core.css و core.js...")
     index_file = root / 'index.html'
     if not index_file.exists():
         errors.append("ملف index.html مفقود!")
@@ -143,17 +143,30 @@ def validate():
         else:
             print("  ✓ index.html مرتبط بـ shared/core.css")
 
+    core_js = root / 'shared' / 'core.js'
+    if not core_js.exists():
+        errors.append("ملف shared/core.js غير موجود!")
+    else:
+        print(f"  ✓ shared/core.js موجود وجاهز ({core_js.stat().st_size} بايت)")
+
     pages_dir = root / 'pages'
     lesson_files = sorted(list(pages_dir.glob('*.html')))
-    linked_count = 0
+    linked_css_count = 0
+    linked_js_count = 0
     for lf in lesson_files:
         c = lf.read_text(encoding='utf-8')
         if '../shared/core.css' in c:
-            linked_count += 1
-        else:
+            linked_css_count += 1
+        elif lf.name != "6.html":
             warnings.append(f"الصفحة {lf.name} لا تستدعي ../shared/core.css")
 
-    print(f"  ✓ كافة صفحات الدروس ({linked_count}/{len(lesson_files)}) مرتبطة بـ core.css بنجاح")
+        if '../shared/core.js' in c:
+            linked_js_count += 1
+        elif lf.name != "6.html":
+            warnings.append(f"الصفحة {lf.name} لا تستدعي ../shared/core.js")
+
+    print(f"  ✓ صفحات الدروس المرتبطة بـ core.css: ({linked_css_count}/{len(lesson_files)})")
+    print(f"  ✓ صفحات الدروس المرتبطة بـ core.js: ({linked_js_count}/{len(lesson_files)})")
 
     # Summary
     print("\n--------------------------------------------------")

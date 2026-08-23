@@ -56,12 +56,6 @@ window.PAGE_CONFIG = {
         ];
         const dataset = _raw.map((r,i)=>({html:r[0], t:r[1], theme:_themes[Math.floor(i/4)%4], w:[r[0].replace(/<[^>]+>/g,'')]}));
     </script>
-        <script src="../shared/sound.js"></script>
-    <script src="../shared/ui-template.js"></script>
-    <script src="../shared/app.js"></script>
-    <script src="../shared/games-wordwall.js"></script>
-    <script src="../shared/games-board.js"></script>
-    <script src="../shared/games-extra.js"></script>
-    <script src="../shared/rule-manager.js"></script>
+    <script src="../shared/core.js"></script>
 </body>
 </html>

@@ -100,10 +100,22 @@ const wordwallRoom = {
 };
 
 const wheelGame = {
-    canvas: null, ctx: null, angle: 0, angularVelocity: 0, friction: 0.985, isSpinning: false,
-    init() { this.canvas = document.getElementById('wheel-canvas'); if (!this.canvas) return; this.ctx = this.canvas.getContext('2d'); this.draw(); },
+    canvas: null, ctx: null, angle: 0, angularVelocity: 0, friction: 0.985, isSpinning: false, animFrameId: null, revealTimer: null,
+    init() {
+        this.reset();
+        this.canvas = document.getElementById('wheel-canvas');
+        if (!this.canvas) return;
+        this.ctx = this.canvas.getContext('2d');
+        this.draw();
+    },
+    reset() {
+        if (this.animFrameId) { cancelAnimationFrame(this.animFrameId); this.animFrameId = null; }
+        if (this.revealTimer) { clearTimeout(this.revealTimer); this.revealTimer = null; }
+        this.isSpinning = false;
+        this.angularVelocity = 0;
+    },
     draw() {
-        if (!this.canvas || !this.ctx || typeof dataset === 'undefined') return;
+        if (!this.canvas || !this.ctx || typeof dataset === 'undefined' || dataset.length === 0) return;
         const numSlices = dataset.length; const sliceAngle = (Math.PI * 2) / numSlices; const radius = this.canvas.width / 2;
         const fontSize = numSlices > 24 ? 'bold 13px Fredoka' : 'bold 17px Fredoka';
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -123,29 +135,50 @@ const wheelGame = {
         this.ctx.beginPath(); this.ctx.arc(0, 0, 30, 0, Math.PI * 2); this.ctx.fillStyle = '#ffffff'; this.ctx.fill(); this.ctx.lineWidth = 4; this.ctx.strokeStyle = '#34d399'; this.ctx.stroke();
         this.ctx.restore();
     },
-    spin() { if (this.isSpinning) return; this.isSpinning = true; this.angularVelocity = Math.random() * 0.4 + 0.4; this.animate(); },
+    spin() {
+        if (this.isSpinning || typeof dataset === 'undefined' || dataset.length === 0) return;
+        this.reset();
+        this.isSpinning = true;
+        this.angularVelocity = Math.random() * 0.4 + 0.4;
+        this.animate();
+    },
     animate() {
-        if (this.angularVelocity > 0.002) { this.angle += this.angularVelocity; this.angularVelocity *= this.friction; this.draw(); requestAnimationFrame(() => this.animate()); }
-        else { this.isSpinning = false; this.angularVelocity = 0; this.calculateStoppingSlice(); }
+        if (this.angularVelocity > 0.002) {
+            this.angle += this.angularVelocity;
+            this.angularVelocity *= this.friction;
+            this.draw();
+            this.animFrameId = requestAnimationFrame(() => this.animate());
+        } else {
+            this.isSpinning = false;
+            this.angularVelocity = 0;
+            this.animFrameId = null;
+            this.calculateStoppingSlice();
+        }
     },
     calculateStoppingSlice() {
-        if (typeof dataset === 'undefined') return;
+        if (typeof dataset === 'undefined' || dataset.length === 0) return;
         const numSlices = dataset.length; const sliceAngle = (Math.PI * 2) / numSlices;
         let normalizedAngle = (Math.PI * 2.5 - (this.angle % (Math.PI * 2))) % (Math.PI * 2);
         let sliceIndex = Math.floor(normalizedAngle / sliceAngle) % numSlices;
         const status = document.getElementById('wheel-status');
         if (status) status.innerText = `Wheel landed on Word ${sliceIndex + 1}`;
-        setTimeout(() => { app.revealWord(sliceIndex, 'wheel'); }, 400);
+        this.revealTimer = setTimeout(() => {
+            if (typeof app !== 'undefined') app.revealWord(sliceIndex, 'wheel');
+            this.revealTimer = null;
+        }, 400);
     }
 };
 
 const cardsGame = {
-    cardDeckIndices: [], isAnimating: false,
+    cardDeckIndices: [], isAnimating: false, animTimer: null,
     init() {
-        if (typeof dataset === 'undefined') return;
+        if (this.animTimer) { clearTimeout(this.animTimer); this.animTimer = null; }
+        this.isAnimating = false;
+        if (typeof dataset === 'undefined' || dataset.length === 0) return;
         this.cardDeckIndices = Array.from({ length: dataset.length }, (_, i) => i);
         this.shuffleDeck();
-        const activeCard = document.getElementById('active-deck-card'); if (activeCard) activeCard.onclick = () => this.dealNextCard();
+        const activeCard = document.getElementById('active-deck-card');
+        if (activeCard) activeCard.onclick = () => this.dealNextCard();
     },
     shuffleDeck() {
         if (typeof app !== 'undefined' && typeof app.shuffle === 'function') {
@@ -159,15 +192,27 @@ const cardsGame = {
     },
     dealNextCard() {
         if (this.isAnimating) return;
-        if (this.cardDeckIndices.length === 0) { app.triggerFeedback('Reshuffling Deck... 🃏', '#3b82f6'); this.init(); return; }
+        if (this.cardDeckIndices.length === 0) {
+            if (typeof app !== 'undefined') app.triggerFeedback('Reshuffling Deck... 🃏', '#3b82f6');
+            this.init();
+            return;
+        }
         this.isAnimating = true;
         const activeCardIndex = this.cardDeckIndices.pop();
         const activeUIElement = document.getElementById('active-deck-card');
         if (activeUIElement) {
-            activeUIElement.style.transform = 'translateY(-120px) rotateY(360deg) scale(1.15)'; activeUIElement.style.opacity = '0.1';
-            setTimeout(() => { activeUIElement.style.transform = 'none'; activeUIElement.style.opacity = '1'; this.isAnimating = false; app.revealWord(activeCardIndex, 'cards'); }, 600);
+            activeUIElement.style.transform = 'translateY(-120px) rotateY(360deg) scale(1.15)';
+            activeUIElement.style.opacity = '0.1';
+            this.animTimer = setTimeout(() => {
+                activeUIElement.style.transform = 'none';
+                activeUIElement.style.opacity = '1';
+                this.isAnimating = false;
+                this.animTimer = null;
+                if (typeof app !== 'undefined') app.revealWord(activeCardIndex, 'cards');
+            }, 600);
         } else {
-            this.isAnimating = false; app.revealWord(activeCardIndex, 'cards');
+            this.isAnimating = false;
+            if (typeof app !== 'undefined') app.revealWord(activeCardIndex, 'cards');
         }
     }
 };

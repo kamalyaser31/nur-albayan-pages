@@ -2,12 +2,16 @@ const ruleManager = {
     step: 0,
     init() { this.step = 0; this.render(); },
     render() {
-        if (typeof rulesData === 'undefined' || rulesData.length === 0) return;
+        if (typeof rulesData === 'undefined' || !Array.isArray(rulesData) || rulesData.length === 0) return;
+        if (this.step < 0) this.step = 0;
+        if (this.step >= rulesData.length) this.step = rulesData.length - 1;
         const data = rulesData[this.step];
+        if (!data) return;
+
         const indicator = document.getElementById('rule-step-indicator');
         if (indicator) indicator.innerText = rulesData.length === 1 ? 'LESSON RULE' : `RULE ${this.step + 1} OF ${rulesData.length}`;
-        const titleEl = document.getElementById('rule-title'); if (titleEl) titleEl.innerText = data.title;
-        const descEl = document.getElementById('rule-desc'); if (descEl) descEl.innerText = data.desc;
+        const titleEl = document.getElementById('rule-title'); if (titleEl) titleEl.innerText = data.title || '';
+        const descEl = document.getElementById('rule-desc'); if (descEl) descEl.innerText = data.desc || '';
         const bigText = document.getElementById('rule-big-text'); 
         if (bigText && typeof app !== 'undefined') {
             app.setSafeHTML(bigText, data.html || '');
@@ -26,13 +30,14 @@ const ruleManager = {
         }
     },
     next() {
-        if (typeof rulesData === 'undefined') return;
+        if (typeof rulesData === 'undefined' || !Array.isArray(rulesData) || rulesData.length === 0) {
+            if (typeof app !== 'undefined') app.startChallenge();
+            return;
+        }
         if (this.step < rulesData.length - 1) { this.step++; this.render(); }
-        else { app.startChallenge(); }
+        else { if (typeof app !== 'undefined') app.startChallenge(); }
     },
     prev() {
         if (this.step > 0) { this.step--; this.render(); }
     }
 };
-
-window.onload = () => { app.init(); };
