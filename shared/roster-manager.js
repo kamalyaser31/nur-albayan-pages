@@ -18,11 +18,11 @@ const rosterManager = {
       <div class="flex items-center gap-3">
         <span class="text-2xl sm:text-3xl" aria-hidden="true">👥</span>
         <div>
-          <h2 id="roster-modal-title" class="text-lg sm:text-xl font-black tracking-tight leading-tight">لوحة إدارة ومتابعة الطلاب</h2>
-          <p class="text-xs text-emerald-100 font-medium">سجلات الدرجات وبنك الأخطاء الشفوي والحفظ المحلي</p>
+          <h2 id="roster-modal-title" class="text-lg sm:text-xl font-black tracking-tight leading-tight">${i18n.t("roster_modal_title")}</h2>
+          <p class="text-xs text-emerald-100 font-medium">${i18n.t("roster_modal_subtitle")}</p>
         </div>
       </div>
-      <button id="roster-modal-close-btn" onclick="rosterManager.close()" class="p-2 rounded-full hover:bg-white/20 text-white/90 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white" aria-label="إغلاق نافذة إدارة الطلاب">
+      <button id="roster-modal-close-btn" onclick="rosterManager.close()" class="p-2 rounded-full hover:bg-white/20 text-white/90 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white" aria-label="${i18n.t('close')}">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
       </button>
     </div>
@@ -31,15 +31,15 @@ const rosterManager = {
     <div class="flex items-center border-b border-slate-200 bg-slate-50 px-4 sm:px-6 pt-2 overflow-x-auto gap-2" role="tablist" aria-label="أقسام لوحة الطلاب">
       <button id="tab-btn-students" onclick="rosterManager.switchTab('students')" class="roster-tab-btn active" role="tab" aria-selected="true" aria-controls="roster-tab-content">
         <span aria-hidden="true">👥</span>
-        <span>قائمة الطلاب والتقدم</span>
+        <span>${i18n.t("tab_students_list")}</span>
       </button>
       <button id="tab-btn-add" onclick="rosterManager.switchTab('add')" class="roster-tab-btn" role="tab" aria-selected="false" aria-controls="roster-tab-content">
         <span aria-hidden="true">➕</span>
-        <span>إضافة طالب جديد</span>
+        <span>${i18n.t("tab_add_student")}</span>
       </button>
       <button id="tab-btn-backup" onclick="rosterManager.switchTab('backup')" class="roster-tab-btn" role="tab" aria-selected="false" aria-controls="roster-tab-content">
         <span aria-hidden="true">💾</span>
-        <span>النسخ الاحتياطي</span>
+        <span>${i18n.t("tab_backup")}</span>
       </button>
     </div>
 
@@ -665,7 +665,7 @@ const rosterManager = {
             <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
               <div>
                 <h4 class="font-black text-rose-900 text-sm sm:text-base flex items-center gap-2">
-                  <span aria-hidden="true">📌</span> <span>بنك الكلمات المتعثرة للقراءة والمراجعة الشفوية</span>
+                  <span aria-hidden="true">📌</span> <span>${i18n.t("mistake_bank_title")}</span>
                 </h4>
                 <p class="text-xs text-rose-700 font-medium mt-0.5">كلمات واجه الطالب صعوبة في قراءتها. تُعرض مشكولة بالرسم القرآني لمراجعتها شفوياً وتثبيتها.</p>
               </div>

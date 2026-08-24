@@ -64,13 +64,13 @@ const i18n = {
      * @param {Object} [params] متغيرات للحقن داخل النص { count: 5 }
      * @returns {string}
      */
-    t(key, fallbackText = '', params = {}) {
+    t(key, fallbackText = null, params = {}) {
         if (!key) return '';
 
         const activeDict = this._locales[this._activeLocale]?.strings || {};
         const fallbackDict = this._locales[this._fallbackLocale]?.strings || {};
 
-        let text = activeDict[key] ?? fallbackDict[key] ?? fallbackText ?? key;
+        let text = activeDict[key] ?? fallbackDict[key] ?? (fallbackText || key);
 
         // حقن المتغيرات إذا وُجدت {param}
         if (params && typeof params === 'object') {

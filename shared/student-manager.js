@@ -687,7 +687,7 @@
             let targetWord = studentIdOrWord;
             let isCorrect = !!wordOrIsCorrect;
 
-            if (typeof wordOrIsCorrect === 'string') {
+            if (isCorrectVal !== undefined) {
                 targetStudentId = studentIdOrWord;
                 targetWord = wordOrIsCorrect;
                 isCorrect = !!isCorrectVal;
@@ -703,19 +703,24 @@
             }
 
             const cleanTarget = this._extractPlainWord(targetWord);
+            if (!cleanTarget) {
+                return { mastered: false, consecutiveCorrect: 0, remainingMistakes: student.mistakeBank.length };
+            }
+
             const mistakeItem = student.mistakeBank.find(m => m.word === cleanTarget);
 
             if (!mistakeItem) {
-                return { mastered: true, consecutiveCorrect: 2, remainingMistakes: student.mistakeBank.length };
+                return { mastered: false, consecutiveCorrect: 0, remainingMistakes: student.mistakeBank.length };
             }
 
             let wasMastered = false;
             if (isCorrect) {
                 mistakeItem.consecutiveCorrect = (mistakeItem.consecutiveCorrect || 0) + 1;
-                student.totalScore += 2; // نقطتان لكل قراءة صحيحة
+                student.totalScore = Math.max(0, (student.totalScore || 0) + 2); // نقطتان لكل قراءة صحيحة
 
                 if (mistakeItem.consecutiveCorrect >= 2) {
                     // إتقان راسخ - حذف الكلمة من البنك ومنح مكافأة إضافية
+                    mistakeItem.mastered = true;
                     student.mistakeBank = student.mistakeBank.filter(m => m.word !== cleanTarget);
                     student.totalScore += 3; // مكافأة إتمام الإتقان
                     wasMastered = true;
@@ -724,6 +729,7 @@
                 mistakeItem.consecutiveCorrect = 0;
                 mistakeItem.count = (mistakeItem.count || 1) + 1;
                 mistakeItem.timestamp = Date.now();
+                mistakeItem.mastered = false;
             }
 
             student.lastActive = Date.now();

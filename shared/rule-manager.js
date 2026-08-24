@@ -32,7 +32,9 @@ const ruleManager = {
 
         const indicator = document.getElementById('rule-step-indicator');
         if (indicator) {
-            indicator.innerText = rules.length === 1 ? 'LESSON RULE' : `RULE ${this.step + 1} OF ${rules.length}`;
+            indicator.innerText = rules.length === 1
+                ? (typeof i18n !== 'undefined' ? i18n.t("rule_step_single", "قاعدة الدرس 📖") : "قاعدة الدرس 📖")
+                : (typeof i18n !== 'undefined' ? i18n.t("rule_step_indicator", `القاعدة ${this.step + 1} من ${rules.length}`, { current: this.step + 1, total: rules.length }) : `القاعدة ${this.step + 1} من ${rules.length}`);
         }
 
         const titleEl = document.getElementById('rule-title');
@@ -53,12 +55,16 @@ const ruleManager = {
         const prevBtn = document.getElementById('rule-prev-btn');
         if (prevBtn) {
             prevBtn.classList.toggle('hidden', this.step === 0);
+            const prevText = typeof i18n !== 'undefined' ? i18n.t("prev_rule", "القاعدة السابقة ⬅") : "القاعدة السابقة ⬅";
+            prevBtn.innerText = prevText;
         }
 
         const nextBtn = document.getElementById('rule-next-btn');
         if (nextBtn) {
             const isLastStep = (this.step === rules.length - 1);
-            nextBtn.innerText = isLastStep ? "Start Challenge! 🚀" : "Next Rule ➡";
+            nextBtn.innerText = isLastStep
+                ? (typeof i18n !== 'undefined' ? i18n.t("start_challenge", "بدء التحدي 🚀") : "بدء التحدي 🚀")
+                : (typeof i18n !== 'undefined' ? i18n.t("next_rule", "القاعدة التالية ➡") : "القاعدة التالية ➡");
             nextBtn.className = isLastStep
                 ? "bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-black py-4 px-8 rounded-2xl text-sm shadow-[0_4px_0_#047857] active:translate-y-1 active:shadow-none transition-all flex-1 animate-pulse"
                 : "bg-emerald-500 hover:bg-emerald-600 text-white font-black py-4 px-8 rounded-2xl text-sm shadow-[0_4px_0_#047857] active:translate-y-1 active:shadow-none transition-all flex-1";
@@ -84,4 +90,13 @@ const ruleManager = {
         }
     }
 };
+
+// مستمع لحدث تغيير اللغة لتحديث نصوص القواعد ومؤشر الخطوات فورياً
+if (typeof window !== 'undefined') {
+    window.addEventListener('nb:locale-changed', () => {
+        if (typeof ruleManager !== 'undefined' && ruleManager.getRules().length > 0) {
+            ruleManager.render();
+        }
+    });
+}
 

@@ -11,15 +11,27 @@ function buildAppUI() {
     if (document.getElementById('learning-stage')) return; // Already exists
 
     const cfg = window.PAGE_CONFIG || {};
-    const title = escapeHTML(cfg.title || document.title || 'Nour Al-Bayan');
-    const subtitle = escapeHTML(cfg.subtitle || 'Harakat & Reading Practice');
-    const footerText = escapeHTML(cfg.footer || 'Nour Al-Bayan Learning System');
+    const isAr = (typeof i18n !== 'undefined' && i18n.getLocale() === 'ar');
+    const title = escapeHTML(isAr ? (i18n.t('app_title') || 'نور البيان') : (cfg.title || 'Nour Al-Bayan'));
+
+    let rawSub = cfg.subtitle || '';
+    if (isAr) {
+        const pageMatch = rawSub.match(/Page\s+(\d+)/i);
+        const arBracketMatch = rawSub.match(/\(([\u0600-\u06FF\s]+)\)/);
+        if (pageMatch && arBracketMatch) {
+            rawSub = `الصفحة ${pageMatch[1]} • ${arBracketMatch[1]}`;
+        } else if (arBracketMatch) {
+            rawSub = arBracketMatch[1];
+        }
+    }
+    const subtitle = escapeHTML(rawSub || (isAr ? 'تعليم القراءة وضبط الحركات' : 'Harakat & Reading Practice'));
+    const footerText = escapeHTML(isAr ? `منظومة نور البيان التعليمية • ${subtitle}` : (cfg.footer || 'Nour Al-Bayan Learning System'));
     const hasRules = (typeof rulesData !== 'undefined' && rulesData.length > 0) || (cfg.rules && cfg.rules.length > 0);
     const game3Type = cfg.game3 || (typeof riddlesGame !== 'undefined' ? 'riddles' : (hasRules ? 'riddles' : 'memory'));
 
     const rulesButtonHtml = hasRules ? `
         <button onclick="app.jumpTo('rules')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3.5 px-6 rounded-[1.5rem] text-lg shadow-[0_4px_0_#3730a3] active:translate-y-1 active:shadow-none transition-all flex items-center justify-between" aria-label="Open Lesson Rules">
-            <span class="flex items-center gap-2">📖 <span>Lesson Rules</span></span>
+            <span class="flex items-center gap-2">📖 <span>${i18n.t('lesson_rules')}</span></span>
             <span class="text-xl" aria-hidden="true">➡</span>
         </button>` : '';
 
@@ -84,7 +96,7 @@ function buildAppUI() {
             <!-- Score & Timer Pill -->
             <div class="flex items-center gap-2 sm:gap-3">
                 <div class="flex items-center gap-2 bg-emerald-50/80 border border-emerald-200 px-3 py-1 rounded-full shadow-inner">
-                    <span class="text-slate-400 text-[10px] sm:text-xs font-black uppercase tracking-wider">Score</span>
+                    <span class="text-slate-400 text-[10px] sm:text-xs font-black uppercase tracking-wider">${i18n.t('score')}</span>
                     <span id="score-val" class="text-base sm:text-lg font-black text-emerald-600 leading-none" aria-live="polite" aria-label="Current score">0</span>
                 </div>
                 <div id="challenge-timer" class="hidden bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full font-mono font-bold text-xs shadow-inner" role="timer">
@@ -101,8 +113,8 @@ function buildAppUI() {
                 <button onclick="app.triggerFeedback('⭐', '#f59e0b', true)" class="p-1 sm:p-1.5 bg-amber-100 text-amber-500 rounded-full hover:bg-amber-200 hover:scale-110 transition-all shadow-sm text-base sm:text-lg leading-none" aria-label="${i18n.t('praise_star')}" title="Star">⭐</button>
                 <button onclick="app.triggerFeedback('❤️', '#ef4444', true)" class="p-1 sm:p-1.5 bg-rose-100 text-rose-500 rounded-full hover:bg-rose-200 hover:scale-110 transition-all shadow-sm text-base sm:text-lg leading-none" aria-label="${i18n.t('praise_heart')}" title="Heart">❤️</button>
                 <div class="w-px h-4 bg-slate-200 mx-0.5" aria-hidden="true"></div>
-                <button onclick="app.triggerFeedback('Perfect! 🌟', '#8b5cf6', true)" class="px-2 py-0.5 bg-purple-100 text-purple-700 rounded-md font-black text-[10px] sm:text-xs hover:bg-purple-200 transition-colors" aria-label="${i18n.t('praise_perfect')}">Perfect</button>
-                <button onclick="app.triggerFeedback('Excellent! 🏆', '#10b981', true)" class="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-md font-black text-[10px] sm:text-xs hover:bg-emerald-200 transition-colors" aria-label="${i18n.t('praise_excellent')}">Excellent</button>
+                <button onclick="app.triggerFeedback(i18n.t('txt_perfect') + ' 🌟', '#8b5cf6', true)" class="px-2 py-0.5 bg-purple-100 text-purple-700 rounded-md font-black text-[10px] sm:text-xs hover:bg-purple-200 transition-colors" aria-label="${i18n.t('praise_perfect')}">${i18n.t('txt_perfect')}</button>
+                <button onclick="app.triggerFeedback(i18n.t('txt_excellent') + ' 🏆', '#10b981', true)" class="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-md font-black text-[10px] sm:text-xs hover:bg-emerald-200 transition-colors" aria-label="${i18n.t('praise_excellent')}">${i18n.t('txt_excellent')}</button>
             </div>
 
             <!-- Dropdown Navigator & Settings Button -->
@@ -126,15 +138,14 @@ function buildAppUI() {
             </div>
 
             <!-- Developer & Dedication Card -->
-            <div class="w-full max-w-sm sm:max-w-md bg-white border-2 border-emerald-200/90 rounded-[2rem] p-4 sm:p-5 shadow-sm text-left relative overflow-hidden">
+            <div class="w-full max-w-sm sm:max-w-md bg-white border-2 border-emerald-200/90 rounded-[2rem] p-4 sm:p-5 shadow-sm relative overflow-hidden">
                 <div class="space-y-1 text-xs sm:text-sm text-slate-600 font-medium">
-                    <p><span class="text-slate-400">Developed by:</span> <strong class="text-slate-800 font-black">Sheikh Gehad Elsayad</strong></p>
-                    <p><span class="text-slate-400">Phone / WhatsApp:</span> <strong class="text-slate-800 font-black tracking-wide">01147992249</strong></p>
+                    <p><span class="text-slate-400">${i18n.t('developed_by')}</span> <strong class="text-slate-800 font-black">${i18n.t('author_name')}</strong></p>
+                    <p><span class="text-slate-400">${i18n.t('phone_whatsapp')}</span> <strong class="text-slate-800 font-black tracking-wide" dir="ltr">01147992249</strong></p>
                 </div>
                 <hr class="my-2.5 border-slate-100">
-                <div class="space-y-1">
-                    <p class="text-[11px] sm:text-xs text-slate-400 italic">Please pray for my father and brother Mohammed (RIP)</p>
-                    <p class="text-xs sm:text-sm text-slate-600 font-bold leading-relaxed text-center" style="font-family: 'Amiri', 'Traditional Arabic', serif; direction: rtl;">نسألكم الدعاء لوالدي ولأخي محمد رحمهما الله</p>
+                <div class="space-y-1 text-center">
+                    <p class="text-xs sm:text-sm text-slate-600 font-bold leading-relaxed quran-font">${i18n.t('dedication_prayer')}</p>
                 </div>
             </div>
 
@@ -142,7 +153,7 @@ function buildAppUI() {
             <div class="w-full max-w-sm sm:max-w-md px-4 py-2 bg-emerald-50/80 border border-emerald-200 rounded-2xl flex items-center justify-between shadow-inner">
                 <label for="toggle-game-breaks" class="flex items-center gap-2 cursor-pointer text-xs sm:text-sm font-bold text-emerald-900 select-none">
                     <span>🎮</span>
-                    <span>Enable Mid-Lesson Game Breaks</span>
+                    <span>${i18n.t('enable_game_breaks')}</span>
                 </label>
                 <input type="checkbox" id="toggle-game-breaks" onchange="app.toggleGameBreaks(this.checked)" class="w-5 h-5 accent-emerald-600 rounded cursor-pointer" aria-label="Enable Mid-Lesson Game Breaks">
             </div>
@@ -151,11 +162,11 @@ function buildAppUI() {
             <div class="grid grid-cols-1 gap-2.5 w-full max-w-sm sm:max-w-md px-2" role="group" aria-label="Main navigation actions">
                 ${rulesButtonHtml}
                 <button onclick="app.startChallenge()" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-black py-3.5 px-6 rounded-[1.5rem] text-lg shadow-[0_5px_0_#047857] active:translate-y-[5px] active:shadow-none transition-all flex items-center justify-between" aria-label="Start Challenge">
-                    <span class="flex items-center gap-2">🚀 <span>Start Challenge</span></span>
+                    <span class="flex items-center gap-2">🚀 <span>${i18n.t('start_challenge')}</span></span>
                     <span class="text-2xl" aria-hidden="true">➡</span>
                 </button>
                 <button onclick="app.jumpTo('ww_box')" class="bg-white border-4 border-amber-400 hover:bg-amber-50 text-amber-500 font-black py-3 px-6 rounded-[1.5rem] text-base shadow-[0_5px_0_#d97706] active:translate-y-[5px] active:shadow-none transition-all flex items-center justify-between" aria-label="Open Word Games">
-                    <span class="flex items-center gap-2">🎡 <span>Word Games</span></span>
+                    <span class="flex items-center gap-2">🎡 <span>${i18n.t('open_word_games')}</span></span>
                     <span class="text-2xl" aria-hidden="true">➡</span>
                 </button>
             </div>
@@ -165,14 +176,14 @@ function buildAppUI() {
 
         <!-- STAGE 0.5: GAME TRANSITION -->
         <section id="game-transition-stage" class="hidden w-full h-full flex flex-col justify-center items-center text-center p-6 rounded-[2.5rem] shadow-xl text-white bg-gradient-to-br from-indigo-500 to-purple-600 relative overflow-hidden shrink-0 z-20" role="dialog" aria-modal="true" aria-labelledby="transition-title">
-            <h2 id="transition-title" class="text-3xl sm:text-5xl font-black text-yellow-300 drop-shadow-md mb-3 animate-bounce">Amazing Job! 🌟</h2>
-            <p class="text-lg sm:text-2xl font-bold text-white mb-6">You are an excellent student!<br>You deserve a game break!</p>
+            <h2 id="transition-title" class="text-3xl sm:text-5xl font-black text-yellow-300 drop-shadow-md mb-3 animate-bounce">${i18n.t('amazing_job')}</h2>
+            <p class="text-lg sm:text-2xl font-bold text-white mb-6">${i18n.t('break_message')}</p>
             <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full max-w-md">
                 <button id="btn-play-game" onclick="app.enterGame()" class="flex-1 bg-yellow-400 hover:bg-yellow-300 text-indigo-900 py-3.5 sm:py-4 rounded-2xl text-lg font-black shadow-[0_5px_0_#ca8a04] active:translate-y-[5px] active:shadow-none transition-all" aria-label="Play game">
-                    🎮 Play <span id="transition-game-name">Game</span>
+                    🎮 ${i18n.t('play_game')}
                 </button>
                 <button id="btn-skip-game" onclick="app.resume(app.pendingGame)" class="flex-1 bg-white/20 hover:bg-white/30 text-white border-2 border-white/50 py-3.5 sm:py-4 rounded-2xl text-lg font-bold transition-all backdrop-blur-sm" aria-label="Skip game and resume">
-                    ⏭️ Skip & Read
+                    ⏭️ ${i18n.t('skip_and_read')}
                 </button>
             </div>
         </section>

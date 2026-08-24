@@ -38,6 +38,9 @@
             console.error('Error loading mistake bank:', e);
         }
 
+        // ترشيح بنك الأخطاء لاستبعاد الكلمات المتقنة مسبقاً
+        rawMistakes = rawMistakes.filter(m => !m.mastered);
+
         // بناء مصفوفة الكلمات التدريبية الحية
         let dataset = [];
         if (rawMistakes.length > 0) {

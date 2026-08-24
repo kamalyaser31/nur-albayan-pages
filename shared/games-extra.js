@@ -12,8 +12,8 @@ const memoryGame = {
         this.cards = [...this.iconSets[this.currentSetIndex], ...this.iconSets[this.currentSetIndex]];
         this.shuffleCards(); this.renderBoard();
         this.matchedPairs = 0; this.hasFlippedCard = false; this.lockBoard = false; this.firstCard = null; this.secondCard = null; this.gameActive = true;
-        const status = document.getElementById('memory-status'); if (status) { status.textContent = "Find all matching pairs! 🧠"; status.classList.remove('text-yellow-300'); }
-        if (typeof app !== 'undefined') app.setGameResumeState('memory-resume-btn', false, '', "Skip to Wordwall ⏭️");
+        const status = document.getElementById('memory-status'); if (status) { status.textContent = i18n.t("memory_find_pairs"); status.classList.remove('text-yellow-300'); }
+        if (typeof app !== 'undefined') app.setGameResumeState('memory-resume-btn', false, '', i18n.t("skip_to_wordwall"));
     },
     shuffleCards() {
         if (typeof app !== 'undefined' && typeof app.shuffle === 'function') {
@@ -71,11 +71,11 @@ const memoryGame = {
             this.gameActive = false;
             const status = document.getElementById('memory-status');
             if (status) {
-                status.textContent = "🏆 Fantastic! You matched them all!";
+                status.textContent = typeof i18n !== 'undefined' ? i18n.t("memory_cleared", "🏆 أحسنت! تم تطابق جميع البطاقات! 🎉") : "🏆 أحسنت! تم تطابق جميع البطاقات! 🎉";
                 status.classList.add('text-yellow-300');
             }
             if (typeof fireCelebration === 'function') fireCelebration();
-            if (typeof app !== 'undefined') app.setGameResumeState('memory-resume-btn', true, "Wordwall Games 🎡");
+            if (typeof app !== 'undefined') app.setGameResumeState('memory-resume-btn', true, typeof i18n !== 'undefined' ? i18n.t("open_word_games", "ألعاب الكلمات 🎡") : "ألعاب الكلمات 🎡");
         }
     },
     unflipCards() {
@@ -109,36 +109,96 @@ const riddlesGame = {
     isAnswering: false,
     timer: null,
     data: [
-        { questionText: "What speaks all languages in the world but has no tongue?", options: ["A telephone", "An echo", "A book", "A flag"], answerIndex: 1 },
-        { questionText: "What gets larger the more you take away from it, and smaller if you add to it?", options: ["A hole", "Time", "Age", "Money"], answerIndex: 0 },
-        { questionText: "What has many teeth but cannot bite?", options: ["A crocodile", "A saw", "A comb", "A key"], answerIndex: 2 }
+        {
+            qKey: "riddle_q1_text",
+            questionText: "حركة توضع فوق الحرف وتفتح الفم عند نطقها، ما هي؟",
+            options: ["الكسرة", "الفتحة", "الضمة", "السكون"],
+            optKeys: ["riddle_q1_opt1", "riddle_q1_opt2", "riddle_q1_opt3", "riddle_q1_opt4"],
+            answerIndex: 1
+        },
+        {
+            qKey: "riddle_q2_text",
+            questionText: "حركة ترسم كالواو الصغيرة فوق الحرف ونضم الشفتين عند نطقها، ما هي؟",
+            options: ["الفتحة", "الكسرة", "الضمة", "التنوين"],
+            optKeys: ["riddle_q2_opt1", "riddle_q2_opt2", "riddle_q2_opt3", "riddle_q2_opt4"],
+            answerIndex: 2
+        },
+        {
+            qKey: "riddle_q3_text",
+            questionText: "سورة قرآنية كريمة تسمى (أم الكتاب) ونقرؤها في كل ركعة صلاة؟",
+            options: ["سورة الإخلاص", "سورة الفاتحة", "سورة الكوثر", "سورة الناس"],
+            optKeys: ["riddle_q3_opt1", "riddle_q3_opt2", "riddle_q3_opt3", "riddle_q3_opt4"],
+            answerIndex: 1
+        },
+        {
+            qKey: "riddle_q4_text",
+            questionText: "حرف مد يأتي ساكناً وقبله حرف مفتوح، ما هو؟",
+            options: ["الألف المدية", "الياء المدية", "الواو المدية", "الهمزة"],
+            optKeys: ["riddle_q4_opt1", "riddle_q4_opt2", "riddle_q4_opt3", "riddle_q4_opt4"],
+            answerIndex: 0
+        },
+        {
+            qKey: "riddle_q5_text",
+            questionText: "سورة قرآنية تعدل ثلث القرآن الكريم وتتحدث عن إخلاص التوحيد لله؟",
+            options: ["سورة الفلق", "سورة الكافرون", "سورة النصر", "سورة الإخلاص"],
+            optKeys: ["riddle_q5_opt1", "riddle_q5_opt2", "riddle_q5_opt3", "riddle_q5_opt4"],
+            answerIndex: 3
+        },
+        {
+            qKey: "riddle_q6_text",
+            questionText: "نون ساكنة زائدة تلحق آخر الأسماء لفظاً لا خطاً (نطقاً لا كتابة)، ما هي؟",
+            options: ["السكون", "الشدة", "التنوين", "المد"],
+            optKeys: ["riddle_q6_opt1", "riddle_q6_opt2", "riddle_q6_opt3", "riddle_q6_opt4"],
+            answerIndex: 2
+        },
+        {
+            qKey: "riddle_q7_text",
+            questionText: "حركة توضع تحت الحرف وينخفض الفك السفلي عند نطقها، ما هي؟",
+            options: ["الضمة", "الكسرة", "الفتحة", "السكون"],
+            optKeys: ["riddle_q7_opt1", "riddle_q7_opt2", "riddle_q7_opt3", "riddle_q7_opt4"],
+            answerIndex: 1
+        },
+        {
+            qKey: "riddle_q8_text",
+            questionText: "ما هي أقصر سورة في القرآن الكريم وتتكون من ثلاث آيات؟",
+            options: ["سورة الكوثر", "سورة العصر", "سورة الإخلاص", "سورة الفلق"],
+            optKeys: ["riddle_q8_opt1", "riddle_q8_opt2", "riddle_q8_opt3", "riddle_q8_opt4"],
+            answerIndex: 0
+        }
     ],
     init() { this.idx = 0; this.isAnswering = false; },
     reset() {
         if (this.timer) { clearTimeout(this.timer); this.timer = null; }
         this.init();
-        if (typeof app !== 'undefined') app.setGameResumeState('riddles-resume-btn', false, '', "Skip to Wordwall ⏭️");
+        if (typeof app !== 'undefined') app.setGameResumeState('riddles-resume-btn', false, '', typeof i18n !== 'undefined' ? i18n.t("skip_to_wordwall") : "Skip to Wordwall ⏭️");
         this.loadNext();
     },
     loadNext() {
         if (this.idx >= this.data.length) {
             if (typeof fireCelebration === 'function') fireCelebration();
-            const qEl = document.getElementById('riddle-question'); if (qEl) qEl.innerText = "🏆 Unbelievable! You solved all the riddles and earned the Quran Genius Badge!";
+            const qEl = document.getElementById('riddle-question');
+            if (qEl) qEl.innerText = typeof i18n !== 'undefined' ? i18n.t("riddle_all_cleared", "🏆 رائع للغاية! لقد حللت جميع الألغاز وحصلت على وسام عبقري نور البيان!") : "🏆 رائع للغاية! لقد حللت جميع الألغاز وحصلت على وسام عبقري نور البيان!";
             const optsDiv = document.getElementById('riddle-options'); if (optsDiv) optsDiv.textContent = '';
-            if (typeof app !== 'undefined') app.setGameResumeState('riddles-resume-btn', true, "Wordwall Room 🎡");
+            if (typeof app !== 'undefined') app.setGameResumeState('riddles-resume-btn', true, typeof i18n !== 'undefined' ? i18n.t("open_word_games", "ألعاب الكلمات 🎡") : "ألعاب الكلمات 🎡");
             return;
         }
         const riddle = this.data[this.idx];
-        const qEl = document.getElementById('riddle-question'); if (qEl) qEl.innerText = riddle.questionText;
+        const qEl = document.getElementById('riddle-question');
+        const question = (riddle.qKey && typeof i18n !== 'undefined') ? i18n.t(riddle.qKey, riddle.questionText) : riddle.questionText;
+        if (qEl) qEl.innerText = question;
         const optsDiv = document.getElementById('riddle-options'); if (optsDiv) optsDiv.textContent = '';
         const fbEl = document.getElementById('riddle-feedback'); if (fbEl) fbEl.innerText = '';
         if (optsDiv) {
             riddle.options.forEach((opt, i) => {
+                const optText = (riddle.optKeys && riddle.optKeys[i] && typeof i18n !== 'undefined')
+                    ? i18n.t(riddle.optKeys[i], opt)
+                    : opt;
                 let btn = document.createElement('button');
                 btn.type = 'button';
-                btn.className = "bg-white/20 hover:bg-white/30 text-xl font-bold py-5 rounded-2xl shadow-md transition-all active:scale-95 text-left px-6 flex justify-between items-center shadow-[0_4px_0_#d97706] active:translate-y-1 active:shadow-none";
-                btn.setAttribute('aria-label', `${opt}, Option ${i + 1}`);
-                btn.innerHTML = `<span>${opt}</span><span class="text-sm opacity-55">Option ${i + 1}</span>`;
+                btn.className = "bg-white/20 hover:bg-white/30 text-xl font-bold py-5 rounded-2xl shadow-md transition-all active:scale-95 text-center px-6 flex justify-between items-center shadow-[0_4px_0_#d97706] active:translate-y-1 active:shadow-none";
+                const optLabel = typeof i18n !== 'undefined' ? i18n.t("riddle_option_num", `الخيار ${i + 1}`, { num: i + 1 }) : `Option ${i + 1}`;
+                btn.setAttribute('aria-label', `${optText}, ${optLabel}`);
+                btn.innerHTML = `<span>${optText}</span><span class="text-sm opacity-60">${optLabel}</span>`;
                 btn.onclick = () => this.check(i, btn);
                 optsDiv.appendChild(btn);
             });
@@ -152,7 +212,10 @@ const riddlesGame = {
         if (selectedIdx === correctIdx) {
             btn.classList.remove('bg-white/20');
             btn.classList.add('bg-emerald-500');
-            if (fb) { fb.innerText = "Genius correct answer! Excellent 👏"; fb.className = "text-lg sm:text-xl font-bold h-8 text-emerald-400 mt-3"; }
+            if (fb) {
+                fb.innerText = typeof i18n !== 'undefined' ? i18n.t("riddle_correct", "إجابة عبقرية صحيحة! أحسنت 👏") : "إجابة عبقرية صحيحة! أحسنت 👏";
+                fb.className = "text-lg sm:text-xl font-bold h-8 text-emerald-400 mt-3";
+            }
             if (typeof fireCelebration === 'function') fireCelebration();
             this.timer = setTimeout(() => {
                 this.idx++;
@@ -163,14 +226,30 @@ const riddlesGame = {
         } else {
             btn.classList.remove('bg-white/20');
             btn.classList.add('bg-rose-500');
-            if (fb) { fb.innerText = "Oops! Think again!"; fb.className = "text-lg sm:text-xl font-bold h-8 text-rose-400 mt-3"; }
+            if (fb) {
+                fb.innerText = typeof i18n !== 'undefined' ? i18n.t("riddle_incorrect", "حاول مرة أخرى! فكر جيداً يا بطل 🤔") : "حاول مرة أخرى! فكر جيداً يا بطل 🤔";
+                fb.className = "text-lg sm:text-xl font-bold h-8 text-rose-400 mt-3";
+            }
             this.timer = setTimeout(() => {
                 btn.classList.remove('bg-rose-500');
                 btn.classList.add('bg-white/20');
-                if (fb) { fb.innerText = ""; fb.className = "text-lg sm:text-xl font-bold h-8 text-emerald-400 mt-3"; }
+                if (fb) {
+                    fb.innerText = "";
+                    fb.className = "text-lg sm:text-xl font-bold h-8 text-emerald-400 mt-3";
+                }
                 this.isAnswering = false;
                 this.timer = null;
             }, 1000);
         }
     }
 };
+
+// مستمع لحدث تغيير اللغة لإعادة رسم اللغز النشط
+if (typeof window !== 'undefined') {
+    window.addEventListener('nb:locale-changed', () => {
+        const stage = document.getElementById('riddles-stage');
+        if (stage && !stage.classList.contains('hidden') && typeof riddlesGame !== 'undefined') {
+            riddlesGame.loadNext();
+        }
+    });
+}

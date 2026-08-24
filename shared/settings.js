@@ -58,10 +58,12 @@ const settingsManager = {
         // محاولة الحفظ الدائم في localStorage
         try {
             localStorage.setItem(this.STORAGE_KEY, JSON.stringify(updated));
-            this.showToast('✓ تم حفظ الإعدادات تلقائياً');
+            const msg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('settings_saved_toast') : 'تم حفظ الإعدادات بنجاح ✔';
+            this.showToast(msg);
         } catch (e) {
             console.warn('تعذر الحفظ الدائم في localStorage (جلسة خاصة):', e);
-            this.showToast('✓ تم تطبيق الإعدادات للجلسة الحالية');
+            const msg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('settings_saved_toast') : 'تم حفظ الإعدادات بنجاح ✔';
+            this.showToast(msg);
         }
         return updated;
     },
@@ -74,7 +76,8 @@ const settingsManager = {
         } catch (_) {}
         this.apply(this.defaults);
         this.syncFormWithSettings(this.defaults);
-        this.showToast('✓ تمت استعادة الإعدادات الافتراضية');
+        const msg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('settings_reset_toast') : 'تمت استعادة الإعدادات الافتراضية 🔄';
+        this.showToast(msg);
     },
 
     // تطبيق الإعدادات الحالية على الصفحة النشطة
@@ -166,17 +169,17 @@ const settingsManager = {
 
         const modalHtml = `
         <div id="nb-settings-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-3 sm:p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title">
-            <div class="bg-white w-full max-w-lg rounded-[2rem] shadow-2xl border border-emerald-100 overflow-hidden flex flex-col my-auto animate-in fade-in zoom-in duration-150" dir="rtl">
+            <div class="bg-white w-full max-w-lg rounded-[2rem] shadow-2xl border border-emerald-100 overflow-hidden flex flex-col my-auto animate-in fade-in zoom-in duration-150" dir="${(typeof i18n !== 'undefined' && i18n.getActiveMeta) ? i18n.getActiveMeta().dir : 'rtl'}">
                 <!-- Header -->
                 <div class="bg-gradient-to-l from-emerald-600 to-teal-700 p-4 sm:p-5 text-white flex items-center justify-between shadow-md">
                     <div class="flex items-center gap-2.5">
                         <span class="text-2xl sm:text-3xl" aria-hidden="true">⚙️</span>
                         <div>
-                            <h2 id="settings-modal-title" class="text-lg sm:text-xl font-black tracking-tight leading-tight">إعدادات المعلم والمنظومة</h2>
-                            <p class="text-xs text-emerald-100 font-medium">تُحفظ التفضيلات تلقائياً في هذا المتصفح</p>
+                            <h2 id="settings-modal-title" class="text-lg sm:text-xl font-black tracking-tight leading-tight">${i18n.t("settings_modal_title")}</h2>
+                            <p class="text-xs text-emerald-100 font-medium">${i18n.t("settings_saved_notice")}</p>
                         </div>
                     </div>
-                    <button id="nb-settings-close-btn" onclick="settingsManager.close()" class="p-2 rounded-full hover:bg-white/20 text-white/90 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white" aria-label="إغلاق نافذة الإعدادات">
+                    <button id="nb-settings-close-btn" onclick="settingsManager.close()" class="p-2 rounded-full hover:bg-white/20 text-white/90 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white" aria-label="${i18n.t('close')}">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                 </div>
@@ -187,15 +190,15 @@ const settingsManager = {
                     <!-- Section 1: الصوتيات -->
                     <div class="bg-slate-50 p-3.5 sm:p-4 rounded-2xl border border-slate-200 space-y-3">
                         <h3 class="font-black text-emerald-800 flex items-center gap-2 text-xs sm:text-sm">
-                            <span aria-hidden="true">🔊</span> <span>الصوتيات والمؤثرات</span>
+                            <span aria-hidden="true">🔊</span> <span>${i18n.t("audio_effects")}</span>
                         </h3>
                         <div class="flex items-center justify-between">
-                            <label for="cfg-sound-enabled" class="font-bold text-slate-700 cursor-pointer select-none">تفعيل المؤثرات الصوتية والتشجيع</label>
+                            <label for="cfg-sound-enabled" class="font-bold text-slate-700 cursor-pointer select-none">${i18n.t("sound_toggle_label")}</label>
                             <input type="checkbox" id="cfg-sound-enabled" onchange="settingsManager.save({soundEnabled: this.checked})" class="w-5 h-5 accent-emerald-600 rounded cursor-pointer">
                         </div>
                         <div class="space-y-1 pt-1">
                             <div class="flex justify-between text-xs font-bold text-slate-600">
-                                <label for="cfg-volume">مستوى الصوت</label>
+                                <label for="cfg-volume">${i18n.t("volume_level")}</label>
                                 <span id="cfg-volume-val" class="font-mono text-emerald-700">80%</span>
                             </div>
                             <input type="range" id="cfg-volume" min="0" max="100" value="80" oninput="document.getElementById('cfg-volume-val').innerText = this.value + '%'" onchange="settingsManager.save({volume: parseInt(this.value)})" class="w-full accent-emerald-600 cursor-pointer">
@@ -205,25 +208,25 @@ const settingsManager = {
                     <!-- Section 2: استراحات الألعاب والخصم الآلي -->
                     <div class="bg-slate-50 p-3.5 sm:p-4 rounded-2xl border border-slate-200 space-y-3">
                         <h3 class="font-black text-emerald-800 flex items-center gap-2 text-xs sm:text-sm">
-                            <span aria-hidden="true">🎮</span> <span>استراحات الألعاب وألعاب الألواح</span>
+                            <span aria-hidden="true">🎮</span> <span>${i18n.t("enable_game_breaks")}</span>
                         </h3>
                         <div class="flex items-center justify-between">
-                            <label for="cfg-game-breaks" class="font-bold text-slate-700 cursor-pointer select-none">تفعيل استراحة الألعاب في منتصف الدرس</label>
+                            <label for="cfg-game-breaks" class="font-bold text-slate-700 cursor-pointer select-none">${i18n.t("game_breaks_toggle_label")}</label>
                             <input type="checkbox" id="cfg-game-breaks" onchange="settingsManager.save({gameBreaksEnabled: this.checked})" class="w-5 h-5 accent-emerald-600 rounded cursor-pointer">
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
                             <div>
-                                <label for="cfg-game-mode" class="block text-xs font-bold text-slate-600 mb-1">الخصم الافتراضي:</label>
+                                <label for="cfg-game-mode" class="block text-xs font-bold text-slate-600 mb-1">${i18n.t("default_game_mode")}</label>
                                 <select id="cfg-game-mode" onchange="settingsManager.save({defaultGameMode: this.value})" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-bold text-xs text-slate-700 outline-none focus:border-emerald-500">
-                                    <option value="computer">🤖 ضد الكمبيوتر</option>
-                                    <option value="teacher">👨‍🏫 مع المعلم</option>
+                                    <option value="computer">${i18n.t("mode_vs_computer")}</option>
+                                    <option value="teacher">${i18n.t("mode_vs_teacher")}</option>
                                 </select>
                             </div>
                             <div>
-                                <label for="cfg-game-diff" class="block text-xs font-bold text-slate-600 mb-1">صعوبة الكمبيوتر:</label>
+                                <label for="cfg-game-diff" class="block text-xs font-bold text-slate-600 mb-1">${i18n.t("ai_difficulty_label")}</label>
                                 <select id="cfg-game-diff" onchange="settingsManager.save({defaultDifficulty: this.value})" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-bold text-xs text-slate-700 outline-none focus:border-emerald-500">
-                                    <option value="easy">سهل وممتع 😊 (عشوائي)</option>
-                                    <option value="smart">ذكي خفيف 🧠 (تحدٍّ)</option>
+                                    <option value="easy">${i18n.t("diff_easy")}</option>
+                                    <option value="smart">${i18n.t("diff_smart")}</option>
                                 </select>
                             </div>
                         </div>
@@ -232,44 +235,44 @@ const settingsManager = {
                     <!-- Section 3: مؤقت القراءة وحجم الخط والترتيب العشوائي ونظام التقييم -->
                     <div class="bg-slate-50 p-3.5 sm:p-4 rounded-2xl border border-slate-200 space-y-3">
                         <h3 class="font-black text-emerald-800 flex items-center gap-2 text-xs sm:text-sm">
-                            <span aria-hidden="true">⏱️</span> <span>المؤقت وحجم الخط ونظام التقييم</span>
+                            <span aria-hidden="true">⏱️</span> <span>${i18n.t("section_timer_font_eval")}</span>
                         </h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                             <div>
-                                <label for="cfg-timer-duration" class="block text-xs font-bold text-slate-600 mb-1">زمن التحدي السريع:</label>
+                                <label for="cfg-timer-duration" class="block text-xs font-bold text-slate-600 mb-1">${i18n.t("timer_duration_label")}</label>
                                 <select id="cfg-timer-duration" onchange="settingsManager.save({timerDuration: parseFloat(this.value)})" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-bold text-xs text-slate-700 outline-none focus:border-emerald-500">
-                                    <option value="5">⚡ 5 ثوانٍ (سريع)</option>
-                                    <option value="10">⏱️ 10 ثوانٍ (قياسي)</option>
-                                    <option value="15">🐢 15 ثانية (تمهيدي)</option>
+                                    <option value="5">${i18n.t("timer_5s")}</option>
+                                    <option value="10">${i18n.t("timer_10s")}</option>
+                                    <option value="15">${i18n.t("timer_15s")}</option>
                                 </select>
                             </div>
                             <div>
-                                <label for="cfg-font-scale" class="block text-xs font-bold text-slate-600 mb-1">حجم الخط القرآني:</label>
+                                <label for="cfg-font-scale" class="block text-xs font-bold text-slate-600 mb-1">${i18n.t("font_scale_label")}</label>
                                 <select id="cfg-font-scale" onchange="settingsManager.save({fontScale: this.value})" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-bold text-xs text-slate-700 outline-none focus:border-emerald-500">
-                                    <option value="normal">عادي (100%)</option>
-                                    <option value="large">كبير (122%) 🔍</option>
-                                    <option value="xlarge">كبير جداً (145%) 🔎</option>
+                                    <option value="normal">${i18n.t("font_normal")}</option>
+                                    <option value="large">${i18n.t("font_large")}</option>
+                                    <option value="xlarge">${i18n.t("font_xlarge")}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="pt-2 border-t border-slate-200/80 flex items-center justify-between">
                             <div>
-                                <label for="cfg-shuffle-cards" class="font-bold text-slate-700 cursor-pointer select-none text-xs sm:text-sm block">ترتيب عشوائي لبطاقات التحدي</label>
-                                <span class="text-[11px] text-slate-400 block">خلط الكلمات لاختبار التهجي ومنع حفظ موضعها</span>
+                                <label for="cfg-shuffle-cards" class="font-bold text-slate-700 cursor-pointer select-none text-xs sm:text-sm block">${i18n.t("shuffle_cards_label")}</label>
+                                <span class="text-[11px] text-slate-400 block">${i18n.t("shuffle_cards_desc")}</span>
                             </div>
                             <input type="checkbox" id="cfg-shuffle-cards" onchange="settingsManager.save({shuffleCards: this.checked})" class="w-5 h-5 accent-emerald-600 rounded cursor-pointer">
                         </div>
                         <div class="pt-2 border-t border-slate-200/80 flex items-center justify-between">
                             <div>
-                                <label for="cfg-no-penalty" class="font-bold text-slate-700 cursor-pointer select-none text-xs sm:text-sm block">نمط التشجيع الإيجابي (بدون خصم نقاط)</label>
-                                <span class="text-[11px] text-slate-400 block">منع إنقاص النقاط عند الخطأ لتشجيع الناشئة</span>
+                                <label for="cfg-no-penalty" class="font-bold text-slate-700 cursor-pointer select-none text-xs sm:text-sm block">${i18n.t("no_penalty_label")}</label>
+                                <span class="text-[11px] text-slate-400 block">${i18n.t("no_penalty_desc")}</span>
                             </div>
                             <input type="checkbox" id="cfg-no-penalty" onchange="settingsManager.save({noPenaltyMode: this.checked})" class="w-5 h-5 accent-emerald-600 rounded cursor-pointer">
                         </div>
                         <div class="pt-2 border-t border-slate-200/80 flex items-center justify-between">
                             <div>
-                                <label for="cfg-manual-advance" class="font-bold text-slate-700 cursor-pointer select-none text-xs sm:text-sm block">التقدم اليدوي للبطاقات (الشرح والتأني)</label>
-                                <span class="text-[11px] text-slate-400 block">إيقاف الانتقال التلقائي للوقوف على بيان الكلمة</span>
+                                <label for="cfg-manual-advance" class="font-bold text-slate-700 cursor-pointer select-none text-xs sm:text-sm block">${i18n.t("manual_advance_label")}</label>
+                                <span class="text-[11px] text-slate-400 block">${i18n.t("manual_advance_desc")}</span>
                             </div>
                             <input type="checkbox" id="cfg-manual-advance" onchange="settingsManager.save({manualAdvance: this.checked})" class="w-5 h-5 accent-emerald-600 rounded cursor-pointer">
                         </div>
@@ -278,16 +281,16 @@ const settingsManager = {
                     <!-- Section 4: سياسة تقييم تكرار الدروس للطلاب -->
                     <div class="bg-slate-50 p-3.5 sm:p-4 rounded-2xl border border-slate-200 space-y-3">
                         <h3 class="font-black text-emerald-800 flex items-center gap-2 text-xs sm:text-sm">
-                            <span aria-hidden="true">📊</span> <span>سياسة تقييم تكرار الدروس</span>
+                            <span aria-hidden="true">📊</span> <span>${i18n.t("section_repeat_policy")}</span>
                         </h3>
                         <div>
-                            <label for="nb-opt-repeat-policy" class="block text-xs font-bold text-slate-600 mb-1">طريقة احتساب نتيجة الدرس عند تكراره:</label>
+                            <label for="nb-opt-repeat-policy" class="block text-xs font-bold text-slate-600 mb-1">${i18n.t("repeat_policy_label")}</label>
                             <select id="nb-opt-repeat-policy" onchange="settingsManager.save({repeatGradingPolicy: this.value})" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-bold text-xs text-slate-700 outline-none focus:border-emerald-500">
-                                <option value="best">🏆 أعلى نتيجة (أفضل محاولة)</option>
-                                <option value="latest">🔄 آخر محاولة (النتيجة الأحدث)</option>
-                                <option value="cumulative">➕ نقاط تراكمية (إضافة النقاط للرصيد)</option>
+                                <option value="best">${i18n.t("policy_best")}</option>
+                                <option value="latest">${i18n.t("policy_latest")}</option>
+                                <option value="cumulative">${i18n.t("policy_cumulative")}</option>
                             </select>
-                            <span class="text-[11px] text-slate-400 block mt-1">تحدد كيفية معالجة نتائج الطالب وسجل إنجازه عند إعادة الدرس أكثر من مرة</span>
+                            <span class="text-[11px] text-slate-400 block mt-1">${i18n.t("repeat_policy_desc")}</span>
                         </div>
                     </div>
 
@@ -295,11 +298,11 @@ const settingsManager = {
 
                 <!-- Footer Actions -->
                 <div class="bg-slate-100 p-3.5 sm:p-4 border-t border-slate-200 flex items-center justify-between gap-2">
-                    <button onclick="settingsManager.reset()" class="text-xs font-bold text-rose-600 hover:text-rose-700 px-3 py-2 rounded-xl hover:bg-rose-50 transition-colors" aria-label="استعادة الإعدادات الافتراضية">
-                        🔄 استعادة الافتراضي
+                    <button onclick="settingsManager.reset()" class="text-xs font-bold text-rose-600 hover:text-rose-700 px-3 py-2 rounded-xl hover:bg-rose-50 transition-colors" aria-label="${i18n.t('settings_reset_btn')}">
+                        ${i18n.t("settings_reset_btn")}
                     </button>
-                    <button onclick="settingsManager.close()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-6 py-2.5 rounded-xl text-xs sm:text-sm shadow-md transition-transform hover:scale-105" aria-label="تم وحفظ">
-                        حفظ وإغلاق ✓
+                    <button onclick="settingsManager.close()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-6 py-2.5 rounded-xl text-xs sm:text-sm shadow-md transition-transform hover:scale-105" aria-label="${i18n.t('save_and_close')}">
+                        ${i18n.t("save_and_close")}
                     </button>
                 </div>
             </div>
@@ -373,4 +376,14 @@ if (typeof document !== 'undefined') {
     } else {
         if (typeof settingsManager !== 'undefined') settingsManager.apply();
     }
+}
+
+// الاستماع لحدث تبديل اللغة لإعادة بناء هيكل النافذة باللغة الجديدة
+if (typeof window !== 'undefined') {
+    window.addEventListener('nb:locale-changed', () => {
+        const existing = document.getElementById('nb-settings-modal');
+        if (existing) {
+            existing.remove();
+        }
+    });
 }

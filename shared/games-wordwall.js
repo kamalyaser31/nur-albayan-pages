@@ -50,7 +50,12 @@ const wordwallRoom = {
         }
         else if (mode === 'wheel' && wheelC) {
             wheelC.classList.remove('hidden');
-            if (typeof wheelGame !== 'undefined') setTimeout(() => wheelGame.draw(), 50);
+            if (typeof wheelGame !== 'undefined') {
+                wheelGame.drawTimer = setTimeout(() => {
+                    wheelGame.draw();
+                    wheelGame.drawTimer = null;
+                }, 50);
+            }
         }
         else if (mode === 'cards' && cardsC) {
             cardsC.classList.remove('hidden');
@@ -116,12 +121,14 @@ const wordwallRoom = {
         this.renderBoxes();
         this.switchMode('box');
         if (typeof cardsGame !== 'undefined') cardsGame.init();
-        if (typeof ladderGame !== 'undefined') ladderGame.init();
+        if (typeof ladderGame !== 'undefined') ladderGame.reset();
+        if (typeof tilesGame !== 'undefined') tilesGame.reset();
+        if (typeof honeycombGame !== 'undefined') honeycombGame.reset();
     }
 };
 
 const wheelGame = {
-    canvas: null, ctx: null, angle: 0, angularVelocity: 0, friction: 0.985, isSpinning: false, animFrameId: null, revealTimer: null,
+    canvas: null, ctx: null, angle: 0, angularVelocity: 0, friction: 0.985, isSpinning: false, animFrameId: null, revealTimer: null, drawTimer: null,
     init() {
         this.reset();
         this.canvas = document.getElementById('wheel-canvas');
@@ -132,6 +139,7 @@ const wheelGame = {
     reset() {
         if (this.animFrameId) { cancelAnimationFrame(this.animFrameId); this.animFrameId = null; }
         if (this.revealTimer) { clearTimeout(this.revealTimer); this.revealTimer = null; }
+        if (this.drawTimer) { clearTimeout(this.drawTimer); this.drawTimer = null; }
         this.isSpinning = false;
         this.angularVelocity = 0;
     },
@@ -211,7 +219,11 @@ const wheelGame = {
         const normalizedAngle = ((1.5 * Math.PI - (this.angle % TWO_PI)) % TWO_PI + TWO_PI) % TWO_PI;
         const sliceIndex = Math.floor(normalizedAngle / sliceAngle) % numSlices;
         const status = document.getElementById('wheel-status');
-        if (status) status.innerText = `Wheel landed on Word ${sliceIndex + 1}`;
+        if (status) {
+            status.innerText = (typeof i18n !== 'undefined')
+                ? i18n.t('wheel_landed', 'استقرت العجلة على: {word}', { word: sliceIndex + 1 })
+                : `استقرت العجلة على: ${sliceIndex + 1}`;
+        }
         this.revealTimer = setTimeout(() => {
             if (typeof app !== 'undefined') app.revealWord(sliceIndex, 'wheel');
             this.revealTimer = null;
@@ -243,7 +255,10 @@ const cardsGame = {
     dealNextCard() {
         if (this.isAnimating) return;
         if (this.cardDeckIndices.length === 0) {
-            if (typeof app !== 'undefined') app.triggerFeedback('Reshuffling Deck... 🃏', '#3b82f6');
+            const reshuffleMsg = (typeof i18n !== 'undefined')
+                ? i18n.t('reshuffling_deck', 'إعادة خلط البطاقات... 🃏')
+                : 'إعادة خلط البطاقات... 🃏';
+            if (typeof app !== 'undefined') app.triggerFeedback(reshuffleMsg, '#3b82f6');
             this.init();
             return;
         }
@@ -284,7 +299,11 @@ const ladderGame = {
         this.renderLadder();
         this.showCurrentWord();
         const resetBtn = document.getElementById('ladder-reset-btn');
-        if (resetBtn) resetBtn.textContent = 'Restart Round 🔄';
+        if (resetBtn) {
+            resetBtn.textContent = (typeof i18n !== 'undefined')
+                ? i18n.t('restart_round', 'إعادة الجولة 🔄')
+                : 'إعادة الجولة 🔄';
+        }
     },
 
     setTarget(steps) {
@@ -343,7 +362,10 @@ const ladderGame = {
         const liveRegion = document.getElementById('ladder-live-announcer');
         if (liveRegion && this.currentWordItem && typeof app !== 'undefined') {
             const plainWord = app.getPlainWord(this.currentWordItem);
-            liveRegion.textContent = `الدرجة ${this.currentStep}: ${plainWord}`;
+            const stepText = (typeof i18n !== 'undefined')
+                ? i18n.t('ladder_step_indicator', 'الدرجة {step} من {total}', { step: this.currentStep, total: this.targetSteps })
+                : `الدرجة ${this.currentStep} من ${this.targetSteps}`;
+            liveRegion.textContent = `${stepText}: ${plainWord}`;
         }
     },
 
@@ -367,10 +389,13 @@ const ladderGame = {
             rung.id = `ladder-rung-${s}`;
             rung.setAttribute('aria-label', `Step ${s}${isReached ? ', reached' : ''}${isCrown ? ', top crown' : ''}`);
 
+            const crownLabel = (typeof i18n !== 'undefined') ? i18n.t('ladder_peak_label', '👑 القمة') : '👑 القمة';
+            const stepLabel = (typeof i18n !== 'undefined') ? i18n.t('ladder_rung_label', 'الدرجة {step}', { step: s }) : `الدرجة ${s}`;
+
             rung.innerHTML = `
                 <div class="flex items-center gap-2">
                     <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs ${isReached ? 'bg-white text-emerald-700 font-black' : 'bg-slate-200 text-slate-600'}">${s}</span>
-                    <span>${isCrown ? '👑 القمة' : `الدرجة ${s}`}</span>
+                    <span>${isCrown ? crownLabel : stepLabel}</span>
                 </div>
                 <span class="text-sm">${isReached ? (isCrown ? '🏆' : '✔') : '🔒'}</span>
             `;
@@ -379,7 +404,9 @@ const ladderGame = {
 
         const stepCountEl = document.getElementById('ladder-step-indicator');
         if (stepCountEl) {
-            stepCountEl.textContent = `الدرجة ${this.currentStep} من ${this.targetSteps}`;
+            stepCountEl.textContent = (typeof i18n !== 'undefined')
+                ? i18n.t('ladder_step_indicator', 'الدرجة {step} من {total}', { step: this.currentStep, total: this.targetSteps })
+                : `الدرجة ${this.currentStep} من ${this.targetSteps}`;
         }
     },
 
@@ -397,17 +424,25 @@ const ladderGame = {
                 Sound.playChime();
                 const wordDisplay = document.getElementById('ladder-word-display');
                 if (wordDisplay) {
+                    const congratsHeading = (typeof i18n !== 'undefined')
+                        ? i18n.t('ladder_peak_congrats', 'ما شاء الله! بلغت القمة!')
+                        : 'ما شاء الله! بلغت القمة!';
+                    const congratsSub = (typeof i18n !== 'undefined')
+                        ? i18n.t('ladder_peak_subtext', 'أتممت درجات الارتقاء بنجاح تام')
+                        : 'أتممت درجات الارتقاء بنجاح تام';
                     wordDisplay.innerHTML = `
                         <div class="flex flex-col items-center justify-center p-4 text-center animate-bounce">
                             <span class="text-6xl sm:text-7xl">👑</span>
-                            <h3 class="text-2xl sm:text-3xl font-black text-amber-500 mt-2">ما شاء الله! بلغت القمة!</h3>
-                            <p class="text-sm text-slate-600 mt-1 font-bold">أتممت درجات الارتقاء بنجاح تام</p>
+                            <h3 class="text-2xl sm:text-3xl font-black text-amber-500 mt-2">${congratsHeading}</h3>
+                            <p class="text-sm text-slate-600 mt-1 font-bold">${congratsSub}</p>
                         </div>
                     `;
                 }
                 const liveRegion = document.getElementById('ladder-live-announcer');
                 if (liveRegion) {
-                    liveRegion.textContent = `أحسنت! بلغت القمة والدرجة ${this.targetSteps}`;
+                    liveRegion.textContent = (typeof i18n !== 'undefined')
+                        ? i18n.t('ladder_peak_announcement', 'أحسنت! بلغت القمة والدرجة {total}', { total: this.targetSteps })
+                        : `أحسنت! بلغت القمة والدرجة ${this.targetSteps}`;
                 }
                 return;
             }
@@ -598,7 +633,9 @@ const honeycombGame = {
         if (!badge || typeof dataset === 'undefined') return;
         const total = dataset.length;
         const mastered = Object.values(this.cellStatus).filter(s => s === 'mastered').length;
-        badge.textContent = `المتقن: ${mastered} من ${total}`;
+        badge.textContent = (typeof i18n !== 'undefined')
+            ? i18n.t('honeycomb_mastered_badge', 'المتقن: {count} من {total}', { count: mastered, total: total })
+            : `المتقن: ${mastered} من ${total}`;
     },
     reset() {
         this.cellStatus = {};

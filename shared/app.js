@@ -28,6 +28,13 @@ const app = {
         if (typeof wordwallRoom !== 'undefined') wordwallRoom.init();
         if (typeof ruleManager !== 'undefined' && typeof rulesData !== 'undefined' && rulesData.length > 0) ruleManager.init();
 
+        window.addEventListener('nb:locale-changed', () => {
+            this.populateSelector();
+            if (typeof updateActiveStudentPill === 'function') {
+                updateActiveStudentPill();
+            }
+        });
+
         if (!this.keyboardBound) {
             this.keyboardBound = true;
             document.addEventListener('keydown', (e) => {
@@ -37,6 +44,10 @@ const app = {
                 // حظر التفاعل بالمفاتيح إذا كانت نافذة الإعدادات مفتوحة
                 const settingsModal = document.getElementById('nb-settings-modal');
                 if (settingsModal && !settingsModal.classList.contains('hidden')) return;
+
+                // حظر التفاعل بالمفاتيح إذا كانت نافذة قائمة الطلاب مفتوحة
+                const rosterModal = document.getElementById('student-roster-modal');
+                if (rosterModal && !rosterModal.classList.contains('hidden')) return;
 
                 const overlay = document.getElementById('word-overlay');
                 const isOverlayOpen = overlay && !overlay.classList.contains('hidden');
@@ -83,6 +94,7 @@ const app = {
     },
 
     hideAll() {
+        this.clearAdvanceTimer();
         if (this.timer) { clearInterval(this.timer); this.timer = null; }
         if (this.feedbackTimer) { clearTimeout(this.feedbackTimer); this.feedbackTimer = null; }
         this.closeOverlay();
@@ -124,6 +136,8 @@ const app = {
         else if (val === 'ww_ladder') { const s = document.getElementById('wordwall-stage'); if (s) s.classList.remove('hidden'); if (typeof wordwallRoom !== 'undefined') wordwallRoom.switchMode('ladder'); }
         else if (val === 'ww_wheel') { const s = document.getElementById('wordwall-stage'); if (s) s.classList.remove('hidden'); if (typeof wordwallRoom !== 'undefined') wordwallRoom.switchMode('wheel'); }
         else if (val === 'ww_cards') { const s = document.getElementById('wordwall-stage'); if (s) s.classList.remove('hidden'); if (typeof wordwallRoom !== 'undefined') wordwallRoom.switchMode('cards'); }
+        else if (val === 'ww_tiles') { const s = document.getElementById('wordwall-stage'); if (s) s.classList.remove('hidden'); if (typeof wordwallRoom !== 'undefined') wordwallRoom.switchMode('tiles'); }
+        else if (val === 'ww_honeycomb') { const s = document.getElementById('wordwall-stage'); if (s) s.classList.remove('hidden'); if (typeof wordwallRoom !== 'undefined') wordwallRoom.switchMode('honeycomb'); }
         else if (val === 'summary') { this.finishToSummary(); }
         const sel = document.getElementById('example-navigator'); if (sel) sel.value = val;
     },
@@ -194,6 +208,8 @@ const app = {
         const w3 = document.createElement('option'); w3.value = 'ww_ladder'; w3.textContent = '🪜 Mastery Ladder (سلم الإتقان)'; wwGroup.appendChild(w3);
         const w4 = document.createElement('option'); w4.value = 'ww_wheel'; w4.textContent = '🎡 Spin The Wheel (عجلة الكلمات)'; wwGroup.appendChild(w4);
         const w5 = document.createElement('option'); w5.value = 'ww_cards'; w5.textContent = '🎴 Random Cards (البطاقات العشوائية)'; wwGroup.appendChild(w5);
+        const w6 = document.createElement('option'); w6.value = 'ww_tiles'; w6.textContent = '🧩 Flip Tiles (اقلب البلاطات)'; wwGroup.appendChild(w6);
+        const w7 = document.createElement('option'); w7.value = 'ww_honeycomb'; w7.textContent = '🐝 Honeycomb (خلية النحل)'; wwGroup.appendChild(w7);
         selector.appendChild(wwGroup);
     },
 
@@ -402,21 +418,7 @@ const app = {
         if (this._isAdvancing) return; // حماية ضد السباق وتعدد الضغطات
         const settings = (typeof settingsManager !== 'undefined') ? settingsManager.get() : {};
 
-        // استدعاء التسجيل اللحظي فورياً للطالب النشط
-        if (typeof studentManager !== 'undefined' && studentManager.hasActiveStudent()) {
-            const lessonId = this.getLessonId();
-            const pts = isCorrect ? ((this.isReviewMode) ? 2 : ((typeof settingsManager !== 'undefined' && settingsManager.get().noPenaltyMode) ? 1 : 1)) : 0;
-            let currentWord = null;
-            if (this.isReviewMode && this.reviewQueue && this.reviewIdx < this.reviewQueue.length) {
-                const rIdx = this.reviewQueue[this.reviewIdx];
-                currentWord = (typeof dataset !== 'undefined' && dataset[rIdx]) ? dataset[rIdx] : null;
-            } else if (typeof dataset !== 'undefined' && dataset.length > 0) {
-                const actualIdx = (this.order && this.order[this.idx] !== undefined) ? this.order[this.idx] : this.idx;
-                currentWord = dataset[actualIdx] || null;
-            }
-            studentManager.recordCardEvaluation(lessonId, isCorrect, isCorrect ? pts : 0, currentWord, this.idx, dataset ? dataset.length : 0);
-        }
-
+        // مسار تقييم صفحة المعالجة المخصصة حصراً لمنع تكرار النقاط ومضاعفة مدخلات البنك
         if (typeof PAGE_CONFIG !== 'undefined' && PAGE_CONFIG.pageNumber === 'remediation') {
             const currentItemIdx = (this.order && this.order[this.idx] !== undefined) ? this.order[this.idx] : this.idx;
             const currentWord = (typeof dataset !== 'undefined' && dataset[currentItemIdx]) ? dataset[currentItemIdx] : null;
@@ -432,17 +434,40 @@ const app = {
                     this.triggerFeedback('تحتاج تدريباً إضافياً ⭐', '#f43f5e', false);
                     if (typeof Sound !== 'undefined' && typeof Sound.fail === 'function') Sound.fail();
                 }
-                this.updateScoreUI();
-                if (!settings.manualAdvance) {
-                    this._isAdvancing = true;
-                    this.clearAdvanceTimer();
-                    this.advanceTimer = setTimeout(() => {
-                        this._isAdvancing = false;
-                        this.next();
-                    }, 600);
-                }
-                return;
+            } else if (isCorrect) {
+                this.stats.ok++;
+                this.score += 2;
+                this.triggerFeedback('أحسنت! ⭐', '#10b981', true);
+            } else {
+                this.stats.err++;
+                this.triggerFeedback('تحتاج تدريباً إضافياً ⭐', '#f43f5e', false);
+                if (typeof Sound !== 'undefined' && typeof Sound.fail === 'function') Sound.fail();
             }
+            this.updateScoreUI();
+            if (!settings.manualAdvance) {
+                this._isAdvancing = true;
+                this.clearAdvanceTimer();
+                this.advanceTimer = setTimeout(() => {
+                    this._isAdvancing = false;
+                    this.next();
+                }, 600);
+            }
+            return;
+        }
+
+        // استدعاء التسجيل اللحظي فورياً للطالب النشط (للدروس العادية)
+        if (typeof studentManager !== 'undefined' && studentManager.hasActiveStudent()) {
+            const lessonId = this.getLessonId();
+            const pts = isCorrect ? ((this.isReviewMode) ? 2 : ((typeof settingsManager !== 'undefined' && settingsManager.get().noPenaltyMode) ? 1 : 1)) : 0;
+            let currentWord = null;
+            if (this.isReviewMode && this.reviewQueue && this.reviewIdx < this.reviewQueue.length) {
+                const rIdx = this.reviewQueue[this.reviewIdx];
+                currentWord = (typeof dataset !== 'undefined' && dataset[rIdx]) ? dataset[rIdx] : null;
+            } else if (typeof dataset !== 'undefined' && dataset.length > 0) {
+                const actualIdx = (this.order && this.order[this.idx] !== undefined) ? this.order[this.idx] : this.idx;
+                currentWord = dataset[actualIdx] || null;
+            }
+            studentManager.recordCardEvaluation(lessonId, isCorrect, isCorrect ? pts : 0, currentWord, this.idx, dataset ? dataset.length : 0);
         }
 
         if (this.isReviewMode) {

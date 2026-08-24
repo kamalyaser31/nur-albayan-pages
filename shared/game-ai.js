@@ -154,8 +154,15 @@ const gameAI = {
     // تحديث مظهر وتسميات أزرار التحكم
     updateUI() {
         const isComp = this.mode === 'computer';
-        const modeLabel = isComp ? '🤖 ضد الكمبيوتر' : '👨‍🏫 مع المعلم';
-        const diffLabel = this.difficulty === 'easy' ? 'سهل 😊' : 'ذكي 🧠';
+        const modeLabel = isComp
+            ? (typeof i18n !== 'undefined' ? i18n.t("mode_vs_computer", "🤖 ضد الكمبيوتر") : "🤖 ضد الكمبيوتر")
+            : (typeof i18n !== 'undefined' ? i18n.t("mode_vs_teacher", "👨‍🏫 مع المعلم") : "👨‍🏫 مع المعلم");
+        const diffText = this.difficulty === 'easy'
+            ? (typeof i18n !== 'undefined' ? i18n.t("diff_easy", "سهل 😊") : "سهل 😊")
+            : (typeof i18n !== 'undefined' ? i18n.t("diff_smart", "ذكي 🧠") : "ذكي 🧠");
+        const diffLabel = typeof i18n !== 'undefined'
+            ? i18n.t("level_label", `مستوى: ${diffText}`, { level: diffText })
+            : `مستوى: ${diffText}`;
 
         // أزرار XO
         const xoModeBtn = document.getElementById('xo-mode-btn');
@@ -168,7 +175,7 @@ const gameAI = {
         }
         if (xoDiffBtn) {
             xoDiffBtn.style.display = isComp ? 'inline-block' : 'none';
-            xoDiffBtn.innerText = `مستوى: ${diffLabel}`;
+            xoDiffBtn.innerText = diffLabel;
         }
 
         // أزرار Connect 4
@@ -182,12 +189,19 @@ const gameAI = {
         }
         if (c4DiffBtn) {
             c4DiffBtn.style.display = isComp ? 'inline-block' : 'none';
-            c4DiffBtn.innerText = `مستوى: ${diffLabel}`;
+            c4DiffBtn.innerText = diffLabel;
         }
     }
 };
 
-// تهيئة تلقائية للواجهة عند التحميل
-document.addEventListener('DOMContentLoaded', () => {
-    if (typeof gameAI !== 'undefined') gameAI.updateUI();
-});
+// تهيئة تلقائية للواجهة عند التحميل وتحديثها عند تبديل اللغة
+if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof gameAI !== 'undefined') gameAI.updateUI();
+    });
+}
+if (typeof window !== 'undefined') {
+    window.addEventListener('nb:locale-changed', () => {
+        if (typeof gameAI !== 'undefined') gameAI.updateUI();
+    });
+}
