@@ -145,6 +145,16 @@ const i18n = {
     },
 
     /**
+     * تبديل اللغة بين اللغات المتاحة (افتراضياً بين ar و en)
+     * @returns {string} كود اللغة الجديدة
+     */
+    toggleLocale() {
+        const next = this._activeLocale === 'ar' ? 'en' : 'ar';
+        this.setLocale(next);
+        return next;
+    },
+
+    /**
      * تطبيق اتجاه المستند واللغة على وسم <html>
      * @private
      */

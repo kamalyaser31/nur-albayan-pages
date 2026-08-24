@@ -117,13 +117,18 @@ function buildAppUI() {
                 <button onclick="app.triggerFeedback(i18n.t('txt_excellent') + ' 🏆', '#10b981', true)" class="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-md font-black text-[10px] sm:text-xs hover:bg-emerald-200 transition-colors" aria-label="${i18n.t('praise_excellent')}">${i18n.t('txt_excellent')}</button>
             </div>
 
-            <!-- Dropdown Navigator & Settings Button -->
+            <!-- Dropdown Navigator & Settings Button & Language Switcher -->
             <div class="flex items-center gap-1.5">
                 <div id="selector-wrapper" class="flex items-center bg-slate-50 px-2 sm:px-3 py-1 rounded-full border border-slate-200 max-w-[130px] sm:max-w-[200px]">
                     <select id="example-navigator" onchange="app.jumpTo(this.value)" class="bg-transparent text-emerald-700 font-bold text-xs sm:text-sm outline-none cursor-pointer w-full text-center truncate" aria-label="${i18n.t('nav_section_aria')}">
                     </select>
                 </div>
-                <button onclick="if(typeof settingsManager!=='undefined')settingsManager.open()" class="p-1.5 sm:p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition-colors shadow-sm text-sm sm:text-base leading-none" aria-label="${i18n.t('open_settings_btn')}" title="Teacher Settings">⚙️</button>
+                <!-- زر تبديل اللغة السريع -->
+                <button id="top-nav-lang-btn" onclick="if(typeof i18n !== 'undefined') i18n.toggleLocale()" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-full transition-colors font-bold text-xs shadow-sm flex items-center gap-1 cursor-pointer" aria-label="${(typeof i18n !== 'undefined' && i18n.getLocale() === 'ar') ? 'التحويل إلى اللغة الإنجليزية' : 'Switch to Arabic language'}">
+                    <span aria-hidden="true">🌐</span>
+                    <span id="top-nav-lang-text">${(typeof i18n !== 'undefined' && i18n.getLocale() === 'ar') ? 'EN' : 'عربي'}</span>
+                </button>
+                <button onclick="if(typeof settingsManager!=='undefined')settingsManager.open()" class="p-1.5 sm:p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition-colors shadow-sm text-sm sm:text-base leading-none cursor-pointer" aria-label="${i18n.t('open_settings_btn')}" title="Teacher Settings">⚙️</button>
             </div>
         </div>
     </header>
@@ -468,6 +473,22 @@ function buildAppUI() {
 }
 
 /**
+ * تحديث زر اللغة وشارة الطالب النشط في ترويسة الدرس تلقائياً
+ */
+function updateTopNavLang() {
+    if (typeof i18n === 'undefined') return;
+    const isAr = i18n.getLocale() === 'ar';
+    const langBtnText = document.getElementById('top-nav-lang-text');
+    const langBtn = document.getElementById('top-nav-lang-btn');
+    if (langBtnText) {
+        langBtnText.textContent = isAr ? 'EN' : 'عربي';
+    }
+    if (langBtn) {
+        langBtn.setAttribute('aria-label', isAr ? 'التحويل إلى اللغة الإنجليزية' : 'Switch to Arabic language');
+    }
+}
+
+/**
  * تحديث شارة الطالب النشط في ترويسة الدرس تلقائياً عبر studentManager
  */
 function updateActiveStudentPill() {
@@ -479,32 +500,45 @@ function updateActiveStudentPill() {
     if (typeof studentManager !== 'undefined' && typeof studentManager.getActiveStudent === 'function') {
         const student = studentManager.getActiveStudent();
         if (student && (student.name || student.id)) {
-            nameEl.textContent = student.name || 'طالب';
+            nameEl.textContent = student.name || (typeof i18n !== 'undefined' ? i18n.t('student_name_placeholder') : 'طالب');
             avatarEl.textContent = student.avatar || '👤';
             if (pill) {
-                pill.setAttribute('aria-label', `الطالب الحالي: ${student.name || 'طالب'}`);
-                pill.title = `الطالب الحالي: ${student.name || 'طالب'}`;
+                pill.setAttribute('aria-label', `${typeof i18n !== 'undefined' ? i18n.t('active_badge') : 'الطالب الحالي'}: ${student.name}`);
+                pill.title = student.name;
             }
             return;
         }
     }
 
-    nameEl.textContent = 'حصة عامة';
+    const defaultText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('general_session') : 'حصة عامة';
+    nameEl.textContent = defaultText;
     avatarEl.textContent = '👤';
     if (pill) {
-        pill.setAttribute('aria-label', 'الطالب الحالي: حصة عامة');
-        pill.title = 'حصة عامة';
+        pill.setAttribute('aria-label', defaultText);
+        pill.title = defaultText;
     }
 }
 
-// إتاحة الدالة عالمياً وتحديث الشارة عند جاهزية الصفحة
+// إتاحة الدوال عالمياً وتحديث الشارة عند جاهزية الصفحة
 window.updateActiveStudentPill = updateActiveStudentPill;
+window.updateTopNavLang = updateTopNavLang;
 
 if (typeof document !== 'undefined') {
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', updateActiveStudentPill);
-    } else {
+    const initTopBar = () => {
         updateActiveStudentPill();
+        updateTopNavLang();
+    };
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initTopBar);
+    } else {
+        initTopBar();
     }
+}
+
+if (typeof window !== 'undefined') {
+    window.addEventListener('nb:locale-changed', () => {
+        updateActiveStudentPill();
+        updateTopNavLang();
+    });
 }
 

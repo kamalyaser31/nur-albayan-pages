@@ -77,6 +77,12 @@
       <span>إدارة الطلاب</span>
     </button>
 
+    <!-- زر تبديل اللغة -->
+    <button id="lang-switch-btn" onclick="i18n.toggleLocale()" class="action-btn" aria-label="التحويل إلى اللغة الإنجليزية">
+      <span aria-hidden="true">🌐</span>
+      <span id="lang-switch-text">English</span>
+    </button>
+
     <!-- زر إعدادات المعلم -->
     <button onclick="settingsManager.open()" class="action-btn" aria-label="فتح نافذة إعدادات المعلم">
       <span aria-hidden="true">⚙️</span>
@@ -509,6 +515,81 @@
   <strong>منظومة نور البيان التفاعلية</strong>
   <p>تطوير الشيخ جهاد الصياد • نسألكم الدعاء لوالده ولأخيه محمد رحمهما الله</p>
 </footer>
+
+<script>
+  function updateIndexLanguage() {
+    if (typeof i18n === 'undefined') return;
+    const isAr = i18n.getLocale() === 'ar';
+
+    // 1. زر تبديل اللغة
+    const langBtnText = document.getElementById('lang-switch-text');
+    const langBtn = document.getElementById('lang-switch-btn');
+    if (langBtnText) {
+      langBtnText.textContent = isAr ? 'English' : 'العربية';
+    }
+    if (langBtn) {
+      langBtn.setAttribute('aria-label', isAr ? 'التحويل إلى اللغة الإنجليزية' : 'Switch to Arabic language');
+    }
+
+    // 2. ترويسة الصفحة
+    const headerH1 = document.querySelector('header h1');
+    if (headerH1) headerH1.textContent = i18n.t('hero_title');
+
+    const headerP = document.querySelector('header p');
+    if (headerP) headerP.textContent = i18n.t('hero_subtitle');
+
+    const countPill = document.querySelector('#count span:last-child');
+    if (countPill) countPill.textContent = i18n.t('total_lessons_label');
+
+    const rosterBtn = document.querySelector('button[onclick="rosterManager.open()"]:not(.active-student-chip) span:last-child');
+    if (rosterBtn) rosterBtn.textContent = i18n.t('roster_btn_text');
+
+    const settingsBtn = document.querySelector('button[onclick="settingsManager.open()"] span:last-child');
+    if (settingsBtn) settingsBtn.textContent = i18n.t('settings');
+
+    // 3. دليل الاختصارات
+    const shortcutsTitle = document.querySelector('#shortcuts-guide-title span:last-child');
+    if (shortcutsTitle) shortcutsTitle.textContent = i18n.t('shortcuts_guide_title');
+
+    const shortcutsSub = document.querySelector('.shortcuts-header .text-slate-500');
+    if (shortcutsSub) shortcutsSub.textContent = i18n.t('shortcuts_guide_subtitle');
+
+    const cardTitles = document.querySelectorAll('.shortcut-card-title span:last-child');
+    if (cardTitles.length >= 3) {
+      cardTitles[0].textContent = i18n.t('section_evaluation');
+      cardTitles[1].textContent = i18n.t('section_navigation');
+      cardTitles[2].textContent = i18n.t('section_zoom_games');
+    }
+
+    // 4. فهرس الدروس
+    const dirHeading = document.querySelector('.lessons-section h2');
+    if (dirHeading) dirHeading.textContent = i18n.t('lessons_list_title');
+
+    const arrows = document.querySelectorAll('.card-arrow');
+    arrows.forEach(a => {
+      a.textContent = isAr ? '←' : '→';
+    });
+
+    // 5. تذييل الصفحة
+    const footerStrong = document.querySelector('footer strong');
+    if (footerStrong) footerStrong.textContent = i18n.t('app_title');
+
+    const footerP = document.querySelector('footer p');
+    if (footerP) {
+      footerP.textContent = `${i18n.t('developed_by')} ${i18n.t('author_name')} • ${i18n.t('dedication_prayer')}`;
+    }
+
+    // 6. تحديث شارة الطالب بالفهرس
+    if (typeof rosterManager !== 'undefined' && typeof rosterManager.updateIndexPill === 'function') {
+      rosterManager.updateIndexPill();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    updateIndexLanguage();
+    window.addEventListener('nb:locale-changed', updateIndexLanguage);
+  });
+</script>
 
 </body>
 </html>

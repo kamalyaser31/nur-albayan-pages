@@ -161,6 +161,11 @@ const settingsManager = {
         setVal('cfg-no-penalty', 'noPenaltyMode', true);
         setVal('cfg-manual-advance', 'manualAdvance', true);
         setVal('nb-opt-repeat-policy', 'repeatGradingPolicy');
+
+        const langSelect = document.getElementById('cfg-language-select');
+        if (langSelect && typeof i18n !== 'undefined') {
+            langSelect.value = i18n.getLocale();
+        }
     },
 
     // إنشاء هيكل النافذة المنبثقة إن لم تكن موجودة في الصفحة
@@ -187,6 +192,17 @@ const settingsManager = {
                 <!-- Body Controls -->
                 <div class="p-4 sm:p-6 space-y-4 sm:space-y-5 overflow-y-auto max-h-[70vh] text-slate-700 text-sm">
                     
+                    <!-- Section 0: لغة الواجهة والمنظومة -->
+                    <div class="bg-emerald-50/70 p-3.5 sm:p-4 rounded-2xl border border-emerald-200/80 flex items-center justify-between gap-3">
+                        <label for="cfg-language-select" class="font-black text-emerald-900 cursor-pointer select-none text-xs sm:text-sm flex items-center gap-2">
+                            <span aria-hidden="true">🌐</span> <span>${i18n.t("language_label")}</span>
+                        </label>
+                        <select id="cfg-language-select" onchange="if(typeof i18n !== 'undefined') i18n.setLocale(this.value)" class="bg-white border border-emerald-300 rounded-xl px-3 py-1.5 font-bold text-xs text-emerald-800 outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm cursor-pointer">
+                            <option value="ar" ${(typeof i18n !== 'undefined' && i18n.getLocale() === 'ar') ? 'selected' : ''}>العربية (Arabic)</option>
+                            <option value="en" ${(typeof i18n !== 'undefined' && i18n.getLocale() === 'en') ? 'selected' : ''}>English (الإنجليزية)</option>
+                        </select>
+                    </div>
+
                     <!-- Section 1: الصوتيات -->
                     <div class="bg-slate-50 p-3.5 sm:p-4 rounded-2xl border border-slate-200 space-y-3">
                         <h3 class="font-black text-emerald-800 flex items-center gap-2 text-xs sm:text-sm">
@@ -383,7 +399,11 @@ if (typeof window !== 'undefined') {
     window.addEventListener('nb:locale-changed', () => {
         const existing = document.getElementById('nb-settings-modal');
         if (existing) {
+            const wasOpen = !existing.classList.contains('hidden');
             existing.remove();
+            if (wasOpen && typeof settingsManager !== 'undefined') {
+                settingsManager.open();
+            }
         }
     });
 }

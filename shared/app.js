@@ -165,52 +165,55 @@ const app = {
     populateSelector() {
         const selector = document.getElementById('example-navigator');
         if (!selector || typeof dataset === 'undefined') return;
+        const currentVal = selector.value;
         selector.innerHTML = '';
 
         const mainGroup = document.createElement('optgroup');
-        mainGroup.label = "📌 Overview & Rules (نظرة عامة والقواعد)";
+        mainGroup.label = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('group_overview') : '📌 Overview & Rules';
         const menuOpt = document.createElement('option');
         menuOpt.value = 'menu';
-        menuOpt.textContent = '🏠 Main Menu (القائمة الرئيسية)';
+        menuOpt.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('main_menu') : '🏠 Main Menu';
         mainGroup.appendChild(menuOpt);
 
         if (typeof rulesData !== 'undefined' && rulesData.length > 0) {
             const ruleOpt = document.createElement('option');
             ruleOpt.value = 'rules';
-            ruleOpt.textContent = '📖 Rules & Introduction (القواعد والشرح)';
+            ruleOpt.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('rules_and_intro') : '📖 Rules';
             mainGroup.appendChild(ruleOpt);
         }
         selector.appendChild(mainGroup);
 
         const cardGroup = document.createElement('optgroup');
-        cardGroup.label = "🔤 Word & Letter Cards (بطاقات الكلمات والحروف)";
+        cardGroup.label = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('group_cards') : '🔤 Cards';
         dataset.forEach((item, index) => {
             const opt = document.createElement('option');
             opt.value = `word_${index}`;
             const plain = this.getPlainWord(item);
-            opt.textContent = `Card ${index + 1}: ${plain}`;
+            opt.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('card_label', null, { num: index + 1, word: plain }) : `Card ${index + 1}: ${plain}`;
             cardGroup.appendChild(opt);
         });
         selector.appendChild(cardGroup);
 
         const gamesGroup = document.createElement('optgroup');
-        gamesGroup.label = "🎮 Mini-Games & Challenges (الألعاب والتحديات)";
-        const g1 = document.createElement('option'); g1.value = 'game_xo'; g1.textContent = '🕹️ Tic-Tac-Toe (إكس-أو)'; gamesGroup.appendChild(g1);
-        const g2 = document.createElement('option'); g2.value = 'game_c4'; g2.textContent = '🕹️ Connect 4 (أربعة في خط)'; gamesGroup.appendChild(g2);
-        const g3 = document.createElement('option'); g3.value = 'game_memory'; g3.textContent = '🧠 Memory Match (الذاكرة)'; gamesGroup.appendChild(g3);
-        const g4 = document.createElement('option'); g4.value = 'game_riddles'; g4.textContent = '❓ Secret Riddles (الألغاز)'; gamesGroup.appendChild(g4);
+        gamesGroup.label = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('group_mini_games') : '🎮 Games';
+        const g1 = document.createElement('option'); g1.value = 'game_xo'; g1.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('game_xo') : '🕹️ XO'; gamesGroup.appendChild(g1);
+        const g2 = document.createElement('option'); g2.value = 'game_c4'; g2.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('game_c4') : '🕹️ Connect 4'; gamesGroup.appendChild(g2);
+        const g3 = document.createElement('option'); g3.value = 'game_memory'; g3.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('game_memory') : '🧠 Memory'; gamesGroup.appendChild(g3);
+        const g4 = document.createElement('option'); g4.value = 'game_riddles'; g4.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('game_riddles') : '❓ Riddles'; gamesGroup.appendChild(g4);
         selector.appendChild(gamesGroup);
 
         const wwGroup = document.createElement('optgroup');
-        wwGroup.label = "🌟 Wordwall Zone (حائط الألعاب التفاعلية)";
-        const w1 = document.createElement('option'); w1.value = 'ww_box'; w1.textContent = '📦 Open The Box (افتح الصندوق)'; wwGroup.appendChild(w1);
-        const w2 = document.createElement('option'); w2.value = 'ww_curtain'; w2.textContent = '🎭 Curtain Reveal (كشف الستار)'; wwGroup.appendChild(w2);
-        const w3 = document.createElement('option'); w3.value = 'ww_ladder'; w3.textContent = '🪜 Mastery Ladder (سلم الإتقان)'; wwGroup.appendChild(w3);
-        const w4 = document.createElement('option'); w4.value = 'ww_wheel'; w4.textContent = '🎡 Spin The Wheel (عجلة الكلمات)'; wwGroup.appendChild(w4);
-        const w5 = document.createElement('option'); w5.value = 'ww_cards'; w5.textContent = '🎴 Random Cards (البطاقات العشوائية)'; wwGroup.appendChild(w5);
-        const w6 = document.createElement('option'); w6.value = 'ww_tiles'; w6.textContent = '🧩 Flip Tiles (اقلب البلاطات)'; wwGroup.appendChild(w6);
-        const w7 = document.createElement('option'); w7.value = 'ww_honeycomb'; w7.textContent = '🐝 Honeycomb (خلية النحل)'; wwGroup.appendChild(w7);
+        wwGroup.label = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('group_wordwall') : '🌟 Wordwall';
+        const w1 = document.createElement('option'); w1.value = 'ww_box'; w1.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('ww_box_opt') : '📦 Box'; wwGroup.appendChild(w1);
+        const w2 = document.createElement('option'); w2.value = 'ww_curtain'; w2.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('ww_curtain_opt') : '🎭 Curtain'; wwGroup.appendChild(w2);
+        const w3 = document.createElement('option'); w3.value = 'ww_ladder'; w3.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('ww_ladder_opt') : '🪜 Ladder'; wwGroup.appendChild(w3);
+        const w4 = document.createElement('option'); w4.value = 'ww_wheel'; w4.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('ww_wheel_opt') : '🎡 Wheel'; wwGroup.appendChild(w4);
+        const w5 = document.createElement('option'); w5.value = 'ww_cards'; w5.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('ww_cards_opt') : '🎴 Cards'; wwGroup.appendChild(w5);
+        const w6 = document.createElement('option'); w6.value = 'ww_tiles'; w6.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('ww_tiles_opt') : '🀄 Tiles'; wwGroup.appendChild(w6);
+        const w7 = document.createElement('option'); w7.value = 'ww_honeycomb'; w7.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('ww_honeycomb_opt') : '🐝 Honeycomb'; wwGroup.appendChild(w7);
         selector.appendChild(wwGroup);
+
+        if (currentVal) selector.value = currentVal;
     },
 
     shuffle(arr) {
