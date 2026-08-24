@@ -34,6 +34,10 @@ const app = {
                 // حظر التفاعل بالمفاتيح السريعة إذا كان التركيز داخل حقل إدخال
                 if (e.target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
 
+                // حظر التفاعل بالمفاتيح إذا كانت نافذة الإعدادات مفتوحة
+                const settingsModal = document.getElementById('nb-settings-modal');
+                if (settingsModal && !settingsModal.classList.contains('hidden')) return;
+
                 const overlay = document.getElementById('word-overlay');
                 const isOverlayOpen = overlay && !overlay.classList.contains('hidden');
                 const learningStage = document.getElementById('learning-stage');
@@ -57,6 +61,7 @@ const app = {
 
                 if (isLearning) {
                     if (e.key === 'ArrowRight' || e.key === 'PageUp') app.prev();
+                    else if (e.key === 'ArrowLeft' || e.key === 'PageDown' || e.key === 'n' || e.key === 'N') app.next();
                     else if (e.key === '1' || e.key === 'ArrowDown') app.evaluate(false);
                     else if (e.key === '2' || e.key === ' ' || e.key === 'Enter') { e.preventDefault(); app.evaluate(true); }
                 }
@@ -361,11 +366,32 @@ const app = {
     },
 
     evaluate(isCorrect) {
+        const settings = (typeof settingsManager !== 'undefined') ? settingsManager.get() : {};
+
+        if (this.isReviewMode) {
+            if (!this.reviewQueue || this.reviewIdx >= this.reviewQueue.length) return;
+            if (isCorrect) {
+                this.stats.ok++;
+                this.score += 2;
+                this.triggerFeedback('Mastered! 🌟', '#10b981', true);
+            } else {
+                this.stats.err++;
+                this.triggerFeedback('Keep Practicing ⭐', '#f43f5e', false);
+                Sound.fail();
+            }
+            const scoreEl = document.getElementById('score-val'); if (scoreEl) scoreEl.innerText = this.score;
+            if (!settings.manualAdvance) {
+                setTimeout(() => this.next(), 600);
+            }
+            return;
+        }
+
         if (typeof dataset === 'undefined' || dataset.length === 0) return;
         const currentItemIdx = (this.order && this.order[this.idx] !== undefined) ? this.order[this.idx] : this.idx;
         const item = dataset[currentItemIdx];
         if (!item) return;
         const type = item.t;
+
         if (isCorrect) {
             this.stats.ok++;
             let points = (type === 'golden') ? 10 : (type === 'speed' && this.clock > 0) ? 5 : 2;
@@ -373,73 +399,60 @@ const app = {
             const feedbacks = ['Excellent! 🌟', 'Awesome! 🏆', 'Hero! 🧠', 'Great Job! ❤️⭐', 'Very Good! ⭐', 'Genius! 🎓', 'Perfect! 👏', '⭐⭐⭐⭐⭐', '❤️❤️❤️❤️❤️'];
             const randomFeedback = feedbacks[Math.floor(Math.random() * feedbacks.length)];
             this.triggerFeedback(randomFeedback, '#10b981', true);
-
-            if (this.isReviewMode) {
-                this.reviewIdx++;
-                if (this.reviewIdx < this.reviewQueue.length) {
-                    setTimeout(() => this.renderReview(), 600);
-                } else {
-                    this.isReviewMode = false;
-                    setTimeout(() => this.finishToSummary(), 600);
-                }
-                const scoreEl = document.getElementById('score-val'); if (scoreEl) scoreEl.innerText = this.score;
-                return;
-            }
-
-            const third1 = Math.floor(dataset.length / 3) - 1;
-            const third2 = Math.floor((dataset.length * 2) / 3) - 1;
-            if (this.enableGameBreaks && this.idx === third1 && !this.hasPlayedGame1 && dataset.length >= 3) {
-                setTimeout(() => this.jumpTo('transition_1'), 600);
-            } else if (this.enableGameBreaks && this.idx === third2 && !this.hasPlayedGame2 && dataset.length >= 3) {
-                setTimeout(() => this.jumpTo('transition_2'), 600);
-            } else if (this.enableGameBreaks && this.idx === dataset.length - 1 && !this.hasPlayedGame3 && dataset.length >= 3) {
-                setTimeout(() => this.jumpTo('transition_3'), 600);
-            } else {
-                if (this.idx < dataset.length - 1) { this.idx++; setTimeout(() => this.render(), 600); }
-                else { setTimeout(() => this.playWordwall(), 600); }
-            }
         } else {
             this.stats.err++;
             if (!this.mistakeIndices.includes(currentItemIdx)) {
                 this.mistakeIndices.push(currentItemIdx);
             }
-            let points = (type === 'danger') ? -5 : -2;
-            this.score += points; if (this.score < 0) this.score = 0;
-            this.triggerFeedback(type === 'danger' ? '-5 Warning! ⚠️' : '-2 Needs Practice', '#f43f5e', true);
+            let penalty = (settings.noPenaltyMode) ? 0 : ((type === 'danger') ? 5 : 2);
+            this.score = Math.max(0, this.score - penalty);
+            const feedbackText = (settings.noPenaltyMode) ?
+                ((type === 'danger') ? 'High Focus! ⚠️' : 'Needs Practice ⭐') :
+                ((type === 'danger') ? '-5 Warning! ⚠️' : '-2 Needs Practice');
+            this.triggerFeedback(feedbackText, '#f43f5e', false);
             Sound.fail();
-
-            if (this.isReviewMode) {
-                this.reviewIdx++;
-                if (this.reviewIdx < this.reviewQueue.length) {
-                    setTimeout(() => this.renderReview(), 600);
-                } else {
-                    this.isReviewMode = false;
-                    setTimeout(() => this.finishToSummary(), 600);
-                }
-                return;
-            }
-
-            if (this.idx < dataset.length - 1) {
-                const third1 = Math.floor(dataset.length / 3) - 1;
-                const third2 = Math.floor((dataset.length * 2) / 3) - 1;
-                if (this.enableGameBreaks && this.idx === third1 && !this.hasPlayedGame1 && dataset.length >= 3) {
-                    setTimeout(() => this.jumpTo('transition_1'), 600);
-                } else if (this.enableGameBreaks && this.idx === third2 && !this.hasPlayedGame2 && dataset.length >= 3) {
-                    setTimeout(() => this.jumpTo('transition_2'), 600);
-                } else if (this.enableGameBreaks && this.idx === dataset.length - 1 && !this.hasPlayedGame3 && dataset.length >= 3) {
-                    setTimeout(() => this.jumpTo('transition_3'), 600);
-                } else {
-                    this.idx++; setTimeout(() => this.render(), 600);
-                }
-            } else {
-                if (this.enableGameBreaks && !this.hasPlayedGame3 && dataset.length >= 3) {
-                    setTimeout(() => this.jumpTo('transition_3'), 600);
-                } else {
-                    setTimeout(() => this.playWordwall(), 600);
-                }
-            }
         }
         const scoreEl = document.getElementById('score-val'); if (scoreEl) scoreEl.innerText = this.score;
+
+        if (!settings.manualAdvance) {
+            setTimeout(() => this.next(), 600);
+        }
+    },
+
+    next() {
+        const scoreEl = document.getElementById('score-val'); if (scoreEl) scoreEl.innerText = this.score;
+        if (this.isReviewMode) {
+            this.reviewIdx++;
+            if (this.reviewIdx < this.reviewQueue.length) {
+                this.renderReview();
+            } else {
+                this.isReviewMode = false;
+                this.finishToSummary();
+            }
+            return;
+        }
+
+        if (typeof dataset === 'undefined' || dataset.length === 0) return;
+        if (this.idx < dataset.length - 1) {
+            const third1 = Math.floor(dataset.length / 3) - 1;
+            const third2 = Math.floor((dataset.length * 2) / 3) - 1;
+            if (this.enableGameBreaks && this.idx === third1 && !this.hasPlayedGame1 && dataset.length >= 3) {
+                this.jumpTo('transition_1');
+            } else if (this.enableGameBreaks && this.idx === third2 && !this.hasPlayedGame2 && dataset.length >= 3) {
+                this.jumpTo('transition_2');
+            } else if (this.enableGameBreaks && this.idx === dataset.length - 1 && !this.hasPlayedGame3 && dataset.length >= 3) {
+                this.jumpTo('transition_3');
+            } else {
+                this.idx++;
+                this.render();
+            }
+        } else {
+            if (this.enableGameBreaks && !this.hasPlayedGame3 && dataset.length >= 3) {
+                this.jumpTo('transition_3');
+            } else {
+                this.playWordwall();
+            }
+        }
     },
 
     startReview() {
