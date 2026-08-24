@@ -174,6 +174,128 @@
     transform: translateX(4px);
   }
 
+  .header-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+
+  .action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #ffffff;
+    padding: 7px 18px;
+    border-radius: 9999px;
+    font-size: 0.88rem;
+    font-weight: 800;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .action-btn:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  .shortcuts-section {
+    background: #ffffff;
+    border: 2px solid #d1fae5;
+    border-radius: 24px;
+    padding: 22px 20px;
+    margin-bottom: 28px;
+    box-shadow: 0 4px 16px rgba(4, 120, 87, 0.05);
+  }
+
+  .shortcuts-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .shortcuts-title {
+    font-size: 1.12rem;
+    font-weight: 900;
+    color: #065f46;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .shortcuts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+  }
+
+  .shortcut-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .shortcut-card-title {
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: #0d9488;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .shortcut-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: #334155;
+  }
+
+  .kbd-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 8px;
+    font-size: 0.76rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-weight: 800;
+    color: #0f172a;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-bottom: 2px solid #94a3b8;
+    border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    white-space: nowrap;
+  }
+
   .empty {
     grid-column: 1 / -1;
     text-align: center;
@@ -207,12 +329,93 @@
 <header>
   <h1>صفحات نور البيان التفاعلية</h1>
   <p>المنظومة التعليمية الرقمية الشاملة لضبط قراءة الكلمات والقرآن الكريم</p>
-  <div class="stats-pill" id="count">
-    <span>📚 إجمالي الدروس: 33 صفحة تفاعلية</span>
+  <div class="header-actions">
+    <div class="stats-pill" id="count">
+      <span>📚 إجمالي الدروس: 33 صفحة تفاعلية</span>
+    </div>
+    <button onclick="settingsManager.open()" class="action-btn" aria-label="فتح نافذة إعدادات المعلم">
+      <span>⚙️ إعدادات المعلم</span>
+    </button>
   </div>
 </header>
 
 <main>
+  <!-- SHORTCUTS GUIDE SECTION -->
+  <section class="shortcuts-section" aria-labelledby="shortcuts-guide-title">
+    <div class="shortcuts-header">
+      <div class="shortcuts-title" id="shortcuts-guide-title">
+        <span aria-hidden="true">⌨️</span>
+        <span>دليل مفاتيح الاختصارات للمعلم (لوحة المفاتيح والشاشات الذكية)</span>
+      </div>
+      <span class="text-xs text-slate-500 font-bold">تسريع وإدارة التحديات المباشرة أثناء الحصة</span>
+    </div>
+
+    <div class="shortcuts-grid">
+      <!-- Card 1: التقييم والتحفيز -->
+      <div class="shortcut-card">
+        <div class="shortcut-card-title">
+          <span aria-hidden="true">🎯</span> <span>التقييم والتحفيز</span>
+        </div>
+        <div class="shortcut-item">
+          <span>إجابة صحيحة (إتقان)</span>
+          <div class="kbd-group">
+            <span class="kbd">2</span>
+            <span class="kbd">Enter</span>
+            <span class="kbd">Space</span>
+          </div>
+        </div>
+        <div class="shortcut-item">
+          <span>إجابة خاطئة (مراجعة)</span>
+          <div class="kbd-group">
+            <span class="kbd">1</span>
+            <span class="kbd">↓ سهم لأسفل</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: التنقل بين الكلمات -->
+      <div class="shortcut-card">
+        <div class="shortcut-card-title">
+          <span aria-hidden="true">🔄</span> <span>التنقل وتصفح الكلمات</span>
+        </div>
+        <div class="shortcut-item">
+          <span>البطاقة التالية (تقدم)</span>
+          <div class="kbd-group">
+            <span class="kbd">← سهم لليسار</span>
+            <span class="kbd">PageDown</span>
+            <span class="kbd">N</span>
+          </div>
+        </div>
+        <div class="shortcut-item">
+          <span>البطاقة السابقة (رجوع)</span>
+          <div class="kbd-group">
+            <span class="kbd">→ سهم لليمين</span>
+            <span class="kbd">PageUp</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: التكبير وإدارة الألعاب -->
+      <div class="shortcut-card">
+        <div class="shortcut-card-title">
+          <span aria-hidden="true">🔍</span> <span>التكبير والألعاب</span>
+        </div>
+        <div class="shortcut-item">
+          <span>إغلاق نافذة التكبير</span>
+          <div class="kbd-group">
+            <span class="kbd">Escape</span>
+          </div>
+        </div>
+        <div class="shortcut-item">
+          <span>إعادة ضبط ألعاب الكلمات</span>
+          <div class="kbd-group">
+            <span class="kbd">R</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- LINKS-START -->
   <div class="grid-container">
     <a href="pages/6.html" class="lesson-card" aria-label="Nour Al-Bayan Page 6: Page 6 • Letter Shapes (أشكال الحروف)">
@@ -488,5 +691,6 @@
   <p>تطوير الشيخ جهاد الصياد • نسألكم الدعاء لوالده ولأخيه محمد رحمهما الله</p>
 </footer>
 
+<script src="shared/settings.js"></script>
 </body>
 </html>
