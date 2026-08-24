@@ -273,6 +273,12 @@ function buildAppUI() {
                     <button onclick="wordwallRoom.switchMode('cards')" id="tab-cards" class="game-tab py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" aria-label="Random cards game">
                         <span class="text-base sm:text-lg">🃏</span> <span class="hidden sm:inline">Cards</span>
                     </button>
+                    <button onclick="wordwallRoom.switchMode('tiles')" id="tab-tiles" class="game-tab py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" aria-label="3D Flip Tiles game">
+                        <span class="text-base sm:text-lg">🀄</span> <span class="hidden sm:inline">Tiles</span>
+                    </button>
+                    <button onclick="wordwallRoom.switchMode('honeycomb')" id="tab-honeycomb" class="game-tab py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" aria-label="Honeycomb Matrix game">
+                        <span class="text-base sm:text-lg">⬡</span> <span class="hidden sm:inline">Honeycomb</span>
+                    </button>
                 </nav>
             </div>
 
@@ -351,6 +357,34 @@ function buildAppUI() {
                             <span class="text-6xl drop-shadow-md" aria-hidden="true">🃏</span>
                             <span class="font-black mt-4 text-xs tracking-[0.2em] bg-black/20 px-3.5 py-1 rounded-full">DEAL</span>
                         </button>
+                    </div>
+                </div>
+
+                <!-- 3D FLIP TILES CONTAINER -->
+                <div id="ww-tiles-container" class="hidden w-full h-full flex flex-col items-center min-h-0 overflow-hidden" role="region" aria-label="3D Flip Tiles Game">
+                    <div class="w-full flex flex-col sm:flex-row justify-between items-center bg-white/90 border border-slate-200 rounded-2xl px-4 py-2 mb-2 shrink-0 shadow-sm max-w-5xl gap-2">
+                        <div id="tiles-prompt-text" class="bg-indigo-100 text-indigo-900 px-3.5 py-1 rounded-full text-xs font-black shadow-xs border border-indigo-200">
+                            انقر على أي بلاطة لقلبها وقراءة الكلمة! 🀄
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="tilesGame.flipAll()" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-black px-3.5 py-1 rounded-full text-xs shadow-xs transition-colors" aria-label="قلب جميع البلاطات">🔄 قلب الكل</button>
+                            <button onclick="tilesGame.reset()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-black px-3.5 py-1 rounded-full text-xs shadow-xs transition-colors" aria-label="إعادة ضبط البلاطات">⚡ إعادة ضبط</button>
+                        </div>
+                    </div>
+                    <div id="tiles-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2.5 sm:gap-3.5 w-full max-w-5xl flex-1 overflow-y-auto p-3 custom-scrollbar pb-20"></div>
+                </div>
+
+                <!-- HONEYCOMB MATRIX CONTAINER -->
+                <div id="ww-honeycomb-container" class="hidden w-full h-full flex flex-col items-center min-h-0 overflow-hidden" role="region" aria-label="Honeycomb Matrix Game">
+                    <div class="w-full flex justify-between items-center bg-white/90 border border-slate-200 rounded-2xl px-4 py-2 mb-2 shrink-0 shadow-sm max-w-5xl">
+                        <div class="flex items-center gap-2">
+                            <span class="text-amber-600 font-black text-sm">⬡ خريطة خلايا النحل</span>
+                            <span id="hex-progress-badge" class="bg-amber-100 text-amber-950 px-3 py-0.5 rounded-full text-xs font-black">المتقن: 0 من 0</span>
+                        </div>
+                        <button onclick="honeycombGame.reset()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-black px-3.5 py-1 rounded-full text-xs shadow-xs transition-colors" aria-label="إعادة ضبط خلايا النحل">🔄 إعادة ضبط</button>
+                    </div>
+                    <div id="honeycomb-grid-container" class="w-full max-w-5xl flex-1 overflow-y-auto p-3 custom-scrollbar pb-20">
+                        <div id="honeycomb-board" class="honeycomb-grid"></div>
                     </div>
                 </div>
             </div>

@@ -650,14 +650,30 @@ const app = {
     closeOverlay() { const overlay = document.getElementById('word-overlay'); if (overlay) overlay.classList.add('hidden'); },
 
     gradeResult(isCorrect) {
-        if (isCorrect) { this.score += 5; this.stats.ok++; this.triggerFeedback('Magnificent! ❤️⭐', '#10b981', true); }
-        else {
+        if (isCorrect) {
+            this.score += 5;
+            this.stats.ok++;
+            this.triggerFeedback('Magnificent! ❤️⭐', '#10b981', true);
+        } else {
             this.stats.err++;
             if (this.currentActiveIndex !== null && !this.mistakeIndices.includes(this.currentActiveIndex)) {
                 this.mistakeIndices.push(this.currentActiveIndex);
             }
             this.triggerFeedback('Keep Trying! ⭐', '#f43f5e', false);
         }
+
+        // تحديث حالة خلية النحل إذا كانت اللعبة نشطة
+        if (typeof honeycombGame !== 'undefined' && this.currentActiveIndex !== null) {
+            honeycombGame.markStatus(this.currentActiveIndex, isCorrect);
+        }
+
+        // التسجيل الذري اللحظي للطالب النشط
+        if (typeof studentManager !== 'undefined' && studentManager.hasActiveStudent()) {
+            const lessonId = this.getLessonId();
+            const currentWord = (typeof dataset !== 'undefined' && this.currentActiveIndex !== null && dataset[this.currentActiveIndex]) ? dataset[this.currentActiveIndex] : null;
+            studentManager.recordCardEvaluation(lessonId, isCorrect, isCorrect ? 5 : 0, currentWord, this.currentActiveIndex, dataset ? dataset.length : 0);
+        }
+
         const scoreEl = document.getElementById('score-val'); if (scoreEl) scoreEl.innerText = this.score;
         this.closeOverlay();
     },

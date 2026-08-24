@@ -5,6 +5,8 @@ const wordwallRoom = {
         if (typeof wheelGame !== 'undefined') wheelGame.init();
         if (typeof cardsGame !== 'undefined') cardsGame.init();
         if (typeof ladderGame !== 'undefined') ladderGame.init();
+        if (typeof tilesGame !== 'undefined') tilesGame.init();
+        if (typeof honeycombGame !== 'undefined') honeycombGame.init();
     },
     switchMode(mode) {
         this.mode = mode;
@@ -21,10 +23,14 @@ const wordwallRoom = {
         const wheelC = document.getElementById('ww-wheel-container');
         const cardsC = document.getElementById('ww-cards-container');
         const ladderC = document.getElementById('ww-ladder-container');
+        const tilesC = document.getElementById('ww-tiles-container');
+        const hexC = document.getElementById('ww-honeycomb-container');
         if (boxC) boxC.classList.add('hidden');
         if (wheelC) wheelC.classList.add('hidden');
         if (cardsC) cardsC.classList.add('hidden');
         if (ladderC) ladderC.classList.add('hidden');
+        if (tilesC) tilesC.classList.add('hidden');
+        if (hexC) hexC.classList.add('hidden');
 
         if (mode === 'box' || mode === 'curtain') {
             if (boxC) {
@@ -48,6 +54,14 @@ const wordwallRoom = {
         }
         else if (mode === 'cards' && cardsC) {
             cardsC.classList.remove('hidden');
+        }
+        else if (mode === 'tiles' && tilesC) {
+            tilesC.classList.remove('hidden');
+            if (typeof tilesGame !== 'undefined') tilesGame.init();
+        }
+        else if (mode === 'honeycomb' && hexC) {
+            hexC.classList.remove('hidden');
+            if (typeof honeycombGame !== 'undefined') honeycombGame.init();
         }
         const navSelect = document.getElementById('example-navigator');
         if (navSelect) navSelect.value = `ww_${mode}`;
@@ -411,3 +425,188 @@ const ladderGame = {
         this.init();
     }
 };
+
+/**
+ * 3D Flip Tiles Game Engine
+ * Universal template for flipping numbered cards to reveal diacritized words
+ */
+const tilesGame = {
+    flippedTiles: new Set(),
+    init() {
+        this.renderTiles();
+    },
+    renderTiles() {
+        const container = document.getElementById('tiles-grid');
+        if (!container || typeof dataset === 'undefined') return;
+        container.textContent = '';
+
+        dataset.forEach((item, index) => {
+            const tile = document.createElement('div');
+            tile.className = `flip-tile relative aspect-square w-full rounded-2xl ${this.flippedTiles.has(index) ? 'flipped' : ''}`;
+            tile.id = `tile-${index}`;
+            tile.setAttribute('role', 'button');
+            tile.setAttribute('tabindex', '0');
+            tile.setAttribute('aria-label', `البلاطة ${index + 1}${this.flippedTiles.has(index) ? '، مفتوحة' : '، مقلوبة'}`);
+            
+            const color = wordwallColors[index % wordwallColors.length];
+            const wordText = (typeof item === 'object' && item !== null) ? (item.display || item.word || item.text || '') : String(item || '');
+            
+            tile.innerHTML = `
+                <div class="flip-tile-inner" aria-hidden="true">
+                    <div class="tile-face tile-front flex flex-col items-center justify-center text-white border-[3px] border-white/40 shadow-lg hover:scale-105 transition-transform" style="background-color: ${color}">
+                        <span class="text-4xl sm:text-5xl lg:text-6xl font-black drop-shadow-md">${index + 1}</span>
+                        <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-2 bg-black/25 px-3 py-0.5 rounded-full backdrop-blur-sm">Flip 🀄</span>
+                    </div>
+                    <div class="tile-face tile-back flex flex-col items-center justify-center p-2 bg-white border-[3px] border-emerald-400 text-slate-800 shadow-xl overflow-hidden">
+                        <span class="font-amiri text-2xl sm:text-3xl md:text-4xl font-bold text-emerald-950 leading-relaxed text-center" style="letter-spacing: normal !important;">${wordText}</span>
+                    </div>
+                </div>
+            `;
+
+            const doFlip = () => {
+                this.flipTile(index);
+            };
+
+            tile.onclick = doFlip;
+            tile.onkeydown = (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    doFlip();
+                }
+            };
+
+            container.appendChild(tile);
+        });
+    },
+    flipTile(index) {
+        const tile = document.getElementById(`tile-${index}`);
+        if (!tile) return;
+        
+        if (this.flippedTiles.has(index)) {
+            this.flippedTiles.delete(index);
+            tile.classList.remove('flipped');
+            tile.setAttribute('aria-label', `البلاطة ${index + 1}، مقلوبة`);
+            if (typeof Sound !== 'undefined' && typeof Sound.playTone === 'function') {
+                Sound.playTone(400, 'sine', 0.08);
+            }
+        } else {
+            this.flippedTiles.add(index);
+            tile.classList.add('flipped');
+            tile.setAttribute('aria-label', `البلاطة ${index + 1}، مفتوحة`);
+            if (typeof Sound !== 'undefined' && typeof Sound.playTone === 'function') {
+                Sound.playTone(600, 'sine', 0.12);
+            }
+        }
+    },
+    flipAll() {
+        if (typeof dataset === 'undefined') return;
+        const allFlipped = this.flippedTiles.size === dataset.length;
+        if (allFlipped) {
+            this.flippedTiles.clear();
+            if (typeof Sound !== 'undefined' && typeof Sound.playTone === 'function') {
+                Sound.playTone(350, 'sine', 0.1);
+            }
+        } else {
+            dataset.forEach((_, idx) => this.flippedTiles.add(idx));
+            if (typeof Sound !== 'undefined' && typeof Sound.playTone === 'function') {
+                Sound.playTone(700, 'sine', 0.15);
+            }
+        }
+        this.renderTiles();
+    },
+    reset() {
+        this.flippedTiles.clear();
+        this.renderTiles();
+        if (typeof Sound !== 'undefined' && typeof Sound.playTone === 'function') {
+            Sound.playTone(440, 'triangle', 0.1);
+        }
+    }
+};
+
+/**
+ * Honeycomb Matrix Board Game Engine
+ * Hexagonal interactive cells tracking mastery and review states
+ */
+const honeycombGame = {
+    cellStatus: {}, // index: 'mastered' | 'review' | null
+    init() {
+        this.cellStatus = {};
+        this.renderBoard();
+        this.updateBadge();
+    },
+    renderBoard() {
+        const board = document.getElementById('honeycomb-board');
+        if (!board || typeof dataset === 'undefined') return;
+        board.textContent = '';
+
+        dataset.forEach((item, index) => {
+            const hex = document.createElement('button');
+            hex.type = 'button';
+            const status = this.cellStatus[index] || '';
+            hex.className = `hex-cell ${status}`;
+            hex.id = `hex-${index}`;
+            
+            const statusText = status === 'mastered' ? 'متقنة' : (status === 'review' ? 'مراجعة' : 'مغلقة');
+            hex.setAttribute('aria-label', `الخلية السداسية ${index + 1}، الحالة: ${statusText}`);
+
+            hex.innerHTML = `
+                <div class="flex flex-col items-center justify-center text-white drop-shadow-sm pointer-events-none">
+                    <span class="text-xl sm:text-2xl font-black">${index + 1}</span>
+                    <span class="text-[10px] font-bold mt-0.5">${status === 'mastered' ? '✔' : (status === 'review' ? '📌' : '⬡')}</span>
+                </div>
+            `;
+
+            hex.onclick = () => {
+                this.selectHex(index);
+            };
+
+            board.appendChild(hex);
+        });
+    },
+    selectHex(index) {
+        if (typeof dataset === 'undefined' || !dataset[index]) return;
+        if (typeof Sound !== 'undefined' && typeof Sound.playTone === 'function') {
+            Sound.playTone(520, 'sine', 0.1);
+        }
+        if (typeof app !== 'undefined' && typeof app.revealWord === 'function') {
+            app.revealWord(index, 'honeycomb');
+        }
+    },
+    markStatus(index, isMastered) {
+        this.cellStatus[index] = isMastered ? 'mastered' : 'review';
+        const hex = document.getElementById(`hex-${index}`);
+        if (hex) {
+            hex.classList.remove('mastered', 'review');
+            hex.classList.add(this.cellStatus[index]);
+            const statusText = isMastered ? 'متقنة' : 'مراجعة';
+            hex.setAttribute('aria-label', `الخلية السداسية ${index + 1}، الحالة: ${statusText}`);
+            const iconSpan = hex.querySelector('span:last-child');
+            if (iconSpan) iconSpan.textContent = isMastered ? '✔' : '📌';
+        }
+        this.updateBadge();
+        
+        if (typeof dataset !== 'undefined') {
+            const masteredCount = Object.values(this.cellStatus).filter(s => s === 'mastered').length;
+            if (masteredCount >= dataset.length) {
+                if (typeof fireCelebration === 'function') fireCelebration();
+                if (typeof Sound !== 'undefined' && typeof Sound.playChime === 'function') Sound.playChime();
+            }
+        }
+    },
+    updateBadge() {
+        const badge = document.getElementById('hex-progress-badge');
+        if (!badge || typeof dataset === 'undefined') return;
+        const total = dataset.length;
+        const mastered = Object.values(this.cellStatus).filter(s => s === 'mastered').length;
+        badge.textContent = `المتقن: ${mastered} من ${total}`;
+    },
+    reset() {
+        this.cellStatus = {};
+        this.renderBoard();
+        this.updateBadge();
+        if (typeof Sound !== 'undefined' && typeof Sound.playTone === 'function') {
+            Sound.playTone(440, 'triangle', 0.1);
+        }
+    }
+};
+
