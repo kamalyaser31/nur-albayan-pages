@@ -11,10 +11,18 @@ const wordwallRoom = {
     switchMode(mode) {
         this.mode = mode;
         if (typeof wheelGame !== 'undefined') wheelGame.reset();
-        if (typeof cardsGame !== 'undefined' && cardsGame.animTimer) {
-            clearTimeout(cardsGame.animTimer);
-            cardsGame.animTimer = null;
+        if (typeof cardsGame !== 'undefined') {
+            if (cardsGame.animTimer) {
+                clearTimeout(cardsGame.animTimer);
+                cardsGame.animTimer = null;
+            }
             cardsGame.isAnimating = false;
+        }
+        // تصفير وإعادة ضبط خواص التحويل والشفافية لبطاقات التقليب لمنع تشوه مظهرها عند التبديل أثناء الحركة
+        const activeCardEl = document.getElementById('active-deck-card');
+        if (activeCardEl) {
+            activeCardEl.style.transform = 'none';
+            activeCardEl.style.opacity = '1';
         }
 
         document.querySelectorAll('#wordwall-stage .game-tab').forEach(tab => tab.classList.remove('active'));
@@ -240,11 +248,15 @@ const cardsGame = {
     init() {
         if (this.animTimer) { clearTimeout(this.animTimer); this.animTimer = null; }
         this.isAnimating = false;
+        const activeCard = document.getElementById('active-deck-card');
+        if (activeCard) {
+            activeCard.style.transform = 'none';
+            activeCard.style.opacity = '1';
+            activeCard.onclick = () => this.dealNextCard();
+        }
         if (typeof dataset === 'undefined' || dataset.length === 0) return;
         this.cardDeckIndices = Array.from({ length: dataset.length }, (_, i) => i);
         this.shuffleDeck();
-        const activeCard = document.getElementById('active-deck-card');
-        if (activeCard) activeCard.onclick = () => this.dealNextCard();
     },
     shuffleDeck() {
         if (typeof app !== 'undefined' && typeof app.shuffle === 'function') {
@@ -421,13 +433,19 @@ const ladderGame = {
 
         if (isCorrect) {
             this.currentStep++;
-            Sound.stepUp(this.currentStep, this.targetSteps);
+            if (typeof Sound !== 'undefined' && typeof Sound.stepUp === 'function') {
+                Sound.stepUp(this.currentStep, this.targetSteps);
+            }
             this.renderLadder();
 
             if (this.currentStep >= this.targetSteps) {
                 this.isCompleted = true;
-                fireCelebration();
-                Sound.playChime();
+                if (typeof fireCelebration === 'function') {
+                    fireCelebration();
+                }
+                if (typeof Sound !== 'undefined' && typeof Sound.playChime === 'function') {
+                    Sound.playChime();
+                }
                 const wordDisplay = document.getElementById('ladder-word-display');
                 if (wordDisplay) {
                     const congratsHeading = (typeof i18n !== 'undefined')
@@ -454,7 +472,9 @@ const ladderGame = {
             }
         } else {
             this.currentStep = Math.max(0, this.currentStep - 1);
-            Sound.stepDown();
+            if (typeof Sound !== 'undefined' && typeof Sound.stepDown === 'function') {
+                Sound.stepDown();
+            }
             this.renderLadder();
         }
 

@@ -89,9 +89,10 @@ const xoGame = {
 };
 
 const c4Game = {
-    rows: 6, cols: 7, board: [], currentPlayer: 'red', gameActive: true, aiTimer: null,
+    rows: 6, cols: 7, board: [], currentPlayer: 'red', gameActive: true, aiTimer: null, winTimer: null,
     init() {
         if (this.aiTimer) { clearTimeout(this.aiTimer); this.aiTimer = null; }
+        if (this.winTimer) { clearTimeout(this.winTimer); this.winTimer = null; }
         const container = document.getElementById('c4-board-container'); if (!container) return; container.innerHTML = '';
         this.board = Array(this.rows).fill(null).map(() => Array(this.cols).fill(null));
         for (let r = 0; r < this.rows; r++) {
@@ -143,7 +144,9 @@ const c4Game = {
                     }
                     this.gameActive = false;
                     if (typeof app !== 'undefined') app.setGameResumeState('c4-resume-btn', true, typeof i18n !== 'undefined' ? i18n.t("continue_reading_btn") : "Continue Reading 📖");
-                    setTimeout(() => {
+                    if (this.winTimer) clearTimeout(this.winTimer);
+                    this.winTimer = setTimeout(() => {
+                        this.winTimer = null;
                         if (this.currentPlayer === 'red' && typeof fireCelebration === 'function') fireCelebration();
                         winCells.forEach(([wr, wc]) => {
                             const cEl = document.getElementById(`c4-${wr}-${wc}`);
@@ -184,6 +187,7 @@ const c4Game = {
     },
     checkWin(row, col) {
         const color = this.board[row][col];
+        if (!color) return null;
         const check = (dr, dc) => {
             let count = 0; let winningCells = [];
             for (let i = -3; i <= 3; i++) {
@@ -198,6 +202,7 @@ const c4Game = {
     },
     reset() {
         if (this.aiTimer) { clearTimeout(this.aiTimer); this.aiTimer = null; }
+        if (this.winTimer) { clearTimeout(this.winTimer); this.winTimer = null; }
         this.currentPlayer = 'red'; this.gameActive = true;
         const status = document.getElementById('c4-status');
         if (status) {

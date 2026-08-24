@@ -28,7 +28,11 @@ const gameAI = {
 
     // حركة الكمبيوتر في لعبة إكس-أو (Tic-Tac-Toe)
     makeXOMove() {
-        if (this.mode !== 'computer' || !xoGame.gameActive || xoGame.currentPlayer !== 'O') return;
+        if (this.mode !== 'computer' || typeof xoGame === 'undefined' || !xoGame.gameActive || xoGame.currentPlayer !== 'O') return;
+
+        // التحقق من وجود عناصر DOM للوح قبل تنفيذ النقلة
+        const container = document.getElementById('xo-board');
+        if (!container || !container.children || container.children.length < 9) return;
 
         const available = xoGame.board.map((v, i) => v === '' ? i : null).filter(v => v !== null);
         if (available.length === 0) return;
@@ -74,8 +78,7 @@ const gameAI = {
             move = available[Math.floor(Math.random() * available.length)];
         }
 
-        const container = document.getElementById('xo-board');
-        if (container && container.children[move]) {
+        if (container.children[move]) {
             xoGame.play(move, container.children[move]);
         }
     },

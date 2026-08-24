@@ -5,43 +5,97 @@
 
 const Sound = {
     ctx: null,
+    masterGain: null,
+    compressor: null,
     _unlocked: false,
 
-    // تهيئة السياق الصوتي وفك تعليقه بطريقة آمنة
+    // تهيئة السياق الصوتي وفك تعليقه بطريقة آمنة ومحصنة ضد أخطاء المتصفح
     getCtx() {
-        if (!this.ctx) {
-            const AudioCtx = window.AudioContext || window.webkitAudioContext;
-            if (!AudioCtx) return null;
-            this.ctx = new AudioCtx();
-        }
-        if (this.ctx.state === 'suspended') {
-            this.ctx.resume().catch(() => {});
-        } else if (this.ctx.state === 'closed') {
-            const AudioCtx = window.AudioContext || window.webkitAudioContext;
-            this.ctx = AudioCtx ? new AudioCtx() : null;
+        if (typeof window === 'undefined') return null;
+        try {
+            if (!this.ctx) {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return null;
+                this.ctx = new AudioCtx();
+                this._initGraph();
+            }
+            if (this.ctx.state === 'suspended') {
+                this.ctx.resume().catch(() => {});
+            } else if (this.ctx.state === 'closed') {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                this.ctx = AudioCtx ? new AudioCtx() : null;
+                if (this.ctx) this._initGraph();
+            }
+        } catch (e) {
+            console.warn('AudioContext initialization error:', e);
+            this.ctx = null;
         }
         return this.ctx;
     },
 
+    // بناء ناقل التحكم العام masterGain وعقدة الضاغط الديناميكي لمنع التشبع الصوتي
+    _initGraph() {
+        if (!this.ctx) return;
+        try {
+            this.compressor = this.ctx.createDynamicsCompressor();
+            this.compressor.threshold.setValueAtTime(-24, this.ctx.currentTime);
+            this.compressor.knee.setValueAtTime(30, this.ctx.currentTime);
+            this.compressor.ratio.setValueAtTime(12, this.ctx.currentTime);
+            this.compressor.attack.setValueAtTime(0.003, this.ctx.currentTime);
+            this.compressor.release.setValueAtTime(0.25, this.ctx.currentTime);
+
+            this.masterGain = this.ctx.createGain();
+            this.updateMasterVolume();
+
+            // ربط السلسلة الصوتية: masterGain -> compressor -> destination
+            this.masterGain.connect(this.compressor);
+            this.compressor.connect(this.ctx.destination);
+        } catch (e) {
+            console.warn('Audio graph initialization error:', e);
+        }
+    },
+
+    // تحديث مستوى الناقل العام فورياً عند تعديل الإعدادات
+    updateMasterVolume() {
+        const vol = this.getVol();
+        if (this.masterGain && this.ctx) {
+            try {
+                this.masterGain.gain.setValueAtTime(vol, this.ctx.currentTime);
+            } catch (_) {
+                try {
+                    this.masterGain.gain.value = vol;
+                } catch (_) {}
+            }
+        }
+    },
+
     // فك تعليق الصوت التلقائي عند أول تفاعل للمستخدم على شاشات اللمس
     setupUnlock() {
-        if (this._unlocked) return;
+        if (this._unlocked || typeof window === 'undefined') return;
         const unlock = () => {
-            const ctx = this.getCtx();
-            if (ctx && ctx.state === 'suspended') {
-                ctx.resume().then(() => {
-                    this._unlocked = true;
-                }).catch(() => {});
-            } else {
-                this._unlocked = true;
-            }
+            try {
+                const ctx = this.getCtx();
+                if (ctx) {
+                    if (ctx.state === 'suspended') {
+                        ctx.resume().then(() => {
+                            this._unlocked = true;
+                            this.updateMasterVolume();
+                        }).catch(() => {});
+                    } else {
+                        this._unlocked = true;
+                        this.updateMasterVolume();
+                    }
+                }
+            } catch (_) {}
             window.removeEventListener('pointerdown', unlock, { capture: true });
             window.removeEventListener('touchstart', unlock, { capture: true });
             window.removeEventListener('keydown', unlock, { capture: true });
+            window.removeEventListener('click', unlock, { capture: true });
         };
         window.addEventListener('pointerdown', unlock, { capture: true, once: true });
         window.addEventListener('touchstart', unlock, { capture: true, once: true });
         window.addEventListener('keydown', unlock, { capture: true, once: true });
+        window.addEventListener('click', unlock, { capture: true, once: true });
     },
 
     // استخراج شدة الصوت الحقيقية مع تصحيح علة الصفر الزائف وتطبيق المنحنى الإدراكي
@@ -55,6 +109,11 @@ const Sound = {
             return normalized * normalized; // منحنى تربيعي إدراكي مريح
         }
         return 0.64; // 0.8^2
+    },
+
+    // إرجاع نقطة الاتصال الصوتية المجمعة (الناقل العام أو المخرج المباشر)
+    getDestination() {
+        return this.masterGain || (this.ctx ? this.ctx.destination : null);
     },
 
     // تنظيف وفصل عقد الصوت فور انتهاء النغمة لمنع تسريب الذاكرة وقطع الإحالة الحلقية
@@ -73,19 +132,27 @@ const Sound = {
         this.setupUnlock();
     },
 
+    // دالة توافقية توجه الاستدعاء مباشرة إلى دالة tone مع ترتيب المعاملات المناسب
+    playTone(freq, type = 'sine', duration = 0.2) {
+        this.tone(freq, duration, type);
+    },
+
     playChime() {
         const vol = this.getVol();
         if (vol <= 0) return;
         const ctx = this.getCtx();
         if (!ctx) return;
+        this.updateMasterVolume();
 
         const now = ctx.currentTime;
         const osc = ctx.createOscillator();
         const gainNode = ctx.createGain();
+        const dest = this.getDestination();
+        if (!dest) return;
 
         osc.type = 'sine';
         osc.connect(gainNode);
-        gainNode.connect(ctx.destination);
+        gainNode.connect(dest);
 
         osc.frequency.setValueAtTime(523.25, now);
         osc.frequency.setValueAtTime(659.25, now + 0.1);
@@ -93,7 +160,7 @@ const Sound = {
         osc.frequency.setValueAtTime(1046.50, now + 0.3);
 
         gainNode.gain.setValueAtTime(0.0001, now);
-        gainNode.gain.linearRampToValueAtTime(0.18 * vol, now + 0.02);
+        gainNode.gain.linearRampToValueAtTime(0.18, now + 0.02);
         gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.5);
         gainNode.gain.setValueAtTime(0, now + 0.51);
 
@@ -107,19 +174,22 @@ const Sound = {
         if (vol <= 0) return;
         const ctx = this.getCtx();
         if (!ctx) return;
+        this.updateMasterVolume();
 
         const now = ctx.currentTime;
         const osc = ctx.createOscillator();
         const gainNode = ctx.createGain();
+        const dest = this.getDestination();
+        if (!dest) return;
 
         osc.type = type;
         osc.frequency.setValueAtTime(freq, now);
         osc.connect(gainNode);
-        gainNode.connect(ctx.destination);
+        gainNode.connect(dest);
 
         const attack = Math.min(0.015, d * 0.2);
         gainNode.gain.setValueAtTime(0.0001, now);
-        gainNode.gain.linearRampToValueAtTime(0.18 * vol, now + attack);
+        gainNode.gain.linearRampToValueAtTime(0.18, now + attack);
         gainNode.gain.exponentialRampToValueAtTime(0.0001, now + d);
         gainNode.gain.setValueAtTime(0, now + d + 0.01);
 
@@ -142,20 +212,23 @@ const Sound = {
         if (vol <= 0) return;
         const ctx = this.getCtx();
         if (!ctx) return;
+        this.updateMasterVolume();
 
         const now = ctx.currentTime;
         const osc = ctx.createOscillator();
         const gainNode = ctx.createGain();
+        const dest = this.getDestination();
+        if (!dest) return;
 
         osc.type = 'sine';
         osc.frequency.setValueAtTime(330, now);
         osc.frequency.linearRampToValueAtTime(220, now + 0.18);
         osc.connect(gainNode);
-        gainNode.connect(ctx.destination);
+        gainNode.connect(dest);
 
         // منع النقر الصوتي (Audio Pop) عبر الصعود الميكروي من 0.0001
         gainNode.gain.setValueAtTime(0.0001, now);
-        gainNode.gain.linearRampToValueAtTime(0.15 * vol, now + 0.01);
+        gainNode.gain.linearRampToValueAtTime(0.15, now + 0.01);
         gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
         gainNode.gain.setValueAtTime(0, now + 0.19);
 
@@ -165,9 +238,12 @@ const Sound = {
     }
 };
 
-// تهيئة مستمعات اللمس تلقائياً
+// تهيئة مستمعات اللمس وتحديث الصوت تلقائياً
 if (typeof window !== 'undefined') {
     Sound.setupUnlock();
+    window.addEventListener('storage', () => {
+        if (Sound.ctx && Sound.masterGain) Sound.updateMasterVolume();
+    });
 }
 
 /**

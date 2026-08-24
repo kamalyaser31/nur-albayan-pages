@@ -9,9 +9,10 @@
 const rosterManager = {
     ensureModalDOM() {
         if (document.getElementById('student-roster-modal')) return;
+        const currentDir = (typeof i18n !== 'undefined' && i18n.getActiveMeta) ? i18n.getActiveMeta().dir : 'rtl';
         const modalWrapper = document.createElement('div');
         modalWrapper.innerHTML = `<div id="student-roster-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-3 sm:p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="roster-modal-title">
-  <div class="bg-white w-full max-w-3xl rounded-[2rem] shadow-2xl border border-emerald-100 overflow-hidden flex flex-col my-auto animate-in fade-in zoom-in duration-150" dir="rtl">
+  <div class="bg-white w-full max-w-3xl rounded-[2rem] shadow-2xl border border-emerald-100 overflow-hidden flex flex-col my-auto animate-in fade-in zoom-in duration-150" dir="${(typeof i18n !== 'undefined' && i18n.getActiveMeta) ? i18n.getActiveMeta().dir : 'rtl'}">
     
     <!-- Modal Header -->
     <div class="bg-gradient-to-l from-emerald-700 via-emerald-600 to-teal-700 p-4 sm:p-5 text-white flex items-center justify-between shadow-md">
@@ -72,6 +73,23 @@ const rosterManager = {
         { hex: '#e11d48', name: 'وردي' },
         { hex: '#0891b2', name: 'سماوي' }
     ],
+
+    /**
+     * تعقيم وترميز النصوص لمنع ثغرات XSS
+     * @private
+     */
+    _escapeHTML(str) {
+        if (typeof escapeHTML === 'function') return escapeHTML(str);
+        if (typeof studentManager !== 'undefined' && typeof studentManager.escapeHTML === 'function') {
+            return studentManager.escapeHTML(str);
+        }
+        return String(str || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    },
 
     init() {
         this.ensureModalDOM();
@@ -152,6 +170,12 @@ const rosterManager = {
 
         const modal = document.getElementById('student-roster-modal');
         if (!modal) return;
+
+        // مزامنة اتجاه النافذة ديناميكياً مع لغة الواجهة الحالية
+        const modalCard = modal.querySelector('.max-w-3xl');
+        if (modalCard) {
+            modalCard.setAttribute('dir', (typeof i18n !== 'undefined' && i18n.getActiveMeta) ? i18n.getActiveMeta().dir : 'rtl');
+        }
 
         modal.classList.remove('hidden');
         modal.classList.add('flex');
@@ -347,9 +371,13 @@ const rosterManager = {
         const student = studentManager.getStudent(studentId);
         const name = student ? student.name : 'الطالب';
 
-        const confirmMsg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('confirm_clear_mistakes') : `هل تريد مسح كافة الكلمات المتعثرة من بنك أخطاء (${name})؟`;
+        const confirmMsg = (typeof i18n !== 'undefined' && i18n.t) 
+            ? i18n.t('confirm_clear_mistakes', { name: name }) 
+            : `هل تريد مسح كافة الكلمات المتعثرة من بنك أخطاء (${name})؟`;
         if (confirm(confirmMsg)) {
-            if (student && Array.isArray(student.mistakeBank)) {
+            if (typeof studentManager.clearStudentMistakes === 'function') {
+                studentManager.clearStudentMistakes(studentId);
+            } else if (student && Array.isArray(student.mistakeBank)) {
                 student.mistakeBank.forEach(m => {
                     studentManager.removeMistake(studentId, m.word);
                 });
@@ -879,16 +907,21 @@ const rosterManager = {
         const container = document.getElementById('roster-tab-content');
         if (!container) return;
 
-        const avatarsHtml = this._avatars.map(av => `
-          <button type="button" onclick="rosterManager.selectEditAvatar('${av}')" class="avatar-option-btn ${av === this._editSelectedAvatar ? 'selected' : ''}" data-avatar="${av}">
+        const avatarsHtml = (this._availableAvatars || []).map(av => `
+          <button type="button" onclick="rosterManager.selectEditAvatar('${av}')" class="avatar-option-btn ${av === this._editSelectedAvatar ? 'selected' : ''}" data-avatar="${av}" aria-pressed="${av === this._editSelectedAvatar ? 'true' : 'false'}" aria-label="اختيار الرمز ${av}">
             <span>${av}</span>
           </button>
         `).join('');
 
-        const colorsHtml = this._colors.map(c => `
-          <button type="button" onclick="rosterManager.selectEditColor('${c}')" class="color-swatch-btn ${c === this._editSelectedColor ? 'selected' : ''}" data-color="${c}" style="background-color: ${c};">
+        const colorsHtml = (this._availableColors || []).map(c => {
+          const hex = typeof c === 'object' ? c.hex : c;
+          const name = typeof c === 'object' ? c.name : c;
+          const isSel = hex === this._editSelectedColor;
+          return `
+          <button type="button" onclick="rosterManager.selectEditColor('${hex}')" class="color-swatch-btn ${isSel ? 'selected' : ''}" data-color="${hex}" style="background-color: ${hex};" aria-pressed="${isSel ? 'true' : 'false'}" aria-label="اختيار اللون ${name}">
           </button>
-        `).join('');
+          `;
+        }).join('');
 
         const html = `
         <form onsubmit="rosterManager.handleSaveEditedStudent(event, '${student.id}')" class="space-y-4 max-w-lg mx-auto bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
@@ -1084,8 +1117,12 @@ const rosterManager = {
         if (!student) return;
 
         const isAr = (typeof i18n !== 'undefined' && i18n.getLocale() === 'ar');
-        const dir = isAr ? 'rtl' : 'ltr';
-        const lang = isAr ? 'ar' : 'en';
+        const dir = (typeof i18n !== 'undefined' && i18n.getActiveMeta) ? i18n.getActiveMeta().dir : (isAr ? 'rtl' : 'ltr');
+        const lang = (typeof i18n !== 'undefined' && i18n.getLocale) ? i18n.getLocale() : (isAr ? 'ar' : 'en');
+
+        const studentName = this._escapeHTML(student.name);
+        const studentIdShort = this._escapeHTML(student.id ? student.id.substring(0, 8) : '');
+        const totalScoreSafe = Math.max(0, Math.floor(Number(student.totalScore) || 0));
 
         const completedLessons = student.completedLessons || {};
         const completedKeys = Object.keys(completedLessons);
@@ -1093,13 +1130,17 @@ const rosterManager = {
 
         let rowsHtml = '';
         completedKeys.forEach(k => {
-            const l = completedLessons[k];
-            const stars = '⭐'.repeat(l.stars || 1);
+            const l = completedLessons[k] || {};
+            const cleanKey = this._escapeHTML(k);
+            const scoreVal = Math.max(0, Math.floor(Number(l.score || l.bestScore) || 0));
+            const accVal = Math.min(100, Math.max(0, Math.round(Number(l.accuracy) || 0)));
+            const starCount = Math.min(3, Math.max(0, Math.floor(Number(l.stars) || 1)));
+            const stars = '⭐'.repeat(starCount);
             rowsHtml += `
             <tr style="border-bottom: 1px solid #e2e8f0;">
-                <td style="padding: 8px 12px; font-weight: bold;">${isAr ? `الدرس / الصفحة ${k}` : `Lesson / Page ${k}`}</td>
-                <td style="padding: 8px 12px; text-align: center; font-family: monospace;">${l.score || 0}</td>
-                <td style="padding: 8px 12px; text-align: center;">${l.accuracy || 0}%</td>
+                <td style="padding: 8px 12px; font-weight: bold;">${isAr ? `الدرس / الصفحة ${cleanKey}` : `Lesson / Page ${cleanKey}`}</td>
+                <td style="padding: 8px 12px; text-align: center; font-family: monospace;">${scoreVal}</td>
+                <td style="padding: 8px 12px; text-align: center;">${accVal}%</td>
                 <td style="padding: 8px 12px; text-align: center;">${stars}</td>
             </tr>`;
         });
@@ -1114,7 +1155,10 @@ const rosterManager = {
             <div style="margin-top: 24px; padding: 16px; background: #fff1f2; border: 1px solid #fecdd3; border-radius: 16px;">
                 <h3 style="margin: 0 0 12px 0; color: #9f1239; font-size: 15px;">📌 ${isAr ? 'الكلمات المستهدفة للمراجعة والتثبيت (سجل العثرات)' : 'Target Words for Review (Mistake Bank)'}</h3>
                 <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                    ${mistakes.map(m => `<span style="display: inline-block; padding: 6px 14px; background: #ffffff; border: 1px solid #fda4af; border-radius: 12px; font-size: 20px; font-family: 'Amiri', serif; color: #1e293b;">${m.word}</span>`).join('')}
+                    ${mistakes.map(m => {
+                        const cleanWord = this._escapeHTML(m.word);
+                        return `<span style="display: inline-block; padding: 6px 14px; background: #ffffff; border: 1px solid #fda4af; border-radius: 12px; font-size: 20px; font-family: 'Amiri', serif; color: #1e293b;">${cleanWord}</span>`;
+                    }).join('')}
                 </div>
             </div>`;
         }
@@ -1124,7 +1168,7 @@ const rosterManager = {
 <html lang="${lang}" dir="${dir}">
 <head>
     <meta charset="UTF-8">
-    <title>${isAr ? 'وثيقة إنجاز الطالب' : 'Student Achievement Certificate'} - ${student.name}</title>
+    <title>${isAr ? 'وثيقة إنجاز الطالب' : 'Student Achievement Certificate'} - ${studentName}</title>
     <style>
         @page { size: A4; margin: 15mm; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #1e293b; line-height: 1.5; margin: 0; padding: 10px; background: #ffffff; }
@@ -1139,7 +1183,7 @@ const rosterManager = {
         .stat-val { font-size: 20px; font-weight: 900; color: #047857; display: block; font-family: monospace; }
         .stat-label { font-size: 11px; color: #64748b; font-weight: bold; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
-        th { background: #f1f5f9; padding: 8px 12px; text-align: ${isAr ? 'right' : 'left'}; font-weight: 900; color: #334155; }
+        th { background: #f1f5f9; padding: 8px 12px; text-align: ${dir === 'rtl' ? 'right' : 'left'}; font-weight: 900; color: #334155; }
         .footer-sig { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 20px; border-top: 1px solid #cbd5e1; font-size: 13px; font-weight: bold; color: #475569; }
         @media print {
             .no-print { display: none; }
@@ -1160,17 +1204,17 @@ const rosterManager = {
         <div class="student-hero">
             <div>
                 <div style="font-size: 11px; color: #059669; font-weight: bold;">${isAr ? 'اسم الطالب / الطالبة' : 'Student Name'}</div>
-                <h2 class="student-name">${student.name}</h2>
+                <h2 class="student-name">${studentName}</h2>
             </div>
-            <div style="text-align: ${isAr ? 'left' : 'right'}; font-size: 12px; color: #64748b;">
+            <div style="text-align: ${dir === 'rtl' ? 'left' : 'right'}; font-size: 12px; color: #64748b;">
                 <div>${isAr ? 'تاريخ الإصدار:' : 'Issue Date:'} <strong>${new Date().toLocaleDateString(isAr ? 'ar-EG' : 'en-US')}</strong></div>
-                <div>${isAr ? 'الرقم التعريفي:' : 'Student ID:'} <span style="font-family: monospace;">#${student.id.substring(0, 8)}</span></div>
+                <div>${isAr ? 'الرقم التعريفي:' : 'Student ID:'} <span style="font-family: monospace;">#${studentIdShort}</span></div>
             </div>
         </div>
 
         <div class="stats-grid">
             <div class="stat-box">
-                <span class="stat-val">⭐ ${student.totalScore || 0}</span>
+                <span class="stat-val">⭐ ${totalScoreSafe}</span>
                 <span class="stat-label">${isAr ? 'مجموع النقاط المحققة' : 'Total Points'}</span>
             </div>
             <div class="stat-box">

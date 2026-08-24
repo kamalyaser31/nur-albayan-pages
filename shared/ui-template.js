@@ -77,7 +77,7 @@ function buildAppUI() {
             <h2 class="text-2xl sm:text-3xl font-black text-amber-400 drop-shadow-md mt-1">Memory Match 🧠</h2>
             <div id="memory-board" class="mem-board mt-3"></div>
             <div class="bg-black/20 py-1.5 px-6 rounded-full inline-block backdrop-blur-sm border border-white/10 shadow-sm mt-3">
-                <h3 id="memory-status" class="text-xs sm:text-sm font-bold text-white tracking-wide">${i18n.t('prompt_memory')}</h3>
+                <h3 id="memory-status" class="text-xs sm:text-sm font-bold text-white tracking-wide" aria-live="polite">${i18n.t('prompt_memory')}</h3>
             </div>
             <div class="flex flex-wrap justify-center gap-3 w-full mt-4 max-w-md">
                 <button onclick="memoryGame.reset()" class="bg-purple-800/40 hover:bg-purple-800/60 border border-purple-400/30 text-white px-6 py-2.5 rounded-full font-bold text-sm backdrop-blur-sm">Reset 🔄</button>
@@ -86,6 +86,9 @@ function buildAppUI() {
         </section>`;
 
     const fullHtml = `
+    <!-- Accessibility Skip Link -->
+    <a href="#word-display-area" class="skip-link sr-only focus:not-sr-only">${i18n.t('skip_to_content') || 'تجاوز إلى المحتوى الرئيسي'}</a>
+
     <!-- Interactive Feedback Badge -->
     <div id="badge-ui" class="feedback-badge bg-white shadow-xl px-8 py-3 rounded-full text-2xl sm:text-3xl font-black border-4 border-emerald-400 whitespace-nowrap" role="status" aria-live="assertive"></div>
 
@@ -96,7 +99,7 @@ function buildAppUI() {
             <!-- Score & Timer Pill -->
             <div class="flex items-center gap-2 sm:gap-3">
                 <div class="flex items-center gap-2 bg-emerald-50/80 border border-emerald-200 px-3 py-1 rounded-full shadow-inner">
-                    <span class="text-slate-400 text-[10px] sm:text-xs font-black uppercase tracking-wider">${i18n.t('score')}</span>
+                    <span class="text-slate-600 text-[10px] sm:text-xs font-black uppercase tracking-wider">${i18n.t('score')}</span>
                     <span id="score-val" class="text-base sm:text-lg font-black text-emerald-600 leading-none" aria-live="polite" aria-label="${i18n.t('score')}">0</span>
                 </div>
                 <div id="challenge-timer" class="hidden bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full font-mono font-bold text-xs shadow-inner" role="timer">
@@ -109,7 +112,7 @@ function buildAppUI() {
             </div>
 
             <!-- Teacher Manual Feedback Triggers -->
-            <div class="flex items-center gap-1 sm:gap-1.5 bg-slate-50 px-2 sm:px-2.5 py-1 rounded-full border border-slate-200" role="toolbar" aria-label="${i18n.t('aria_game_mode_controls')}">
+            <div class="flex items-center gap-1 sm:gap-1.5 bg-slate-50 px-2 sm:px-2.5 py-1 rounded-full border border-slate-200" role="toolbar" aria-label="${i18n.t('aria_teacher_praise_toolbar')}">
                 <button onclick="app.triggerFeedback('⭐', '#f59e0b', true)" class="p-1 sm:p-1.5 bg-amber-100 text-amber-500 rounded-full hover:bg-amber-200 hover:scale-110 transition-all shadow-sm text-base sm:text-lg leading-none" aria-label="${i18n.t('praise_star')}" title="⭐">⭐</button>
                 <button onclick="app.triggerFeedback('❤️', '#ef4444', true)" class="p-1 sm:p-1.5 bg-rose-100 text-rose-500 rounded-full hover:bg-rose-200 hover:scale-110 transition-all shadow-sm text-base sm:text-lg leading-none" aria-label="${i18n.t('praise_heart')}" title="❤️">❤️</button>
                 <div class="w-px h-4 bg-slate-200 mx-0.5" aria-hidden="true"></div>
@@ -145,8 +148,8 @@ function buildAppUI() {
             <!-- Developer & Dedication Card -->
             <div class="w-full max-w-sm sm:max-w-md bg-white border-2 border-emerald-200/90 rounded-[2rem] p-4 sm:p-5 shadow-sm relative overflow-hidden">
                 <div class="space-y-1 text-xs sm:text-sm text-slate-600 font-medium">
-                    <p><span class="text-slate-400">${i18n.t('developed_by')}</span> <strong class="text-slate-800 font-black">${i18n.t('author_name')}</strong></p>
-                    <p><span class="text-slate-400">${i18n.t('phone_whatsapp')}</span> <strong class="text-slate-800 font-black tracking-wide" dir="ltr">01147992249</strong></p>
+                    <p><span class="text-slate-600">${i18n.t('developed_by')}</span> <strong class="text-slate-800 font-black">${i18n.t('author_name')}</strong></p>
+                    <p><span class="text-slate-600">${i18n.t('phone_whatsapp')}</span> <strong class="text-slate-800 font-black tracking-wide" dir="ltr">01147992249</strong></p>
                 </div>
                 <hr class="my-2.5 border-slate-100">
                 <div class="space-y-1 text-center">
@@ -196,7 +199,7 @@ function buildAppUI() {
         <!-- STAGE 1: LEARNING / READING CHALLENGE -->
         <section id="learning-stage" class="hidden w-full flex flex-col justify-between items-center gap-2 py-2 flex-1 overflow-hidden relative">
             <div class="w-full max-w-4xl flex justify-between items-center px-4 shrink-0 h-8">
-                <span id="progress-text" class="text-slate-400 font-black text-xs sm:text-sm tracking-widest uppercase" aria-live="polite">Card 1</span>
+                <span id="progress-text" class="text-slate-600 font-black text-xs sm:text-sm tracking-widest uppercase" aria-live="polite">Card 1</span>
                 <div id="status-banner" class="text-center py-1 px-4 rounded-full font-bold text-white shadow-md hidden text-xs uppercase tracking-wide" role="status" aria-live="polite"></div>
             </div>
 
@@ -234,7 +237,7 @@ function buildAppUI() {
                     <div id="xo-board" class="grid grid-cols-3 gap-2.5 sm:gap-3 bg-white/20 p-3 sm:p-4 rounded-[2rem] backdrop-blur-md shadow-inner border border-white/25 w-full h-full"></div>
                 </div>
                 <div class="bg-black/20 py-1.5 px-6 rounded-full inline-block backdrop-blur-sm border border-white/10 shadow-sm mt-1">
-                    <h3 id="xo-status" class="text-sm sm:text-base font-bold text-white tracking-wide">${i18n.t('xo_default_turn')}</h3>
+                    <h3 id="xo-status" class="text-sm sm:text-base font-bold text-white tracking-wide" aria-live="polite">${i18n.t('xo_default_turn')}</h3>
                 </div>
                 <div class="flex flex-wrap justify-center gap-3 w-full mt-2">
                     <button onclick="xoGame.reset()" class="bg-white/20 hover:bg-white/30 text-white border border-white/30 px-6 py-2.5 rounded-full font-bold text-sm transition-transform hover:scale-105 backdrop-blur-sm">${i18n.t('reset')} 🔄</button>
@@ -256,7 +259,7 @@ function buildAppUI() {
                 </div>
                 <div id="c4-board-container" class="c4-board-new grid-cols-7 mx-auto mt-1"></div>
                 <div class="bg-black/20 py-1.5 px-6 rounded-full inline-block backdrop-blur-sm border border-white/10 shadow-sm mt-2">
-                    <h3 id="c4-status" class="text-xs sm:text-sm font-bold text-white tracking-wide">${i18n.t('c4_select_column')}</h3>
+                    <h3 id="c4-status" class="text-xs sm:text-sm font-bold text-white tracking-wide" aria-live="polite">${i18n.t('c4_select_column')}</h3>
                 </div>
                 <div class="flex flex-wrap justify-center gap-3 w-full mt-3">
                     <button onclick="c4Game.reset()" class="bg-blue-800/40 hover:bg-blue-800/60 border border-blue-400/30 text-white px-6 py-2.5 rounded-full font-bold text-sm backdrop-blur-sm">${i18n.t('reset')} 🔄</button>
@@ -439,7 +442,7 @@ function buildAppUI() {
             <h2 class="text-3xl sm:text-4xl font-black text-slate-800">${i18n.t('challenge_completed_title')}</h2>
             <div class="grid grid-cols-2 gap-4 items-center">
                 <div class="space-y-2">
-                    <span class="text-slate-400 font-bold uppercase text-xs sm:text-sm tracking-wider">${i18n.t('points_gathered_label')}</span>
+                    <span class="text-slate-600 font-bold uppercase text-xs sm:text-sm tracking-wider">${i18n.t('points_gathered_label')}</span>
                     <div id="final-score" class="text-5xl sm:text-6xl font-black text-emerald-600 drop-shadow-sm leading-none" role="status" aria-live="polite">0</div>
                 </div>
                 <div class="flex flex-col items-center">
@@ -457,7 +460,7 @@ function buildAppUI() {
 
     </main>
 
-    <footer class="text-center text-[10px] text-slate-400 py-1 shrink-0 h-6">
+    <footer class="text-center text-[10px] text-slate-600 py-1 shrink-0 h-6">
         ${footerText}
     </footer>
     `;
@@ -470,6 +473,84 @@ function buildAppUI() {
 
     // Update active student pill automatically
     updateActiveStudentPill();
+
+    // Setup Focus Trap & Restoration for modals
+    setupModalAccessibility();
+}
+
+/**
+ * تطبيق حصر واستعادة التركيز (Focus Trap & Restoration) للنوافذ المنبثقة التفاعلية
+ */
+function setupModalAccessibility() {
+    const modalIds = ['word-overlay', 'game-transition-stage'];
+    const focusableSelector = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+    let lastFocusedElement = null;
+    document.addEventListener('focusin', (e) => {
+        const isInsideModal = modalIds.some(id => {
+            const el = document.getElementById(id);
+            return el && el.contains(e.target);
+        });
+        if (!isInsideModal) {
+            lastFocusedElement = e.target;
+        }
+    }, true);
+
+    modalIds.forEach(id => {
+        const modal = document.getElementById(id);
+        if (!modal || modal._hasAccessibilityObs) return;
+        modal._hasAccessibilityObs = true;
+
+        let prevClassHidden = modal.classList.contains('hidden');
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach(() => {
+                const isHidden = modal.classList.contains('hidden');
+                if (prevClassHidden && !isHidden) {
+                    // Modal opened: record trigger & focus first element
+                    modal._savedTrigger = lastFocusedElement || document.activeElement;
+                    const focusables = Array.from(modal.querySelectorAll(focusableSelector)).filter(el => el.offsetParent !== null || el.offsetWidth > 0 || el.offsetHeight > 0);
+                    if (focusables.length > 0) {
+                        focusables[0].focus();
+                    }
+                } else if (!prevClassHidden && isHidden) {
+                    // Modal closed: restore focus
+                    if (modal._savedTrigger && typeof modal._savedTrigger.focus === 'function' && document.body.contains(modal._savedTrigger)) {
+                        modal._savedTrigger.focus();
+                    }
+                    modal._savedTrigger = null;
+                }
+                prevClassHidden = isHidden;
+            });
+        });
+        observer.observe(modal, { attributes: true, attributeFilter: ['class'] });
+    });
+
+    if (!window._nbModalKeydownBound) {
+        window._nbModalKeydownBound = true;
+        document.addEventListener('keydown', (e) => {
+            if (e.key !== 'Tab') return;
+            const activeModal = modalIds.map(id => document.getElementById(id)).find(el => el && !el.classList.contains('hidden'));
+            if (!activeModal) return;
+
+            const focusables = Array.from(activeModal.querySelectorAll(focusableSelector)).filter(el => el.offsetParent !== null || el.offsetWidth > 0 || el.offsetHeight > 0);
+            if (focusables.length === 0) return;
+
+            const firstEl = focusables[0];
+            const lastEl = focusables[focusables.length - 1];
+
+            if (e.shiftKey) {
+                if (document.activeElement === firstEl || !activeModal.contains(document.activeElement)) {
+                    e.preventDefault();
+                    lastEl.focus();
+                }
+            } else {
+                if (document.activeElement === lastEl || !activeModal.contains(document.activeElement)) {
+                    e.preventDefault();
+                    firstEl.focus();
+                }
+            }
+        });
+    }
 }
 
 /**
@@ -522,11 +603,13 @@ function updateActiveStudentPill() {
 // إتاحة الدوال عالمياً وتحديث الشارة عند جاهزية الصفحة
 window.updateActiveStudentPill = updateActiveStudentPill;
 window.updateTopNavLang = updateTopNavLang;
+window.setupModalAccessibility = setupModalAccessibility;
 
 if (typeof document !== 'undefined') {
     const initTopBar = () => {
         updateActiveStudentPill();
         updateTopNavLang();
+        setupModalAccessibility();
     };
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initTopBar);

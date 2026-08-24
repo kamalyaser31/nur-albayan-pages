@@ -67,15 +67,25 @@ const i18n = {
     t(key, fallbackText = null, params = {}) {
         if (!key) return '';
 
+        let fallback = fallbackText;
+        let actualParams = params;
+
+        // دعم تمرير كائن المتغيرات كمعامل ثانٍ مباشرة: i18n.t('key', { name: '...' })
+        if (fallbackText && typeof fallbackText === 'object' && (!params || Object.keys(params).length === 0)) {
+            actualParams = fallbackText;
+            fallback = null;
+        }
+
         const activeDict = this._locales[this._activeLocale]?.strings || {};
         const fallbackDict = this._locales[this._fallbackLocale]?.strings || {};
 
-        let text = activeDict[key] ?? fallbackDict[key] ?? (fallbackText || key);
+        let text = activeDict[key] ?? fallbackDict[key] ?? (typeof fallback === 'string' ? fallback : key);
 
-        // حقن المتغيرات إذا وُجدت {param}
-        if (params && typeof params === 'object') {
-            for (const [pKey, pVal] of Object.entries(params)) {
-                text = text.replace(new RegExp(`\\{${pKey}\\}`, 'g'), String(pVal));
+        // حقن المتغيرات إذا وُجدت {param} مع تعقيم الرموز الخاصة في المفتاح
+        if (actualParams && typeof actualParams === 'object') {
+            for (const [pKey, pVal] of Object.entries(actualParams)) {
+                const escapedKey = String(pKey).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                text = text.replace(new RegExp(`\\{${escapedKey}\\}`, 'g'), String(pVal));
             }
         }
 

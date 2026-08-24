@@ -1,7 +1,7 @@
 const app = {
     idx: 0, score: 0, stats: { ok: 0, err: 0 }, clock: 10.0, timer: null, feedbackTimer: null, advanceTimer: null, _isAdvancing: false,
     hasPlayedGame1: false, hasPlayedGame2: false, hasPlayedGame3: false, currentActiveIndex: null, pendingGame: 0, chartInstance: null,
-    mistakeIndices: [], isReviewMode: false, reviewQueue: [], reviewIdx: 0, keyboardBound: false,
+    mistakeIndices: [], isReviewMode: false, reviewQueue: [], reviewIdx: 0, keyboardBound: false, _localeBound: false,
     enableGameBreaks: false,
 
     init() {
@@ -28,12 +28,15 @@ const app = {
         if (typeof wordwallRoom !== 'undefined') wordwallRoom.init();
         if (typeof ruleManager !== 'undefined' && typeof rulesData !== 'undefined' && rulesData.length > 0) ruleManager.init();
 
-        window.addEventListener('nb:locale-changed', () => {
-            this.populateSelector();
-            if (typeof updateActiveStudentPill === 'function') {
-                updateActiveStudentPill();
-            }
-        });
+        if (!this._localeBound) {
+            this._localeBound = true;
+            window.addEventListener('nb:locale-changed', () => {
+                this.populateSelector();
+                if (typeof updateActiveStudentPill === 'function') {
+                    updateActiveStudentPill();
+                }
+            });
+        }
 
         if (!this.keyboardBound) {
             this.keyboardBound = true;
@@ -69,7 +72,7 @@ const app = {
 
                 if (isOverlayOpen) {
                     if (e.key === 'Escape') app.closeOverlay();
-                    else if (e.key === '1' || e.key === 'ArrowUp') app.gradeResult(false);
+                    else if (e.key === '1' || e.key === 'ArrowUp') { e.preventDefault(); app.gradeResult(false); }
                     else if (e.key === '2' || e.key === 'Enter' || e.key === ' ') { e.preventDefault(); app.gradeResult(true); }
                     return;
                 }
@@ -77,17 +80,26 @@ const app = {
                 const wwStage = document.getElementById('wordwall-stage');
                 const isWordwall = wwStage && !wwStage.classList.contains('hidden');
                 if (isWordwall && typeof wordwallRoom !== 'undefined' && wordwallRoom.mode === 'ladder' && typeof ladderGame !== 'undefined') {
-                    if (e.key === '1' || e.key === 'ArrowDown') ladderGame.grade(false);
+                    if (e.key === '1' || e.key === 'ArrowDown') { e.preventDefault(); ladderGame.grade(false); }
                     else if (e.key === '2' || e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ladderGame.grade(true); }
                     else if (e.key === 'r' || e.key === 'R') ladderGame.reset();
                     return;
                 }
 
                 if (isLearning) {
-                    if (e.key === 'ArrowRight' || e.key === 'PageUp') app.prev();
-                    else if (e.key === 'ArrowLeft' || e.key === 'PageDown' || e.key === 'n' || e.key === 'N') app.next();
-                    else if (e.key === '1' || e.key === 'ArrowDown') app.evaluate(false);
-                    else if (e.key === '2' || e.key === ' ' || e.key === 'Enter') { e.preventDefault(); app.evaluate(true); }
+                    if (e.key === 'ArrowRight' || e.key === 'PageUp') {
+                        e.preventDefault();
+                        app.prev();
+                    } else if (e.key === 'ArrowLeft' || e.key === 'PageDown' || e.key === 'n' || e.key === 'N') {
+                        e.preventDefault();
+                        app.next();
+                    } else if (e.key === '1' || e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        app.evaluate(false);
+                    } else if (e.key === '2' || e.key === ' ' || e.key === 'Enter') {
+                        e.preventDefault();
+                        app.evaluate(true);
+                    }
                 }
             });
         }
@@ -107,19 +119,21 @@ const app = {
         this.hideAll();
         this.isReviewMode = false;
         const topNav = document.getElementById('top-nav'); if (topNav) topNav.classList.remove('hidden');
-        if (val.startsWith('word_')) {
+        if (typeof val === 'string' && val.startsWith('word_')) {
             const targetWordIdx = parseInt(val.split('_')[1], 10);
-            if (!this.order && typeof dataset !== 'undefined') {
-                this.order = Array.from({ length: dataset.length }, (_, i) => i);
-                const settings = (typeof settingsManager !== 'undefined') ? settingsManager.get() : {};
-                if (settings.shuffleCards) {
-                    this.shuffle(this.order);
+            if (!Number.isNaN(targetWordIdx) && targetWordIdx >= 0) {
+                if (!this.order && typeof dataset !== 'undefined') {
+                    this.order = Array.from({ length: dataset.length }, (_, i) => i);
+                    const settings = (typeof settingsManager !== 'undefined') ? settingsManager.get() : {};
+                    if (settings.shuffleCards) {
+                        this.shuffle(this.order);
+                    }
                 }
+                const foundPos = (this.order) ? this.order.indexOf(targetWordIdx) : targetWordIdx;
+                this.idx = (foundPos !== -1) ? foundPos : targetWordIdx;
+                const stage = document.getElementById('learning-stage'); if (stage) stage.classList.remove('hidden');
+                this.render();
             }
-            const foundPos = (this.order) ? this.order.indexOf(targetWordIdx) : targetWordIdx;
-            this.idx = (foundPos !== -1) ? foundPos : targetWordIdx;
-            const stage = document.getElementById('learning-stage'); if (stage) stage.classList.remove('hidden');
-            this.render();
         } else if (val === 'menu') {
             const menu = document.getElementById('main-menu-stage'); if (menu) menu.classList.remove('hidden');
         } else if (val === 'rules') {
@@ -525,8 +539,6 @@ const app = {
                 ((type === 'danger') ? ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('warning_danger_penalty') : 'High Focus! ⚠️') : ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_needs_practice') : 'Needs Practice ⭐')) :
                 ((type === 'danger') ? ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('warning_danger_penalty') : '-5 Warning! ⚠️') : ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_needs_practice') : '-2 Needs Practice'));
             this.triggerFeedback(feedbackText, '#f43f5e', false);
-            if (typeof Sound !== 'undefined' && typeof Sound.fail === 'function') Sound.fail();
-        }
             if (typeof Sound !== 'undefined' && typeof Sound.fail === 'function') Sound.fail();
         }
         this.updateScoreUI();

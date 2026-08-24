@@ -342,7 +342,10 @@
         "status_closed": "Closed",
         "aria_step_reached": "Step {step}, reached",
         "aria_step_unreached": "Step {step}, locked",
-        "aria_step_crown": "Step {step}, Top Crown 🏆"
+        "aria_step_crown": "Step {step}, Top Crown 🏆",
+        "aria_teacher_praise_toolbar": "Teacher praise and motivation toolbar",
+        "skip_to_content": "Skip to main content",
+        "edit_student": "Edit Student Profile"
 };
 
     if (typeof i18n !== 'undefined') {

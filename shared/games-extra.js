@@ -12,8 +12,8 @@ const memoryGame = {
         this.cards = [...this.iconSets[this.currentSetIndex], ...this.iconSets[this.currentSetIndex]];
         this.shuffleCards(); this.renderBoard();
         this.matchedPairs = 0; this.hasFlippedCard = false; this.lockBoard = false; this.firstCard = null; this.secondCard = null; this.gameActive = true;
-        const status = document.getElementById('memory-status'); if (status) { status.textContent = i18n.t("memory_find_pairs"); status.classList.remove('text-yellow-300'); }
-        if (typeof app !== 'undefined') app.setGameResumeState('memory-resume-btn', false, '', i18n.t("skip_to_wordwall"));
+        const status = document.getElementById('memory-status'); if (status) { status.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t("memory_find_pairs") : "ابحث عن الأزواج المتطابقة 🔍"; status.classList.remove('text-yellow-300'); }
+        if (typeof app !== 'undefined') app.setGameResumeState('memory-resume-btn', false, '', (typeof i18n !== 'undefined' && i18n.t) ? i18n.t("skip_to_wordwall") : "Skip to Wordwall ⏭️");
     },
     shuffleCards() {
         if (typeof app !== 'undefined' && typeof app.shuffle === 'function') {
@@ -244,11 +244,16 @@ const riddlesGame = {
     }
 };
 
-// مستمع لحدث تغيير اللغة لإعادة رسم اللغز النشط
+// مستمع لحدث تغيير اللغة لإعادة رسم اللغز النشط مع تصفير أي مؤقت نشط لمنع تداخل الأسئلة
 if (typeof window !== 'undefined') {
     window.addEventListener('nb:locale-changed', () => {
         const stage = document.getElementById('riddles-stage');
         if (stage && !stage.classList.contains('hidden') && typeof riddlesGame !== 'undefined') {
+            if (riddlesGame.timer) {
+                clearTimeout(riddlesGame.timer);
+                riddlesGame.timer = null;
+                riddlesGame.isAnswering = false;
+            }
             riddlesGame.loadNext();
         }
     });

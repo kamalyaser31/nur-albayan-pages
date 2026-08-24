@@ -342,7 +342,10 @@
         "status_closed": "مغلقة",
         "aria_step_reached": "الدرجة {step}، منجزة",
         "aria_step_unreached": "الدرجة {step}، مقفلة",
-        "aria_step_crown": "الدرجة {step}، القمة المحرزة 🏆"
+        "aria_step_crown": "الدرجة {step}، القمة المحرزة 🏆",
+        "aria_teacher_praise_toolbar": "شريط أزرار تحفيز وتشجيع المعلم",
+        "skip_to_content": "تجاوز إلى المحتوى الرئيسي",
+        "edit_student": "تعديل بيانات الطالب"
 };
 
     if (typeof i18n !== 'undefined') {

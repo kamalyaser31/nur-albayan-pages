@@ -20,6 +20,7 @@
     const STORAGE_KEY = 'nb_students_data';
     const DEFAULT_AVATARS = ['👦', '👧', '🌟', '🦁', '🦅', '👑', '🚀', '🎯', '🦄', '🐬', '🏆', '🌸'];
     const DEFAULT_COLORS = ['#059669', '#0d9488', '#2563eb', '#4f46e5', '#7c3aed', '#d97706', '#e11d48', '#0891b2'];
+    const HEX_COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 
     /**
      * كائن إدارة الطلاب والتقدم التراكمي
@@ -187,13 +188,28 @@
         },
 
         /**
-         * تنقية النصوص وإزالة وسوم HTML لمنع ثغرات XSS
+         * ترميز الكيانات الخاصة لمنع ثغرات XSS وحماية سمات ARIA والأحداث المضمنة
+         * @param {string} str
+         * @returns {string}
+         */
+        escapeHTML(str) {
+            return String(str || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        },
+
+        /**
+         * تنقية النصوص وإزالة وسوم HTML وترميز الكيانات الخاصة لمنع ثغرات XSS وحماية سمات ARIA
          * @private
          */
         _sanitizeText(str, fallback = '') {
-            if (typeof str !== 'string') return fallback;
-            const clean = str.replace(/<[^>]*>/g, '').trim();
-            return clean.length > 0 ? clean : fallback;
+            if (str === null || str === undefined) return fallback;
+            const clean = String(str).replace(/<[^>]*>/g, '').trim();
+            if (clean.length === 0) return fallback;
+            return this.escapeHTML(clean);
         },
 
         /**
@@ -263,7 +279,7 @@
         },
 
         /**
-         * إنشاء طالب جديد وإضافته للمنظومة
+         * إنشاء طالب جديد وإضافته للمنظومة مع التحقق الصارم من صحة الألوان
          * @param {Object} options خيارات الطالب { name, avatar, color }
          * @returns {Object} كائن الطالب المنشأ
          */
@@ -272,7 +288,10 @@
 
             const sanitizedName = this._sanitizeText(name, 'طالب جديد');
             const chosenAvatar = this._sanitizeText(avatar) || sanitizedName.charAt(0) || DEFAULT_AVATARS[Math.floor(Math.random() * DEFAULT_AVATARS.length)];
-            const chosenColor = this._sanitizeText(color) || DEFAULT_COLORS[this._state.students.length % DEFAULT_COLORS.length];
+            
+            const fallbackColor = DEFAULT_COLORS[this._state.students.length % DEFAULT_COLORS.length];
+            const rawColor = typeof color === 'string' ? color.trim() : '';
+            const chosenColor = HEX_COLOR_REGEX.test(rawColor) ? rawColor : fallbackColor;
 
             const now = Date.now();
             const newStudent = {
@@ -303,7 +322,7 @@
         },
 
         /**
-         * تحديث بيانات طالب موجود
+         * تحديث بيانات طالب موجود والتحقق من صحة اللون والاسم
          * @param {string} id معرف الطالب
          * @param {Object} patchData التعديلات الجزئية
          * @returns {Object|null} الطالب بعد التحديث
@@ -320,7 +339,10 @@
                 student.avatar = this._sanitizeText(patchData.avatar, student.avatar);
             }
             if (patchData.color !== undefined) {
-                student.color = this._sanitizeText(patchData.color, student.color);
+                const rawCol = typeof patchData.color === 'string' ? patchData.color.trim() : '';
+                if (HEX_COLOR_REGEX.test(rawCol)) {
+                    student.color = rawCol;
+                }
             }
             if (typeof patchData.totalScore === 'number') {
                 student.totalScore = Math.max(0, Math.floor(patchData.totalScore));
@@ -623,7 +645,7 @@
         },
 
         /**
-         * حذف تقدم درس محدد لطالب وإعادة احتساب النقاط
+         * حذف تقدم درس محدد لطالب وإعادة احتساب النقاط بدقة
          * @param {string} studentId معرف الطالب
          * @param {string|number} lessonId رقم الدرس المراد إلغاء تقدمه
          * @returns {boolean} نجاح العملية
@@ -637,16 +659,19 @@
             const lessonKey = String(lessonId).trim();
             if (!student.completedLessons[lessonKey]) return false;
 
-            const lessonScore = Number(student.completedLessons[lessonKey].score || student.completedLessons[lessonKey].bestScore) || 0;
+            // تحديد النقاط المسجلة لهذا الدرس فقط لخصمها بدقة دون الإخلال بالمجموع التراكمي
+            const lessonData = student.completedLessons[lessonKey];
+            const lessonScore = Math.max(0, Math.floor(Number(lessonData.score) || 0));
             delete student.completedLessons[lessonKey];
 
-            // خصم نقاط الدرس من المجموع الكلي مع ضمان عدم النزول تحت الصفر
+            // خصم نقاط الدرس المحذوف من المجموع التراكمي مع الحفاظ على الحد الأدنى 0
             student.totalScore = Math.max(0, (student.totalScore || 0) - lessonScore);
             student.lastActive = Date.now();
 
             this._saveToStorage();
             this._dispatchEvent('nb:student-updated', { student: this._clone(student) });
             this._dispatchEvent('nb:lesson-progress-deleted', { studentId, lessonId: lessonKey });
+            this._dispatchEvent('nb:student-progress-updated', { studentId, lessonId: lessonKey });
             this.updateIndexBadges();
 
             return true;
@@ -813,6 +838,35 @@
         },
 
         /**
+         * تفريغ بنك الأخطاء لطالب محدد أو الطالب النشط بشكل ذري ودفعة واحدة
+         * يحفظ الحالة في التخزين ويبث أحداث التحديث مرة واحدة بدلاً من التكرار المجهد
+         * @param {string} [studentId] معرف الطالب (إذا لم يُمرر يُستخدم الطالب النشط)
+         * @returns {boolean} نجاح العملية
+         */
+        clearStudentMistakes(studentId) {
+            this.init();
+            const targetId = studentId || this._state.activeStudentId;
+            if (!targetId) return false;
+
+            const student = this._state.students.find(s => s.id === targetId);
+            if (!student) return false;
+
+            const countBefore = Array.isArray(student.mistakeBank) ? student.mistakeBank.length : 0;
+            student.mistakeBank = [];
+            student.lastActive = Date.now();
+
+            this._saveToStorage();
+            this._dispatchEvent('nb:student-updated', { student: this._clone(student) });
+            this._dispatchEvent('nb:student-progress-updated', {
+                studentId: targetId,
+                mistakesCleared: countBefore,
+                mistakeBank: []
+            });
+
+            return true;
+        },
+
+        /**
          * تصدير بيانات كافة الطلاب كملف JSON للنسخ الاحتياطي
          * @returns {string} محتوى نص JSON المصدر
          */
@@ -888,7 +942,10 @@
                     const id = typeof raw.id === 'string' && raw.id.trim() ? raw.id.trim() : this.generateId();
                     const name = this._sanitizeText(raw.name, `طالب ${i + 1}`);
                     const avatar = this._sanitizeText(raw.avatar, '👦');
-                    const color = this._sanitizeText(raw.color, '#059669');
+                    
+                    const rawColor = typeof raw.color === 'string' ? raw.color.trim() : '';
+                    const color = HEX_COLOR_REGEX.test(rawColor) ? rawColor : DEFAULT_COLORS[i % DEFAULT_COLORS.length];
+                    
                     const totalScore = Math.max(0, Math.floor(Number(raw.totalScore) || 0));
 
                     // تنقية سجل الدروس بحراسة ضد تلوث النموذج الأولي (Prototype Pollution Guard)
