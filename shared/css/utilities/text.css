@@ -1,6 +1,6 @@
 /**
- * Nour Al-Bayan Interactive Platform - Utilities: Typography & Text
- * Font sizes, weights, leading, tracking, text alignment, and transforms.
+ * Nour Al-Bayan Interactive Platform - Utilities: Typography & Text (Logical Alignment)
+ * Font sizes, weights, leading, tracking, logical text alignment, and transforms.
  */
 
 .text-\[10px\] { font-size: 10px; line-height: 14px; }
@@ -15,6 +15,9 @@
 .text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
 .text-5xl { font-size: 3rem; line-height: 1.15; }
 .text-6xl { font-size: 3.75rem; line-height: 1.15; }
+.text-7xl { font-size: 4.5rem; line-height: 1.1; }
+.text-8xl { font-size: 6rem; line-height: 1.05; }
+.text-9xl { font-size: 8rem; line-height: 1; }
 
 .font-medium { font-weight: 500; }
 .font-semibold { font-weight: 600; }
@@ -35,8 +38,13 @@
 .uppercase { text-transform: uppercase; }
 .italic { font-style: italic; }
 .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Logical & Physical Text Alignments */
+.text-start { text-align: start; }
+.text-end { text-align: end; }
 .text-center { text-align: center; }
 .text-left { text-align: left; }
 .text-right { text-align: right; }
+
 .break-words { overflow-wrap: break-word; }
 .whitespace-nowrap { white-space: nowrap; }

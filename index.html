@@ -30,8 +30,16 @@
 <link rel="preload" href="shared/vendor/fonts/amiri-bold.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="shared/vendor/fonts/fredoka-bold.woff2" as="font" type="font/woff2" crossorigin>
 
+<!-- Apple Mobile Web App & PWA Metadata -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="نور البيان">
+<link rel="apple-touch-icon" href="shared/vendor/icon.png">
+<link rel="apple-touch-icon" sizes="192x192" href="shared/vendor/icon.png">
+
 <link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="shared/core.css">
+<script src="shared/store.js" defer></script>
 <script src="shared/i18n.js" defer></script>
 <script src="shared/locales/ar.js" defer></script>
 <script src="shared/locales/en.js" defer></script>
@@ -54,28 +62,28 @@
 </head>
 <body>
 
-<a href="#main-content" class="skip-link">تخطي إلى قائمة الدروس</a>
+<a href="#main-content" class="skip-link" data-i18n="skip_to_content">تخطي إلى قائمة الدروس</a>
 
 <header>
-  <h1>صفحات نور البيان التفاعلية</h1>
-  <p>المنظومة التعليمية الرقمية الشاملة لضبط قراءة الكلمات والقرآن الكريم</p>
+  <h1 data-i18n="hero_title">صفحات نور البيان التفاعلية</h1>
+  <p data-i18n="hero_subtitle">المنظومة التعليمية الرقمية الشاملة لضبط قراءة الكلمات والقرآن الكريم</p>
   <div class="header-actions">
     <div class="stats-pill" id="count">
       <span aria-hidden="true">📚</span>
-      <span>إجمالي الدروس: 34 صفحة تفاعلية</span>
+      <span data-i18n="total_lessons_label">إجمالي الدروس: 34 صفحة تفاعلية</span>
     </div>
 
     <!-- شريط عرض الطالب الحالي النشط -->
-    <button id="active-student-btn" onclick="rosterManager.open()" class="action-btn active-student-chip" aria-label="عرض بيانات الطالب النشط ولوحة الطلاب">
+    <button id="active-student-btn" onclick="rosterManager.open()" class="action-btn active-student-chip" data-i18n-aria="open_roster_btn" aria-label="عرض بيانات الطالب النشط ولوحة الطلاب">
       <span id="active-student-avatar" class="chip-avatar" aria-hidden="true">👤</span>
-      <span id="active-student-name" class="chip-name">حصة عامة (ضيف)</span>
+      <span id="active-student-name" class="chip-name" data-i18n="general_session">حصة عامة (ضيف)</span>
       <span id="active-student-score" class="chip-score">⭐ 0</span>
     </button>
 
     <!-- زر إدارة ومتابعة الطلاب -->
-    <button onclick="rosterManager.open()" class="action-btn" aria-label="فتح لوحة إدارة ومتابعة الطلاب">
+    <button onclick="rosterManager.open()" class="action-btn" data-i18n-aria="open_roster_btn" aria-label="فتح لوحة إدارة ومتابعة الطلاب">
       <span aria-hidden="true">👥</span>
-      <span>إدارة الطلاب</span>
+      <span data-i18n="roster_btn_text">إدارة الطلاب</span>
     </button>
 
     <!-- زر تبديل اللغة -->
@@ -98,19 +106,19 @@
     <div class="shortcuts-header">
       <h2 class="shortcuts-title" id="shortcuts-guide-title">
         <span aria-hidden="true">⌨️</span>
-        <span>دليل مفاتيح الاختصارات</span>
+        <span data-i18n="shortcuts_guide_title">دليل مفاتيح الاختصارات</span>
       </h2>
-      <span class="text-xs text-slate-500 font-bold">لتسريع إدارة الحصة</span>
+      <span class="text-xs text-slate-500 font-bold" data-i18n="shortcuts_guide_subtitle">لتسريع إدارة الحصة</span>
     </div>
 
     <div class="shortcuts-grid">
       <!-- Card 1: التقييم والتحفيز -->
       <div class="shortcut-card">
         <h3 class="shortcut-card-title">
-          <span aria-hidden="true">🎯</span> <span>التقييم</span>
+          <span aria-hidden="true">🎯</span> <span data-i18n="section_evaluation">التقييم</span>
         </h3>
         <div class="shortcut-item">
-          <span>إتقان (صحيح)</span>
+          <span data-i18n="eval_correct_label">إتقان (صحيح)</span>
           <div class="kbd-group">
             <span class="kbd">2</span>
             <span class="kbd">Enter</span>
@@ -118,11 +126,11 @@
           </div>
         </div>
         <div class="shortcut-item">
-          <span>مراجعة (خطأ)</span>
+          <span data-i18n="eval_incorrect_label">مراجعة (خطأ)</span>
           <div class="kbd-group">
             <span class="kbd">1</span>
             <span class="kbd">↓</span>
-            <span class="kbd-hint">(سهم لأسفل)</span>
+            <span class="kbd-hint" data-i18n="kbd_hint_down">(سهم لأسفل)</span>
           </div>
         </div>
       </div>
@@ -130,22 +138,22 @@
       <!-- Card 2: التنقل بين الكلمات -->
       <div class="shortcut-card">
         <h3 class="shortcut-card-title">
-          <span aria-hidden="true">🔄</span> <span>التنقل</span>
+          <span aria-hidden="true">🔄</span> <span data-i18n="section_navigation">التنقل</span>
         </h3>
         <div class="shortcut-item">
-          <span>التالي</span>
+          <span data-i18n="nav_next_label">التالي</span>
           <div class="kbd-group">
             <span class="kbd">←</span>
-            <span class="kbd-hint">(يسار)</span>
+            <span class="kbd-hint" data-i18n="kbd_hint_left">(يسار)</span>
             <span class="kbd">PageDown</span>
             <span class="kbd">N</span>
           </div>
         </div>
         <div class="shortcut-item">
-          <span>السابق</span>
+          <span data-i18n="nav_prev_label">السابق</span>
           <div class="kbd-group">
             <span class="kbd">→</span>
-            <span class="kbd-hint">(يمين)</span>
+            <span class="kbd-hint" data-i18n="kbd_hint_right">(يمين)</span>
             <span class="kbd">PageUp</span>
           </div>
         </div>
@@ -154,16 +162,16 @@
       <!-- Card 3: التكبير وإدارة الألعاب -->
       <div class="shortcut-card">
         <h3 class="shortcut-card-title">
-          <span aria-hidden="true">🔍</span> <span>التكبير والألعاب</span>
+          <span aria-hidden="true">🔍</span> <span data-i18n="section_zoom_games">التكبير والألعاب</span>
         </h3>
         <div class="shortcut-item">
-          <span>إغلاق التكبير</span>
+          <span data-i18n="zoom_close_label">إغلاق التكبير</span>
           <div class="kbd-group">
             <span class="kbd">Escape</span>
           </div>
         </div>
         <div class="shortcut-item">
-          <span>إعادة ضبط الألعاب</span>
+          <span data-i18n="games_reset_label">إعادة ضبط الألعاب</span>
           <div class="kbd-group">
             <span class="kbd">R</span>
           </div>
@@ -531,57 +539,64 @@
   function updateIndexLanguage() {
     if (typeof i18n === 'undefined') return;
     const isAr = i18n.getLocale() === 'ar';
+    const currentLocale = i18n.getLocale();
+    const activeMeta = (typeof i18n.getActiveMeta === 'function') ? i18n.getActiveMeta() : { dir: (isAr ? 'rtl' : 'ltr') };
 
-    // 1. زر تبديل اللغة
+    // 1. لغة واتجاه المستند
+    document.documentElement.lang = currentLocale;
+    document.documentElement.dir = activeMeta.dir || (isAr ? 'rtl' : 'ltr');
+
+    // 2. ترجمة تصريحية شاملة للعناصر الموسومة بـ data-i18n*
+    if (typeof i18n.translateDOM === 'function') {
+      i18n.translateDOM();
+    }
+
+    // 3. زر تبديل اللغة (ديناميكي — ليس مفتاح ثابت)
     const langBtnText = document.getElementById('lang-switch-text');
     const langBtn = document.getElementById('lang-switch-btn');
-    if (langBtnText) {
-      langBtnText.textContent = isAr ? 'English' : 'العربية';
-    }
-    if (langBtn) {
-      langBtn.setAttribute('aria-label', isAr ? 'التحويل إلى اللغة الإنجليزية' : 'Switch to Arabic language');
-    }
+    if (langBtnText) langBtnText.textContent = isAr ? 'English' : 'العربية';
+    if (langBtn) langBtn.setAttribute('aria-label', isAr ? 'التحويل إلى اللغة الإنجليزية' : 'Switch to Arabic language');
 
-    // 2. ترويسة الصفحة
-    const headerH1 = document.querySelector('header h1');
-    if (headerH1) headerH1.textContent = i18n.t('hero_title');
-
-    const headerP = document.querySelector('header p');
-    if (headerP) headerP.textContent = i18n.t('hero_subtitle');
-
-    const countPill = document.querySelector('#count span:last-child');
-    if (countPill) countPill.textContent = i18n.t('total_lessons_label');
-
-    const rosterBtn = document.querySelector('button[onclick="rosterManager.open()"]:not(.active-student-chip) span:last-child');
-    if (rosterBtn) rosterBtn.textContent = i18n.t('roster_btn_text');
-
-    const settingsBtn = document.querySelector('button[onclick="settingsManager.open()"] span:last-child');
-    if (settingsBtn) settingsBtn.textContent = i18n.t('settings');
-
-    // 3. دليل الاختصارات
-    const shortcutsTitle = document.querySelector('#shortcuts-guide-title span:last-child');
-    if (shortcutsTitle) shortcutsTitle.textContent = i18n.t('shortcuts_guide_title');
-
-    const shortcutsSub = document.querySelector('.shortcuts-header .text-slate-500');
-    if (shortcutsSub) shortcutsSub.textContent = i18n.t('shortcuts_guide_subtitle');
-
-    const cardTitles = document.querySelectorAll('.shortcut-card-title span:last-child');
-    if (cardTitles.length >= 3) {
-      cardTitles[0].textContent = i18n.t('section_evaluation');
-      cardTitles[1].textContent = i18n.t('section_navigation');
-      cardTitles[2].textContent = i18n.t('section_zoom_games');
+    // 4. شارات وعناوين بطاقات الدروس (ديناميكية — تعتمد على رقم الصفحة)
+    const navEl = document.querySelector('nav');
+    if (navEl) {
+      navEl.setAttribute('aria-label', i18n.t('lessons_list_title'));
+      const navHeading = navEl.querySelector('h2.sr-only');
+      if (navHeading) navHeading.textContent = i18n.t('lessons_list_title');
     }
 
-    // 4. فهرس الدروس
-    const dirHeading = document.querySelector('.lessons-section h2');
-    if (dirHeading) dirHeading.textContent = i18n.t('lessons_list_title');
+    document.querySelectorAll('.lesson-card').forEach(card => {
+      const href = card.getAttribute('href') || '';
+      const numEl = card.querySelector('.card-num');
+      const badgeEl = card.querySelector('.card-badge');
+      const titleEl = card.querySelector('.card-title');
 
-    const arrows = document.querySelectorAll('.card-arrow');
-    arrows.forEach(a => {
-      a.textContent = isAr ? '←' : '→';
+      const isRemediation = href.includes('remediation');
+      const pageMatch = href.match(/(\d+)\.html/);
+      const pageNum = isRemediation ? '0' : (pageMatch ? pageMatch[1] : (numEl ? numEl.textContent.trim() : ''));
+
+      if (badgeEl && pageNum) {
+        badgeEl.textContent = isAr ? `الصفحة ${pageNum}` : `Page ${pageNum}`;
+      }
+
+      if (titleEl) {
+        if (!titleEl.dataset.rawTitle) titleEl.dataset.rawTitle = titleEl.textContent.trim();
+        const raw = titleEl.dataset.rawTitle;
+        const parenMatch = raw.match(/\(([^)]+)\)/);
+        const arPart = parenMatch ? parenMatch[1].trim() : raw;
+        const enPart = raw.replace(/\s*\([^)]+\)/, '').trim();
+        titleEl.textContent = isAr ? arPart : (enPart || raw);
+      }
+
+      if (pageNum) {
+        const titleText = titleEl ? titleEl.textContent.trim() : '';
+        card.setAttribute('aria-label', isAr ? `الصفحة ${pageNum}: ${titleText}` : `Page ${pageNum}: ${titleText}`);
+      }
     });
 
-    // 5. تذييل الصفحة
+    document.querySelectorAll('.card-arrow').forEach(a => { a.textContent = isAr ? '←' : '→'; });
+
+    // 5. تذييل الصفحة (ديناميكي — يجمع أكثر من مفتاح)
     const footerStrong = document.querySelector('footer strong');
     if (footerStrong) footerStrong.textContent = i18n.t('app_title');
 
@@ -590,9 +605,9 @@
       footerP.textContent = `${i18n.t('developed_by')} ${i18n.t('author_name')} • ${i18n.t('dedication_prayer')}`;
     }
 
-    // 6. تحديث شارة الطالب بالفهرس
-    if (typeof rosterManager !== 'undefined' && typeof rosterManager.updateIndexPill === 'function') {
-      rosterManager.updateIndexPill();
+    // 6. شريط الطالب النشط
+    if (typeof rosterManager !== 'undefined' && typeof rosterManager.updateHeaderBar === 'function') {
+      rosterManager.updateHeaderBar();
     }
   }
 

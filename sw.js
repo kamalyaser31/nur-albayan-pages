@@ -1,9 +1,13 @@
 /**
  * Nour Al-Bayan Interactive Platform - Progressive Web App Service Worker
- * Strategy: Cache-First with Network Fallback & Dynamic Cache Population
+ * Multi-Tier Caching Architecture:
+ * - Network-First for Navigation / HTML documents (ensuring live content updates with offline resilience)
+ * - Cache-First with Dynamic Runtime Fallback for Static Assets & Offline Fonts
  */
 
-const CACHE_NAME = 'nur-albayan-v2';
+const CACHE_VERSION = 'v3';
+const CACHE_STATIC_NAME = `nur-albayan-static-${CACHE_VERSION}`;
+const CACHE_RUNTIME_NAME = `nur-albayan-runtime-${CACHE_VERSION}`;
 
 const PRECACHE_ASSETS = [
     './',
@@ -50,19 +54,14 @@ const PRECACHE_ASSETS = [
     './shared/vendor/chart.umd.min.js',
     './shared/vendor/confetti.browser.min.js',
     './shared/vendor/icon.png',
-    // Offline Fonts
+    // Optimized Offline Fonts (Unique, De-duplicated)
     './shared/vendor/fonts/amiri-regular.woff2',
     './shared/vendor/fonts/amiri-bold.woff2',
-    './shared/vendor/fonts/amiri-400.woff2',
-    './shared/vendor/fonts/amiri-700.woff2',
     './shared/vendor/fonts/fredoka-regular.woff2',
     './shared/vendor/fonts/fredoka-semibold.woff2',
     './shared/vendor/fonts/fredoka-bold.woff2',
     './shared/vendor/fonts/fredoka-black.woff2',
-    './shared/vendor/fonts/fredoka-400.woff2',
-    './shared/vendor/fonts/fredoka-600.woff2',
-    './shared/vendor/fonts/fredoka-700.woff2',
-    // Lesson Pages & Remediation
+    // Lesson Pages & Remediation Hub
     './pages/6.html',
     './pages/7.html',
     './pages/8.html',
@@ -101,44 +100,34 @@ const PRECACHE_ASSETS = [
 
 self.addEventListener('install', (event) => {
     event.waitUntil(
-        caches.open(CACHE_NAME)
+        caches.open(CACHE_STATIC_NAME)
             .then(async (cache) => {
                 try {
-                    // Attempt atomic precache of all defined assets
                     await cache.addAll(PRECACHE_ASSETS);
-                    console.log('[SW] All precache assets successfully cached.');
+                    console.log('[SW] All precache assets successfully stored in static cache.');
                 } catch (err) {
-                    console.error('[SW] Precache failed during cache.addAll:', err);
-                    // Fallback: cache individual items to maximize offline resilience while identifying missing assets
-                    const results = await Promise.allSettled(
-                        PRECACHE_ASSETS.map(async (asset) => {
-                            try {
-                                await cache.add(asset);
-                            } catch (itemErr) {
-                                console.error(`[SW] Failed to cache individual asset "${asset}":`, itemErr);
-                                throw itemErr;
-                            }
-                        })
+                    console.error('[SW] Atomic precache failed, falling back to individual caching:', err);
+                    await Promise.allSettled(
+                        PRECACHE_ASSETS.map((asset) => cache.add(asset).catch((itemErr) => {
+                            console.error(`[SW] Precache item failed: "${asset}"`, itemErr);
+                        }))
                     );
-                    const failures = results.filter((r) => r.status === 'rejected');
-                    if (failures.length > 0) {
-                        console.error(`[SW] Precache finished with ${failures.length} missing asset(s).`);
-                    }
                 }
             })
             .then(() => self.skipWaiting())
-            .catch((err) => {
-                console.error('[SW] Critical install failure:', err);
-            })
     );
 });
 
 self.addEventListener('activate', (event) => {
+    const validCaches = [CACHE_STATIC_NAME, CACHE_RUNTIME_NAME];
     event.waitUntil(
         caches.keys()
             .then((keys) => {
                 return Promise.all(
-                    keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
+                    keys.filter((key) => !validCaches.includes(key)).map((key) => {
+                        console.log(`[SW] Deleting deprecated cache: ${key}`);
+                        return caches.delete(key);
+                    })
                 );
             })
             .then(() => self.clients.claim())
@@ -149,8 +138,43 @@ self.addEventListener('fetch', (event) => {
     if (event.request.method !== 'GET') return;
     if (!event.request.url.startsWith('http')) return;
 
-    const requestUrl = new URL(event.request.url);
+    const isNavigation = event.request.mode === 'navigate' ||
+        (event.request.headers.get('accept') && event.request.headers.get('accept').includes('text/html'));
 
+    // 1. Navigation / HTML Document Strategy: Network-First
+    if (isNavigation) {
+        event.respondWith(
+            fetch(event.request)
+                .then((networkResponse) => {
+                    if (networkResponse && networkResponse.status === 200) {
+                        const responseClone = networkResponse.clone();
+                        caches.open(CACHE_RUNTIME_NAME).then((cache) => {
+                            cache.put(event.request, responseClone);
+                        });
+                    }
+                    return networkResponse;
+                })
+                .catch(async () => {
+                    // Network unavailable -> Check static and runtime caches
+                    const cachedResponse = await caches.match(event.request, { ignoreSearch: true });
+                    if (cachedResponse) {
+                        return cachedResponse;
+                    }
+
+                    const requestUrl = new URL(event.request.url);
+                    const isRootOrIndex = requestUrl.pathname.endsWith('/') || 
+                                          requestUrl.pathname.endsWith('/index.html');
+                    if (isRootOrIndex) {
+                        return caches.match('./index.html').then((res) => res || caches.match('index.html'));
+                    }
+                    
+                    return Promise.reject(new Error('Offline: Resource not cached'));
+                })
+        );
+        return;
+    }
+
+    // 2. Static Assets, Fonts & Stylesheets Strategy: Cache-First
     event.respondWith(
         caches.match(event.request, { ignoreSearch: true }).then((cachedResponse) => {
             if (cachedResponse) {
@@ -162,29 +186,15 @@ self.addEventListener('fetch', (event) => {
                     if (!networkResponse || networkResponse.status !== 200 || (networkResponse.type !== 'basic' && networkResponse.type !== 'cors')) {
                         return networkResponse;
                     }
-                    const responseToCache = networkResponse.clone();
-                    caches.open(CACHE_NAME).then((cache) => {
-                        cache.put(event.request, responseToCache);
+                    const responseClone = networkResponse.clone();
+                    caches.open(CACHE_RUNTIME_NAME).then((cache) => {
+                        cache.put(event.request, responseClone);
                     });
                     return networkResponse;
                 })
-                .catch((error) => {
-                    // Check if this is a navigation or HTML request
-                    const isHtmlRequest = event.request.mode === 'navigate' ||
-                        (event.request.headers.get('accept') && event.request.headers.get('accept').includes('text/html'));
-
-                    if (isHtmlRequest) {
-                        // Only fallback to index.html for root/home navigation to prevent breaking relative asset paths on subpages
-                        const isRootOrIndex = requestUrl.pathname.endsWith('/') || 
-                                              requestUrl.pathname.endsWith('/index.html');
-
-                        if (isRootOrIndex) {
-                            return caches.match('./index.html').then((res) => res || caches.match('index.html'));
-                        }
-                    }
-
-                    // For sub-page navigation or non-HTML resources that failed offline, propagate error
-                    return Promise.reject(error);
+                .catch((err) => {
+                    console.warn(`[SW] Static asset fetch failed offline: ${event.request.url}`);
+                    return Promise.reject(err);
                 });
         })
     );

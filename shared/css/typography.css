@@ -1,11 +1,17 @@
 /**
  * Nour Al-Bayan Interactive Platform - Quranic & Arabic Typography
- * Font family styling, Tajweed diacritic color tokens, and custom scrollbar.
+ * Font family styling, Tajweed diacritic color tokens, WCAG AA contrast, and Arabic letter-spacing constraints.
  */
+
+/* Enforce strict prohibition of letter-spacing on Arabic & RTL text */
+:lang(ar),
+[dir="rtl"] {
+    letter-spacing: normal !important;
+}
 
 .quran-font,
 .quran-special-font {
-    font-family: 'Amiri', 'Amiri Quran', 'Scheherazade New', 'Traditional Arabic', serif;
+    font-family: var(--font-quran, 'Amiri', 'Amiri Quran', 'Scheherazade New', 'Traditional Arabic', serif);
     font-weight: 700;
     font-feature-settings: "calt" 1, "liga" 1, "mkmk" 1, "mark" 1, "ccmp" 1;
     text-rendering: optimizeLegibility;
@@ -20,13 +26,18 @@
 /* Word Diacritic Colors (Linked to Central Tokens) */
 .c-red, .c0, .color-0 { color: var(--color-quranic-red, #b91c1c); }
 .c-blue, .c1, .color-1 { color: var(--color-quranic-blue, #1d4ed8); }
-.c-black, .c2, .color-2 { color: #1e293b; }
+.c-black, .c2, .color-2 { color: var(--text-main, #1e293b); }
 .c-purple { color: #7e22ce; }
-.sep-bar { color: #cbd5e1; margin: 0 4px; font-weight: 300; }
+
+/* Separator bar with WCAG 2.1 AA compliant contrast (4.63:1 against white) */
+.sep-bar {
+    color: #64748b;
+    margin-inline: 4px;
+    font-weight: 400;
+}
 
 /* Custom Scrollbar */
 .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
 .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
 .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-

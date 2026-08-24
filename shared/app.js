@@ -1,8 +1,28 @@
 const app = {
-    idx: 0, score: 0, stats: { ok: 0, err: 0 }, clock: 10.0, timer: null, feedbackTimer: null, advanceTimer: null, _isAdvancing: false,
-    hasPlayedGame1: false, hasPlayedGame2: false, hasPlayedGame3: false, currentActiveIndex: null, pendingGame: 0, chartInstance: null,
-    mistakeIndices: [], isReviewMode: false, reviewQueue: [], reviewIdx: 0, keyboardBound: false, _localeBound: false,
-    isSessionDrill: false, sessionDrillQueue: [], sessionDrillIdx: 0, initialSessionMistakes: [], sessionMistakesHistory: [],
+    idx: 0,
+    score: 0,
+    stats: { ok: 0, err: 0 },
+    clock: 10.0,
+    timer: null,
+    feedbackTimer: null,
+    advanceTimer: null,
+    drillTransitionTimer: null,
+    _isAdvancing: false,
+    hasPlayedGame1: false,
+    hasPlayedGame2: false,
+    hasPlayedGame3: false,
+    currentActiveIndex: null,
+    pendingGame: 0,
+    chartInstance: null,
+    order: null,
+    mistakeIndices: [],
+    keyboardBound: false,
+    _localeBound: false,
+    isSessionDrill: false,
+    sessionDrillQueue: [],
+    sessionDrillIdx: 0,
+    initialSessionMistakes: [],
+    sessionMistakesHistory: [],
     enableGameBreaks: false,
 
     init() {
@@ -42,6 +62,9 @@ const app = {
         if (!this.keyboardBound) {
             this.keyboardBound = true;
             document.addEventListener('keydown', (e) => {
+                // فحص المفاتيح التوجيهية وتجاهلها لعدم التعارض مع اختصارات المتصفح
+                if (e.ctrlKey || e.altKey || e.metaKey) return;
+
                 // حظر التفاعل بالمفاتيح السريعة إذا كان التركيز داخل حقل إدخال
                 if (e.target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
 
@@ -129,8 +152,18 @@ const app = {
         this.clearAdvanceTimer();
         if (this.timer) { clearInterval(this.timer); this.timer = null; }
         if (this.feedbackTimer) { clearTimeout(this.feedbackTimer); this.feedbackTimer = null; }
+        if (this.drillTransitionTimer) { clearTimeout(this.drillTransitionTimer); this.drillTransitionTimer = null; }
+        this._isAdvancing = false;
         this.closeOverlay();
         this.closeEarlyExitModal();
+
+        // تنظيف الألعاب النشطة
+        if (typeof xoGame !== 'undefined' && typeof xoGame.cleanup === 'function') xoGame.cleanup();
+        if (typeof c4Game !== 'undefined' && typeof c4Game.cleanup === 'function') c4Game.cleanup();
+        if (typeof memoryGame !== 'undefined' && typeof memoryGame.cleanup === 'function') memoryGame.cleanup();
+        if (typeof riddlesGame !== 'undefined' && typeof riddlesGame.cleanup === 'function') riddlesGame.cleanup();
+        if (typeof wordwallRoom !== 'undefined' && typeof wordwallRoom.cleanup === 'function') wordwallRoom.cleanup();
+
         const drillBanner = document.getElementById('session-drill-banner');
         if (drillBanner) drillBanner.classList.add('hidden');
         ['main-menu-stage', 'rule-stage', 'game-transition-stage', 'learning-stage', 'xo-stage', 'c4-stage', 'memory-stage', 'riddles-stage', 'wordwall-stage', 'summary-screen'].forEach(id => {
@@ -139,8 +172,11 @@ const app = {
     },
 
     jumpTo(val) {
+        if (this.drillTransitionTimer) {
+            clearTimeout(this.drillTransitionTimer);
+            this.drillTransitionTimer = null;
+        }
         this.hideAll();
-        this.isReviewMode = false;
         this.isSessionDrill = false;
         const topNav = document.getElementById('top-nav'); if (topNav) topNav.classList.remove('hidden');
         if (typeof val === 'string' && val.startsWith('word_')) {
@@ -185,10 +221,18 @@ const app = {
     startChallenge() {
         this.idx = 0; this.score = 0; this.stats = { ok: 0, err: 0 };
         this.hasPlayedGame1 = false; this.hasPlayedGame2 = false; this.hasPlayedGame3 = false;
-        this.mistakeIndices = []; this.isReviewMode = false; this.reviewQueue = []; this.reviewIdx = 0;
+        this.mistakeIndices = [];
         this.isSessionDrill = false; this.sessionDrillQueue = []; this.sessionDrillIdx = 0; this.sessionMistakesHistory = [];
         this.updateDrillNavOption();
-        const scoreEl = document.getElementById('score-val'); if (scoreEl) scoreEl.innerText = '0';
+        this.updateScoreUI();
+
+        // مزامنة الدرس الحالي والنقاط مع موزع الحالة المركزي
+        if (typeof nbStore !== 'undefined' && typeof nbStore.setState === 'function') {
+            const lessonId = (typeof window.PAGE_CONFIG !== 'undefined' && window.PAGE_CONFIG.lessonId)
+                ? window.PAGE_CONFIG.lessonId
+                : (window.location.pathname.match(/(\d+)\.html/) || [])[1] || null;
+            nbStore.setState({ score: 0, currentLessonId: lessonId }, { silent: true });
+        }
 
         if (typeof dataset !== 'undefined' && Array.isArray(dataset)) {
             this.order = Array.from({ length: dataset.length }, (_, i) => i);
@@ -442,7 +486,7 @@ const app = {
             }
         } else if (item.t === 'speed') {
             if (banner) {
-                banner.innerText = "⚡ SPEED CHALLENGE!";
+                banner.innerText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('speed_challenge_banner', '⚡ SPEED CHALLENGE!') : "⚡ SPEED CHALLENGE!";
                 banner.className = "text-center py-1 px-4 rounded-full font-bold text-white shadow-md w-fit bg-blue-500 block uppercase tracking-wide text-xs shrink-0";
                 banner.classList.remove('hidden');
             }
@@ -454,6 +498,9 @@ const app = {
     updateScoreUI() {
         const scoreEl = document.getElementById('score-val');
         if (scoreEl) scoreEl.innerText = String(this.score);
+        if (typeof nbStore !== 'undefined' && typeof nbStore.set === 'function') {
+            nbStore.set('score', this.score, { silent: true });
+        }
     },
 
     clearAdvanceTimer() {
@@ -462,6 +509,107 @@ const app = {
             this.advanceTimer = null;
         }
         this._isAdvancing = false;
+    },
+
+    scheduleAdvance(callback, delay = 600) {
+        const settings = (typeof settingsManager !== 'undefined') ? settingsManager.get() : {};
+        if (settings.manualAdvance) return;
+
+        this.clearAdvanceTimer();
+        this._isAdvancing = true;
+        this.advanceTimer = setTimeout(() => {
+            this._isAdvancing = false;
+            this.advanceTimer = null;
+            if (typeof callback === 'function') {
+                callback();
+            } else {
+                this.next();
+            }
+        }, delay);
+    },
+
+    recordMistake(origIndex) {
+        if (origIndex === null || origIndex === undefined) return;
+        if (!this.mistakeIndices.includes(origIndex)) {
+            this.mistakeIndices.push(origIndex);
+        }
+        if (!this.sessionMistakesHistory) this.sessionMistakesHistory = [];
+        if (!this.sessionMistakesHistory.includes(origIndex)) {
+            this.sessionMistakesHistory.push(origIndex);
+        }
+        this.updateDrillNavOption();
+    },
+
+    _evaluateDrillItem(drillItem, origIndex, item, isCorrect, isAr) {
+        const drillMode = (typeof settingsManager !== 'undefined' && settingsManager.get().remediationDrillMode)
+            ? settingsManager.get().remediationDrillMode
+            : 'loop';
+        let shouldAdvance = true;
+
+        if (isCorrect) {
+            this.stats.ok++;
+            this.score += 2;
+
+            if (drillMode === 'instant_repeat' && drillItem._hasFailed) {
+                drillItem._inPlaceSuccessCount = (drillItem._inPlaceSuccessCount || 0) + 1;
+                if (drillItem._inPlaceSuccessCount < 3) {
+                    const stepMsg = (typeof i18n !== 'undefined' && i18n.t)
+                        ? i18n.t('drill_step_success', `أحسنت! (${drillItem._inPlaceSuccessCount}/3) ⭐`, { current: drillItem._inPlaceSuccessCount, total: 3 })
+                        : (isAr ? `أحسنت! (${drillItem._inPlaceSuccessCount}/3) ⭐` : `Well done! (${drillItem._inPlaceSuccessCount}/3) ⭐`);
+                    this.triggerFeedback(stepMsg, '#10b981', true);
+                    shouldAdvance = false;
+                } else {
+                    const masteredMsg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_mastered') : 'أتقنت الكلمة! 🌟';
+                    this.triggerFeedback(masteredMsg, '#10b981', true);
+                    this.mistakeIndices = this.mistakeIndices.filter(idx => idx !== origIndex);
+                }
+            } else {
+                const masteredMsg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_mastered') : 'أتقنت الكلمة! 🌟';
+                this.triggerFeedback(masteredMsg, '#10b981', true);
+            }
+
+            // شطب الكلمة ذرياً من بنك الأخطاء وتحديث الدقة والنجوم في studentManager
+            if (typeof studentManager !== 'undefined') {
+                const studentId = studentManager.getActiveStudentId ? studentManager.getActiveStudentId() : null;
+                if (item) studentManager.recordRemediationAttempt(studentId, item, true);
+                if (studentManager.hasActiveStudent && studentManager.hasActiveStudent()) {
+                    const lessonId = this.getLessonId();
+                    const total = this.stats.ok + this.stats.err;
+                    const accuracy = total > 0 ? Math.round((this.stats.ok / total) * 100) : 100;
+                    const stars = accuracy >= 90 ? 3 : (accuracy >= 70 ? 2 : 1);
+                    studentManager.recordLessonCompletion(lessonId, this.score, accuracy, stars);
+                }
+            }
+        } else {
+            this.stats.err++;
+            const feedbackText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_needs_practice') : 'تحتاج تدريباً إضافياً ⭐';
+            this.triggerFeedback(feedbackText, '#f43f5e', false);
+            if (typeof Sound !== 'undefined' && typeof Sound.fail === 'function') Sound.fail();
+
+            if (drillMode === 'loop') {
+                this.sessionDrillQueue.push({ index: origIndex, _inPlaceSuccessCount: 0, _hasFailed: true });
+                shouldAdvance = true;
+            } else if (drillMode === 'instant_repeat') {
+                drillItem._hasFailed = true;
+                drillItem._inPlaceSuccessCount = 0;
+                shouldAdvance = false;
+            } else if (drillMode === 'single_pass') {
+                shouldAdvance = true;
+            }
+
+            if (typeof studentManager !== 'undefined' && item) {
+                const studentId = studentManager.getActiveStudentId ? studentManager.getActiveStudentId() : null;
+                studentManager.recordRemediationAttempt(studentId, item, false);
+            }
+        }
+
+        this.updateScoreUI();
+        this.updateDrillNavOption();
+
+        if (shouldAdvance) {
+            this.sessionDrillIdx++;
+        }
+        this.scheduleAdvance(() => this.renderSessionDrill());
     },
 
     startClock() {
@@ -484,17 +632,23 @@ const app = {
     updateProgress(current, total, prefix = 'Card') {
         const progText = document.getElementById('progress-text');
         const pBar = document.getElementById('progress-bar');
-        if (progText) progText.innerText = `${prefix} ${current} of ${total}`;
+        if (progText) {
+            const isAr = (typeof i18n !== 'undefined' && i18n.getLocale() === 'ar');
+            if (typeof i18n !== 'undefined' && i18n.t) {
+                progText.innerText = i18n.t('progress_step_indicator', `${prefix} ${current} ${isAr ? 'من' : 'of'} ${total}`, { prefix, current, total });
+            } else {
+                progText.innerText = `${prefix} ${current} ${isAr ? 'من' : 'of'} ${total}`;
+            }
+        }
         if (pBar && total > 0) {
             const pct = Math.round((current / total) * 100);
-            pBar.style.width = `${pct}%`;
+            pBar.style.setProperty('--progress', (current / total));
             pBar.setAttribute('aria-valuenow', pct);
         }
     },
 
     evaluate(isCorrect) {
         if (this._isAdvancing) return; // حماية ضد السباق وتعدد الضغطات
-        const settings = (typeof settingsManager !== 'undefined') ? settingsManager.get() : {};
 
         // مسار طور المعالجة الفورية لعثرات الجلسة (Session Remediation Drill)
         if (this.isSessionDrill) {
@@ -502,94 +656,8 @@ const app = {
             const drillItem = this.sessionDrillQueue[this.sessionDrillIdx];
             const origIndex = (typeof drillItem === 'object' && drillItem !== null) ? drillItem.index : drillItem;
             const currentWord = (typeof dataset !== 'undefined' && dataset[origIndex]) ? dataset[origIndex] : null;
-            const drillMode = (typeof settingsManager !== 'undefined' && settingsManager.get().remediationDrillMode) ? settingsManager.get().remediationDrillMode : 'loop';
             const isAr = (typeof i18n !== 'undefined' && i18n.getLocale() === 'ar');
-
-            let shouldAdvance = false;
-
-            if (isCorrect) {
-                this.stats.ok++;
-                this.score += 2;
-
-                if (drillMode === 'instant_repeat') {
-                    if (drillItem._hasFailed) {
-                        drillItem._inPlaceSuccessCount = (drillItem._inPlaceSuccessCount || 0) + 1;
-                        if (drillItem._inPlaceSuccessCount < 3) {
-                            const stepMsg = isAr ? `أحسنت! (${drillItem._inPlaceSuccessCount}/3) ⭐` : `Well done! (${drillItem._inPlaceSuccessCount}/3) ⭐`;
-                            this.triggerFeedback(stepMsg, '#10b981', true);
-                            shouldAdvance = false;
-                        } else {
-                            const masteredMsg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_mastered') : 'أتقنت الكلمة! 🌟';
-                            this.triggerFeedback(masteredMsg, '#10b981', true);
-                            this.mistakeIndices = this.mistakeIndices.filter(idx => idx !== origIndex);
-                            shouldAdvance = true;
-                        }
-                    } else {
-                        const masteredMsg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_mastered') : 'أتقنت الكلمة! 🌟';
-                        this.triggerFeedback(masteredMsg, '#10b981', true);
-                        this.mistakeIndices = this.mistakeIndices.filter(idx => idx !== origIndex);
-                        shouldAdvance = true;
-                    }
-                } else {
-                    // loop أو single_pass
-                    const masteredMsg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_mastered') : 'أتقنت الكلمة! 🌟';
-                    this.triggerFeedback(masteredMsg, '#10b981', true);
-                    this.mistakeIndices = this.mistakeIndices.filter(idx => idx !== origIndex);
-                    shouldAdvance = true;
-                }
-
-                // شطب الكلمة ذرياً من بنك الأخطاء وتحديث الدقة والنجوم في studentManager
-                if (typeof studentManager !== 'undefined') {
-                    const studentId = studentManager.getActiveStudentId ? studentManager.getActiveStudentId() : null;
-                    if (currentWord) {
-                        studentManager.recordRemediationAttempt(studentId, currentWord, true);
-                    }
-                    if (studentManager.hasActiveStudent && studentManager.hasActiveStudent()) {
-                        const lessonId = this.getLessonId();
-                        const total = this.stats.ok + this.stats.err;
-                        const accuracy = total > 0 ? Math.round((this.stats.ok / total) * 100) : 100;
-                        const stars = accuracy >= 90 ? 3 : (accuracy >= 70 ? 2 : 1);
-                        studentManager.recordLessonCompletion(lessonId, this.score, accuracy, stars);
-                    }
-                }
-            } else {
-                this.stats.err++;
-                const feedbackText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_needs_practice') : 'تحتاج تدريباً إضافياً ⭐';
-                this.triggerFeedback(feedbackText, '#f43f5e', false);
-                if (typeof Sound !== 'undefined' && typeof Sound.fail === 'function') Sound.fail();
-
-                if (drillMode === 'loop') {
-                    this.sessionDrillQueue.push({ index: origIndex, _inPlaceSuccessCount: 0, _hasFailed: true });
-                    shouldAdvance = true;
-                } else if (drillMode === 'instant_repeat') {
-                    drillItem._hasFailed = true;
-                    drillItem._inPlaceSuccessCount = 0;
-                    shouldAdvance = false;
-                } else if (drillMode === 'single_pass') {
-                    shouldAdvance = true;
-                }
-
-                if (typeof studentManager !== 'undefined' && currentWord) {
-                    const studentId = studentManager.getActiveStudentId ? studentManager.getActiveStudentId() : null;
-                    studentManager.recordRemediationAttempt(studentId, currentWord, false);
-                }
-            }
-
-            this.updateScoreUI();
-            this.updateDrillNavOption();
-
-            if (shouldAdvance) {
-                this.sessionDrillIdx++;
-            }
-
-            if (!settings.manualAdvance) {
-                this._isAdvancing = true;
-                this.clearAdvanceTimer();
-                this.advanceTimer = setTimeout(() => {
-                    this._isAdvancing = false;
-                    this.renderSessionDrill();
-                }, 600);
-            }
+            this._evaluateDrillItem(drillItem, origIndex, currentWord, isCorrect, isAr);
             return;
         }
 
@@ -619,52 +687,7 @@ const app = {
                 if (typeof Sound !== 'undefined' && typeof Sound.fail === 'function') Sound.fail();
             }
             this.updateScoreUI();
-            if (!settings.manualAdvance) {
-                this._isAdvancing = true;
-                this.clearAdvanceTimer();
-                this.advanceTimer = setTimeout(() => {
-                    this._isAdvancing = false;
-                    this.next();
-                }, 600);
-            }
-            return;
-        }
-
-        // استدعاء التسجيل اللحظي فورياً للطالب النشط (للدروس العادية)
-        if (typeof studentManager !== 'undefined' && studentManager.hasActiveStudent()) {
-            const lessonId = this.getLessonId();
-            const pts = isCorrect ? ((this.isReviewMode) ? 2 : ((typeof settingsManager !== 'undefined' && settingsManager.get().noPenaltyMode) ? 1 : 1)) : 0;
-            let currentWord = null;
-            if (this.isReviewMode && this.reviewQueue && this.reviewIdx < this.reviewQueue.length) {
-                const rIdx = this.reviewQueue[this.reviewIdx];
-                currentWord = (typeof dataset !== 'undefined' && dataset[rIdx]) ? dataset[rIdx] : null;
-            } else if (typeof dataset !== 'undefined' && dataset.length > 0) {
-                const actualIdx = (this.order && this.order[this.idx] !== undefined) ? this.order[this.idx] : this.idx;
-                currentWord = dataset[actualIdx] || null;
-            }
-            studentManager.recordCardEvaluation(lessonId, isCorrect, isCorrect ? pts : 0, currentWord, this.idx, dataset ? dataset.length : 0);
-        }
-
-        if (this.isReviewMode) {
-            if (!this.reviewQueue || this.reviewIdx >= this.reviewQueue.length) return;
-            if (isCorrect) {
-                this.stats.ok++;
-                this.score += 2;
-                this.triggerFeedback((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_mastered') : 'Mastered! 🌟', '#10b981', true);
-            } else {
-                this.stats.err++;
-                this.triggerFeedback((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_keep_practicing') : 'Keep Practicing ⭐', '#f43f5e', false);
-                if (typeof Sound !== 'undefined' && typeof Sound.fail === 'function') Sound.fail();
-            }
-            this.updateScoreUI();
-            if (!settings.manualAdvance) {
-                this._isAdvancing = true;
-                this.clearAdvanceTimer();
-                this.advanceTimer = setTimeout(() => {
-                    this._isAdvancing = false;
-                    this.next();
-                }, 600);
-            }
+            this.scheduleAdvance();
             return;
         }
 
@@ -672,11 +695,18 @@ const app = {
         const currentItemIdx = (this.order && this.order[this.idx] !== undefined) ? this.order[this.idx] : this.idx;
         const item = dataset[currentItemIdx];
         if (!item) return;
-        const type = item.t;
+
+        const settings = (typeof settingsManager !== 'undefined') ? settingsManager.get() : {};
+        const points = isCorrect ? ((item.t === 'golden') ? 10 : (item.t === 'speed' && this.clock > 0) ? 5 : 2) : 0;
+
+        // التسجيل اللحظي فورياً للطالب النشط بالنقاط الفعلية
+        if (typeof studentManager !== 'undefined' && studentManager.hasActiveStudent()) {
+            const lessonId = this.getLessonId();
+            studentManager.recordCardEvaluation(lessonId, isCorrect, points, item, this.idx, dataset.length);
+        }
 
         if (isCorrect) {
             this.stats.ok++;
-            let points = (type === 'golden') ? 10 : (type === 'speed' && this.clock > 0) ? 5 : 2;
             this.score += points;
             const perfWord = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('txt_perfect') : 'Perfect';
             const excWord = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('txt_excellent') : 'Excellent';
@@ -687,32 +717,18 @@ const app = {
             this.triggerFeedback(randomFeedback, '#10b981', true);
         } else {
             this.stats.err++;
-            if (!this.mistakeIndices.includes(currentItemIdx)) {
-                this.mistakeIndices.push(currentItemIdx);
-            }
-            if (!this.sessionMistakesHistory) this.sessionMistakesHistory = [];
-            if (!this.sessionMistakesHistory.includes(currentItemIdx)) {
-                this.sessionMistakesHistory.push(currentItemIdx);
-            }
-            this.updateDrillNavOption();
-            let penalty = (settings.noPenaltyMode) ? 0 : ((type === 'danger') ? 5 : 2);
+            this.recordMistake(currentItemIdx);
+            const penalty = settings.noPenaltyMode ? 0 : ((item.t === 'danger') ? 5 : 2);
             this.score = Math.max(0, this.score - penalty);
-            const feedbackText = (settings.noPenaltyMode) ?
-                ((type === 'danger') ? ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('warning_danger_penalty') : 'High Focus! ⚠️') : ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_needs_practice') : 'Needs Practice ⭐')) :
-                ((type === 'danger') ? ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('warning_danger_penalty') : '-5 Warning! ⚠️') : ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_needs_practice') : '-2 Needs Practice'));
+            const feedbackText = settings.noPenaltyMode
+                ? ((item.t === 'danger') ? ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('warning_danger_penalty') : 'High Focus! ⚠️') : ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_needs_practice') : 'Needs Practice ⭐'))
+                : ((item.t === 'danger') ? ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('warning_danger_penalty') : '-5 Warning! ⚠️') : ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_needs_practice') : '-2 Needs Practice'));
             this.triggerFeedback(feedbackText, '#f43f5e', false);
             if (typeof Sound !== 'undefined' && typeof Sound.fail === 'function') Sound.fail();
         }
-        this.updateScoreUI();
 
-        if (!settings.manualAdvance) {
-            this._isAdvancing = true;
-            this.clearAdvanceTimer();
-            this.advanceTimer = setTimeout(() => {
-                this._isAdvancing = false;
-                this.next();
-            }, 600);
-        }
+        this.updateScoreUI();
+        this.scheduleAdvance();
     },
 
     next() {
@@ -721,17 +737,6 @@ const app = {
 
         if (this.isSessionDrill) {
             this.renderSessionDrill();
-            return;
-        }
-
-        if (this.isReviewMode) {
-            this.reviewIdx++;
-            if (this.reviewIdx < this.reviewQueue.length) {
-                this.renderReview();
-            } else {
-                this.isReviewMode = false;
-                this.finishToSummary();
-            }
             return;
         }
 
@@ -762,8 +767,11 @@ const app = {
 
         if (!hasMistakes && !hasHistory) {
             const isAr = (typeof i18n !== 'undefined' && i18n.getLocale() === 'ar');
-            const noMistakesMsg = isAr ? 'ما شاء الله! لا توجد عثرات لمعالجتها في هذه الجلسة! 🌟' : 'Excellent! No mistakes to drill in this session! 🌟';
+            const noMistakesMsg = (typeof i18n !== 'undefined' && i18n.t)
+                ? i18n.t('no_session_mistakes_toast', isAr ? 'ما شاء الله! لا توجد عثرات لمعالجتها في هذه الجلسة! 🌟' : 'Excellent! No mistakes to drill in this session! 🌟')
+                : (isAr ? 'ما شاء الله! لا توجد عثرات لمعالجتها في هذه الجلسة! 🌟' : 'Excellent! No mistakes to drill in this session! 🌟');
             this.triggerFeedback(noMistakesMsg, '#10b981', true);
+            this.jumpTo('menu');
             return;
         }
 
@@ -774,7 +782,6 @@ const app = {
         if (typeof dataset === 'undefined' || dataset.length === 0) return;
 
         this.isSessionDrill = true;
-        this.isReviewMode = false;
 
         // حفظ نسخة أصلية من عثرات الجلسة لتمكين التراجع عند الإلغاء
         this.initialSessionMistakes = [...this.mistakeIndices];
@@ -832,7 +839,9 @@ const app = {
         if (stage) stage.classList.remove('hidden');
 
         const isAr = (typeof i18n !== 'undefined' && i18n.getLocale() === 'ar');
-        const progressLabel = isAr ? 'معالجة العثرات' : 'Remediation Drill';
+        const progressLabel = (typeof i18n !== 'undefined' && i18n.t)
+            ? i18n.t('session_drill_title', isAr ? 'معالجة العثرات' : 'Remediation Drill')
+            : (isAr ? 'معالجة العثرات' : 'Remediation Drill');
         this.updateProgress(this.sessionDrillIdx + 1, this.sessionDrillQueue.length, progressLabel);
 
         // إظهار شريط المعالجة الفورية وتحديث العدادات
@@ -856,7 +865,10 @@ const app = {
         if (area) {
             this.renderWordInto(area, item);
             const plain = this.getPlainWord(item);
-            area.setAttribute('aria-label', `${progressLabel} ${this.sessionDrillIdx + 1} of ${this.sessionDrillQueue.length}: ${plain}`);
+            const stepOf = (typeof i18n !== 'undefined' && i18n.t)
+                ? i18n.t('progress_step_indicator', `${progressLabel} ${this.sessionDrillIdx + 1} ${isAr ? 'من' : 'of'} ${this.sessionDrillQueue.length}`, { prefix: progressLabel, current: this.sessionDrillIdx + 1, total: this.sessionDrillQueue.length })
+                : `${progressLabel} ${this.sessionDrillIdx + 1} ${isAr ? 'من' : 'of'} ${this.sessionDrillQueue.length}`;
+            area.setAttribute('aria-label', `${stepOf}: ${plain}`);
             area.tabIndex = -1;
             area.focus({ preventScroll: true });
         }
@@ -868,12 +880,19 @@ const app = {
         if (typeof Sound !== 'undefined' && typeof Sound.playChime === 'function') Sound.playChime();
 
         const isAr = (typeof i18n !== 'undefined' && i18n.getLocale() === 'ar');
-        const congratsMsg = isAr ? 'رائع جداً! تم إتقان جميع عثرات الجلسة بنجاح! 🏆' : 'Great Job! All session mistakes mastered! 🏆';
+        const congratsMsg = (typeof i18n !== 'undefined' && i18n.t)
+            ? i18n.t('session_drill_completed', isAr ? 'رائع جداً! تم إتقان جميع عثرات الجلسة بنجاح! 🏆' : 'Great Job! All session mistakes mastered! 🏆')
+            : (isAr ? 'رائع جداً! تم إتقان جميع عثرات الجلسة بنجاح! 🏆' : 'Great Job! All session mistakes mastered! 🏆');
         this.triggerFeedback(congratsMsg, '#10b981', true);
         this.updateDrillNavOption();
 
-        // انتقال تلقائي بعد ثانيتين إلى ساحة الألعاب Wordwall
-        setTimeout(() => {
+        // انتقال تلقائي بعد ثانيتين إلى ساحة الألعاب Wordwall مع ربطه بمؤقت قابل للإبطال
+        if (this.drillTransitionTimer) {
+            clearTimeout(this.drillTransitionTimer);
+            this.drillTransitionTimer = null;
+        }
+        this.drillTransitionTimer = setTimeout(() => {
+            this.drillTransitionTimer = null;
             if (!this.isSessionDrill) {
                 this.playWordwall();
             }
@@ -911,36 +930,6 @@ const app = {
         this.finishToSummary();
     },
 
-    startReview() {
-        if (this.mistakeIndices.length === 0 || typeof dataset === 'undefined') return;
-        this.isReviewMode = true;
-        this.reviewQueue = [...this.mistakeIndices];
-        this.reviewIdx = 0;
-        this.renderReview();
-    },
-
-    renderReview() {
-        if (this.reviewIdx >= this.reviewQueue.length) {
-            this.isReviewMode = false;
-            this.finishToSummary();
-            return;
-        }
-        const origIndex = this.reviewQueue[this.reviewIdx];
-        const item = dataset[origIndex];
-        const area = document.getElementById('word-display-area');
-        this.hideAll();
-        const stage = document.getElementById('learning-stage'); if (stage) stage.classList.remove('hidden');
-        this.updateProgress(this.reviewIdx + 1, this.reviewQueue.length, 'Mistake Review');
-
-        if (area) {
-            this.renderWordInto(area, item);
-            const plain = this.getPlainWord(item);
-            area.setAttribute('aria-label', `Review Card ${this.reviewIdx + 1} of ${this.reviewQueue.length}: ${plain}`);
-            area.tabIndex = -1;
-            area.focus({ preventScroll: true });
-        }
-    },
-
     toggleGameBreaks(enabled) {
         this.enableGameBreaks = enabled;
         if (typeof settingsManager !== 'undefined') {
@@ -958,10 +947,9 @@ const app = {
             }
             return;
         }
-        if (this.isReviewMode) {
-            if (this.reviewIdx > 0) { this.reviewIdx--; this.renderReview(); }
-        } else {
-            if (this.idx > 0) { this.idx--; this.render(); }
+        if (this.idx > 0) {
+            this.idx--;
+            this.render();
         }
     },
 
@@ -1004,22 +992,44 @@ const app = {
         this.pendingGame = gameNum;
         const stage = document.getElementById('game-transition-stage'); if (stage) stage.classList.remove('hidden');
         let gameName = "";
-        if (gameNum === 1) gameName = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('game_xo') : "Tic-Tac-Toe";
-        else if (gameNum === 2) gameName = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('game_c4') : "Connect 4";
-        else if (gameNum === 3) gameName = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('games_room_title') : "Wordwall Arena";
+        if (gameNum === 1) {
+            gameName = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('game_xo') : "Tic-Tac-Toe";
+        } else if (gameNum === 2) {
+            gameName = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('game_c4') : "Connect 4";
+        } else if (gameNum === 3) {
+            const isRiddles = (typeof PAGE_CONFIG !== 'undefined' && PAGE_CONFIG.game3 === 'riddles');
+            if (isRiddles) {
+                gameName = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('game_riddles') : "Riddles";
+            } else {
+                gameName = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('game_memory') : "Memory Match";
+            }
+        }
         const titleEl = document.getElementById('transition-game-name'); if (titleEl) titleEl.innerText = gameName;
     },
 
     enterGame() {
         if (this.pendingGame === 1) this.jumpTo('game_xo');
         else if (this.pendingGame === 2) this.jumpTo('game_c4');
-        else if (this.pendingGame === 3) this.playWordwall();
+        else if (this.pendingGame === 3) {
+            const isRiddles = (typeof PAGE_CONFIG !== 'undefined' && PAGE_CONFIG.game3 === 'riddles');
+            this.jumpTo(isRiddles ? 'game_riddles' : 'game_memory');
+        }
     },
 
     resume(gameNum) {
         if (gameNum === 1) this.hasPlayedGame1 = true;
         if (gameNum === 2) this.hasPlayedGame2 = true;
-        if (gameNum === 3) { this.hasPlayedGame3 = true; this.playWordwall(); return; }
+        if (gameNum === 3) {
+            this.hasPlayedGame3 = true;
+            if (typeof dataset !== 'undefined' && this.idx < dataset.length - 1) {
+                this.idx++;
+                const wordIdx = (this.order && this.order[this.idx] !== undefined) ? this.order[this.idx] : this.idx;
+                this.jumpTo(`word_${wordIdx}`);
+            } else {
+                this.playWordwall();
+            }
+            return;
+        }
         if (typeof dataset !== 'undefined' && this.idx < dataset.length - 1) {
             this.idx++;
             const wordIdx = (this.order && this.order[this.idx] !== undefined) ? this.order[this.idx] : this.idx;
@@ -1070,7 +1080,7 @@ const app = {
                 if (typeof honeycombGame !== 'undefined' && this.currentActiveIndex !== null) {
                     honeycombGame.markStatus(this.currentActiveIndex, isCorrect);
                 }
-                const scoreEl = document.getElementById('score-val'); if (scoreEl) scoreEl.innerText = this.score;
+                this.updateScoreUI();
                 this.closeOverlay();
                 return;
             }
@@ -1082,16 +1092,7 @@ const app = {
             this.triggerFeedback((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_magnificent') : 'Magnificent! ❤️⭐', '#10b981', true);
         } else {
             this.stats.err++;
-            if (this.currentActiveIndex !== null) {
-                if (!this.mistakeIndices.includes(this.currentActiveIndex)) {
-                    this.mistakeIndices.push(this.currentActiveIndex);
-                }
-                if (!this.sessionMistakesHistory) this.sessionMistakesHistory = [];
-                if (!this.sessionMistakesHistory.includes(this.currentActiveIndex)) {
-                    this.sessionMistakesHistory.push(this.currentActiveIndex);
-                }
-                this.updateDrillNavOption();
-            }
+            this.recordMistake(this.currentActiveIndex);
             this.triggerFeedback((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_keep_trying') : 'Keep Trying! ⭐', '#f43f5e', false);
         }
 
@@ -1107,7 +1108,7 @@ const app = {
             studentManager.recordCardEvaluation(lessonId, isCorrect, isCorrect ? 5 : 0, currentWord, this.currentActiveIndex, dataset ? dataset.length : 0);
         }
 
-        const scoreEl = document.getElementById('score-val'); if (scoreEl) scoreEl.innerText = this.score;
+        this.updateScoreUI();
         this.closeOverlay();
     },
 
@@ -1128,7 +1129,9 @@ const app = {
                     }
                     this.startSessionDrill();
                 };
-                const btnText = isAr ? '🔄 إعادة مراجعة عثرات اليوم' : '🔄 Review Today\'s Mistakes';
+                const btnText = (typeof i18n !== 'undefined' && i18n.t)
+                    ? i18n.t('btn_repeat_drill', isAr ? '🔄 إعادة مراجعة عثرات اليوم' : '🔄 Review Today\'s Mistakes')
+                    : (isAr ? '🔄 إعادة مراجعة عثرات اليوم' : '🔄 Review Today\'s Mistakes');
                 reviewBtn.innerHTML = `<span>${btnText}</span> <span aria-hidden="true">🎯</span>`;
             } else {
                 reviewBtn.classList.add('hidden');
@@ -1153,12 +1156,14 @@ const app = {
             if (window.PAGE_CONFIG) {
                 if (window.PAGE_CONFIG.lessonId) return String(window.PAGE_CONFIG.lessonId);
                 if (window.PAGE_CONFIG.id) return String(window.PAGE_CONFIG.id);
-                if (window.PAGE_CONFIG.page) return String(window.PAGE_CONFIG.page);
+                if (window.PAGE_CONFIG.pageNumber !== undefined && window.PAGE_CONFIG.pageNumber !== null) return String(window.PAGE_CONFIG.pageNumber);
+                if (window.PAGE_CONFIG.page !== undefined && window.PAGE_CONFIG.page !== null) return String(window.PAGE_CONFIG.page);
                 const text = `${window.PAGE_CONFIG.subtitle || ''} ${window.PAGE_CONFIG.title || ''} ${window.PAGE_CONFIG.footer || ''}`;
                 const m = text.match(/(?:Page|صفحة|درس|الدرس)\s*(\d+)/i);
                 if (m) return m[1];
             }
             if (window.location && window.location.pathname) {
+                if (/remediation\.html/i.test(window.location.pathname)) return 'remediation';
                 const pathMatch = window.location.pathname.match(/(\d+)\.html/i);
                 if (pathMatch) return pathMatch[1];
             }
@@ -1175,23 +1180,35 @@ const app = {
 
     drawChart() {
         if (typeof Chart === 'undefined') return;
-        if (this.chartInstance) this.chartInstance.destroy();
+        if (this.chartInstance) {
+            this.chartInstance.destroy();
+            this.chartInstance = null;
+        }
         const canvas = document.getElementById('summaryChart'); if (!canvas) return;
         const ctx = canvas.getContext('2d');
+        const isAr = (typeof i18n !== 'undefined' && i18n.getLocale() === 'ar');
+        const labelCorrect = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('btn_correct', isAr ? 'صحيح' : 'Correct') : (isAr ? 'صحيح' : 'Correct');
+        const labelIncorrect = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('btn_incorrect', isAr ? 'خطأ' : 'Incorrect') : (isAr ? 'خطأ' : 'Incorrect');
         this.chartInstance = new Chart(ctx, {
             type: 'doughnut',
-            data: { labels: ['Correct', 'Mistakes'], datasets: [{ data: [this.stats.ok, this.stats.err], backgroundColor: ['#10b981', '#f43f5e'], borderWidth: 0, hoverOffset: 6 }] },
+            data: { labels: [labelCorrect, labelIncorrect], datasets: [{ data: [this.stats.ok, this.stats.err], backgroundColor: ['#10b981', '#f43f5e'], borderWidth: 0, hoverOffset: 6 }] },
             options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { font: { family: 'Fredoka', weight: 'bold' } } } } }
         });
+    },
+
+    // تابع تنظيف شامل للمؤقتات والألعاب والرسم البياني
+    destroy() {
+        this.hideAll();
+        if (this.chartInstance) {
+            this.chartInstance.destroy();
+            this.chartInstance = null;
+        }
     }
 };
 
-// الاستماع لحدث تبديل الطالب لتحديث واجهة الدرس تلقائياً
+// الاستماع لحدث تبديل الطالب لتحديث واجهة الدرس تلقائياً بدون تكرار
 if (typeof window !== 'undefined') {
     window.addEventListener('nb:student-changed', (e) => {
-        if (typeof updateActiveStudentPill === 'function') {
-            updateActiveStudentPill();
-        }
         if (typeof app !== 'undefined' && typeof app.onStudentChanged === 'function') {
             app.onStudentChanged(e && e.detail ? e.detail : null);
         }
@@ -1206,3 +1223,4 @@ if (typeof document !== 'undefined') {
         }
     });
 }
+

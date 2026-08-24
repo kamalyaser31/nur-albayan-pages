@@ -1,20 +1,38 @@
 /**
- * Nour Al-Bayan Interactive Platform - Utilities: Borders & Radius
- * Border styles, widths, color tokens, and rounded corner utilities.
+ * Nour Al-Bayan Interactive Platform - Utilities: Borders & Radius (Logical Properties)
+ * Border styles, widths, logical inline/block borders, color tokens, and rounded corner utilities.
  */
 
-.border, .border-2, .border-4, .border-8, .border-\[3px\], .border-\[5px\], .border-t, .border-b {
+.border, .border-2, .border-4, .border-8, .border-\[3px\], .border-\[5px\],
+.border-t, .border-b, .border-t-8, .border-b-4,
+.border-s, .border-s-2, .border-s-4, .border-e, .border-e-2, .border-e-4,
+.border-bs, .border-be {
     border-style: solid;
 }
+
 .border { border-width: 1px; }
 .border-2 { border-width: 2px; }
 .border-4 { border-width: 4px; }
 .border-8 { border-width: 8px; }
 .border-\[3px\] { border-width: 3px; }
 .border-\[5px\] { border-width: 5px; }
-.border-t { border-top-width: 1px; }
-.border-b { border-bottom-width: 1px; }
 
+.border-t { border-top-width: 1px; }
+.border-t-8 { border-top-width: 8px; }
+.border-b { border-bottom-width: 1px; }
+.border-b-4 { border-bottom-width: 4px; }
+
+/* Logical Borders */
+.border-s { border-inline-start-width: 1px; }
+.border-s-2 { border-inline-start-width: 2px; }
+.border-s-4 { border-inline-start-width: 4px; }
+.border-e { border-inline-end-width: 1px; }
+.border-e-2 { border-inline-end-width: 2px; }
+.border-e-4 { border-inline-end-width: 4px; }
+.border-bs { border-block-start-width: 1px; }
+.border-be { border-block-end-width: 1px; }
+
+/* Border Colors */
 .border-transparent { border-color: transparent; }
 .border-white { border-color: #ffffff; }
 .border-white\/10 { border-color: rgba(255, 255, 255, 0.1); }
@@ -29,21 +47,46 @@
 .border-slate-200 { border-color: #e2e8f0; }
 .border-slate-200\/80 { border-color: rgba(226, 232, 240, 0.8); }
 .border-slate-300 { border-color: #cbd5e1; }
+.border-gray-200 { border-color: #e5e7eb; }
+.border-gray-300 { border-color: #d1d5db; }
 
 .border-emerald-100 { border-color: #d1fae5; }
 .border-emerald-200 { border-color: #a7f3d0; }
 .border-emerald-200\/90 { border-color: rgba(167, 243, 208, 0.9); }
 .border-emerald-400 { border-color: #34d399; }
+.border-emerald-500 { border-color: #10b981; }
+
+.border-green-400 { border-color: #4ade80; }
+.border-green-500 { border-color: #22c55e; }
 
 .border-amber-200 { border-color: #fde68a; }
 .border-amber-400 { border-color: #fbbf24; }
+.border-yellow-400 { border-color: #facc15; }
 
 .border-indigo-200 { border-color: #c7d2fe; }
-.border-purple-400\/30 { border-color: rgba(192, 132, 252, 0.3); }
-.border-blue-400\/30 { border-color: rgba(96, 165, 250, 0.3); }
-.border-rose-200 { border-color: #fecdd3; }
+.border-indigo-400 { border-color: #818cf8; }
+.border-indigo-500 { border-color: #6366f1; }
 
+.border-blue-200 { border-color: #bfdbfe; }
+.border-blue-400 { border-color: #60a5fa; }
+.border-blue-400\/30 { border-color: rgba(96, 165, 250, 0.3); }
+
+.border-purple-400 { border-color: #c084fc; }
+.border-purple-500 { border-color: #a855f7; }
+.border-purple-400\/30 { border-color: rgba(192, 132, 252, 0.3); }
+
+.border-orange-300 { border-color: #fdba74; }
+.border-orange-400 { border-color: #fb923c; }
+.border-orange-500 { border-color: #f97316; }
+
+.border-pink-200 { border-color: #fbcfe8; }
+.border-pink-400 { border-color: #f472b6; }
+.border-rose-200 { border-color: #fecdd3; }
+.border-red-500 { border-color: #ef4444; }
+
+/* Border Radius */
 .rounded-md { border-radius: 0.375rem; }
+.rounded-lg { border-radius: 0.5rem; }
 .rounded-xl { border-radius: 0.75rem; }
 .rounded-2xl { border-radius: 1rem; }
 .rounded-3xl { border-radius: 1.5rem; }

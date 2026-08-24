@@ -1,11 +1,11 @@
 /**
  * Nour Al-Bayan Interactive Platform - Word Display Cards & Themes
- * Full word box, segmented letters container, and multi-layered elevation themes.
+ * Full word box, segmented letters container, multi-layered elevation themes, and Hub lesson cards.
  */
 
 .letter-box,
 .seg-box {
-    background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
+    background: linear-gradient(180deg, var(--surface-card, #ffffff) 0%, #fafbfc 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -104,8 +104,8 @@
 
 /* Hub Lesson Cards */
 .lesson-card {
-    background: #ffffff;
-    border: 2px solid #e2e8f0;
+    background: var(--card-bg, #ffffff);
+    border: 2px solid var(--border-color, #e2e8f0);
     border-radius: 20px;
     padding: 16px 18px;
     display: flex;
@@ -124,7 +124,7 @@
         transform: translateY(-3px);
         border-color: #34d399;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04), 0 14px 28px -6px rgba(16, 185, 129, 0.20);
-        background: #ffffff;
+        background: var(--card-bg, #ffffff);
     }
     .lesson-card:hover .card-arrow {
         color: var(--color-primary, #047857);
@@ -160,10 +160,22 @@
     text-align: start;
 }
 
+.card-badge {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--primary, #047857);
+    background: var(--primary-light, #ecfdf5);
+    padding: 2px 8px;
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 4px;
+    letter-spacing: normal !important;
+}
+
 .card-title {
     font-size: 0.96rem;
     font-weight: 700;
-    color: #1e293b;
+    color: var(--text-main, #1e293b);
     margin: 0;
     line-height: 1.45;
     display: -webkit-box;
@@ -174,9 +186,8 @@
 
 .card-arrow {
     font-size: 1.25rem;
-    color: #94a3b8;
+    color: #64748b;
     transition: transform 0.25s ease, color 0.25s ease;
     flex-shrink: 0;
     font-weight: 900;
 }
-

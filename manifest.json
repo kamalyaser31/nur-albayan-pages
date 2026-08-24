@@ -40,5 +40,65 @@
       "type": "image/png",
       "purpose": "maskable"
     }
+  ],
+  "shortcuts": [
+    {
+      "name": "فهرس الدروس",
+      "short_name": "الرئيسية",
+      "description": "الانتقال إلى فهرس جميع صفحات ودروس نور البيان",
+      "url": "./index.html",
+      "icons": [
+        {
+          "src": "shared/vendor/icon.png",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "any"
+        }
+      ]
+    },
+    {
+      "name": "بنك الأخطاء التراكمي",
+      "short_name": "بنك الأخطاء",
+      "description": "جلسة تدريب مكثفة لعلاج عثرات الطالب التراكمية",
+      "url": "./pages/remediation.html",
+      "icons": [
+        {
+          "src": "shared/vendor/icon.png",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "any"
+        }
+      ]
+    },
+    {
+      "name": "أشكال الحروف",
+      "short_name": "الصفحة 6",
+      "description": "تدريب أشكال الحروف في أول ووسط وآخر الكلمة",
+      "url": "./pages/6.html",
+      "icons": [
+        {
+          "src": "shared/vendor/icon.png",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "any"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "shared/vendor/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "الصفحة الرئيسية لمنظومة نور البيان"
+    },
+    {
+      "src": "shared/vendor/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "عرض الهاتف التفاعلي لمنظومة نور البيان"
+    }
   ]
 }

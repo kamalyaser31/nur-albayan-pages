@@ -5,11 +5,11 @@
 
 .game-tab { transition: all 0.25s var(--ease-bounce); }
 .game-tab.active {
-    background-color: #10b981 !important;
-    color: white !important;
+    background-color: var(--color-primary, #047857) !important;
+    color: #ffffff !important;
     transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
-    border-color: #059669;
+    box-shadow: 0 6px 15px rgba(4, 120, 87, 0.3);
+    border-color: var(--color-primary-dark, #065f46);
 }
 
 .wordwall-box { perspective: 1200px; cursor: pointer; }
@@ -94,7 +94,7 @@
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 }
 
-/* Honeycomb Matrix */
+/* Honeycomb Matrix (drop-shadow filter for unclipped polygon contours) */
 .honeycomb-grid {
     display: flex;
     flex-wrap: wrap;
@@ -115,22 +115,21 @@
     align-items: center;
     justify-content: center;
     background: linear-gradient(145deg, #fbbf24 0%, #d97706 100%);
-    box-shadow: 0 4px 10px rgba(217, 119, 6, 0.3);
+    filter: drop-shadow(0 4px 6px rgba(217, 119, 6, 0.35));
 }
 @media (min-width: 640px) {
     .hex-cell { width: 92px; height: 104px; }
 }
 .hex-cell:hover {
     transform: translateY(-4px) scale(1.08);
-    filter: brightness(1.1);
+    filter: drop-shadow(0 6px 10px rgba(217, 119, 6, 0.45)) brightness(1.08);
     z-index: 10;
 }
 .hex-cell.mastered {
     background: linear-gradient(145deg, #10b981 0%, #047857 100%) !important;
-    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.45) !important;
+    filter: drop-shadow(0 4px 6px rgba(4, 120, 87, 0.45)) !important;
 }
 .hex-cell.review {
     background: linear-gradient(145deg, #f97316 0%, #c2410c 100%) !important;
-    box-shadow: 0 4px 14px rgba(249, 115, 22, 0.45) !important;
+    filter: drop-shadow(0 4px 6px rgba(194, 65, 12, 0.45)) !important;
 }
-

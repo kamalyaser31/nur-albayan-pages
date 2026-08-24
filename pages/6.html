@@ -5,21 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nour Al-Bayan - Page 6 • Letter Shapes (أشكال الحروف)</title>
     
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/core.css">
+    <script src="../shared/vendor/confetti.browser.min.js"></script>
     
     <style>
         body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: #f0fdfa;
-            background-image: radial-gradient(#cbd5e1 2px, transparent 2px);
-            background-size: 30px 30px;
+            font-family: var(--font-sans);
+            background-color: var(--color-bg-green, #f0fdf4);
+            background-image: radial-gradient(#dcfce7 1px, transparent 1px), radial-gradient(#f0fdf4 1px, #f0fdf4 1px);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
         }
 
         .amiri-font {
-            font-family: 'Amiri', serif;
+            font-family: var(--font-quran, 'Amiri', serif);
+            letter-spacing: normal !important;
         }
 
         .letter-card {

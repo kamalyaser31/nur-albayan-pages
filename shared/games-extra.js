@@ -1,3 +1,12 @@
+/**
+ * وحدة ألعاب الاستراحة الإضافية (Memory Match & Riddles Games)
+ * المنظومة: نور البيان
+ *
+ * يوفر هذا الملف:
+ * 1. memoryGame: لعبة الذاكرة وتطابق الأزواج
+ * 2. riddlesGame: لعبة الألغاز والمسابقات القرآنية واللغوية
+ */
+
 const memoryGame = {
     iconSets: [
         ['🍎', '🍌', '🍉', '🍇', '🍓', '🥑', '🥕', '🌽'],
@@ -6,17 +15,56 @@ const memoryGame = {
         ['⚽', '🏀', '🏈', '⚾', '🎾', '🏐', '🏓', '🎱'],
         ['🌞', '🌝', '🌛', '🌜', '🌙', '⭐', '🌟', '☄️']
     ],
-    currentSetIndex: 0, cards: [], hasFlippedCard: false, lockBoard: false, firstCard: null, secondCard: null, matchedPairs: 0, gameActive: true, flipTimer: null,
-    init() {
-        if (this.flipTimer) { clearTimeout(this.flipTimer); this.flipTimer = null; }
-        this.cards = [...this.iconSets[this.currentSetIndex], ...this.iconSets[this.currentSetIndex]];
-        this.shuffleCards(); this.renderBoard();
-        this.matchedPairs = 0; this.hasFlippedCard = false; this.lockBoard = false; this.firstCard = null; this.secondCard = null; this.gameActive = true;
-        const status = document.getElementById('memory-status'); if (status) { status.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t("memory_find_pairs") : "ابحث عن الأزواج المتطابقة 🔍"; status.classList.remove('text-yellow-300'); }
-        if (typeof app !== 'undefined') app.setGameResumeState('memory-resume-btn', false, '', (typeof i18n !== 'undefined' && i18n.t) ? i18n.t("skip_to_wordwall") : "Skip to Wordwall ⏭️");
+    currentSetIndex: 0,
+    cards: [],
+    hasFlippedCard: false,
+    lockBoard: false,
+    firstCard: null,
+    secondCard: null,
+    matchedPairs: 0,
+    gameActive: true,
+    flipTimer: null,
+
+    cleanup() {
+        if (typeof GameCore !== 'undefined') {
+            GameCore.clearTimer(this, 'flipTimer');
+        } else if (this.flipTimer) {
+            clearTimeout(this.flipTimer);
+            this.flipTimer = null;
+        }
+        this.lockBoard = false;
+        this.hasFlippedCard = false;
+        this.firstCard = null;
+        this.secondCard = null;
     },
+
+    init() {
+        this.cleanup();
+        this.cards = [...this.iconSets[this.currentSetIndex], ...this.iconSets[this.currentSetIndex]];
+        this.shuffleCards();
+        this.renderBoard();
+        this.matchedPairs = 0;
+        this.hasFlippedCard = false;
+        this.lockBoard = false;
+        this.firstCard = null;
+        this.secondCard = null;
+        this.gameActive = true;
+        const status = document.getElementById('memory-status');
+        if (status) {
+            status.textContent = (typeof i18n !== 'undefined' && i18n.t)
+                ? i18n.t("memory_find_pairs")
+                : "ابحث عن الأزواج المتطابقة 🔍";
+            status.classList.remove('text-yellow-300');
+        }
+        if (typeof app !== 'undefined') {
+            app.setGameResumeState('memory-resume-btn', false, '', (typeof i18n !== 'undefined' && i18n.t) ? i18n.t("skip_to_wordwall") : "Skip to Wordwall ⏭️");
+        }
+    },
+
     shuffleCards() {
-        if (typeof app !== 'undefined' && typeof app.shuffle === 'function') {
+        if (typeof GameCore !== 'undefined') {
+            GameCore.shuffle(this.cards);
+        } else if (typeof app !== 'undefined' && typeof app.shuffle === 'function') {
             app.shuffle(this.cards);
         } else {
             for (let i = this.cards.length - 1; i > 0; i--) {
@@ -25,10 +73,16 @@ const memoryGame = {
             }
         }
     },
+
     renderBoard() {
-        const board = document.getElementById('memory-board'); if (!board) return; board.textContent = '';
+        const board = document.getElementById('memory-board');
+        if (!board) return;
+        board.textContent = '';
+        const fragment = document.createDocumentFragment();
+
         this.cards.forEach((icon, idx) => {
-            const scene = document.createElement('div'); scene.className = 'mem-scene';
+            const scene = document.createElement('div');
+            scene.className = 'mem-scene';
             const card = document.createElement('button');
             card.type = 'button';
             card.className = 'mem-card';
@@ -36,23 +90,40 @@ const memoryGame = {
             card.setAttribute('aria-label', `Memory card ${idx + 1}, hidden`);
             card.setAttribute('aria-pressed', 'false');
             card.onclick = () => this.flipCard(card);
-            const front = document.createElement('div'); front.className = 'mem-face mem-face-front shadow-[0_4px_0_#be123c] active:translate-y-1 active:shadow-none'; front.innerText = '❓';
-            const back = document.createElement('div'); back.className = 'mem-face mem-face-back'; back.innerText = icon;
-            card.appendChild(front); card.appendChild(back); scene.appendChild(card); board.appendChild(scene);
+            const front = document.createElement('div');
+            front.className = 'mem-face mem-face-front shadow-[0_4px_0_#be123c] active:translate-y-1 active:shadow-none';
+            front.innerText = '❓';
+            const back = document.createElement('div');
+            back.className = 'mem-face mem-face-back';
+            back.innerText = icon;
+            card.appendChild(front);
+            card.appendChild(back);
+            scene.appendChild(card);
+            fragment.appendChild(scene);
         });
+        board.appendChild(fragment);
     },
+
     flipCard(card) {
         if (!this.gameActive || this.lockBoard || card === this.firstCard || card.classList.contains('is-flipped')) return;
         card.classList.add('is-flipped');
         card.setAttribute('aria-label', `Card with ${card.dataset.icon}`);
         card.setAttribute('aria-pressed', 'true');
-        if (!this.hasFlippedCard) { this.hasFlippedCard = true; this.firstCard = card; return; }
-        this.secondCard = card; this.checkForMatch();
+        if (!this.hasFlippedCard) {
+            this.hasFlippedCard = true;
+            this.firstCard = card;
+            return;
+        }
+        this.secondCard = card;
+        this.checkForMatch();
     },
+
     checkForMatch() {
-        let isMatch = this.firstCard.dataset.icon === this.secondCard.dataset.icon;
-        if (isMatch) this.disableCards(); else this.unflipCards();
+        const isMatch = this.firstCard.dataset.icon === this.secondCard.dataset.icon;
+        if (isMatch) this.disableCards();
+        else this.unflipCards();
     },
+
     disableCards() {
         this.firstCard.setAttribute('aria-label', `Matched pair: ${this.firstCard.dataset.icon}`);
         this.secondCard.setAttribute('aria-label', `Matched pair: ${this.secondCard.dataset.icon}`);
@@ -71,17 +142,25 @@ const memoryGame = {
             this.gameActive = false;
             const status = document.getElementById('memory-status');
             if (status) {
-                status.textContent = typeof i18n !== 'undefined' ? i18n.t("memory_cleared", "🏆 أحسنت! تم تطابق جميع البطاقات! 🎉") : "🏆 أحسنت! تم تطابق جميع البطاقات! 🎉";
+                status.textContent = typeof i18n !== 'undefined'
+                    ? i18n.t("memory_cleared", "🏆 أحسنت! تم تطابق جميع البطاقات! 🎉")
+                    : "🏆 أحسنت! تم تطابق جميع البطاقات! 🎉";
                 status.classList.add('text-yellow-300');
             }
-            if (typeof fireCelebration === 'function') fireCelebration();
-            if (typeof app !== 'undefined') app.setGameResumeState('memory-resume-btn', true, typeof i18n !== 'undefined' ? i18n.t("open_word_games", "ألعاب الكلمات 🎡") : "ألعاب الكلمات 🎡");
+            if (typeof GameCore !== 'undefined') {
+                GameCore.celebrate(false);
+            } else if (typeof fireCelebration === 'function') {
+                fireCelebration();
+            }
+            if (typeof app !== 'undefined') {
+                app.setGameResumeState('memory-resume-btn', true, typeof i18n !== 'undefined' ? i18n.t("open_word_games", "ألعاب الكلمات 🎡") : "ألعاب الكلمات 🎡");
+            }
         }
     },
+
     unflipCards() {
         this.lockBoard = true;
-        if (this.flipTimer) clearTimeout(this.flipTimer);
-        this.flipTimer = setTimeout(() => {
+        const unflipAction = () => {
             if (this.firstCard) {
                 this.firstCard.classList.remove('is-flipped');
                 this.firstCard.setAttribute('aria-label', 'Memory card, hidden');
@@ -93,12 +172,26 @@ const memoryGame = {
                 this.secondCard.setAttribute('aria-pressed', 'false');
             }
             this.resetBoard();
-            this.flipTimer = null;
-        }, 1000);
+        };
+
+        if (typeof GameCore !== 'undefined') {
+            GameCore.createTimer(this, 'flipTimer', unflipAction, 1000);
+        } else {
+            if (this.flipTimer) clearTimeout(this.flipTimer);
+            this.flipTimer = setTimeout(() => {
+                unflipAction();
+                this.flipTimer = null;
+            }, 1000);
+        }
     },
-    resetBoard() { [this.hasFlippedCard, this.lockBoard] = [false, false]; [this.firstCard, this.secondCard] = [null, null]; },
+
+    resetBoard() {
+        [this.hasFlippedCard, this.lockBoard] = [false, false];
+        [this.firstCard, this.secondCard] = [null, null];
+    },
+
     reset() {
-        if (this.flipTimer) { clearTimeout(this.flipTimer); this.flipTimer = null; }
+        this.cleanup();
         this.currentSetIndex = (this.currentSetIndex + 1) % this.iconSets.length;
         this.init();
     }
@@ -166,71 +259,131 @@ const riddlesGame = {
             answerIndex: 0
         }
     ],
-    init() { this.idx = 0; this.isAnswering = false; },
+
+    cleanup() {
+        if (typeof GameCore !== 'undefined') {
+            GameCore.clearTimer(this, 'timer');
+        } else if (this.timer) {
+            clearTimeout(this.timer);
+            this.timer = null;
+        }
+        this.isAnswering = false;
+    },
+
+    init() {
+        this.idx = 0;
+        this.isAnswering = false;
+    },
+
     reset() {
-        if (this.timer) { clearTimeout(this.timer); this.timer = null; }
+        this.cleanup();
         this.init();
-        if (typeof app !== 'undefined') app.setGameResumeState('riddles-resume-btn', false, '', typeof i18n !== 'undefined' ? i18n.t("skip_to_wordwall") : "Skip to Wordwall ⏭️");
+        if (typeof app !== 'undefined') {
+            app.setGameResumeState('riddles-resume-btn', false, '', typeof i18n !== 'undefined' ? i18n.t("skip_to_wordwall") : "Skip to Wordwall ⏭️");
+        }
         this.loadNext();
     },
+
     loadNext() {
         if (this.idx >= this.data.length) {
-            if (typeof fireCelebration === 'function') fireCelebration();
+            if (typeof GameCore !== 'undefined') {
+                GameCore.celebrate(false);
+            } else if (typeof fireCelebration === 'function') {
+                fireCelebration();
+            }
             const qEl = document.getElementById('riddle-question');
-            if (qEl) qEl.innerText = typeof i18n !== 'undefined' ? i18n.t("riddle_all_cleared", "🏆 رائع للغاية! لقد حللت جميع الألغاز وحصلت على وسام عبقري نور البيان!") : "🏆 رائع للغاية! لقد حللت جميع الألغاز وحصلت على وسام عبقري نور البيان!";
-            const optsDiv = document.getElementById('riddle-options'); if (optsDiv) optsDiv.textContent = '';
-            if (typeof app !== 'undefined') app.setGameResumeState('riddles-resume-btn', true, typeof i18n !== 'undefined' ? i18n.t("open_word_games", "ألعاب الكلمات 🎡") : "ألعاب الكلمات 🎡");
+            if (qEl) {
+                qEl.innerText = typeof i18n !== 'undefined'
+                    ? i18n.t("riddle_all_cleared", "🏆 رائع للغاية! لقد حللت جميع الألغاز وحصلت على وسام عبقري نور البيان!")
+                    : "🏆 رائع للغاية! لقد حللت جميع الألغاز وحصلت على وسام عبقري نور البيان!";
+            }
+            const optsDiv = document.getElementById('riddle-options');
+            if (optsDiv) optsDiv.textContent = '';
+            if (typeof app !== 'undefined') {
+                app.setGameResumeState('riddles-resume-btn', true, typeof i18n !== 'undefined' ? i18n.t("open_word_games", "ألعاب الكلمات 🎡") : "ألعاب الكلمات 🎡");
+            }
             return;
         }
+
         const riddle = this.data[this.idx];
         const qEl = document.getElementById('riddle-question');
-        const question = (riddle.qKey && typeof i18n !== 'undefined') ? i18n.t(riddle.qKey, riddle.questionText) : riddle.questionText;
+        const question = (riddle.qKey && typeof i18n !== 'undefined')
+            ? i18n.t(riddle.qKey, riddle.questionText)
+            : riddle.questionText;
         if (qEl) qEl.innerText = question;
-        const optsDiv = document.getElementById('riddle-options'); if (optsDiv) optsDiv.textContent = '';
-        const fbEl = document.getElementById('riddle-feedback'); if (fbEl) fbEl.innerText = '';
+
+        const optsDiv = document.getElementById('riddle-options');
+        if (optsDiv) optsDiv.textContent = '';
+        const fbEl = document.getElementById('riddle-feedback');
+        if (fbEl) fbEl.innerText = '';
+
         if (optsDiv) {
+            const fragment = document.createDocumentFragment();
             riddle.options.forEach((opt, i) => {
                 const optText = (riddle.optKeys && riddle.optKeys[i] && typeof i18n !== 'undefined')
                     ? i18n.t(riddle.optKeys[i], opt)
                     : opt;
-                let btn = document.createElement('button');
+                const btn = document.createElement('button');
                 btn.type = 'button';
                 btn.className = "bg-white/20 hover:bg-white/30 text-xl font-bold py-5 rounded-2xl shadow-md transition-all active:scale-95 text-center px-6 flex justify-between items-center shadow-[0_4px_0_#d97706] active:translate-y-1 active:shadow-none";
-                const optLabel = typeof i18n !== 'undefined' ? i18n.t("riddle_option_num", `الخيار ${i + 1}`, { num: i + 1 }) : `Option ${i + 1}`;
+                const optLabel = typeof i18n !== 'undefined'
+                    ? i18n.t("riddle_option_num", `الخيار ${i + 1}`, { num: i + 1 })
+                    : `Option ${i + 1}`;
                 btn.setAttribute('aria-label', `${optText}, ${optLabel}`);
                 btn.innerHTML = `<span>${optText}</span><span class="text-sm opacity-60">${optLabel}</span>`;
                 btn.onclick = () => this.check(i, btn);
-                optsDiv.appendChild(btn);
+                fragment.appendChild(btn);
             });
+            optsDiv.appendChild(fragment);
         }
     },
+
     check(selectedIdx, btn) {
         if (this.isAnswering) return;
         this.isAnswering = true;
         const correctIdx = this.data[this.idx].answerIndex;
         const fb = document.getElementById('riddle-feedback');
+
         if (selectedIdx === correctIdx) {
             btn.classList.remove('bg-white/20');
             btn.classList.add('bg-emerald-500');
             if (fb) {
-                fb.innerText = typeof i18n !== 'undefined' ? i18n.t("riddle_correct", "إجابة عبقرية صحيحة! أحسنت 👏") : "إجابة عبقرية صحيحة! أحسنت 👏";
+                fb.innerText = typeof i18n !== 'undefined'
+                    ? i18n.t("riddle_correct", "إجابة عبقرية صحيحة! أحسنت 👏")
+                    : "إجابة عبقرية صحيحة! أحسنت 👏";
                 fb.className = "text-lg sm:text-xl font-bold h-8 text-emerald-400 mt-3";
             }
-            if (typeof fireCelebration === 'function') fireCelebration();
-            this.timer = setTimeout(() => {
+            if (typeof GameCore !== 'undefined') {
+                GameCore.celebrate(false);
+            } else if (typeof fireCelebration === 'function') {
+                fireCelebration();
+            }
+
+            const nextStep = () => {
                 this.idx++;
                 this.isAnswering = false;
-                this.timer = null;
                 this.loadNext();
-            }, 1500);
+            };
+
+            if (typeof GameCore !== 'undefined') {
+                GameCore.createTimer(this, 'timer', nextStep, 1500);
+            } else {
+                this.timer = setTimeout(() => {
+                    this.timer = null;
+                    nextStep();
+                }, 1500);
+            }
         } else {
             btn.classList.remove('bg-white/20');
             btn.classList.add('bg-rose-500');
             if (fb) {
-                fb.innerText = typeof i18n !== 'undefined' ? i18n.t("riddle_incorrect", "حاول مرة أخرى! فكر جيداً يا بطل 🤔") : "حاول مرة أخرى! فكر جيداً يا بطل 🤔";
+                fb.innerText = typeof i18n !== 'undefined'
+                    ? i18n.t("riddle_incorrect", "حاول مرة أخرى! فكر جيداً يا بطل 🤔")
+                    : "حاول مرة أخرى! فكر جيداً يا بطل 🤔";
                 fb.className = "text-lg sm:text-xl font-bold h-8 text-rose-400 mt-3";
             }
-            this.timer = setTimeout(() => {
+
+            const resetStep = () => {
                 btn.classList.remove('bg-rose-500');
                 btn.classList.add('bg-white/20');
                 if (fb) {
@@ -238,8 +391,16 @@ const riddlesGame = {
                     fb.className = "text-lg sm:text-xl font-bold h-8 text-emerald-400 mt-3";
                 }
                 this.isAnswering = false;
-                this.timer = null;
-            }, 1000);
+            };
+
+            if (typeof GameCore !== 'undefined') {
+                GameCore.createTimer(this, 'timer', resetStep, 1000);
+            } else {
+                this.timer = setTimeout(() => {
+                    this.timer = null;
+                    resetStep();
+                }, 1000);
+            }
         }
     }
 };
@@ -249,12 +410,10 @@ if (typeof window !== 'undefined') {
     window.addEventListener('nb:locale-changed', () => {
         const stage = document.getElementById('riddles-stage');
         if (stage && !stage.classList.contains('hidden') && typeof riddlesGame !== 'undefined') {
-            if (riddlesGame.timer) {
-                clearTimeout(riddlesGame.timer);
-                riddlesGame.timer = null;
-                riddlesGame.isAnswering = false;
-            }
+            riddlesGame.cleanup();
             riddlesGame.loadNext();
         }
     });
+    window.memoryGame = memoryGame;
+    window.riddlesGame = riddlesGame;
 }

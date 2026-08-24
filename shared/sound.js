@@ -8,8 +8,9 @@ const Sound = {
     masterGain: null,
     compressor: null,
     _unlocked: false,
+    _unlockBound: false,
 
-    // تهيئة السياق الصوتي وفك تعليقه بطريقة آمنة ومحصنة ضد أخطاء المتصفح
+    // تهيئة السياق الصوتي وفك تعليقه بطريقة آمنة ومحصنة ضد أخطاء المتصفح وحالات المقاطعة
     getCtx() {
         if (typeof window === 'undefined') return null;
         try {
@@ -19,7 +20,7 @@ const Sound = {
                 this.ctx = new AudioCtx();
                 this._initGraph();
             }
-            if (this.ctx.state === 'suspended') {
+            if (this.ctx.state === 'suspended' || this.ctx.state === 'interrupted') {
                 this.ctx.resume().catch(() => {});
             } else if (this.ctx.state === 'closed') {
                 const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -69,33 +70,64 @@ const Sound = {
         }
     },
 
+    // بث نبضة صامتة لفك قفل محركات WebKit/iOS (Silent Buffer Kickstart)
+    _kickstartSilentBuffer(ctx) {
+        if (!ctx) return;
+        try {
+            const buffer = ctx.createBuffer(1, 1, 22050);
+            const source = ctx.createBufferSource();
+            source.buffer = buffer;
+            source.connect(ctx.destination);
+            source.start(0);
+        } catch (_) {}
+    },
+
+    // إزالة مستمعات فك القفل عند نجاح تشغيل المحرك الصوتي
+    _removeUnlockListeners() {
+        if (!this._unlockHandler || typeof window === 'undefined') return;
+        window.removeEventListener('pointerdown', this._unlockHandler, { capture: true });
+        window.removeEventListener('touchstart', this._unlockHandler, { capture: true });
+        window.removeEventListener('touchend', this._unlockHandler, { capture: true });
+        window.removeEventListener('keydown', this._unlockHandler, { capture: true });
+        window.removeEventListener('click', this._unlockHandler, { capture: true });
+        this._unlockBound = false;
+    },
+
     // فك تعليق الصوت التلقائي عند أول تفاعل للمستخدم على شاشات اللمس
     setupUnlock() {
-        if (this._unlocked || typeof window === 'undefined') return;
+        if (this._unlocked || this._unlockBound || typeof window === 'undefined') return;
+
         const unlock = () => {
             try {
                 const ctx = this.getCtx();
                 if (ctx) {
-                    if (ctx.state === 'suspended') {
+                    if (ctx.state === 'suspended' || ctx.state === 'interrupted') {
                         ctx.resume().then(() => {
-                            this._unlocked = true;
-                            this.updateMasterVolume();
+                            this._kickstartSilentBuffer(ctx);
+                            if (ctx.state === 'running') {
+                                this._unlocked = true;
+                                this.updateMasterVolume();
+                                this._removeUnlockListeners();
+                            }
                         }).catch(() => {});
-                    } else {
+                    } else if (ctx.state === 'running') {
+                        this._kickstartSilentBuffer(ctx);
                         this._unlocked = true;
                         this.updateMasterVolume();
+                        this._removeUnlockListeners();
                     }
                 }
             } catch (_) {}
-            window.removeEventListener('pointerdown', unlock, { capture: true });
-            window.removeEventListener('touchstart', unlock, { capture: true });
-            window.removeEventListener('keydown', unlock, { capture: true });
-            window.removeEventListener('click', unlock, { capture: true });
         };
-        window.addEventListener('pointerdown', unlock, { capture: true, once: true });
-        window.addEventListener('touchstart', unlock, { capture: true, once: true });
-        window.addEventListener('keydown', unlock, { capture: true, once: true });
-        window.addEventListener('click', unlock, { capture: true, once: true });
+
+        this._unlockHandler = unlock;
+        this._unlockBound = true;
+
+        window.addEventListener('pointerdown', unlock, { capture: true });
+        window.addEventListener('touchstart', unlock, { capture: true });
+        window.addEventListener('touchend', unlock, { capture: true });
+        window.addEventListener('keydown', unlock, { capture: true });
+        window.addEventListener('click', unlock, { capture: true });
     },
 
     // استخراج شدة الصوت الحقيقية مع تصحيح علة الصفر الزائف وتطبيق المنحنى الإدراكي
@@ -116,15 +148,30 @@ const Sound = {
         return this.masterGain || (this.ctx ? this.ctx.destination : null);
     },
 
-    // تنظيف وفصل عقد الصوت فور انتهاء النغمة لمنع تسريب الذاكرة وقطع الإحالة الحلقية
-    _cleanup(osc, gainNode) {
-        osc.onended = () => {
-            osc.onended = null;
-            try {
-                osc.disconnect();
-                gainNode.disconnect();
-            } catch (_) {}
+    // تنظيف وفصل عقد الصوت فور انتهاء النغمة مع صمام أمان زمني لمنع تسريب الذاكرة في الخلفية
+    _cleanup(osc, gainNode, durationSec = 0.5) {
+        let cleaned = false;
+        let timer = null;
+
+        const doClean = () => {
+            if (cleaned) return;
+            cleaned = true;
+            if (timer) clearTimeout(timer);
+            if (osc) {
+                osc.onended = null;
+                try { osc.disconnect(); } catch (_) {}
+            }
+            if (gainNode) {
+                try { gainNode.disconnect(); } catch (_) {}
+            }
         };
+
+        if (osc) {
+            osc.onended = doClean;
+        }
+
+        // صمام أمان زمني (fallback timeout) لفصل العقد تلقائياً حتى لو لم ينطلق حدث onended في التبويب المعلق
+        timer = setTimeout(doClean, Math.max(100, Math.round((durationSec + 0.15) * 1000)));
     },
 
     init() {
@@ -134,107 +181,140 @@ const Sound = {
 
     // دالة توافقية توجه الاستدعاء مباشرة إلى دالة tone مع ترتيب المعاملات المناسب
     playTone(freq, type = 'sine', duration = 0.2) {
-        this.tone(freq, duration, type);
+        try {
+            this.tone(freq, duration, type);
+        } catch (e) {
+            console.warn('Sound.playTone error:', e);
+        }
     },
 
     playChime() {
-        const vol = this.getVol();
-        if (vol <= 0) return;
-        const ctx = this.getCtx();
-        if (!ctx) return;
-        this.updateMasterVolume();
+        try {
+            const vol = this.getVol();
+            if (vol <= 0) return;
+            const ctx = this.getCtx();
+            if (!ctx) return;
+            this.updateMasterVolume();
 
-        const now = ctx.currentTime;
-        const osc = ctx.createOscillator();
-        const gainNode = ctx.createGain();
-        const dest = this.getDestination();
-        if (!dest) return;
+            const now = ctx.currentTime;
+            const osc = ctx.createOscillator();
+            const gainNode = ctx.createGain();
+            const dest = this.getDestination();
+            if (!dest) return;
 
-        osc.type = 'sine';
-        osc.connect(gainNode);
-        gainNode.connect(dest);
+            osc.type = 'sine';
+            osc.connect(gainNode);
+            gainNode.connect(dest);
 
-        osc.frequency.setValueAtTime(523.25, now);
-        osc.frequency.setValueAtTime(659.25, now + 0.1);
-        osc.frequency.setValueAtTime(783.99, now + 0.2);
-        osc.frequency.setValueAtTime(1046.50, now + 0.3);
+            osc.frequency.setValueAtTime(523.25, now);
+            osc.frequency.setValueAtTime(659.25, now + 0.1);
+            osc.frequency.setValueAtTime(783.99, now + 0.2);
+            osc.frequency.setValueAtTime(1046.50, now + 0.3);
 
-        gainNode.gain.setValueAtTime(0.0001, now);
-        gainNode.gain.linearRampToValueAtTime(0.18, now + 0.02);
-        gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.5);
-        gainNode.gain.setValueAtTime(0, now + 0.51);
+            gainNode.gain.setValueAtTime(0.0001, now);
+            gainNode.gain.linearRampToValueAtTime(0.18, now + 0.02);
+            gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.5);
+            gainNode.gain.setValueAtTime(0, now + 0.51);
 
-        this._cleanup(osc, gainNode);
-        osc.start(now);
-        osc.stop(now + 0.51);
+            this._cleanup(osc, gainNode, 0.51);
+            osc.start(now);
+            osc.stop(now + 0.51);
+        } catch (e) {
+            console.warn('Sound.playChime error:', e);
+        }
     },
 
     tone(freq, d = 0.2, type = 'sine') {
-        const vol = this.getVol();
-        if (vol <= 0) return;
-        const ctx = this.getCtx();
-        if (!ctx) return;
-        this.updateMasterVolume();
+        try {
+            const vol = this.getVol();
+            if (vol <= 0) return;
+            const ctx = this.getCtx();
+            if (!ctx) return;
+            this.updateMasterVolume();
 
-        const now = ctx.currentTime;
-        const osc = ctx.createOscillator();
-        const gainNode = ctx.createGain();
-        const dest = this.getDestination();
-        if (!dest) return;
+            const now = ctx.currentTime;
+            const osc = ctx.createOscillator();
+            const gainNode = ctx.createGain();
+            const dest = this.getDestination();
+            if (!dest) return;
 
-        osc.type = type;
-        osc.frequency.setValueAtTime(freq, now);
-        osc.connect(gainNode);
-        gainNode.connect(dest);
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, now);
+            osc.connect(gainNode);
+            gainNode.connect(dest);
 
-        const attack = Math.min(0.015, d * 0.2);
-        gainNode.gain.setValueAtTime(0.0001, now);
-        gainNode.gain.linearRampToValueAtTime(0.18, now + attack);
-        gainNode.gain.exponentialRampToValueAtTime(0.0001, now + d);
-        gainNode.gain.setValueAtTime(0, now + d + 0.01);
+            const attack = Math.min(0.015, d * 0.2);
+            gainNode.gain.setValueAtTime(0.0001, now);
+            gainNode.gain.linearRampToValueAtTime(0.18, now + attack);
+            gainNode.gain.exponentialRampToValueAtTime(0.0001, now + d);
+            gainNode.gain.setValueAtTime(0, now + d + 0.01);
 
-        this._cleanup(osc, gainNode);
-        osc.start(now);
-        osc.stop(now + d + 0.01);
+            this._cleanup(osc, gainNode, d + 0.01);
+            osc.start(now);
+            osc.stop(now + d + 0.01);
+        } catch (e) {
+            console.warn('Sound.tone error:', e);
+        }
     },
 
-    danger() { this.tone(220, 0.3, 'sawtooth'); },
-    fail() { this.tone(180, 0.25, 'sawtooth'); },
+    danger() {
+        try {
+            this.tone(220, 0.3, 'sawtooth');
+        } catch (e) {
+            console.warn('Sound.danger error:', e);
+        }
+    },
+
+    fail() {
+        try {
+            this.tone(180, 0.25, 'sawtooth');
+        } catch (e) {
+            console.warn('Sound.fail error:', e);
+        }
+    },
 
     stepUp(step = 1, max = 5) {
-        const freqs = [392, 440, 493.88, 523.25, 587.33, 659.25, 698.46, 783.99, 880, 987.77, 1046.50];
-        const f = freqs[Math.min(step, freqs.length - 1)] || (392 + step * 45);
-        this.tone(f, 0.16, 'triangle');
+        try {
+            const freqs = [392, 440, 493.88, 523.25, 587.33, 659.25, 698.46, 783.99, 880, 987.77, 1046.50];
+            const f = freqs[Math.min(step, freqs.length - 1)] || (392 + step * 45);
+            this.tone(f, 0.16, 'triangle');
+        } catch (e) {
+            console.warn('Sound.stepUp error:', e);
+        }
     },
 
     stepDown() {
-        const vol = this.getVol();
-        if (vol <= 0) return;
-        const ctx = this.getCtx();
-        if (!ctx) return;
-        this.updateMasterVolume();
+        try {
+            const vol = this.getVol();
+            if (vol <= 0) return;
+            const ctx = this.getCtx();
+            if (!ctx) return;
+            this.updateMasterVolume();
 
-        const now = ctx.currentTime;
-        const osc = ctx.createOscillator();
-        const gainNode = ctx.createGain();
-        const dest = this.getDestination();
-        if (!dest) return;
+            const now = ctx.currentTime;
+            const osc = ctx.createOscillator();
+            const gainNode = ctx.createGain();
+            const dest = this.getDestination();
+            if (!dest) return;
 
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(330, now);
-        osc.frequency.linearRampToValueAtTime(220, now + 0.18);
-        osc.connect(gainNode);
-        gainNode.connect(dest);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(330, now);
+            osc.frequency.linearRampToValueAtTime(220, now + 0.18);
+            osc.connect(gainNode);
+            gainNode.connect(dest);
 
-        // منع النقر الصوتي (Audio Pop) عبر الصعود الميكروي من 0.0001
-        gainNode.gain.setValueAtTime(0.0001, now);
-        gainNode.gain.linearRampToValueAtTime(0.15, now + 0.01);
-        gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
-        gainNode.gain.setValueAtTime(0, now + 0.19);
+            // منع النقر الصوتي (Audio Pop) عبر الصعود الميكروي من 0.0001
+            gainNode.gain.setValueAtTime(0.0001, now);
+            gainNode.gain.linearRampToValueAtTime(0.15, now + 0.01);
+            gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+            gainNode.gain.setValueAtTime(0, now + 0.19);
 
-        this._cleanup(osc, gainNode);
-        osc.start(now);
-        osc.stop(now + 0.19);
+            this._cleanup(osc, gainNode, 0.19);
+            osc.start(now);
+            osc.stop(now + 0.19);
+        } catch (e) {
+            console.warn('Sound.stepDown error:', e);
+        }
     }
 };
 

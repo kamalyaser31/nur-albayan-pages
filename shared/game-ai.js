@@ -4,13 +4,13 @@
  *
  * الخصائص:
  * 1. وضع اللعب: ضد الكمبيوتر (🤖 ضد الكمبيوتر) / مع المعلم (👨‍🏫 مع المعلم)
- * 2. مستويات الصعوبة: سهل (😊 حركات عفوية ممتعة) / ذكي (🧠 حركات متوازنة بحذر)
+ * 2. مستويات الصعوبة: سهل (😊 حركات عفوية ممتعة) / ذكي (🧠 شجرة قرارات تكتيكية حتمية)
  * 3. استقلالية تامة: ملف منفصل يُستدعى اختيارياً دون تضخيم المنطق الأساسي للألعاب
  */
 
 const gameAI = {
     mode: 'computer', // 'computer' (ضد الكمبيوتر) | 'teacher' (مع المعلم)
-    difficulty: 'easy', // 'easy' (سهل عشوائي) | 'smart' (ذكي خفيف)
+    difficulty: 'easy', // 'easy' (سهل عشوائي) | 'smart' (ذكي حتمي وتكتيكي)
 
     // تبديل وضع اللعب (كمبيوتر / معلم)
     toggleMode(gameType) {
@@ -39,7 +39,7 @@ const gameAI = {
 
         let move = -1;
 
-        // في المستوى الذكي: فحص الفوز أو الحجب
+        // في المستوى الذكي: شجرة قرارات تكتيكية حتمية (الفوز -> الحجب -> المركز -> الزوايا -> الأطراف)
         if (this.difficulty === 'smart') {
             const winCond = [
                 [0, 1, 2], [3, 4, 5], [6, 7, 8],
@@ -47,7 +47,7 @@ const gameAI = {
                 [0, 4, 8], [2, 4, 6]
             ];
 
-            // 1. فرصة فوز للكمبيوتر
+            // 1. فرصة فوز حتمية للكمبيوتر ('O')
             for (const [a, b, c] of winCond) {
                 const line = [xoGame.board[a], xoGame.board[b], xoGame.board[c]];
                 if (line.filter(x => x === 'O').length === 2 && line.includes('')) {
@@ -56,7 +56,7 @@ const gameAI = {
                 }
             }
 
-            // 2. حجب فوز الطفل
+            // 2. حجب فوز الطفل ('X')
             if (move === -1) {
                 for (const [a, b, c] of winCond) {
                     const line = [xoGame.board[a], xoGame.board[b], xoGame.board[c]];
@@ -67,13 +67,31 @@ const gameAI = {
                 }
             }
 
-            // 3. اختيار المركز
-            if (move === -1 && xoGame.board[4] === '' && Math.random() > 0.4) {
+            // 3. السيطرة على خانة المركز (4)
+            if (move === -1 && xoGame.board[4] === '') {
                 move = 4;
+            }
+
+            // 4. السيطرة على الزوايا الحتمية [0, 2, 6, 8]
+            if (move === -1) {
+                const corners = [0, 2, 6, 8];
+                const freeCorner = corners.find(idx => xoGame.board[idx] === '');
+                if (freeCorner !== undefined) {
+                    move = freeCorner;
+                }
+            }
+
+            // 5. السيطرة على الأطراف [1, 3, 5, 7]
+            if (move === -1) {
+                const edges = [1, 3, 5, 7];
+                const freeEdge = edges.find(idx => xoGame.board[idx] === '');
+                if (freeEdge !== undefined) {
+                    move = freeEdge;
+                }
             }
         }
 
-        // في المستوى السهل أو في غياب شروط الفوز: اختيار خانة عشوائية ليفوز الطفل بسهولة
+        // في المستوى السهل أو في غياب الشروط: اختيار خانة عشوائية ليفوز الطفل بسهولة
         if (move === -1) {
             move = available[Math.floor(Math.random() * available.length)];
         }
@@ -83,62 +101,83 @@ const gameAI = {
         }
     },
 
-    // حركة الكمبيوتر في لعبة Connect 4 (أربعة في خط)
+    // حركة الكمبيوتر في لعبة Connect 4 (أربعة في خط) بأولويات استراتيجية وتطويق try/finally
     makeC4Move() {
-        if (this.mode !== 'computer' || !c4Game.gameActive || c4Game.currentPlayer !== 'yellow') return;
+        if (this.mode !== 'computer' || typeof c4Game === 'undefined' || !c4Game.gameActive || c4Game.currentPlayer !== 'yellow') return;
 
         const validCols = [];
         for (let c = 0; c < c4Game.cols; c++) {
-            if (c4Game.board[0][c] === null) validCols.push(c);
+            if (c4Game.board[0] && c4Game.board[0][c] === null) validCols.push(c);
         }
         if (validCols.length === 0) return;
 
         let bestCol = -1;
+        const STRATEGIC_COL_ORDER = [3, 2, 4, 1, 5, 0, 6];
 
         if (this.difficulty === 'smart') {
-            // 1. فحص الفوز للكمبيوتر (أصفر)
-            for (const col of validCols) {
+            // 1. فحص الفوز الفوري للكمبيوتر (أصفر) بترتيب الأولويات
+            for (const col of STRATEGIC_COL_ORDER) {
+                if (!validCols.includes(col)) continue;
                 const r = this.getC4LowestRow(col);
                 if (r !== -1) {
                     c4Game.board[r][col] = 'yellow';
-                    if (c4Game.checkWin(r, col)) bestCol = col;
-                    c4Game.board[r][col] = null;
-                    if (bestCol !== -1) break;
+                    try {
+                        if (c4Game.checkWin(r, col)) {
+                            bestCol = col;
+                            break;
+                        }
+                    } finally {
+                        c4Game.board[r][col] = null;
+                    }
                 }
             }
 
-            // 2. حجب فوز الطفل (أحمر)
+            // 2. حجب فوز الطفل (أحمر) بترتيب الأولويات
             if (bestCol === -1) {
-                for (const col of validCols) {
+                for (const col of STRATEGIC_COL_ORDER) {
+                    if (!validCols.includes(col)) continue;
                     const r = this.getC4LowestRow(col);
                     if (r !== -1) {
                         c4Game.board[r][col] = 'red';
-                        if (c4Game.checkWin(r, col)) bestCol = col;
-                        c4Game.board[r][col] = null;
-                        if (bestCol !== -1) break;
+                        try {
+                            if (c4Game.checkWin(r, col)) {
+                                bestCol = col;
+                                break;
+                            }
+                        } finally {
+                            c4Game.board[r][col] = null;
+                        }
                     }
                 }
             }
 
             // 3. تجنب إهداء الفوز للخصم في الصف الأعلى (Avoid Suicidal Blunder)
             if (bestCol === -1) {
-                const safeCols = validCols.filter(col => {
+                const safeCols = STRATEGIC_COL_ORDER.filter(col => {
+                    if (!validCols.includes(col)) return false;
                     const r = this.getC4LowestRow(col);
                     if (r <= 0) return true;
                     c4Game.board[r][col] = 'yellow';
-                    c4Game.board[r - 1][col] = 'red';
-                    const wouldEnableLoss = !!c4Game.checkWin(r - 1, col);
-                    c4Game.board[r - 1][col] = null;
-                    c4Game.board[r][col] = null;
-                    return !wouldEnableLoss;
+                    try {
+                        c4Game.board[r - 1][col] = 'red';
+                        try {
+                            const wouldEnableLoss = Boolean(c4Game.checkWin(r - 1, col));
+                            return !wouldEnableLoss;
+                        } finally {
+                            c4Game.board[r - 1][col] = null;
+                        }
+                    } finally {
+                        c4Game.board[r][col] = null;
+                    }
                 });
+
                 if (safeCols.length > 0) {
-                    bestCol = safeCols[Math.floor(Math.random() * safeCols.length)];
+                    bestCol = safeCols[0]; // اختيار العمود الأفضل استراتيجياً والأكثر أماناً
                 }
             }
         }
 
-        // في المستوى السهل أو غياب الشروط: اختيار عمود عشوائي خفيف
+        // في المستوى السهل أو غياب الشروط: اختيار عمود عشوائي
         if (bestCol === -1) {
             bestCol = validCols[Math.floor(Math.random() * validCols.length)];
         }
@@ -148,14 +187,15 @@ const gameAI = {
 
     // دالة مساعدة لمعرفة أدنى صف فارغ في العمود
     getC4LowestRow(col) {
+        if (!c4Game.board || !Array.isArray(c4Game.board)) return -1;
         for (let r = c4Game.rows - 1; r >= 0; r--) {
-            if (!c4Game.board[r][col]) return r;
+            if (c4Game.board[r] && !c4Game.board[r][col]) return r;
         }
         return -1;
     },
 
-    // تحديث مظهر وتسميات أزرار التحكم
-    updateUI() {
+    // دالة مساعدة لتحديث أزرار التحكم في ألعاب المنافسة (XO / C4)
+    _updateGameControlButtons(prefix, compBgClass) {
         const isComp = this.mode === 'computer';
         const modeLabel = isComp
             ? (typeof i18n !== 'undefined' ? i18n.t("mode_vs_computer", "🤖 ضد الكمبيوتر") : "🤖 ضد الكمبيوتر")
@@ -167,33 +207,25 @@ const gameAI = {
             ? i18n.t("level_label", `مستوى: ${diffText}`, { level: diffText })
             : `مستوى: ${diffText}`;
 
-        // أزرار XO
-        const xoModeBtn = document.getElementById('xo-mode-btn');
-        const xoDiffBtn = document.getElementById('xo-diff-btn');
-        if (xoModeBtn) {
-            xoModeBtn.innerText = modeLabel;
-            xoModeBtn.className = isComp
-                ? 'bg-emerald-500/80 hover:bg-emerald-500 text-white border border-emerald-300/40 px-3.5 py-1.5 rounded-full font-bold text-xs shadow-sm transition-all'
-                : 'bg-indigo-500/80 hover:bg-indigo-500 text-white border border-indigo-300/40 px-3.5 py-1.5 rounded-full font-bold text-xs shadow-sm transition-all';
-        }
-        if (xoDiffBtn) {
-            xoDiffBtn.style.display = isComp ? 'inline-block' : 'none';
-            xoDiffBtn.innerText = diffLabel;
-        }
+        const modeBtn = document.getElementById(`${prefix}-mode-btn`);
+        const diffBtn = document.getElementById(`${prefix}-diff-btn`);
 
-        // أزرار Connect 4
-        const c4ModeBtn = document.getElementById('c4-mode-btn');
-        const c4DiffBtn = document.getElementById('c4-diff-btn');
-        if (c4ModeBtn) {
-            c4ModeBtn.innerText = modeLabel;
-            c4ModeBtn.className = isComp
-                ? 'bg-sky-500/80 hover:bg-sky-500 text-white border border-sky-300/40 px-3.5 py-1.5 rounded-full font-bold text-xs shadow-sm transition-all'
+        if (modeBtn) {
+            modeBtn.innerText = modeLabel;
+            modeBtn.className = isComp
+                ? `${compBgClass} text-white px-3.5 py-1.5 rounded-full font-bold text-xs shadow-sm transition-all`
                 : 'bg-indigo-500/80 hover:bg-indigo-500 text-white border border-indigo-300/40 px-3.5 py-1.5 rounded-full font-bold text-xs shadow-sm transition-all';
         }
-        if (c4DiffBtn) {
-            c4DiffBtn.style.display = isComp ? 'inline-block' : 'none';
-            c4DiffBtn.innerText = diffLabel;
+        if (diffBtn) {
+            diffBtn.style.display = isComp ? 'inline-block' : 'none';
+            diffBtn.innerText = diffLabel;
         }
+    },
+
+    // تحديث مظهر وتسميات أزرار التحكم للألعاب التنافسية
+    updateUI() {
+        this._updateGameControlButtons('xo', 'bg-emerald-500/80 hover:bg-emerald-500 border border-emerald-300/40');
+        this._updateGameControlButtons('c4', 'bg-sky-500/80 hover:bg-sky-500 border border-sky-300/40');
     }
 };
 
@@ -207,4 +239,5 @@ if (typeof window !== 'undefined') {
     window.addEventListener('nb:locale-changed', () => {
         if (typeof gameAI !== 'undefined') gameAI.updateUI();
     });
+    window.gameAI = gameAI;
 }

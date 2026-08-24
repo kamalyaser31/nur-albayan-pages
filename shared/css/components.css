@@ -1,7 +1,7 @@
 /**
  * Nour Al-Bayan Interactive Platform - UI Components
- * Navigation progress bar, feedback badge, chart container,
- * student avatar circles, lesson star badges, mistake review boxes, and print styles.
+ * Navigation progress bar (hardware-accelerated), feedback badge, chart container,
+ * active student pill, session drill banner (GPU composite pseudo-layer), and interactive modals.
  */
 
 /* ==========================================================================
@@ -10,11 +10,15 @@
 #progress-bar {
     position: absolute;
     bottom: 0;
-    left: 0;
+    inset-inline-start: 0;
+    width: 100%;
     height: 3.5px;
     background: linear-gradient(90deg, #10b981, #d97706);
     border-radius: 0 3px 3px 0;
-    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: inline-start;
+    transform: scaleX(var(--progress, 0));
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
     z-index: 40;
 }
 
@@ -37,12 +41,12 @@
     position: relative;
     width: 100%;
     max-width: 220px;
-    margin: 0 auto;
+    margin-inline: auto;
     height: 150px;
 }
 
 /* ==========================================================================
-   2. Active Student Header Pill & Student Cards
+   2. Active Student Header Pill
    ========================================================================== */
 #active-student-pill {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -54,410 +58,46 @@
     border-color: #6ee7b7;
 }
 
-.student-card {
-    background: #ffffff;
-    border: 2px solid #e2e8f0;
-    border-radius: 1.25rem;
-    padding: 16px;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-}
-
-.student-card:hover {
-    transform: translateY(-2px);
-    border-color: #34d399;
-    box-shadow: 0 10px 24px -6px rgba(16, 185, 129, 0.15);
-}
-
-.student-card.active {
-    border-color: #10b981;
-    background: #f0fdf4;
-    box-shadow: 0 8px 20px -4px rgba(16, 185, 129, 0.18);
-}
-
 /* ==========================================================================
-   3. Lesson Star Badge (Golden Star Rating on Hub Cards)
-   ========================================================================== */
-.lesson-star-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-    border: 1px solid #fde68a;
-    color: #b45309;
-    padding: 2px 8px;
-    border-radius: 9999px;
-    font-size: 0.72rem;
-    font-weight: 800;
-    box-shadow: 0 1px 3px rgba(217, 119, 6, 0.12);
-    letter-spacing: 0.2px;
-    white-space: nowrap;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    user-select: none;
-}
-
-/* Positioning inside lesson cards */
-.lesson-card .lesson-star-badge {
-    position: absolute;
-    top: 10px;
-    left: 14px;
-    z-index: 5;
-}
-
-html[dir="ltr"] .lesson-card .lesson-star-badge {
-    left: auto;
-    right: 14px;
-}
-
-.lesson-star-badge .star-icon,
-.lesson-star-badge .star {
-    color: #f59e0b;
-    font-size: 0.8rem;
-    line-height: 1;
-    filter: drop-shadow(0 1px 1px rgba(245, 158, 11, 0.3));
-}
-
-.lesson-star-badge .star.empty {
-    color: #cbd5e1;
-    filter: none;
-}
-
-.lesson-star-badge.full,
-.lesson-star-badge.mastered {
-    background: linear-gradient(135deg, #fef3c7 0%, #fde047 100%);
-    border-color: #f59e0b;
-    color: #854d0e;
-    box-shadow: 0 2px 6px rgba(234, 179, 8, 0.25);
-}
-
-.lesson-star-badge.hidden-empty:empty,
-.lesson-star-badge[data-stars="0"] {
-    display: none;
-}
-
-/* ==========================================================================
-   4. Vibrant Student Avatar Circles
-   ========================================================================== */
-.avatar-circle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: #ffffff;
-    font-size: 1.4rem;
-    font-weight: 900;
-    line-height: 1;
-    flex-shrink: 0;
-    user-select: none;
-    border: 2px solid #ffffff;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.4);
-    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s ease;
-}
-
-.avatar-circle:hover {
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 8px 18px rgba(16, 185, 129, 0.32);
-}
-
-/* Avatar Size Variants */
-.avatar-circle.avatar-xs {
-    width: 24px;
-    height: 24px;
-    font-size: 0.75rem;
-    border-width: 1.5px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.avatar-circle.avatar-sm {
-    width: 34px;
-    height: 34px;
-    font-size: 1.05rem;
-    border-width: 2px;
-}
-
-.avatar-circle.avatar-lg {
-    width: 58px;
-    height: 58px;
-    font-size: 1.85rem;
-    border-width: 3px;
-    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.28);
-}
-
-.avatar-circle.avatar-xl {
-    width: 76px;
-    height: 76px;
-    font-size: 2.4rem;
-    border-width: 4px;
-    box-shadow: 0 12px 28px rgba(16, 185, 129, 0.32);
-}
-
-/* Avatar Vibrant Themes */
-.avatar-circle.theme-emerald,
-.avatar-circle.theme-green {
-    background: linear-gradient(135deg, #10b981 0%, #047857 100%);
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
-}
-
-.avatar-circle.theme-indigo,
-.avatar-circle.theme-purple {
-    background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
-}
-
-.avatar-circle.theme-amber,
-.avatar-circle.theme-yellow {
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
-}
-
-.avatar-circle.theme-rose,
-.avatar-circle.theme-pink {
-    background: linear-gradient(135deg, #f43f5e 0%, #be123c 100%);
-    box-shadow: 0 4px 12px rgba(244, 63, 94, 0.25);
-}
-
-.avatar-circle.theme-sky,
-.avatar-circle.theme-blue {
-    background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
-    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25);
-}
-
-.avatar-circle.theme-teal {
-    background: linear-gradient(135deg, #14b8a6 0%, #0f766e 100%);
-    box-shadow: 0 4px 12px rgba(20, 184, 166, 0.25);
-}
-
-/* Avatar Active Selection */
-.avatar-circle.active,
-.avatar-circle.selected {
-    outline: 3px solid #10b981;
-    outline-offset: 3px;
-}
-
-/* ==========================================================================
-   5. Mistake Word Items (Quranic Font Presentation)
-   ========================================================================== */
-.mistake-word-item {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(180deg, #ffffff 0%, #fff5f5 100%);
-    border: 2px solid #fecdd3;
-    border-radius: 1.25rem;
-    padding: 10px 16px;
-    min-width: 95px;
-    text-align: center;
-    position: relative;
-    box-shadow: 0 2px 6px rgba(244, 63, 94, 0.08);
-    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-                box-shadow 0.25s ease,
-                border-color 0.25s ease;
-}
-
-.mistake-word-item:hover {
-    transform: translateY(-3px) scale(1.03);
-    border-color: #f43f5e;
-    box-shadow: 0 8px 20px -4px rgba(244, 63, 94, 0.20);
-    background: #ffffff;
-}
-
-.mistake-word-item .word-text {
-    font-family: 'Amiri', 'Traditional Arabic', serif;
-    font-size: 1.75rem;
-    font-weight: 700;
-    line-height: 1.6;
-    color: #9f1239;
-    direction: rtl;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    letter-spacing: normal !important;
-    white-space: nowrap;
-    padding: 2px 4px;
-}
-
-.mistake-word-item .word-badge {
-    font-family: 'Fredoka', -apple-system, sans-serif;
-    font-size: 0.7rem;
-    font-weight: 800;
-    color: #be123c;
-    background: #ffe4e6;
-    border: 1px solid #fecdd3;
-    padding: 1px 7px;
-    border-radius: 9999px;
-    margin-top: 4px;
-    letter-spacing: 0.3px;
-    line-height: 1.3;
-}
-
-.mistakes-container,
-.mistakes-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    justify-content: center;
-    align-items: center;
-    padding: 8px;
-    max-width: 100%;
-}
-
-/* ==========================================================================
-   6. Media Print Rules for Elegant Student Report Printing
-   ========================================================================== */
-@media print {
-    @page {
-        size: A4 portrait;
-        margin: 1.2cm 1.5cm;
-    }
-
-    *,
-    *::before,
-    *::after {
-        box-shadow: none !important;
-        text-shadow: none !important;
-    }
-
-    body {
-        background: #ffffff !important;
-        color: #0f172a !important;
-        font-size: 11pt !important;
-        line-height: 1.5 !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-    }
-
-    /* Hide Navigation, Controls, Timers, Overlays, Floating Badges & Action Buttons */
-    header#top-nav,
-    header.main-header,
-    nav,
-    .header-actions,
-    .shortcuts-section,
-    .feedback-badge,
-    #challenge-timer,
-    #progress-bar,
-    #example-navigator,
-    #selector-wrapper,
-    #nb-settings-modal,
-    #nb-settings-toast,
-    #word-overlay,
-    #early-exit-modal,
-    #session-drill-banner,
-    .modal-backdrop,
-    button:not(.print-keep),
-    .action-btn,
-    footer,
-    .skip-link {
-        display: none !important;
-    }
-
-    /* Make Summary & Student Report Visible & Pristine */
-    #summary-screen,
-    .student-report-card,
-    .student-print-report {
-        display: block !important;
-        position: static !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 auto !important;
-        padding: 16px 20px !important;
-        border: 2px solid #047857 !important;
-        border-radius: 12px !important;
-        background: #ffffff !important;
-        page-break-inside: avoid;
-        break-inside: avoid;
-    }
-
-    /* Print Header & Titles */
-    .print-report-header {
-        display: block !important;
-        text-align: center;
-        border-bottom: 2px solid #047857;
-        padding-bottom: 12px;
-        margin-bottom: 16px;
-    }
-
-    .print-report-header h1 {
-        font-size: 18pt !important;
-        font-weight: 900 !important;
-        color: #047857 !important;
-        margin: 0 0 4px 0 !important;
-    }
-
-    /* Mistake Items on Paper */
-    .mistake-word-item {
-        border: 1px solid #cbd5e1 !important;
-        background: #f8fafc !important;
-        border-radius: 8px !important;
-        padding: 6px 12px !important;
-        page-break-inside: avoid;
-        break-inside: avoid;
-    }
-
-    .mistake-word-item .word-text {
-        font-size: 1.4rem !important;
-        color: #9f1239 !important;
-    }
-
-    .mistake-word-item .word-badge {
-        border: 1px solid #94a3b8 !important;
-        background: #f1f5f9 !important;
-        color: #334155 !important;
-    }
-
-    /* Star Badges on Paper */
-    .lesson-star-badge {
-        border: 1px solid #d97706 !important;
-        background: #fffbeb !important;
-        color: #b45309 !important;
-    }
-
-    /* Avatars on Paper */
-    .avatar-circle {
-        border: 1px solid #047857 !important;
-        background: #ecfdf5 !important;
-        color: #047857 !important;
-    }
-
-    /* Charts sizing on print */
-    .chart-container {
-        max-width: 160px !important;
-        height: auto !important;
-        margin: 0 auto !important;
-    }
-
-    canvas {
-        max-width: 100% !important;
-        height: auto !important;
-    }
-}
-
-/* ==========================================================================
-   7. Session Drill Banner, Early Exit Modal & Wordwall Mistake Filter
+   3. Session Drill Banner, Early Exit Modal & Wordwall Mistake Filter
    ========================================================================== */
 
-/* Session Drill Active Banner */
+/* Session Drill Active Banner (Hardware-Accelerated Pseudo-Layer Motion) */
 #session-drill-banner {
     position: relative;
-    background: linear-gradient(135deg, #e11d48 0%, #d97706 50%, #e11d48 100%);
-    background-size: 200% 200%;
-    animation: drillGradientFlow 4s ease infinite;
+    overflow: hidden;
+    background: #e11d48;
     box-shadow: 0 4px 14px rgba(225, 29, 72, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.3);
     border: 1.5px solid rgba(255, 255, 255, 0.4);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     user-select: none;
 }
 
+#session-drill-banner::before {
+    content: "";
+    position: absolute;
+    inset: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(135deg, #e11d48 0%, #d97706 50%, #e11d48 100%);
+    animation: drillGradientFlow 6s linear infinite;
+    will-change: transform;
+    z-index: 0;
+}
+
+#session-drill-banner > * {
+    position: relative;
+    z-index: 1;
+}
+
 @keyframes drillGradientFlow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0% { transform: translate3d(-20%, 0, 0); }
+    50% { transform: translate3d(0%, 0, 0); }
+    100% { transform: translate3d(-20%, 0, 0); }
 }
 
 #session-drill-banner #session-drill-title {
-    letter-spacing: 0.2px;
+    letter-spacing: normal !important;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
@@ -554,5 +194,3 @@ html[dir="ltr"] .lesson-card .lesson-star-badge {
     background: linear-gradient(135deg, #fb7185 0%, #f43f5e 100%);
     box-shadow: 0 4px 14px rgba(225, 29, 72, 0.45);
 }
-
-

@@ -3,8 +3,8 @@
  * المنظومة: نور البيان
  *
  * الخصائص:
- * 1. الحفظ التلقائي الفوري في المتصفح مع ذاكرة وسيطة (LocalStorage + In-Memory Fallback).
- * 2. نافذة إعدادات منبثقة تفاعلية ويسيرة الوصول (Accessible Modal with Focus Trap & Restoration).
+ * 1. الحفظ التلقائي الفوري في المتصفح مع موزع الحالة المركزي nbStore والذاكرة الوسيطة (LocalStorage + In-Memory Fallback).
+ * 2. نافذة إعدادات منبثقة تفاعلية ويسيرة الوصول ومزينة بسمات data-i18n* (Accessible Modal with Focus Trap & Restoration).
  * 3. سريان الإعدادات تلقائياً على الصفحة الرئيسية وكافة صفحات الدروس الـ 33.
  */
 
@@ -25,10 +25,66 @@ const settingsManager = {
         shuffleCards: false, // الترتيب العشوائي للكلمات (منع حفظ الموضع)
         noPenaltyMode: false, // نمط التشجيع الإيجابي (بدون خصم نقاط عند الخطأ)
         manualAdvance: false, // التقدم اليدوي للبطاقات بعد التقييم (للشرح)
-        remediationDrillMode: 'loop', // نمط جلسة معالجة الأخطاء: 'loop' (تدوير الكلمات حتى الإتقان) | 'single_pass' (مرور مفرد) | 'instant_repeat' (تكرار موضعي فوري 3 مرات)
-        repeatGradingPolicy: 'best' // سياسة تقييم تكرار الدروس: 'best' (أعلى نتيجة) | 'latest' (آخر محاولة) | 'cumulative' (نقاط تراكمية)
+        remediationDrillMode: 'loop', // نمط جلسة معالجة الأخطاء: 'loop' | 'single_pass' | 'instant_repeat'
+        repeatGradingPolicy: 'best' // سياسة تقييم تكرار الدروس: 'best' | 'latest' | 'cumulative'
     },
     get DEFAULTS() { return this.defaults; },
+
+    // دالة مساعدة آمنة للترجمة والتعريب
+    _t(key, fallback = '') {
+        if (typeof i18n !== 'undefined' && typeof i18n.t === 'function') {
+            const res = i18n.t(key);
+            if (res && res !== key) return res;
+        }
+        return fallback;
+    },
+
+    // دالة فحص وتطهير لحدود وصحة القيم المدخلة (Schema Validation & Clamping)
+    _validateAndClamp(input) {
+        if (!input || typeof input !== 'object') return {};
+        const clean = {};
+
+        if (input.soundEnabled !== undefined) {
+            clean.soundEnabled = Boolean(input.soundEnabled);
+        }
+        if (input.volume !== undefined) {
+            const num = Number(input.volume);
+            clean.volume = Number.isFinite(num) ? Math.max(0, Math.min(100, Math.round(num))) : this.defaults.volume;
+        }
+        if (input.gameBreaksEnabled !== undefined) {
+            clean.gameBreaksEnabled = Boolean(input.gameBreaksEnabled);
+        }
+        if (input.defaultGameMode !== undefined) {
+            clean.defaultGameMode = ['computer', 'teacher'].includes(input.defaultGameMode) ? input.defaultGameMode : this.defaults.defaultGameMode;
+        }
+        if (input.defaultDifficulty !== undefined) {
+            clean.defaultDifficulty = ['easy', 'smart'].includes(input.defaultDifficulty) ? input.defaultDifficulty : this.defaults.defaultDifficulty;
+        }
+        if (input.timerDuration !== undefined) {
+            const num = Number(input.timerDuration);
+            clean.timerDuration = Number.isFinite(num) ? Math.max(3, Math.min(60, num)) : this.defaults.timerDuration;
+        }
+        if (input.fontScale !== undefined) {
+            clean.fontScale = ['normal', 'large', 'xlarge'].includes(input.fontScale) ? input.fontScale : this.defaults.fontScale;
+        }
+        if (input.shuffleCards !== undefined) {
+            clean.shuffleCards = Boolean(input.shuffleCards);
+        }
+        if (input.noPenaltyMode !== undefined) {
+            clean.noPenaltyMode = Boolean(input.noPenaltyMode);
+        }
+        if (input.manualAdvance !== undefined) {
+            clean.manualAdvance = Boolean(input.manualAdvance);
+        }
+        if (input.remediationDrillMode !== undefined) {
+            clean.remediationDrillMode = ['loop', 'single_pass', 'instant_repeat'].includes(input.remediationDrillMode) ? input.remediationDrillMode : this.defaults.remediationDrillMode;
+        }
+        if (input.repeatGradingPolicy !== undefined) {
+            clean.repeatGradingPolicy = ['best', 'latest', 'cumulative'].includes(input.repeatGradingPolicy) ? input.repeatGradingPolicy : this.defaults.repeatGradingPolicy;
+        }
+
+        return clean;
+    },
 
     // جلب الإعدادات الحالية من localStorage أو الذاكرة الوسيطة بنسخة معزولة
     get() {
@@ -38,7 +94,8 @@ const settingsManager = {
         try {
             const raw = localStorage.getItem(this.STORAGE_KEY);
             if (raw) {
-                this._memoryCache = JSON.parse(raw);
+                const parsed = JSON.parse(raw);
+                this._memoryCache = this._validateAndClamp(parsed);
                 return Object.assign({}, this.defaults, this._memoryCache);
             }
         } catch (e) {
@@ -48,11 +105,17 @@ const settingsManager = {
         return Object.assign({}, this.defaults, this._memoryCache);
     },
 
-    // حفظ تعديل جزئي أو كلي وتطبيقه فوراً
-    save(newSettings) {
+    // حفظ تعديل جزئي أو كلي وتطبيقه فوراً وربطه بموزع الحالة nbStore
+    save(newSettings, options = {}) {
+        const validated = this._validateAndClamp(newSettings);
         const current = this.get();
-        const updated = Object.assign({}, current, newSettings);
+        const updated = Object.assign({}, current, validated);
         this._memoryCache = updated;
+
+        // ربط حفظ الإعدادات بموزع الحالة المركزي nbStore
+        if (typeof nbStore !== 'undefined' && typeof nbStore.set === 'function') {
+            nbStore.set('settings', updated);
+        }
 
         // تطبيق التعديل في الذاكرة الحية فوراً
         this.apply(updated);
@@ -60,12 +123,16 @@ const settingsManager = {
         // محاولة الحفظ الدائم في localStorage
         try {
             localStorage.setItem(this.STORAGE_KEY, JSON.stringify(updated));
-            const msg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('settings_saved_toast') : 'تم حفظ الإعدادات بنجاح ✔';
-            this.showToast(msg);
+            if (!options.silent) {
+                const msg = this._t('settings_saved_toast', 'تم حفظ الإعدادات بنجاح ✔');
+                this.showToast(msg);
+            }
         } catch (e) {
             console.warn('تعذر الحفظ الدائم في localStorage (جلسة خاصة):', e);
-            const msg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('settings_saved_toast') : 'تم حفظ الإعدادات بنجاح ✔';
-            this.showToast(msg);
+            if (!options.silent) {
+                const msg = this._t('settings_saved_toast', 'تم حفظ الإعدادات بنجاح ✔');
+                this.showToast(msg);
+            }
         }
         return updated;
     },
@@ -76,9 +143,15 @@ const settingsManager = {
         try {
             localStorage.removeItem(this.STORAGE_KEY);
         } catch (_) {}
+
+        // تحديث موزع الحالة المركزي
+        if (typeof nbStore !== 'undefined' && typeof nbStore.set === 'function') {
+            nbStore.set('settings', this.defaults);
+        }
+
         this.apply(this.defaults);
         this.syncFormWithSettings(this.defaults);
-        const msg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('settings_reset_toast') : 'تمت استعادة الإعدادات الافتراضية 🔄';
+        const msg = this._t('settings_reset_toast', 'تمت استعادة الإعدادات الافتراضية 🔄');
         this.showToast(msg);
     },
 
@@ -105,14 +178,23 @@ const settingsManager = {
             gameAI.difficulty = settings.defaultDifficulty || 'easy';
             gameAI.updateUI();
         }
+
+        // 4. تطبيق مستوى الصوت فورياً على محرك الصوتيات
+        if (typeof Sound !== 'undefined' && typeof Sound.updateMasterVolume === 'function') {
+            Sound.updateMasterVolume();
+        }
     },
 
-    // فتح نافذة الإعدادات مع حصر التركيز (Focus Trap)
+    // فتح نافذة الإعدادات مع حصر التركيز والترجمة التصريحية (Focus Trap)
     open() {
         this._lastFocusedElement = document.activeElement;
         this.ensureModalExists();
         const modal = document.getElementById('nb-settings-modal');
         if (!modal) return;
+
+        if (typeof i18n !== 'undefined' && typeof i18n.translateDOM === 'function') {
+            i18n.translateDOM(modal);
+        }
 
         this.syncFormWithSettings(this.get());
         modal.classList.remove('hidden');
@@ -133,37 +215,41 @@ const settingsManager = {
         document.body.style.overflow = '';
 
         // استعادة التركيز للعنصر الذي فتح النافذة
-        if (this._lastFocusedElement && typeof this._lastFocusedElement.focus === 'function') {
+        if (this._lastFocusedElement && typeof this._lastFocusedElement.focus === 'function' && document.body.contains(this._lastFocusedElement)) {
             this._lastFocusedElement.focus();
         }
+        this._lastFocusedElement = null;
     },
 
-    // مزامنة عناصر الإدخال في النموذج مع القيم
+    // مزامنة عناصر الإدخال في النموذج مع القيم عبر حلقة بيانات موحدة
     syncFormWithSettings(s) {
-        const setVal = (id, prop, isCheck = false) => {
-            const el = document.getElementById(id);
-            if (el) {
-                if (isCheck) el.checked = !!s[prop];
-                else el.value = s[prop];
-            }
-        };
+        const fieldMap = [
+            { id: 'cfg-sound-enabled', prop: 'soundEnabled', check: true },
+            { id: 'cfg-volume', prop: 'volume' },
+            { id: 'cfg-game-breaks', prop: 'gameBreaksEnabled', check: true },
+            { id: 'cfg-game-mode', prop: 'defaultGameMode' },
+            { id: 'cfg-game-diff', prop: 'defaultDifficulty' },
+            { id: 'cfg-timer-duration', prop: 'timerDuration' },
+            { id: 'cfg-font-scale', prop: 'fontScale' },
+            { id: 'cfg-shuffle-cards', prop: 'shuffleCards', check: true },
+            { id: 'cfg-no-penalty', prop: 'noPenaltyMode', check: true },
+            { id: 'cfg-manual-advance', prop: 'manualAdvance', check: true },
+            { id: 'cfg-remediation-drill-mode', prop: 'remediationDrillMode' },
+            { id: 'nb-opt-repeat-policy', prop: 'repeatGradingPolicy' }
+        ];
 
-        setVal('cfg-sound-enabled', 'soundEnabled', true);
-        setVal('cfg-volume', 'volume');
+        fieldMap.forEach(({ id, prop, check }) => {
+            const el = document.getElementById(id);
+            if (!el || s[prop] === undefined) return;
+            if (check) {
+                el.checked = !!s[prop];
+            } else {
+                el.value = s[prop];
+            }
+        });
+
         const volVal = document.getElementById('cfg-volume-val');
         if (volVal) volVal.innerText = `${s.volume || 0}%`;
-
-        setVal('cfg-game-breaks', 'gameBreaksEnabled', true);
-        setVal('cfg-game-mode', 'defaultGameMode');
-        setVal('cfg-game-diff', 'defaultDifficulty');
-
-        setVal('cfg-timer-duration', 'timerDuration');
-        setVal('cfg-font-scale', 'fontScale');
-        setVal('cfg-shuffle-cards', 'shuffleCards', true);
-        setVal('cfg-no-penalty', 'noPenaltyMode', true);
-        setVal('cfg-manual-advance', 'manualAdvance', true);
-        setVal('cfg-remediation-drill-mode', 'remediationDrillMode');
-        setVal('nb-opt-repeat-policy', 'repeatGradingPolicy');
 
         const langSelect = document.getElementById('cfg-language-select');
         if (langSelect && typeof i18n !== 'undefined') {
@@ -171,8 +257,9 @@ const settingsManager = {
         }
     },
 
-    // توليد كود HTML لنافذة الإعدادات
+    // توليد كود HTML لنافذة الإعدادات مزيناً بكافة سمات data-i18n*
     getModalHTML() {
+        const t = (k, f) => this._t(k, f);
         return `
         <div id="nb-settings-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-3 sm:p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title">
             <div class="bg-white w-full max-w-lg rounded-[2rem] shadow-2xl border border-emerald-100 overflow-hidden flex flex-col my-auto animate-in fade-in zoom-in duration-150" dir="${(typeof i18n !== 'undefined' && i18n.getActiveMeta) ? i18n.getActiveMeta().dir : 'rtl'}">
@@ -181,11 +268,11 @@ const settingsManager = {
                     <div class="flex items-center gap-2.5">
                         <span class="text-2xl sm:text-3xl" aria-hidden="true">⚙️</span>
                         <div>
-                            <h2 id="settings-modal-title" class="text-lg sm:text-xl font-black tracking-tight leading-tight">${i18n.t("settings_modal_title")}</h2>
-                            <p class="text-xs text-emerald-100 font-medium">${i18n.t("settings_saved_notice")}</p>
+                            <h2 id="settings-modal-title" data-i18n="settings_modal_title" class="text-lg sm:text-xl font-black tracking-tight leading-tight">${t("settings_modal_title", "إعدادات المنظومة")}</h2>
+                            <p data-i18n="settings_saved_notice" class="text-xs text-emerald-100 font-medium">${t("settings_saved_notice", "يتم حفظ التعديلات فورياً")}</p>
                         </div>
                     </div>
-                    <button id="nb-settings-close-btn" onclick="settingsManager.close()" class="p-2 rounded-full hover:bg-white/20 text-white/90 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white" aria-label="${i18n.t('close')}">
+                    <button id="nb-settings-close-btn" data-i18n-aria="close" onclick="settingsManager.close()" class="p-2 rounded-full hover:bg-white/20 text-white/90 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white" aria-label="${t('close', 'إغلاق')}">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                 </div>
@@ -196,54 +283,54 @@ const settingsManager = {
                     <!-- Section 0: لغة الواجهة والمنظومة -->
                     <div class="bg-emerald-50/70 p-3.5 sm:p-4 rounded-2xl border border-emerald-200/80 flex items-center justify-between gap-3">
                         <label for="cfg-language-select" class="font-black text-emerald-900 cursor-pointer select-none text-xs sm:text-sm flex items-center gap-2">
-                            <span aria-hidden="true">🌐</span> <span>${i18n.t("language_label")}</span>
+                            <span aria-hidden="true">🌐</span> <span data-i18n="language_label">${t("language_label", "اللغة")}</span>
                         </label>
                         <select id="cfg-language-select" onchange="if(typeof i18n !== 'undefined') i18n.setLocale(this.value)" class="bg-white border border-emerald-300 rounded-xl px-3 py-1.5 font-bold text-xs text-emerald-800 outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm cursor-pointer">
-                            <option value="ar" ${(typeof i18n !== 'undefined' && i18n.getLocale() === 'ar') ? 'selected' : ''}>العربية (Arabic)</option>
-                            <option value="en" ${(typeof i18n !== 'undefined' && i18n.getLocale() === 'en') ? 'selected' : ''}>English (الإنجليزية)</option>
+                            <option value="ar" ${(typeof i18n !== 'undefined' && i18n.getLocale() === 'ar') ? 'selected' : ''}>العربية</option>
+                            <option value="en" ${(typeof i18n !== 'undefined' && i18n.getLocale() === 'en') ? 'selected' : ''}>English</option>
                         </select>
                     </div>
 
                     <!-- Section 1: الصوتيات -->
                     <div class="bg-slate-50 p-3.5 sm:p-4 rounded-2xl border border-slate-200 space-y-3">
                         <h3 class="font-black text-emerald-800 flex items-center gap-2 text-xs sm:text-sm">
-                            <span aria-hidden="true">🔊</span> <span>${i18n.t("audio_effects")}</span>
+                            <span aria-hidden="true">🔊</span> <span data-i18n="audio_effects">${t("audio_effects", "المؤثرات الصوتية")}</span>
                         </h3>
                         <div class="flex items-center justify-between">
-                            <label for="cfg-sound-enabled" class="font-bold text-slate-700 cursor-pointer select-none">${i18n.t("sound_toggle_label")}</label>
-                            <input type="checkbox" id="cfg-sound-enabled" onchange="settingsManager.save({soundEnabled: this.checked})" class="w-5 h-5 accent-emerald-600 rounded cursor-pointer">
+                            <label for="cfg-sound-enabled" data-i18n="sound_toggle_label" class="font-bold text-slate-700 cursor-pointer select-none">${t("sound_toggle_label", "تفعيل الصوت")}</label>
+                            <input type="checkbox" id="cfg-sound-enabled" onchange="settingsManager.save({soundEnabled: this.checked}, {silent: true})" class="w-5 h-5 accent-emerald-600 rounded cursor-pointer">
                         </div>
                         <div class="space-y-1 pt-1">
                             <div class="flex justify-between text-xs font-bold text-slate-600">
-                                <label for="cfg-volume">${i18n.t("volume_level")}</label>
+                                <label for="cfg-volume" data-i18n="volume_level">${t("volume_level", "مستوى الصوت")}</label>
                                 <span id="cfg-volume-val" class="font-mono text-emerald-700">80%</span>
                             </div>
-                            <input type="range" id="cfg-volume" min="0" max="100" value="80" oninput="document.getElementById('cfg-volume-val').innerText = this.value + '%'" onchange="settingsManager.save({volume: parseInt(this.value)})" class="w-full accent-emerald-600 cursor-pointer">
+                            <input type="range" id="cfg-volume" min="0" max="100" value="80" oninput="document.getElementById('cfg-volume-val').innerText = this.value + '%'" onchange="settingsManager.save({volume: parseInt(this.value, 10)}, {silent: true})" class="w-full accent-emerald-600 cursor-pointer">
                         </div>
                     </div>
 
                     <!-- Section 2: استراحات الألعاب والخصم الآلي -->
                     <div class="bg-slate-50 p-3.5 sm:p-4 rounded-2xl border border-slate-200 space-y-3">
                         <h3 class="font-black text-emerald-800 flex items-center gap-2 text-xs sm:text-sm">
-                            <span aria-hidden="true">🎮</span> <span>${i18n.t("enable_game_breaks")}</span>
+                            <span aria-hidden="true">🎮</span> <span data-i18n="enable_game_breaks">${t("enable_game_breaks", "استراحات الألعاب")}</span>
                         </h3>
                         <div class="flex items-center justify-between">
-                            <label for="cfg-game-breaks" class="font-bold text-slate-700 cursor-pointer select-none">${i18n.t("game_breaks_toggle_label")}</label>
-                            <input type="checkbox" id="cfg-game-breaks" onchange="settingsManager.save({gameBreaksEnabled: this.checked})" class="w-5 h-5 accent-emerald-600 rounded cursor-pointer">
+                            <label for="cfg-game-breaks" data-i18n="game_breaks_toggle_label" class="font-bold text-slate-700 cursor-pointer select-none">${t("game_breaks_toggle_label", "تفعيل الاستراحات أثناء القراءة")}</label>
+                            <input type="checkbox" id="cfg-game-breaks" onchange="settingsManager.save({gameBreaksEnabled: this.checked}, {silent: true})" class="w-5 h-5 accent-emerald-600 rounded cursor-pointer">
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
                             <div>
-                                <label for="cfg-game-mode" class="block text-xs font-bold text-slate-600 mb-1">${i18n.t("default_game_mode")}</label>
-                                <select id="cfg-game-mode" onchange="settingsManager.save({defaultGameMode: this.value})" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-bold text-xs text-slate-700 outline-none focus:border-emerald-500">
-                                    <option value="computer">${i18n.t("mode_vs_computer")}</option>
-                                    <option value="teacher">${i18n.t("mode_vs_teacher")}</option>
+                                <label for="cfg-game-mode" data-i18n="default_game_mode" class="block text-xs font-bold text-slate-600 mb-1">${t("default_game_mode", "وضع اللعب")}</label>
+                                <select id="cfg-game-mode" onchange="settingsManager.save({defaultGameMode: this.value}, {silent: true})" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-bold text-xs text-slate-700 outline-none focus:border-emerald-500">
+                                    <option value="computer" data-i18n="mode_vs_computer">${t("mode_vs_computer", "ضد الحاسوب")}</option>
+                                    <option value="teacher" data-i18n="mode_vs_teacher">${t("mode_vs_teacher", "مع المعلم")}</option>
                                 </select>
                             </div>
                             <div>
-                                <label for="cfg-game-diff" class="block text-xs font-bold text-slate-600 mb-1">${i18n.t("ai_difficulty_label")}</label>
-                                <select id="cfg-game-diff" onchange="settingsManager.save({defaultDifficulty: this.value})" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-bold text-xs text-slate-700 outline-none focus:border-emerald-500">
-                                    <option value="easy">${i18n.t("diff_easy")}</option>
-                                    <option value="smart">${i18n.t("diff_smart")}</option>
+                                <label for="cfg-game-diff" data-i18n="ai_difficulty_label" class="block text-xs font-bold text-slate-600 mb-1">${t("ai_difficulty_label", "مستوى الذكاء")}</label>
+                                <select id="cfg-game-diff" onchange="settingsManager.save({defaultDifficulty: this.value}, {silent: true})" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-bold text-xs text-slate-700 outline-none focus:border-emerald-500">
+                                    <option value="easy" data-i18n="diff_easy">${t("diff_easy", "سهل")}</option>
+                                    <option value="smart" data-i18n="diff_smart">${t("diff_smart", "ذكي")}</option>
                                 </select>
                             </div>
                         </div>
@@ -252,53 +339,53 @@ const settingsManager = {
                     <!-- Section 3: مؤقت القراءة وحجم الخط والترتيب العشوائي ونظام التقييم -->
                     <div class="bg-slate-50 p-3.5 sm:p-4 rounded-2xl border border-slate-200 space-y-3">
                         <h3 class="font-black text-emerald-800 flex items-center gap-2 text-xs sm:text-sm">
-                            <span aria-hidden="true">⏱️</span> <span>${i18n.t("section_timer_font_eval")}</span>
+                            <span aria-hidden="true">⏱️</span> <span data-i18n="section_timer_font_eval">${t("section_timer_font_eval", "المؤقت وحجم الخط وخيارات الدرس")}</span>
                         </h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                             <div>
-                                <label for="cfg-timer-duration" class="block text-xs font-bold text-slate-600 mb-1">${i18n.t("timer_duration_label")}</label>
-                                <select id="cfg-timer-duration" onchange="settingsManager.save({timerDuration: parseFloat(this.value)})" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-bold text-xs text-slate-700 outline-none focus:border-emerald-500">
-                                    <option value="5">${i18n.t("timer_5s")}</option>
-                                    <option value="10">${i18n.t("timer_10s")}</option>
-                                    <option value="15">${i18n.t("timer_15s")}</option>
+                                <label for="cfg-timer-duration" data-i18n="timer_duration_label" class="block text-xs font-bold text-slate-600 mb-1">${t("timer_duration_label", "مدة المؤقت")}</label>
+                                <select id="cfg-timer-duration" onchange="settingsManager.save({timerDuration: parseFloat(this.value)}, {silent: true})" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-bold text-xs text-slate-700 outline-none focus:border-emerald-500">
+                                    <option value="5" data-i18n="timer_5s">${t("timer_5s", "5 ثوانٍ")}</option>
+                                    <option value="10" data-i18n="timer_10s">${t("timer_10s", "10 ثوانٍ")}</option>
+                                    <option value="15" data-i18n="timer_15s">${t("timer_15s", "15 ثانية")}</option>
                                 </select>
                             </div>
                             <div>
-                                <label for="cfg-font-scale" class="block text-xs font-bold text-slate-600 mb-1">${i18n.t("font_scale_label")}</label>
-                                <select id="cfg-font-scale" onchange="settingsManager.save({fontScale: this.value})" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-bold text-xs text-slate-700 outline-none focus:border-emerald-500">
-                                    <option value="normal">${i18n.t("font_normal")}</option>
-                                    <option value="large">${i18n.t("font_large")}</option>
-                                    <option value="xlarge">${i18n.t("font_xlarge")}</option>
+                                <label for="cfg-font-scale" data-i18n="font_scale_label" class="block text-xs font-bold text-slate-600 mb-1">${t("font_scale_label", "حجم الخط")}</label>
+                                <select id="cfg-font-scale" onchange="settingsManager.save({fontScale: this.value}, {silent: true})" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-bold text-xs text-slate-700 outline-none focus:border-emerald-500">
+                                    <option value="normal" data-i18n="font_normal">${t("font_normal", "افتراضي (100%)")}</option>
+                                    <option value="large" data-i18n="font_large">${t("font_large", "كبير (122%)")}</option>
+                                    <option value="xlarge" data-i18n="font_xlarge">${t("font_xlarge", "كبير جداً (145%)")}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="pt-2 border-t border-slate-200/80 flex items-center justify-between">
                             <div>
-                                <label for="cfg-shuffle-cards" class="font-bold text-slate-700 cursor-pointer select-none text-xs sm:text-sm block">${i18n.t("shuffle_cards_label")}</label>
-                                <span class="text-[11px] text-slate-400 block">${i18n.t("shuffle_cards_desc")}</span>
+                                <label for="cfg-shuffle-cards" data-i18n="shuffle_cards_label" class="font-bold text-slate-700 cursor-pointer select-none text-xs sm:text-sm block">${t("shuffle_cards_label", "خلط الكلمات عشوائياً")}</label>
+                                <span data-i18n="shuffle_cards_desc" class="text-[11px] text-slate-400 block">${t("shuffle_cards_desc", "منع حفظ مواضع الكلمات في الدرس")}</span>
                             </div>
-                            <input type="checkbox" id="cfg-shuffle-cards" onchange="settingsManager.save({shuffleCards: this.checked})" class="w-5 h-5 accent-emerald-600 rounded cursor-pointer">
+                            <input type="checkbox" id="cfg-shuffle-cards" onchange="settingsManager.save({shuffleCards: this.checked}, {silent: true})" class="w-5 h-5 accent-emerald-600 rounded cursor-pointer">
                         </div>
                         <div class="pt-2 border-t border-slate-200/80 flex items-center justify-between">
                             <div>
-                                <label for="cfg-no-penalty" class="font-bold text-slate-700 cursor-pointer select-none text-xs sm:text-sm block">${i18n.t("no_penalty_label")}</label>
-                                <span class="text-[11px] text-slate-400 block">${i18n.t("no_penalty_desc")}</span>
+                                <label for="cfg-no-penalty" data-i18n="no_penalty_label" class="font-bold text-slate-700 cursor-pointer select-none text-xs sm:text-sm block">${t("no_penalty_label", "نمط بدون خصم نقاط")}</label>
+                                <span data-i18n="no_penalty_desc" class="text-[11px] text-slate-400 block">${t("no_penalty_desc", "تعزيز الثقة دون عقوبة عند الخطأ")}</span>
                             </div>
-                            <input type="checkbox" id="cfg-no-penalty" onchange="settingsManager.save({noPenaltyMode: this.checked})" class="w-5 h-5 accent-emerald-600 rounded cursor-pointer">
+                            <input type="checkbox" id="cfg-no-penalty" onchange="settingsManager.save({noPenaltyMode: this.checked}, {silent: true})" class="w-5 h-5 accent-emerald-600 rounded cursor-pointer">
                         </div>
                         <div class="pt-2 border-t border-slate-200/80 flex items-center justify-between">
                             <div>
-                                <label for="cfg-manual-advance" class="font-bold text-slate-700 cursor-pointer select-none text-xs sm:text-sm block">${i18n.t("manual_advance_label")}</label>
-                                <span class="text-[11px] text-slate-400 block">${i18n.t("manual_advance_desc")}</span>
+                                <label for="cfg-manual-advance" data-i18n="manual_advance_label" class="font-bold text-slate-700 cursor-pointer select-none text-xs sm:text-sm block">${t("manual_advance_label", "التقدم اليدوي للبطاقات")}</label>
+                                <span data-i18n="manual_advance_desc" class="text-[11px] text-slate-400 block">${t("manual_advance_desc", "البقاء على الكلمة بعد التقييم للشرح")}</span>
                             </div>
-                            <input type="checkbox" id="cfg-manual-advance" onchange="settingsManager.save({manualAdvance: this.checked})" class="w-5 h-5 accent-emerald-600 rounded cursor-pointer">
+                            <input type="checkbox" id="cfg-manual-advance" onchange="settingsManager.save({manualAdvance: this.checked}, {silent: true})" class="w-5 h-5 accent-emerald-600 rounded cursor-pointer">
                         </div>
                         <div class="pt-2 border-t border-slate-200/80">
-                            <label for="cfg-remediation-drill-mode" class="block text-xs font-bold text-slate-600 mb-1">${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t("remediation_drill_mode_label") || 'نمط المعالجة (Remediation Drill):' : 'نمط المعالجة (Remediation Drill):'}</label>
-                            <select id="cfg-remediation-drill-mode" onchange="settingsManager.save({remediationDrillMode: this.value})" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-bold text-xs text-slate-700 outline-none focus:border-emerald-500">
-                                <option value="loop">${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t("drill_mode_loop") || 'تدوير الكلمات حتى الإتقان (Loop)' : 'تدوير الكلمات حتى الإتقان (Loop)'}</option>
-                                <option value="single_pass">${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t("drill_mode_single_pass") || 'مرور مفرد (Single Pass)' : 'مرور مفرد (Single Pass)'}</option>
-                                <option value="instant_repeat">${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t("drill_mode_instant_repeat") || 'تكرار موضعي فوري 3 مرات (Instant Repeat)' : 'تكرار موضعي فوري 3 مرات (Instant Repeat)'}</option>
+                            <label for="cfg-remediation-drill-mode" data-i18n="remediation_drill_mode_label" class="block text-xs font-bold text-slate-600 mb-1">${t("remediation_drill_mode_label", "نمط جلسة المعالجة")}</label>
+                            <select id="cfg-remediation-drill-mode" onchange="settingsManager.save({remediationDrillMode: this.value}, {silent: true})" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-bold text-xs text-slate-700 outline-none focus:border-emerald-500">
+                                <option value="loop" data-i18n="drill_mode_loop">${t("drill_mode_loop", "تدوير الكلمات حتى الإتقان")}</option>
+                                <option value="single_pass" data-i18n="drill_mode_single_pass">${t("drill_mode_single_pass", "مرور مفرد على الكلمات")}</option>
+                                <option value="instant_repeat" data-i18n="drill_mode_instant_repeat">${t("drill_mode_instant_repeat", "تكرار موضعي فوري 3 مرات")}</option>
                             </select>
                         </div>
                     </div>
@@ -306,16 +393,16 @@ const settingsManager = {
                     <!-- Section 4: سياسة تقييم تكرار الدروس للطلاب -->
                     <div class="bg-slate-50 p-3.5 sm:p-4 rounded-2xl border border-slate-200 space-y-3">
                         <h3 class="font-black text-emerald-800 flex items-center gap-2 text-xs sm:text-sm">
-                            <span aria-hidden="true">📊</span> <span>${i18n.t("section_repeat_policy")}</span>
+                            <span aria-hidden="true">📊</span> <span data-i18n="section_repeat_policy">${t("section_repeat_policy", "سياسة تكرار الدروس")}</span>
                         </h3>
                         <div>
-                            <label for="nb-opt-repeat-policy" class="block text-xs font-bold text-slate-600 mb-1">${i18n.t("repeat_policy_label")}</label>
-                            <select id="nb-opt-repeat-policy" onchange="settingsManager.save({repeatGradingPolicy: this.value})" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-bold text-xs text-slate-700 outline-none focus:border-emerald-500">
-                                <option value="best">${i18n.t("policy_best")}</option>
-                                <option value="latest">${i18n.t("policy_latest")}</option>
-                                <option value="cumulative">${i18n.t("policy_cumulative")}</option>
+                            <label for="nb-opt-repeat-policy" data-i18n="repeat_policy_label" class="block text-xs font-bold text-slate-600 mb-1">${t("repeat_policy_label", "سياسة احتساب النتيجة عند الإعادة")}</label>
+                            <select id="nb-opt-repeat-policy" onchange="settingsManager.save({repeatGradingPolicy: this.value}, {silent: true})" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-bold text-xs text-slate-700 outline-none focus:border-emerald-500">
+                                <option value="best" data-i18n="policy_best">${t("policy_best", "أعلى نتيجة محققة")}</option>
+                                <option value="latest" data-i18n="policy_latest">${t("policy_latest", "نتيجة آخر محاولة")}</option>
+                                <option value="cumulative" data-i18n="policy_cumulative">${t("policy_cumulative", "نقاط تراكمية إضافية")}</option>
                             </select>
-                            <span class="text-[11px] text-slate-400 block mt-1">${i18n.t("repeat_policy_desc")}</span>
+                            <span data-i18n="repeat_policy_desc" class="text-[11px] text-slate-400 block mt-1">${t("repeat_policy_desc", "تحدد كيفية تحديث سجل الطالب عند تكرار نفس الدرس")}</span>
                         </div>
                     </div>
 
@@ -323,11 +410,11 @@ const settingsManager = {
 
                 <!-- Footer Actions -->
                 <div class="bg-slate-100 p-3.5 sm:p-4 border-t border-slate-200 flex items-center justify-between gap-2">
-                    <button onclick="settingsManager.reset()" class="text-xs font-bold text-rose-600 hover:text-rose-700 px-3 py-2 rounded-xl hover:bg-rose-50 transition-colors" aria-label="${i18n.t('settings_reset_btn')}">
-                        ${i18n.t("settings_reset_btn")}
+                    <button onclick="settingsManager.reset()" data-i18n-aria="settings_reset_btn" class="text-xs font-bold text-rose-600 hover:text-rose-700 px-3 py-2 rounded-xl hover:bg-rose-50 transition-colors" aria-label="${t('settings_reset_btn', 'استعادة الافتراضي')}">
+                        <span data-i18n="settings_reset_btn">${t("settings_reset_btn", "استعادة الافتراضي")}</span>
                     </button>
-                    <button onclick="settingsManager.close()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-6 py-2.5 rounded-xl text-xs sm:text-sm shadow-md transition-transform hover:scale-105" aria-label="${i18n.t('save_and_close')}">
-                        ${i18n.t("save_and_close")}
+                    <button onclick="settingsManager.close()" data-i18n-aria="save_and_close" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-6 py-2.5 rounded-xl text-xs sm:text-sm shadow-md transition-transform hover:scale-105" aria-label="${t('save_and_close', 'حفظ وإغلاق')}">
+                        <span data-i18n="save_and_close">${t("save_and_close", "حفظ وإغلاق")}</span>
                     </button>
                 </div>
             </div>
@@ -344,8 +431,13 @@ const settingsManager = {
         // ربط حصر التركيز والإغلاق بمفتاح Escape
         const modal = document.getElementById('nb-settings-modal');
         if (modal) {
+            if (typeof i18n !== 'undefined' && typeof i18n.translateDOM === 'function') {
+                i18n.translateDOM(modal);
+            }
+
             modal.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
+                    e.preventDefault();
                     this.close();
                     return;
                 }
@@ -406,6 +498,19 @@ if (typeof document !== 'undefined') {
     } else {
         if (typeof settingsManager !== 'undefined') settingsManager.apply();
     }
+}
+
+// مزامنة موزع الحالة nbStore مع settingsManager
+if (typeof nbStore !== 'undefined' && typeof nbStore.subscribe === 'function') {
+    nbStore.subscribe('settings', (newSettings) => {
+        if (newSettings && typeof newSettings === 'object') {
+            const current = settingsManager.get();
+            const hasDiff = Object.keys(newSettings).some(k => current[k] !== newSettings[k]);
+            if (hasDiff) {
+                settingsManager.save(newSettings, { silent: true });
+            }
+        }
+    });
 }
 
 // الاستماع لحدث تبديل اللغة لإعادة بناء هيكل النافذة باللغة الجديدة

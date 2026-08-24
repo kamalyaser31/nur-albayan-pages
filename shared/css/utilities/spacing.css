@@ -1,30 +1,68 @@
 /**
- * Nour Al-Bayan Interactive Platform - Utilities: Spacing
- * Margins, paddings, gaps, and space-y utilities.
+ * Nour Al-Bayan Interactive Platform - Utilities: Spacing (Logical Properties)
+ * Margins, paddings, logical inline/block offsets, gaps, and space-between utilities.
  */
 
+/* Margin Utilities */
 .m-0 { margin: 0; }
-.mx-auto { margin-left: auto; margin-right: auto; }
-.my-auto { margin-top: auto; margin-bottom: auto; }
-.my-1 { margin-top: 0.25rem; margin-bottom: 0.25rem; }
-.my-2\.5 { margin-top: 0.625rem; margin-bottom: 0.625rem; }
-.mt-1 { margin-top: 0.25rem; }
-.mt-2 { margin-top: 0.5rem; }
-.mt-3 { margin-top: 0.75rem; }
-.mt-4 { margin-top: 1rem; }
-.mt-5 { margin-top: 1.25rem; }
-.mt-6 { margin-top: 1.5rem; }
-.mb-1 { margin-bottom: 0.25rem; }
-.mb-2 { margin-bottom: 0.5rem; }
-.mb-3 { margin-bottom: 0.75rem; }
-.mb-6 { margin-bottom: 1.5rem; }
-.pt-1 { padding-top: 0.25rem; }
-.pt-2 { padding-top: 0.5rem; }
-.pb-1 { padding-bottom: 0.25rem; }
-.pb-2 { padding-bottom: 0.5rem; }
-.pb-3 { padding-bottom: 0.75rem; }
-.pb-16 { padding-bottom: 4rem; }
+.m-auto { margin: auto; }
+.mx-auto { margin-inline: auto; }
+.my-auto { margin-block: auto; }
 
+.my-1 { margin-block: 0.25rem; }
+.my-2 { margin-block: 0.5rem; }
+.my-2\.5 { margin-block: 0.625rem; }
+.my-3 { margin-block: 0.75rem; }
+.my-4 { margin-block: 1rem; }
+.my-6 { margin-block: 1.5rem; }
+
+.mx-1 { margin-inline: 0.25rem; }
+.mx-2 { margin-inline: 0.5rem; }
+.mx-3 { margin-inline: 0.75rem; }
+.mx-4 { margin-inline: 1rem; }
+.mx-6 { margin-inline: 1.5rem; }
+
+.mt-1 { margin-block-start: 0.25rem; margin-top: 0.25rem; }
+.mt-2 { margin-block-start: 0.5rem; margin-top: 0.5rem; }
+.mt-3 { margin-block-start: 0.75rem; margin-top: 0.75rem; }
+.mt-4 { margin-block-start: 1rem; margin-top: 1rem; }
+.mt-5 { margin-block-start: 1.25rem; margin-top: 1.25rem; }
+.mt-6 { margin-block-start: 1.5rem; margin-top: 1.5rem; }
+.mt-8 { margin-block-start: 2rem; margin-top: 2rem; }
+.mt-12 { margin-block-start: 3rem; margin-top: 3rem; }
+
+.mb-1 { margin-block-end: 0.25rem; margin-bottom: 0.25rem; }
+.mb-2 { margin-block-end: 0.5rem; margin-bottom: 0.5rem; }
+.mb-3 { margin-block-end: 0.75rem; margin-bottom: 0.75rem; }
+.mb-4 { margin-block-end: 1rem; margin-bottom: 1rem; }
+.mb-6 { margin-block-end: 1.5rem; margin-bottom: 1.5rem; }
+.mb-8 { margin-block-end: 2rem; margin-bottom: 2rem; }
+
+/* Logical Inline Margins */
+.ms-0 { margin-inline-start: 0px; }
+.ms-1 { margin-inline-start: 0.25rem; }
+.ms-1\.5 { margin-inline-start: 0.375rem; }
+.ms-2 { margin-inline-start: 0.5rem; }
+.ms-2\.5 { margin-inline-start: 0.625rem; }
+.ms-3 { margin-inline-start: 0.75rem; }
+.ms-4 { margin-inline-start: 1rem; }
+.ms-5 { margin-inline-start: 1.25rem; }
+.ms-6 { margin-inline-start: 1.5rem; }
+.ms-auto { margin-inline-start: auto; }
+
+.me-0 { margin-inline-end: 0px; }
+.me-1 { margin-inline-end: 0.25rem; }
+.me-1\.5 { margin-inline-end: 0.375rem; }
+.me-2 { margin-inline-end: 0.5rem; }
+.me-2\.5 { margin-inline-end: 0.625rem; }
+.me-3 { margin-inline-end: 0.75rem; }
+.me-4 { margin-inline-end: 1rem; }
+.me-5 { margin-inline-end: 1.25rem; }
+.me-6 { margin-inline-end: 1.5rem; }
+.me-auto { margin-inline-end: auto; }
+
+/* Padding Utilities */
+.p-0 { padding: 0; }
 .p-1 { padding: 0.25rem; }
 .p-1\.5 { padding: 0.375rem; }
 .p-2 { padding: 0.5rem; }
@@ -36,25 +74,67 @@
 .p-6 { padding: 1.5rem; }
 .p-8 { padding: 2rem; }
 
-.px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
-.px-2\.5 { padding-left: 0.625rem; padding-right: 0.625rem; }
-.px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
-.px-3\.5 { padding-left: 0.875rem; padding-right: 0.875rem; }
-.px-4 { padding-left: 1rem; padding-right: 1rem; }
-.px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
-.px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
-.px-8 { padding-left: 2rem; padding-right: 2rem; }
+.px-0 { padding-inline: 0px; }
+.px-1 { padding-inline: 0.25rem; }
+.px-1\.5 { padding-inline: 0.375rem; }
+.px-2 { padding-inline: 0.5rem; }
+.px-2\.5 { padding-inline: 0.625rem; }
+.px-3 { padding-inline: 0.75rem; }
+.px-3\.5 { padding-inline: 0.875rem; }
+.px-4 { padding-inline: 1rem; }
+.px-5 { padding-inline: 1.25rem; }
+.px-6 { padding-inline: 1.5rem; }
+.px-8 { padding-inline: 2rem; }
+.px-10 { padding-inline: 2.5rem; }
 
-.py-0\.5 { padding-top: 0.125rem; padding-bottom: 0.125rem; }
-.py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
-.py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
-.py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
-.py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
-.py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
-.py-3\.5 { padding-top: 0.875rem; padding-bottom: 0.875rem; }
-.py-4 { padding-top: 1rem; padding-bottom: 1rem; }
-.py-5 { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+.py-0\.5 { padding-block: 0.125rem; }
+.py-1 { padding-block: 0.25rem; }
+.py-1\.5 { padding-block: 0.375rem; }
+.py-2 { padding-block: 0.5rem; }
+.py-2\.5 { padding-block: 0.625rem; }
+.py-3 { padding-block: 0.75rem; }
+.py-3\.5 { padding-block: 0.875rem; }
+.py-4 { padding-block: 1rem; }
+.py-5 { padding-block: 1.25rem; }
+.py-6 { padding-block: 1.5rem; }
 
+.pt-1 { padding-block-start: 0.25rem; padding-top: 0.25rem; }
+.pt-2 { padding-block-start: 0.5rem; padding-top: 0.5rem; }
+.pt-3 { padding-block-start: 0.75rem; padding-top: 0.75rem; }
+.pt-4 { padding-block-start: 1rem; padding-top: 1rem; }
+
+.pb-1 { padding-block-end: 0.25rem; padding-bottom: 0.25rem; }
+.pb-2 { padding-block-end: 0.5rem; padding-bottom: 0.5rem; }
+.pb-3 { padding-block-end: 0.75rem; padding-bottom: 0.75rem; }
+.pb-4 { padding-block-end: 1rem; padding-bottom: 1rem; }
+.pb-16 { padding-block-end: 4rem; padding-bottom: 4rem; }
+
+/* Logical Inline Paddings */
+.ps-0 { padding-inline-start: 0px; }
+.ps-1 { padding-inline-start: 0.25rem; }
+.ps-1\.5 { padding-inline-start: 0.375rem; }
+.ps-2 { padding-inline-start: 0.5rem; }
+.ps-2\.5 { padding-inline-start: 0.625rem; }
+.ps-3 { padding-inline-start: 0.75rem; }
+.ps-3\.5 { padding-inline-start: 0.875rem; }
+.ps-4 { padding-inline-start: 1rem; }
+.ps-5 { padding-inline-start: 1.25rem; }
+.ps-6 { padding-inline-start: 1.5rem; }
+.ps-8 { padding-inline-start: 2rem; }
+
+.pe-0 { padding-inline-end: 0px; }
+.pe-1 { padding-inline-end: 0.25rem; }
+.pe-1\.5 { padding-inline-end: 0.375rem; }
+.pe-2 { padding-inline-end: 0.5rem; }
+.pe-2\.5 { padding-inline-end: 0.625rem; }
+.pe-3 { padding-inline-end: 0.75rem; }
+.pe-3\.5 { padding-inline-end: 0.875rem; }
+.pe-4 { padding-inline-end: 1rem; }
+.pe-5 { padding-inline-end: 1.25rem; }
+.pe-6 { padding-inline-end: 1.5rem; }
+.pe-8 { padding-inline-end: 2rem; }
+
+/* Gaps */
 .gap-1 { gap: 0.25rem; }
 .gap-1\.5 { gap: 0.375rem; }
 .gap-2 { gap: 0.5rem; }
@@ -64,7 +144,19 @@
 .gap-4 { gap: 1rem; }
 .gap-5 { gap: 1.25rem; }
 .gap-6 { gap: 1.5rem; }
+.gap-8 { gap: 2rem; }
 
-.space-y-1 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.25rem; }
-.space-y-2 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.5rem; }
-.space-y-5 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.25rem; }
+.gap-x-1 { column-gap: 0.25rem; }
+.gap-x-2 { column-gap: 0.5rem; }
+.gap-x-3 { column-gap: 0.75rem; }
+.gap-x-4 { column-gap: 1rem; }
+.gap-y-1 { row-gap: 0.25rem; }
+.gap-y-2 { row-gap: 0.5rem; }
+.gap-y-3 { row-gap: 0.75rem; }
+.gap-y-4 { row-gap: 1rem; }
+
+/* Space Utilities */
+.space-y-1 > :not([hidden]) ~ :not([hidden]) { margin-block-start: 0.25rem; }
+.space-y-2 > :not([hidden]) ~ :not([hidden]) { margin-block-start: 0.5rem; }
+.space-y-5 > :not([hidden]) ~ :not([hidden]) { margin-block-start: 1.25rem; }
+.space-x-2 > :not([hidden]) ~ :not([hidden]) { margin-inline-start: 0.5rem; }

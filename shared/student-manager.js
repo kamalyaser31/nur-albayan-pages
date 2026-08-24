@@ -54,10 +54,19 @@
             // الاستماع لتغييرات التخزين عبر النوافذ والألسنة المتعددة (Multi-tab Storage Sync)
             if (typeof window !== 'undefined' && !this._storageListenerBound) {
                 window.addEventListener('storage', (event) => {
-                    if (event.key === STORAGE_KEY && event.newValue) {
-                        this._loadFromStorage();
+                    if (event.key === STORAGE_KEY) {
+                        if (event.newValue === null) {
+                            // تم تفريغ أو مسح التخزين في لسان آخر - إعادة تعيين الحالة فوراً
+                            this._state = {
+                                version: 1,
+                                activeStudentId: null,
+                                students: []
+                            };
+                        } else {
+                            this._loadFromStorage();
+                        }
                         this._dispatchEvent('nb:student-progress-updated', { studentId: this._state.activeStudentId });
-                        this._dispatchEvent('nb:student-changed', { studentId: this._state.activeStudentId });
+                        this._dispatchEvent('nb:student-changed', { activeStudentId: this._state.activeStudentId, student: this.getActiveStudent() });
                         this.updateIndexBadges();
                     }
                 });
@@ -77,7 +86,83 @@
         },
 
         /**
-         * قراءة البيانات من LocalStorage إلى الذاكرة الوسيطة مع الحماية
+         * تسوية وتطهير هيكل سجل الطالب لمنع انهيار الحسابات عند تلف أو نقص الحقول
+         * @private
+         * @param {Object} raw بيانات الطالب الخام
+         * @param {number} [index=0] ترتيب الطالب للاستعانة به في القيم الافتراضية
+         * @returns {Object|null} كائن الطالب المطهر والمسوّى
+         */
+        _normalizeStudent(raw, index = 0) {
+            if (!raw || typeof raw !== 'object') return null;
+
+            const id = typeof raw.id === 'string' && raw.id.trim() ? raw.id.trim() : this.generateId();
+            const name = this._sanitizeText(raw.name, `طالب ${index + 1}`);
+            const avatar = this._sanitizeText(raw.avatar, '👦') || name.charAt(0) || DEFAULT_AVATARS[index % DEFAULT_AVATARS.length];
+            
+            const rawColor = typeof raw.color === 'string' ? raw.color.trim() : '';
+            const color = HEX_COLOR_REGEX.test(rawColor) ? rawColor : DEFAULT_COLORS[index % DEFAULT_COLORS.length];
+            
+            const totalScore = Math.max(0, Math.floor(Number(raw.totalScore) || 0));
+
+            // تنقية سجل الدروس بحراسة ضد تلوث النموذج الأولي (Prototype Pollution Guard)
+            const completedLessons = Object.create(null);
+            const FORBIDDEN_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
+            if (raw.completedLessons && typeof raw.completedLessons === 'object') {
+                Object.keys(raw.completedLessons).forEach(key => {
+                    const cleanKey = String(key).trim();
+                    if (FORBIDDEN_KEYS.has(cleanKey)) return;
+                    const l = raw.completedLessons[key];
+                    if (l && typeof l === 'object') {
+                        completedLessons[cleanKey] = {
+                            score: Math.max(0, Math.floor(Number(l.score) || 0)),
+                            bestScore: Math.max(0, Math.floor(Number(l.bestScore !== undefined ? l.bestScore : l.score) || 0)),
+                            accuracy: Math.min(100, Math.max(0, Math.round(Number(l.accuracy !== undefined ? l.accuracy : 100)) || 0)),
+                            stars: Math.min(3, Math.max(0, Math.floor(Number(l.stars) || 0))),
+                            attempts: Math.max(1, Math.floor(Number(l.attempts) || 1)),
+                            lastStudiedAt: Number(l.lastStudiedAt) || Date.now()
+                        };
+                    }
+                });
+            }
+
+            // تنقية بنك الأخطاء
+            const mistakeBank = [];
+            if (Array.isArray(raw.mistakeBank)) {
+                raw.mistakeBank.forEach(m => {
+                    if (m && typeof m === 'object') {
+                        const plain = this._extractPlainWord(m.word);
+                        if (plain) {
+                            mistakeBank.push({
+                                word: plain,
+                                lessonId: String(m.lessonId || '').trim(),
+                                timestamp: Number(m.timestamp) || Date.now(),
+                                count: Math.max(1, Math.floor(Number(m.count) || 1)),
+                                mastered: !!m.mastered,
+                                consecutiveCorrect: Math.max(0, Math.floor(Number(m.consecutiveCorrect) || 0))
+                            });
+                        }
+                    }
+                });
+            }
+
+            const createdAt = Number(raw.createdAt) || Date.now();
+            const lastActive = Number(raw.lastActive) || Date.now();
+
+            return {
+                id,
+                name,
+                avatar,
+                color,
+                totalScore,
+                completedLessons,
+                mistakeBank,
+                createdAt,
+                lastActive
+            };
+        },
+
+        /**
+         * قراءة البيانات من LocalStorage إلى الذاكرة الوسيطة مع الحماية والتسوية الهيكلية
          * @private
          */
         _loadFromStorage() {
@@ -89,7 +174,10 @@
                         if (parsed && typeof parsed === 'object') {
                             this._state.version = parsed.version || 1;
                             this._state.activeStudentId = parsed.activeStudentId || null;
-                            this._state.students = Array.isArray(parsed.students) ? parsed.students : [];
+                            const rawStudents = Array.isArray(parsed.students) ? parsed.students : [];
+                            this._state.students = rawStudents
+                                .map((s, idx) => this._normalizeStudent(s, idx))
+                                .filter(Boolean);
                             return;
                         }
                     }
@@ -250,7 +338,17 @@
          * @private
          */
         _clone(obj) {
-            return JSON.parse(JSON.stringify(obj));
+            if (obj === null || obj === undefined) return obj;
+            if (typeof structuredClone === 'function') {
+                try {
+                    return structuredClone(obj);
+                } catch (_) {}
+            }
+            try {
+                return JSON.parse(JSON.stringify(obj));
+            } catch (_) {
+                return obj;
+            }
         },
 
         // ========================================================================
@@ -677,6 +775,40 @@
             return true;
         },
 
+        /**
+         * إعادة احتساب وضبط إجمالي النقاط التراكمية لطالب محدد بدقة من واقع الدروس المنجزة
+         * @param {string} [studentId] معرف الطالب (إذا لم يُمرر يُستخدم الطالب النشط)
+         * @returns {number} إجمالي النقاط المحتسبة
+         */
+        recalculateStudentScore(studentId) {
+            this.init();
+            const targetId = studentId || this._state.activeStudentId;
+            if (!targetId) return 0;
+
+            const student = this._state.students.find(s => s.id === targetId);
+            if (!student) return 0;
+
+            let recalculated = 0;
+            if (student.completedLessons && typeof student.completedLessons === 'object') {
+                for (const l of Object.values(student.completedLessons)) {
+                    if (l && typeof l === 'object') {
+                        const s = Math.max(0, Math.floor(Number(l.bestScore !== undefined ? l.bestScore : l.score) || 0));
+                        recalculated += s;
+                    }
+                }
+            }
+
+            student.totalScore = recalculated;
+            student.lastActive = Date.now();
+
+            this._saveToStorage();
+            this._dispatchEvent('nb:student-updated', { student: this._clone(student) });
+            this._dispatchEvent('nb:student-progress-updated', { studentId: targetId, totalScore: recalculated });
+            this.updateIndexBadges();
+
+            return recalculated;
+        },
+
         // ========================================================================
         // 5. بنك الأخطاء والنسخ الاحتياطي (Mistake Bank & JSON Backup)
         // ========================================================================
@@ -698,19 +830,32 @@
         },
 
         /**
-         * إزالة كلمة من بنك الأخطاء أو تمييزها كمتقنة
+         * إزالة كلمة من بنك الأخطاء أو تمييزها كمتقنة مع دعم حصر الحذف بدرس محدد لمنع الحذف العشوائي
          * @param {string} studentIdOrWord معرف الطالب أو الكلمة إذا كان الطالب نشطاً
          * @param {string} [word] الكلمة المراد حذفها
+         * @param {string|number} [lessonId] رقم الدرس المراد قصر الحذف عليه اختيارياً
          * @returns {Array<Object>} بنك الأخطاء بعد التعديل
          */
-        removeMistake(studentIdOrWord, word) {
+        removeMistake(studentIdOrWord, word, lessonId) {
             this.init();
             let targetStudentId = this._state.activeStudentId;
             let targetWord = studentIdOrWord;
+            let targetLessonId = undefined;
 
-            if (word !== undefined) {
+            if (lessonId !== undefined) {
                 targetStudentId = studentIdOrWord;
                 targetWord = word;
+                targetLessonId = String(lessonId).trim();
+            } else if (word !== undefined) {
+                const isStudent = this._state.students.some(s => s.id === studentIdOrWord);
+                if (isStudent) {
+                    targetStudentId = studentIdOrWord;
+                    targetWord = word;
+                } else {
+                    targetStudentId = this._state.activeStudentId;
+                    targetWord = studentIdOrWord;
+                    targetLessonId = String(word).trim();
+                }
             }
 
             if (!targetStudentId || !targetWord) return [];
@@ -719,7 +864,13 @@
             if (!student || !Array.isArray(student.mistakeBank)) return [];
 
             const cleanTarget = this._extractPlainWord(targetWord);
-            student.mistakeBank = student.mistakeBank.filter(m => m.word !== cleanTarget);
+            student.mistakeBank = student.mistakeBank.filter(m => {
+                if (m.word !== cleanTarget) return true;
+                if (targetLessonId !== undefined && targetLessonId !== '') {
+                    return String(m.lessonId).trim() !== targetLessonId;
+                }
+                return false;
+            });
             student.lastActive = Date.now();
 
             this._saveToStorage();
@@ -933,76 +1084,9 @@
                     throw new Error('لم يتم العثور على مصفوفة طلاب صالحة داخل الملف.');
                 }
 
-                const validatedStudents = [];
-
-                for (let i = 0; i < candidateStudents.length; i++) {
-                    const raw = candidateStudents[i];
-                    if (!raw || typeof raw !== 'object') continue;
-
-                    const id = typeof raw.id === 'string' && raw.id.trim() ? raw.id.trim() : this.generateId();
-                    const name = this._sanitizeText(raw.name, `طالب ${i + 1}`);
-                    const avatar = this._sanitizeText(raw.avatar, '👦');
-                    
-                    const rawColor = typeof raw.color === 'string' ? raw.color.trim() : '';
-                    const color = HEX_COLOR_REGEX.test(rawColor) ? rawColor : DEFAULT_COLORS[i % DEFAULT_COLORS.length];
-                    
-                    const totalScore = Math.max(0, Math.floor(Number(raw.totalScore) || 0));
-
-                    // تنقية سجل الدروس بحراسة ضد تلوث النموذج الأولي (Prototype Pollution Guard)
-                    const completedLessons = Object.create(null);
-                    const FORBIDDEN_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
-                    if (raw.completedLessons && typeof raw.completedLessons === 'object') {
-                        Object.keys(raw.completedLessons).forEach(key => {
-                            const cleanKey = String(key).trim();
-                            if (FORBIDDEN_KEYS.has(cleanKey)) return;
-                            const l = raw.completedLessons[key];
-                            if (l && typeof l === 'object') {
-                                completedLessons[cleanKey] = {
-                                    score: Math.max(0, Math.floor(Number(l.score) || 0)),
-                                    bestScore: Math.max(0, Math.floor(Number(l.bestScore || l.score) || 0)),
-                                    accuracy: Math.min(100, Math.max(0, Math.round(Number(l.accuracy) || 0))),
-                                    stars: Math.min(3, Math.max(0, Math.floor(Number(l.stars) || 0))),
-                                    attempts: Math.max(1, Math.floor(Number(l.attempts) || 1)),
-                                    lastStudiedAt: Number(l.lastStudiedAt) || Date.now()
-                                };
-                            }
-                        });
-                    }
-
-                    // تنقية بنك الأخطاء
-                    const mistakeBank = [];
-                    if (Array.isArray(raw.mistakeBank)) {
-                        raw.mistakeBank.forEach(m => {
-                            if (m && typeof m === 'object') {
-                                const plain = this._extractPlainWord(m.word);
-                                if (plain) {
-                                    mistakeBank.push({
-                                        word: plain,
-                                        lessonId: String(m.lessonId || '').trim(),
-                                        timestamp: Number(m.timestamp) || Date.now(),
-                                        count: Math.max(1, Math.floor(Number(m.count) || 1)),
-                                        mastered: !!m.mastered
-                                    });
-                                }
-                            }
-                        });
-                    }
-
-                    const createdAt = Number(raw.createdAt) || Date.now();
-                    const lastActive = Number(raw.lastActive) || Date.now();
-
-                    validatedStudents.push({
-                        id,
-                        name,
-                        avatar,
-                        color,
-                        totalScore,
-                        completedLessons,
-                        mistakeBank,
-                        createdAt,
-                        lastActive
-                    });
-                }
+                const validatedStudents = candidateStudents
+                    .map((raw, i) => this._normalizeStudent(raw, i))
+                    .filter(Boolean);
 
                 if (validatedStudents.length === 0) {
                     throw new Error('الملف لا يحتوي على أي سجلات طلاب صالحة للاستيراد.');

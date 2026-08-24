@@ -8,13 +8,22 @@
 (function () {
     'use strict';
 
-    const currentScript = document.currentScript;
     let basePath = '../shared/';
+    const currentScript = document.currentScript;
+
     if (currentScript && currentScript.src) {
         basePath = currentScript.src.substring(0, currentScript.src.lastIndexOf('/') + 1);
+    } else {
+        // البحث عن وسم السكربت في حال انعدام document.currentScript
+        const coreScript = document.querySelector('script[src*="core.js"]') ||
+            (document.scripts ? Array.from(document.scripts).find(s => s.src && s.src.includes('core.js')) : null);
+        if (coreScript && coreScript.src) {
+            basePath = coreScript.src.substring(0, coreScript.src.lastIndexOf('/') + 1);
+        }
     }
 
     const modules = [
+        'store.js',
         'i18n.js',
         'locales/ar.js',
         'locales/en.js',
@@ -30,7 +39,17 @@
         'rule-manager.js'
     ];
 
-    modules.forEach(function (file) {
-        document.write('<script src="' + basePath + file + '"><\/script>');
-    });
+    if (document.readyState === 'loading') {
+        modules.forEach(function (file) {
+            document.write('<script src="' + basePath + file + '"><\/script>');
+        });
+    } else {
+        // إذا كان المستند جاهزاً بالفعل، يتم الحقن المتسلسل عبر DOM مع حفظ الترتيب
+        modules.forEach(function (file) {
+            const script = document.createElement('script');
+            script.src = basePath + file;
+            script.async = false; // الحفاظ على ترتيب التنفيذ
+            (document.head || document.documentElement).appendChild(script);
+        });
+    }
 })();
