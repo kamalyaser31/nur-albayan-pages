@@ -32,7 +32,7 @@ function buildAppUI() {
                 <p id="rule-desc" class="text-sm sm:text-base text-slate-500 max-w-md mx-auto mt-1 leading-relaxed">Description of current rule</p>
             </div>
             <div class="w-full max-w-3xl bg-white border-4 sm:border-8 border-emerald-400 rounded-[2.5rem] shadow-xl p-6 flex flex-col justify-center items-center h-[38vh] min-h-[200px] max-h-[340px]">
-                <span id="rule-big-text" class="quran-font text-center text-slate-800 leading-normal tracking-wide select-text px-4 w-full break-words" style="font-size: clamp(3rem, 10vh, 6.5rem);" role="region" aria-label="Rule example" aria-live="polite">
+                <span id="rule-big-text" class="quran-font text-center text-slate-800 leading-relaxed select-text px-4 w-full break-words" style="font-size: clamp(3rem, 10vh, 6.5rem);" role="region" aria-label="Rule example" aria-live="polite">
                     Rule Content
                 </span>
             </div>
@@ -79,7 +79,7 @@ function buildAppUI() {
 
     <!-- Navigation Header with Interactive Progress Bar -->
     <header id="top-nav" class="w-full bg-white/95 backdrop-blur-sm border-b border-slate-200/80 px-3 sm:px-6 py-2 flex justify-between items-center shadow-sm shrink-0 z-30 relative">
-        <div id="progress-bar" style="width: 0%;"></div>
+        <div id="progress-bar" style="width: 0%;" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Reading progress"></div>
         <div class="w-full max-w-5xl mx-auto flex justify-between items-center gap-2">
             <!-- Score & Timer Pill -->
             <div class="flex items-center gap-2 sm:gap-3">
@@ -89,6 +89,10 @@ function buildAppUI() {
                 </div>
                 <div id="challenge-timer" class="hidden bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full font-mono font-bold text-xs shadow-inner" role="timer">
                     ⏱ <span id="timer-val">10.0</span>s
+                </div>
+                <div id="active-student-pill" class="flex items-center gap-1.5 bg-emerald-50/90 border border-emerald-200 px-2.5 sm:px-3 py-1 rounded-full shadow-inner text-xs sm:text-sm font-bold text-emerald-800" role="status" aria-label="الطالب الحالي">
+                    <span id="active-student-avatar-icon" class="text-sm">👤</span>
+                    <span id="active-student-name-text" class="max-w-[80px] sm:max-w-[120px] truncate font-black">حصة عامة</span>
                 </div>
             </div>
 
@@ -413,4 +417,49 @@ function buildAppUI() {
     container.className = 'w-full h-full flex flex-col items-center overflow-hidden';
     container.innerHTML = fullHtml;
     document.body.insertBefore(container, document.body.firstChild);
+
+    // Update active student pill automatically
+    updateActiveStudentPill();
 }
+
+/**
+ * تحديث شارة الطالب النشط في ترويسة الدرس تلقائياً عبر studentManager
+ */
+function updateActiveStudentPill() {
+    const pill = document.getElementById('active-student-pill');
+    const nameEl = document.getElementById('active-student-name-text');
+    const avatarEl = document.getElementById('active-student-avatar-icon');
+    if (!nameEl || !avatarEl) return;
+
+    if (typeof studentManager !== 'undefined' && typeof studentManager.getActiveStudent === 'function') {
+        const student = studentManager.getActiveStudent();
+        if (student && (student.name || student.id)) {
+            nameEl.textContent = student.name || 'طالب';
+            avatarEl.textContent = student.avatar || '👤';
+            if (pill) {
+                pill.setAttribute('aria-label', `الطالب الحالي: ${student.name || 'طالب'}`);
+                pill.title = `الطالب الحالي: ${student.name || 'طالب'}`;
+            }
+            return;
+        }
+    }
+
+    nameEl.textContent = 'حصة عامة';
+    avatarEl.textContent = '👤';
+    if (pill) {
+        pill.setAttribute('aria-label', 'الطالب الحالي: حصة عامة');
+        pill.title = 'حصة عامة';
+    }
+}
+
+// إتاحة الدالة عالمياً وتحديث الشارة عند جاهزية الصفحة
+window.updateActiveStudentPill = updateActiveStudentPill;
+
+if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', updateActiveStudentPill);
+    } else {
+        updateActiveStudentPill();
+    }
+}
+

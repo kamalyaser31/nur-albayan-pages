@@ -1,5 +1,5 @@
 const app = {
-    idx: 0, score: 0, stats: { ok: 0, err: 0 }, clock: 10.0, timer: null, feedbackTimer: null,
+    idx: 0, score: 0, stats: { ok: 0, err: 0 }, clock: 10.0, timer: null, feedbackTimer: null, advanceTimer: null, _isAdvancing: false,
     hasPlayedGame1: false, hasPlayedGame2: false, hasPlayedGame3: false, currentActiveIndex: null, pendingGame: 0, chartInstance: null,
     mistakeIndices: [], isReviewMode: false, reviewQueue: [], reviewIdx: 0, keyboardBound: false,
     enableGameBreaks: false,
@@ -42,6 +42,19 @@ const app = {
                 const isOverlayOpen = overlay && !overlay.classList.contains('hidden');
                 const learningStage = document.getElementById('learning-stage');
                 const isLearning = learningStage && !learningStage.classList.contains('hidden');
+
+                const ruleStage = document.getElementById('rule-stage');
+                const isRuleActive = ruleStage && !ruleStage.classList.contains('hidden');
+                if (isRuleActive && typeof ruleManager !== 'undefined') {
+                    if (e.key === 'ArrowLeft' || e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        ruleManager.next();
+                    } else if (e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        ruleManager.prev();
+                    }
+                    return;
+                }
 
                 if (isOverlayOpen) {
                     if (e.key === 'Escape') app.closeOverlay();
@@ -192,25 +205,28 @@ const app = {
         return arr;
     },
 
-    // تعقيم وتطهير نصوص HTML ضد هجمات XSS مع حماية كاملة للمخططات
+    // تعقيم وتطهير نصوص HTML ضد هجمات XSS وفق معيار القائمة البيضاء الصارمة (Strict Whitelist)
     setSafeHTML(el, htmlStr) {
         if (!el) return;
         const template = document.createElement('template');
         template.innerHTML = htmlStr || '';
         const content = template.content;
 
-        content.querySelectorAll('script, iframe, object, embed, style, link, svg, math, base, meta, form').forEach(e => e.remove());
+        const ALLOWED_TAGS = new Set(['SPAN', 'BDI', 'RUBY', 'RT', 'B', 'STRONG', 'EM', 'I', 'DIV']);
+        const ALLOWED_ATTRS = new Set(['class', 'style', 'dir', 'lang', 'aria-hidden']);
 
-        const elements = content.querySelectorAll('*');
-        for (let i = 0; i < elements.length; i++) {
-            const child = elements[i];
-            for (let j = child.attributes.length - 1; j >= 0; j--) {
-                const attr = child.attributes[j];
-                const name = attr.name.toLowerCase();
-                const val = attr.value.replace(/\s+/g, '').toLowerCase();
-
-                if (name.startsWith('on') || val.includes('javascript:') || val.includes('data:text/html') || val.includes('vbscript:')) {
-                    child.removeAttribute(attr.name);
+        const allElements = Array.from(content.querySelectorAll('*'));
+        for (const node of allElements) {
+            if (!ALLOWED_TAGS.has(node.tagName.toUpperCase())) {
+                node.replaceWith(...node.childNodes);
+                continue;
+            }
+            for (let j = node.attributes.length - 1; j >= 0; j--) {
+                const attr = node.attributes[j];
+                const attrName = attr.name.toLowerCase();
+                const val = attr.value.trim().toLowerCase();
+                if (!ALLOWED_ATTRS.has(attrName) || val.startsWith('javascript:') || val.includes('data:') || val.includes('vbscript:')) {
+                    node.removeAttribute(attr.name);
                 }
             }
         }
@@ -317,14 +333,14 @@ const app = {
         if (this.timer) { clearInterval(this.timer); this.timer = null; }
 
         if (item.t === 'golden') {
-            Sound.playChime();
+            if (typeof Sound !== 'undefined' && typeof Sound.playChime === 'function') Sound.playChime();
             if (banner) {
                 banner.innerText = "🌟 Golden Word! (+10)";
                 banner.className = "text-center py-1 px-4 rounded-full font-bold text-white shadow-md w-fit bg-amber-500 block animate-bounce uppercase tracking-wide text-xs shrink-0";
                 banner.classList.remove('hidden');
             }
         } else if (item.t === 'danger') {
-            Sound.danger();
+            if (typeof Sound !== 'undefined' && typeof Sound.danger === 'function') Sound.danger();
             if (banner) {
                 banner.innerText = "⚠️ High Focus! (-5)";
                 banner.className = "text-center py-1 px-4 rounded-full font-bold text-white shadow-md w-fit bg-rose-600 block pulse-danger uppercase tracking-wide text-xs shrink-0";
@@ -339,6 +355,19 @@ const app = {
             if (timerBox) timerBox.classList.remove('hidden');
             this.startClock();
         }
+    },
+
+    updateScoreUI() {
+        const scoreEl = document.getElementById('score-val');
+        if (scoreEl) scoreEl.innerText = String(this.score);
+    },
+
+    clearAdvanceTimer() {
+        if (this.advanceTimer) {
+            clearTimeout(this.advanceTimer);
+            this.advanceTimer = null;
+        }
+        this._isAdvancing = false;
     },
 
     startClock() {
@@ -362,11 +391,31 @@ const app = {
         const progText = document.getElementById('progress-text');
         const pBar = document.getElementById('progress-bar');
         if (progText) progText.innerText = `${prefix} ${current} of ${total}`;
-        if (pBar && total > 0) pBar.style.width = `${(current / total) * 100}%`;
+        if (pBar && total > 0) {
+            const pct = Math.round((current / total) * 100);
+            pBar.style.width = `${pct}%`;
+            pBar.setAttribute('aria-valuenow', pct);
+        }
     },
 
     evaluate(isCorrect) {
+        if (this._isAdvancing) return; // حماية ضد السباق وتعدد الضغطات
         const settings = (typeof settingsManager !== 'undefined') ? settingsManager.get() : {};
+
+        // استدعاء التسجيل اللحظي فورياً للطالب النشط
+        if (typeof studentManager !== 'undefined' && studentManager.hasActiveStudent()) {
+            const lessonId = this.getLessonId();
+            const pts = isCorrect ? ((this.isReviewMode) ? 2 : ((typeof settingsManager !== 'undefined' && settingsManager.get().noPenaltyMode) ? 1 : 1)) : 0;
+            let currentWord = null;
+            if (this.isReviewMode && this.reviewQueue && this.reviewIdx < this.reviewQueue.length) {
+                const rIdx = this.reviewQueue[this.reviewIdx];
+                currentWord = (typeof dataset !== 'undefined' && dataset[rIdx]) ? dataset[rIdx] : null;
+            } else if (typeof dataset !== 'undefined' && dataset.length > 0) {
+                const actualIdx = (this.order && this.order[this.idx] !== undefined) ? this.order[this.idx] : this.idx;
+                currentWord = dataset[actualIdx] || null;
+            }
+            studentManager.recordCardEvaluation(lessonId, isCorrect, isCorrect ? pts : 0, currentWord, this.idx, dataset ? dataset.length : 0);
+        }
 
         if (this.isReviewMode) {
             if (!this.reviewQueue || this.reviewIdx >= this.reviewQueue.length) return;
@@ -377,11 +426,16 @@ const app = {
             } else {
                 this.stats.err++;
                 this.triggerFeedback('Keep Practicing ⭐', '#f43f5e', false);
-                Sound.fail();
+                if (typeof Sound !== 'undefined' && typeof Sound.fail === 'function') Sound.fail();
             }
-            const scoreEl = document.getElementById('score-val'); if (scoreEl) scoreEl.innerText = this.score;
+            this.updateScoreUI();
             if (!settings.manualAdvance) {
-                setTimeout(() => this.next(), 600);
+                this._isAdvancing = true;
+                this.clearAdvanceTimer();
+                this.advanceTimer = setTimeout(() => {
+                    this._isAdvancing = false;
+                    this.next();
+                }, 600);
             }
             return;
         }
@@ -410,17 +464,24 @@ const app = {
                 ((type === 'danger') ? 'High Focus! ⚠️' : 'Needs Practice ⭐') :
                 ((type === 'danger') ? '-5 Warning! ⚠️' : '-2 Needs Practice');
             this.triggerFeedback(feedbackText, '#f43f5e', false);
-            Sound.fail();
+            if (typeof Sound !== 'undefined' && typeof Sound.fail === 'function') Sound.fail();
         }
-        const scoreEl = document.getElementById('score-val'); if (scoreEl) scoreEl.innerText = this.score;
+        this.updateScoreUI();
 
         if (!settings.manualAdvance) {
-            setTimeout(() => this.next(), 600);
+            this._isAdvancing = true;
+            this.clearAdvanceTimer();
+            this.advanceTimer = setTimeout(() => {
+                this._isAdvancing = false;
+                this.next();
+            }, 600);
         }
     },
 
     next() {
-        const scoreEl = document.getElementById('score-val'); if (scoreEl) scoreEl.innerText = this.score;
+        this.clearAdvanceTimer();
+        this.updateScoreUI();
+
         if (this.isReviewMode) {
             this.reviewIdx++;
             if (this.reviewIdx < this.reviewQueue.length) {
@@ -440,8 +501,6 @@ const app = {
                 this.jumpTo('transition_1');
             } else if (this.enableGameBreaks && this.idx === third2 && !this.hasPlayedGame2 && dataset.length >= 3) {
                 this.jumpTo('transition_2');
-            } else if (this.enableGameBreaks && this.idx === dataset.length - 1 && !this.hasPlayedGame3 && dataset.length >= 3) {
-                this.jumpTo('transition_3');
             } else {
                 this.idx++;
                 this.render();
@@ -493,6 +552,8 @@ const app = {
     },
 
     prev() {
+        this.clearAdvanceTimer();
+        this.updateScoreUI();
         if (this.isReviewMode) {
             if (this.reviewIdx > 0) { this.reviewIdx--; this.renderReview(); }
         } else {
@@ -610,7 +671,43 @@ const app = {
             if (this.mistakeIndices.length > 0) reviewBtn.classList.remove('hidden');
             else reviewBtn.classList.add('hidden');
         }
+
+        // استدعاء إتمام الدرس وحفظ النتائج للطالب النشط
+        if (typeof studentManager !== 'undefined' && studentManager.hasActiveStudent()) {
+            const lessonId = this.getLessonId();
+            const total = this.stats.ok + this.stats.err;
+            const accuracy = total > 0 ? Math.round((this.stats.ok / total) * 100) : 0;
+            const stars = accuracy >= 90 ? 3 : (accuracy >= 70 ? 2 : 1);
+            studentManager.recordLessonCompletion(lessonId, this.score, accuracy, stars);
+        }
+
         this.drawChart();
+    },
+
+    // استخلاص معرف أو رقم الدرس من PAGE_CONFIG أو مسار الصفحة
+    getLessonId() {
+        if (typeof window !== 'undefined') {
+            if (window.PAGE_CONFIG) {
+                if (window.PAGE_CONFIG.lessonId) return String(window.PAGE_CONFIG.lessonId);
+                if (window.PAGE_CONFIG.id) return String(window.PAGE_CONFIG.id);
+                if (window.PAGE_CONFIG.page) return String(window.PAGE_CONFIG.page);
+                const text = `${window.PAGE_CONFIG.subtitle || ''} ${window.PAGE_CONFIG.title || ''} ${window.PAGE_CONFIG.footer || ''}`;
+                const m = text.match(/(?:Page|صفحة|درس|الدرس)\s*(\d+)/i);
+                if (m) return m[1];
+            }
+            if (window.location && window.location.pathname) {
+                const pathMatch = window.location.pathname.match(/(\d+)\.html/i);
+                if (pathMatch) return pathMatch[1];
+            }
+        }
+        return '1';
+    },
+
+    // معالجة حدث تبديل الطالب
+    onStudentChanged(student) {
+        if (typeof updateActiveStudentPill === 'function') {
+            updateActiveStudentPill();
+        }
     },
 
     drawChart() {
@@ -625,6 +722,18 @@ const app = {
         });
     }
 };
+
+// الاستماع لحدث تبديل الطالب لتحديث واجهة الدرس تلقائياً
+if (typeof window !== 'undefined') {
+    window.addEventListener('nb:student-changed', (e) => {
+        if (typeof updateActiveStudentPill === 'function') {
+            updateActiveStudentPill();
+        }
+        if (typeof app !== 'undefined' && typeof app.onStudentChanged === 'function') {
+            app.onStudentChanged(e && e.detail ? e.detail : null);
+        }
+    });
+}
 
 // تشغيل التطبيق تلقائياً عند جاهزية DOM
 if (typeof document !== 'undefined') {

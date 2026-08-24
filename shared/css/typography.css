@@ -5,15 +5,23 @@
 
 .quran-font,
 .quran-special-font {
-    font-family: 'Amiri', 'Traditional Arabic', serif;
+    font-family: 'Amiri', 'Amiri Quran', 'Scheherazade New', 'Traditional Arabic', serif;
     font-weight: 700;
+    font-feature-settings: "calt" 1, "liga" 1, "mkmk" 1, "mark" 1, "ccmp" 1;
+    text-rendering: optimizeLegibility;
+    font-variant-ligatures: contextual common-ligatures;
+    font-synthesis: none;
+    line-height: 2.1;
+    letter-spacing: normal !important;
+    direction: rtl;
+    unicode-bidi: isolate;
 }
 
-/* Word Diacritic Colors */
-.c-red, .c0, .color-0 { color: #dc2626; }
-.c-blue, .c1, .color-1 { color: #2563eb; }
+/* Word Diacritic Colors (Linked to Central Tokens) */
+.c-red, .c0, .color-0 { color: var(--color-quranic-red, #b91c1c); }
+.c-blue, .c1, .color-1 { color: var(--color-quranic-blue, #1d4ed8); }
 .c-black, .c2, .color-2 { color: #1e293b; }
-.c-purple { color: #9333ea; }
+.c-purple { color: #7e22ce; }
 .sep-bar { color: #cbd5e1; margin: 0 4px; font-weight: 300; }
 
 /* Custom Scrollbar */
@@ -22,15 +30,3 @@
 .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-/* Quranic Font Scale Modes (Settings) */
-html.font-scale-large .letter-box,
-html.font-scale-large .seg-box,
-html.font-scale-large .word-wrapper {
-    font-size: 1.22em !important;
-}
-
-html.font-scale-xlarge .letter-box,
-html.font-scale-xlarge .seg-box,
-html.font-scale-xlarge .word-wrapper {
-    font-size: 1.45em !important;
-}

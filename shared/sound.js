@@ -36,9 +36,11 @@ const Sound = {
                 this._unlocked = true;
             }
             window.removeEventListener('pointerdown', unlock, { capture: true });
+            window.removeEventListener('touchstart', unlock, { capture: true });
             window.removeEventListener('keydown', unlock, { capture: true });
         };
         window.addEventListener('pointerdown', unlock, { capture: true, once: true });
+        window.addEventListener('touchstart', unlock, { capture: true, once: true });
         window.addEventListener('keydown', unlock, { capture: true, once: true });
     },
 
@@ -46,7 +48,7 @@ const Sound = {
     getVol() {
         if (typeof settingsManager !== 'undefined') {
             const s = settingsManager.get();
-            if (!s.soundEnabled) return 0;
+            if (!s || !s.soundEnabled) return 0;
             const rawVol = (typeof s.volume === 'number') ? s.volume : 80;
             if (rawVol <= 0) return 0;
             const normalized = Math.max(0, Math.min(100, rawVol)) / 100;
@@ -55,9 +57,10 @@ const Sound = {
         return 0.64; // 0.8^2
     },
 
-    // تنظيف وفصل عقد الصوت فور انتهاء النغمة لمنع تسريب الذاكرة
+    // تنظيف وفصل عقد الصوت فور انتهاء النغمة لمنع تسريب الذاكرة وقطع الإحالة الحلقية
     _cleanup(osc, gainNode) {
         osc.onended = () => {
+            osc.onended = null;
             try {
                 osc.disconnect();
                 gainNode.disconnect();
@@ -114,8 +117,9 @@ const Sound = {
         osc.connect(gainNode);
         gainNode.connect(ctx.destination);
 
+        const attack = Math.min(0.015, d * 0.2);
         gainNode.gain.setValueAtTime(0.0001, now);
-        gainNode.gain.linearRampToValueAtTime(0.18 * vol, now + 0.015);
+        gainNode.gain.linearRampToValueAtTime(0.18 * vol, now + attack);
         gainNode.gain.exponentialRampToValueAtTime(0.0001, now + d);
         gainNode.gain.setValueAtTime(0, now + d + 0.01);
 
@@ -178,6 +182,7 @@ let _celebrationTimer = null;
 
 function fireCelebration() {
     if (typeof confetti !== 'function') return;
+    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     if (_celebrationActive) return; // حماية ضد الاستدعاء المتزامن المتكرر
 
     _celebrationActive = true;

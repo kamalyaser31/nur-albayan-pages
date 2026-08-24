@@ -16,6 +16,7 @@
 
     const modules = [
         'settings.js',
+        'student-manager.js',
         'sound.js',
         'ui-template.js',
         'app.js',

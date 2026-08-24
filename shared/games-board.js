@@ -1,6 +1,7 @@
 const xoGame = {
-    board: ['', '', '', '', '', '', '', '', ''], currentPlayer: 'X', gameActive: true,
+    board: ['', '', '', '', '', '', '', '', ''], currentPlayer: 'X', gameActive: true, aiTimer: null,
     init() {
+        if (this.aiTimer) { clearTimeout(this.aiTimer); this.aiTimer = null; }
         const container = document.getElementById('xo-board'); if (!container) return; container.textContent = '';
         for (let i = 0; i < 9; i++) {
             let cell = document.createElement('button');
@@ -43,7 +44,11 @@ const xoGame = {
             status.classList.remove('text-yellow-300');
         }
         if (isComp && this.currentPlayer === 'O' && this.gameActive) {
-            setTimeout(() => { if (typeof gameAI !== 'undefined') gameAI.makeXOMove(); }, 450);
+            if (this.aiTimer) clearTimeout(this.aiTimer);
+            this.aiTimer = setTimeout(() => {
+                this.aiTimer = null;
+                if (typeof gameAI !== 'undefined') gameAI.makeXOMove();
+            }, 450);
         }
     },
     checkWin() {
@@ -52,6 +57,7 @@ const xoGame = {
         return null;
     },
     reset() {
+        if (this.aiTimer) { clearTimeout(this.aiTimer); this.aiTimer = null; }
         this.board = ['', '', '', '', '', '', '', '', '']; this.currentPlayer = 'X'; this.gameActive = true;
         const status = document.getElementById('xo-status'); if (status) { status.innerText = 'Player X Turn!'; status.classList.remove('text-yellow-300'); }
         if (typeof app !== 'undefined') app.setGameResumeState('xo-resume-btn', false, '', "Skip & Read ⏭️");
@@ -61,8 +67,9 @@ const xoGame = {
 };
 
 const c4Game = {
-    rows: 6, cols: 7, board: [], currentPlayer: 'red', gameActive: true,
+    rows: 6, cols: 7, board: [], currentPlayer: 'red', gameActive: true, aiTimer: null,
     init() {
+        if (this.aiTimer) { clearTimeout(this.aiTimer); this.aiTimer = null; }
         const container = document.getElementById('c4-board-container'); if (!container) return; container.innerHTML = '';
         this.board = Array(this.rows).fill(null).map(() => Array(this.cols).fill(null));
         for (let r = 0; r < this.rows; r++) {
@@ -97,7 +104,7 @@ const c4Game = {
                 let winCells = this.checkWin(row, col);
                 if (winCells) {
                     let winnerName = this.currentPlayer === 'red' ? 'Red 🔴' : (typeof gameAI !== 'undefined' && gameAI.mode === 'computer' ? 'الكمبيوتر 🤖' : 'Yellow 🟡');
-                    const status = document.getElementById('c4-status'); if (status) { status.textContent = `${winnerName} Wins! 🎉`; status.className = 'text-yellow-300'; }
+                    const status = document.getElementById('c4-status'); if (status) { status.textContent = `${winnerName} Wins! 🎉`; status.classList.add('text-yellow-300'); }
                     this.gameActive = false;
                     if (typeof app !== 'undefined') app.setGameResumeState('c4-resume-btn', true, "Continue Reading 📖");
                     setTimeout(() => {
@@ -120,9 +127,14 @@ const c4Game = {
                 const status = document.getElementById('c4-status');
                 if (status) {
                     status.innerText = (isComp && this.currentPlayer === 'yellow') ? 'الكمبيوتر يفكر... 🤖' : (this.currentPlayer === 'red' ? "Red's Turn 🔴" : "Yellow's Turn 🟡");
+                    status.classList.remove('text-yellow-300');
                 }
                 if (isComp && this.currentPlayer === 'yellow' && this.gameActive) {
-                    setTimeout(() => { if (typeof gameAI !== 'undefined') gameAI.makeC4Move(); }, 450);
+                    if (this.aiTimer) clearTimeout(this.aiTimer);
+                    this.aiTimer = setTimeout(() => {
+                        this.aiTimer = null;
+                        if (typeof gameAI !== 'undefined') gameAI.makeC4Move();
+                    }, 450);
                 }
                 return;
             }
@@ -143,8 +155,9 @@ const c4Game = {
         return check(0, 1) || check(1, 0) || check(1, 1) || check(1, -1);
     },
     reset() {
+        if (this.aiTimer) { clearTimeout(this.aiTimer); this.aiTimer = null; }
         this.currentPlayer = 'red'; this.gameActive = true;
-        const status = document.getElementById('c4-status'); if (status) status.innerText = `Your Turn! Drop a red piece`;
+        const status = document.getElementById('c4-status'); if (status) { status.innerText = `Your Turn! Drop a red piece`; status.classList.remove('text-yellow-300'); }
         if (typeof app !== 'undefined') app.setGameResumeState('c4-resume-btn', false, '', "Skip & Read ⏭️");
         this.init();
     }

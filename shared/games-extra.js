@@ -58,11 +58,23 @@ const memoryGame = {
         this.secondCard.setAttribute('aria-label', `Matched pair: ${this.secondCard.dataset.icon}`);
         this.firstCard.disabled = true;
         this.secondCard.disabled = true;
-        this.firstCard.onclick = null; this.secondCard.onclick = null; this.matchedPairs++; this.resetBoard();
-        if (this.matchedPairs === 8) {
+        this.firstCard.onclick = null;
+        this.secondCard.onclick = null;
+        this.matchedPairs++;
+        this.resetBoard();
+
+        if (typeof Sound !== 'undefined' && typeof Sound.stepUp === 'function') {
+            Sound.stepUp(this.matchedPairs);
+        }
+
+        if (this.matchedPairs === this.cards.length / 2) {
             this.gameActive = false;
-            const status = document.getElementById('memory-status'); if (status) { status.textContent = "🏆 Fantastic! You matched them all!"; status.classList.add('text-yellow-300'); }
-            fireCelebration();
+            const status = document.getElementById('memory-status');
+            if (status) {
+                status.textContent = "🏆 Fantastic! You matched them all!";
+                status.classList.add('text-yellow-300');
+            }
+            if (typeof fireCelebration === 'function') fireCelebration();
             if (typeof app !== 'undefined') app.setGameResumeState('memory-resume-btn', true, "Wordwall Games 🎡");
         }
     },
@@ -110,7 +122,7 @@ const riddlesGame = {
     },
     loadNext() {
         if (this.idx >= this.data.length) {
-            fireCelebration();
+            if (typeof fireCelebration === 'function') fireCelebration();
             const qEl = document.getElementById('riddle-question'); if (qEl) qEl.innerText = "🏆 Unbelievable! You solved all the riddles and earned the Quran Genius Badge!";
             const optsDiv = document.getElementById('riddle-options'); if (optsDiv) optsDiv.textContent = '';
             if (typeof app !== 'undefined') app.setGameResumeState('riddles-resume-btn', true, "Wordwall Room 🎡");
@@ -123,7 +135,9 @@ const riddlesGame = {
         if (optsDiv) {
             riddle.options.forEach((opt, i) => {
                 let btn = document.createElement('button');
+                btn.type = 'button';
                 btn.className = "bg-white/20 hover:bg-white/30 text-xl font-bold py-5 rounded-2xl shadow-md transition-all active:scale-95 text-left px-6 flex justify-between items-center shadow-[0_4px_0_#d97706] active:translate-y-1 active:shadow-none";
+                btn.setAttribute('aria-label', `${opt}, Option ${i + 1}`);
                 btn.innerHTML = `<span>${opt}</span><span class="text-sm opacity-55">Option ${i + 1}</span>`;
                 btn.onclick = () => this.check(i, btn);
                 optsDiv.appendChild(btn);
@@ -139,7 +153,7 @@ const riddlesGame = {
             btn.classList.remove('bg-white/20');
             btn.classList.add('bg-emerald-500');
             if (fb) { fb.innerText = "Genius correct answer! Excellent 👏"; fb.className = "text-lg sm:text-xl font-bold h-8 text-emerald-400 mt-3"; }
-            if (typeof confetti === 'function') confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 } });
+            if (typeof fireCelebration === 'function') fireCelebration();
             this.timer = setTimeout(() => {
                 this.idx++;
                 this.isAnswering = false;

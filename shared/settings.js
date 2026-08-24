@@ -20,15 +20,15 @@ const settingsManager = {
         gameBreaksEnabled: false, // استراحات الألعاب أثناء الدرس
         defaultGameMode: 'computer', // 'computer' (ضد الكمبيوتر) | 'teacher' (مع المعلم)
         defaultDifficulty: 'easy', // 'easy' (سهل) | 'smart' (ذكي)
-        timerEnabled: false, // مؤقت القراءة
         timerDuration: 10, // بالثواني
         fontScale: 'normal', // 'normal' (100%) | 'large' (122%) | 'xlarge' (145%)
         shuffleCards: false, // الترتيب العشوائي للكلمات (منع حفظ الموضع)
         noPenaltyMode: false, // نمط التشجيع الإيجابي (بدون خصم نقاط عند الخطأ)
-        manualAdvance: false // التقدم اليدوي للبطاقات بعد التقييم (للشرح)
+        manualAdvance: false, // التقدم اليدوي للبطاقات بعد التقييم (للشرح)
+        repeatGradingPolicy: 'best' // سياسة تقييم تكرار الدروس: 'best' (أعلى نتيجة) | 'latest' (آخر محاولة) | 'cumulative' (نقاط تراكمية)
     },
 
-    // جلب الإعدادات الحالية من localStorage أو الذاكرة الوسيطة
+    // جلب الإعدادات الحالية من localStorage أو الذاكرة الوسيطة بنسخة معزولة
     get() {
         if (this._memoryCache) {
             return Object.assign({}, this.defaults, this._memoryCache);
@@ -43,7 +43,7 @@ const settingsManager = {
             console.warn('تعذر قراءة الإعدادات من localStorage:', e);
         }
         this._memoryCache = Object.assign({}, this.defaults);
-        return this._memoryCache;
+        return Object.assign({}, this.defaults, this._memoryCache);
     },
 
     // حفظ تعديل جزئي أو كلي وتطبيقه فوراً
@@ -157,6 +157,7 @@ const settingsManager = {
         setVal('cfg-shuffle-cards', 'shuffleCards', true);
         setVal('cfg-no-penalty', 'noPenaltyMode', true);
         setVal('cfg-manual-advance', 'manualAdvance', true);
+        setVal('nb-opt-repeat-policy', 'repeatGradingPolicy');
     },
 
     // إنشاء هيكل النافذة المنبثقة إن لم تكن موجودة في الصفحة
@@ -274,6 +275,22 @@ const settingsManager = {
                         </div>
                     </div>
 
+                    <!-- Section 4: سياسة تقييم تكرار الدروس للطلاب -->
+                    <div class="bg-slate-50 p-3.5 sm:p-4 rounded-2xl border border-slate-200 space-y-3">
+                        <h3 class="font-black text-emerald-800 flex items-center gap-2 text-xs sm:text-sm">
+                            <span aria-hidden="true">📊</span> <span>سياسة تقييم تكرار الدروس</span>
+                        </h3>
+                        <div>
+                            <label for="nb-opt-repeat-policy" class="block text-xs font-bold text-slate-600 mb-1">طريقة احتساب نتيجة الدرس عند تكراره:</label>
+                            <select id="nb-opt-repeat-policy" onchange="settingsManager.save({repeatGradingPolicy: this.value})" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-bold text-xs text-slate-700 outline-none focus:border-emerald-500">
+                                <option value="best">🏆 أعلى نتيجة (أفضل محاولة)</option>
+                                <option value="latest">🔄 آخر محاولة (النتيجة الأحدث)</option>
+                                <option value="cumulative">➕ نقاط تراكمية (إضافة النقاط للرصيد)</option>
+                            </select>
+                            <span class="text-[11px] text-slate-400 block mt-1">تحدد كيفية معالجة نتائج الطالب وسجل إنجازه عند إعادة الدرس أكثر من مرة</span>
+                        </div>
+                    </div>
+
                 </div>
 
                 <!-- Footer Actions -->
@@ -326,12 +343,15 @@ const settingsManager = {
         }
     },
 
-    // إشعار عائم خفيف بحفظ الإعدادات
+    // إشعار عائم بحفظ الإعدادات مع دعم قارئات الشاشة (Screen Reader Live Region)
     showToast(msg) {
         let toast = document.getElementById('nb-settings-toast');
         if (!toast) {
             toast = document.createElement('div');
             toast.id = 'nb-settings-toast';
+            toast.setAttribute('role', 'status');
+            toast.setAttribute('aria-live', 'polite');
+            toast.setAttribute('aria-atomic', 'true');
             toast.className = 'fixed bottom-4 left-1/2 -translate-x-1/2 bg-slate-900/90 text-white font-bold text-xs px-4 py-2 rounded-full shadow-lg z-[100] transition-opacity duration-300 pointer-events-none opacity-0';
             document.body.appendChild(toast);
         }
@@ -344,11 +364,13 @@ const settingsManager = {
     }
 };
 
-// تشغيل وتطبيق الإعدادات تلقائياً عند تحميل DOM
+// تشغيل وتطبيق الإعدادات تلقائياً عند جاهزية المستند
 if (typeof document !== 'undefined') {
-    document.addEventListener('DOMContentLoaded', () => {
-        if (typeof settingsManager !== 'undefined') {
-            settingsManager.apply();
-        }
-    });
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof settingsManager !== 'undefined') settingsManager.apply();
+        });
+    } else {
+        if (typeof settingsManager !== 'undefined') settingsManager.apply();
+    }
 }

@@ -1,14 +1,29 @@
 /**
  * Nour Al-Bayan Interactive Platform - Master Stylesheet Aggregator
- * Imports all 9 modular stylesheets maintaining 100% offline-first compatibility.
+ * Flat 1-Tier Architecture: Zero nested @import waterfalls for optimal FCP/LCP.
  */
 
+/* 1. Tokens & Reset */
 @import url('css/tokens.css');
 @import url('css/base.css');
-@import url('css/utilities.css');
+
+/* 2. Flat Utility Modules (Direct 1-Hop Imports) */
+@import url('css/utilities/layout.css');
+@import url('css/utilities/spacing.css');
+@import url('css/utilities/text.css');
+@import url('css/utilities/colors.css');
+@import url('css/utilities/borders.css');
+@import url('css/utilities/effects.css');
+@import url('css/utilities/buttons.css');
+@import url('css/utilities/responsive.css');
+
+/* 3. Typography, Cards & Components */
 @import url('css/typography.css');
 @import url('css/cards.css');
 @import url('css/components.css');
+
+/* 4. Game Engines & Motion */
 @import url('css/games-wordwall.css');
 @import url('css/games-board.css');
 @import url('css/animations.css');
+

@@ -8,6 +8,13 @@ const wordwallRoom = {
     },
     switchMode(mode) {
         this.mode = mode;
+        if (typeof wheelGame !== 'undefined') wheelGame.reset();
+        if (typeof cardsGame !== 'undefined' && cardsGame.animTimer) {
+            clearTimeout(cardsGame.animTimer);
+            cardsGame.animTimer = null;
+            cardsGame.isAnimating = false;
+        }
+
         document.querySelectorAll('#wordwall-stage .game-tab').forEach(tab => tab.classList.remove('active'));
         const activeTab = document.getElementById(`tab-${mode}`); if (activeTab) activeTab.classList.add('active');
         const boxC = document.getElementById('ww-box-container');
@@ -116,23 +123,49 @@ const wheelGame = {
     },
     draw() {
         if (!this.canvas || !this.ctx || typeof dataset === 'undefined' || dataset.length === 0) return;
-        const numSlices = dataset.length; const sliceAngle = (Math.PI * 2) / numSlices; const radius = this.canvas.width / 2;
+        const numSlices = dataset.length;
+        const sliceAngle = (Math.PI * 2) / numSlices;
+        const radius = this.canvas.width / 2;
         const fontSize = numSlices > 24 ? 'bold 13px Fredoka' : 'bold 17px Fredoka';
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.save(); this.ctx.translate(radius, radius); this.ctx.rotate(this.angle);
+        this.ctx.save();
+        this.ctx.translate(radius, radius);
+        this.ctx.rotate(this.angle);
+
+        // دالة التباين الخطي وفق معيار WCAG 2.1
+        const rLin = (c) => { const v = c / 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+
         for (let i = 0; i < numSlices; i++) {
             const col = wordwallColors[i % wordwallColors.length];
-            this.ctx.beginPath(); this.ctx.moveTo(0, 0); this.ctx.arc(0, 0, radius - 8, i * sliceAngle, (i + 1) * sliceAngle); this.ctx.closePath();
-            this.ctx.fillStyle = col; this.ctx.fill(); this.ctx.lineWidth = 2; this.ctx.strokeStyle = '#ffffff'; this.ctx.stroke();
-            this.ctx.save(); this.ctx.rotate(i * sliceAngle + sliceAngle / 2);
-            const red = parseInt(col.slice(1, 3), 16) / 255;
-            const green = parseInt(col.slice(3, 5), 16) / 255;
-            const blue = parseInt(col.slice(5, 7), 16) / 255;
-            const lum = 0.2126 * red + 0.7152 * green + 0.0722 * blue;
-            this.ctx.fillStyle = lum > 0.45 ? '#1a1a2e' : '#ffffff';
-            this.ctx.font = fontSize; this.ctx.textAlign = 'right'; this.ctx.fillText((i + 1).toString(), radius - 25, 5); this.ctx.restore();
+            this.ctx.beginPath();
+            this.ctx.moveTo(0, 0);
+            this.ctx.arc(0, 0, radius - 8, i * sliceAngle, (i + 1) * sliceAngle);
+            this.ctx.closePath();
+            this.ctx.fillStyle = col;
+            this.ctx.fill();
+            this.ctx.lineWidth = 2;
+            this.ctx.strokeStyle = '#ffffff';
+            this.ctx.stroke();
+
+            this.ctx.save();
+            this.ctx.rotate(i * sliceAngle + sliceAngle / 2);
+            const red = parseInt(col.slice(1, 3), 16);
+            const green = parseInt(col.slice(3, 5), 16);
+            const blue = parseInt(col.slice(5, 7), 16);
+            const lum = 0.2126 * rLin(red) + 0.7152 * rLin(green) + 0.0722 * rLin(blue);
+            this.ctx.fillStyle = lum > 0.38 ? '#0f172a' : '#ffffff';
+            this.ctx.font = fontSize;
+            this.ctx.textAlign = 'right';
+            this.ctx.fillText((i + 1).toString(), radius - 25, 5);
+            this.ctx.restore();
         }
-        this.ctx.beginPath(); this.ctx.arc(0, 0, 30, 0, Math.PI * 2); this.ctx.fillStyle = '#ffffff'; this.ctx.fill(); this.ctx.lineWidth = 4; this.ctx.strokeStyle = '#34d399'; this.ctx.stroke();
+        this.ctx.beginPath();
+        this.ctx.arc(0, 0, 30, 0, Math.PI * 2);
+        this.ctx.fillStyle = '#ffffff';
+        this.ctx.fill();
+        this.ctx.lineWidth = 4;
+        this.ctx.strokeStyle = '#34d399';
+        this.ctx.stroke();
         this.ctx.restore();
     },
     spin() {
@@ -157,9 +190,12 @@ const wheelGame = {
     },
     calculateStoppingSlice() {
         if (typeof dataset === 'undefined' || dataset.length === 0) return;
-        const numSlices = dataset.length; const sliceAngle = (Math.PI * 2) / numSlices;
-        let normalizedAngle = (Math.PI * 2.5 - (this.angle % (Math.PI * 2))) % (Math.PI * 2);
-        let sliceIndex = Math.floor(normalizedAngle / sliceAngle) % numSlices;
+        const numSlices = dataset.length;
+        const sliceAngle = (Math.PI * 2) / numSlices;
+        const TWO_PI = Math.PI * 2;
+        // المؤشر يقع في قمة الدائرة عند 270 درجة (1.5 * PI)
+        const normalizedAngle = ((1.5 * Math.PI - (this.angle % TWO_PI)) % TWO_PI + TWO_PI) % TWO_PI;
+        const sliceIndex = Math.floor(normalizedAngle / sliceAngle) % numSlices;
         const status = document.getElementById('wheel-status');
         if (status) status.innerText = `Wheel landed on Word ${sliceIndex + 1}`;
         this.revealTimer = setTimeout(() => {

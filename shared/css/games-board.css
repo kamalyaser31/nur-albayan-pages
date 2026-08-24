@@ -34,8 +34,8 @@
     border-bottom: 6px solid #172554;
 }
 .c4-cell-new {
-    width: clamp(28px, 6.5vw, 44px);
-    height: clamp(28px, 6.5vw, 44px);
+    width: clamp(34px, 7.5vw, 48px);
+    height: clamp(34px, 7.5vw, 48px);
     border-radius: 50%;
     cursor: pointer;
     background: #0f172a;

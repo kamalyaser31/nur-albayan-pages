@@ -116,6 +116,23 @@ const gameAI = {
                     }
                 }
             }
+
+            // 3. تجنب إهداء الفوز للخصم في الصف الأعلى (Avoid Suicidal Blunder)
+            if (bestCol === -1) {
+                const safeCols = validCols.filter(col => {
+                    const r = this.getC4LowestRow(col);
+                    if (r <= 0) return true;
+                    c4Game.board[r][col] = 'yellow';
+                    c4Game.board[r - 1][col] = 'red';
+                    const wouldEnableLoss = !!c4Game.checkWin(r - 1, col);
+                    c4Game.board[r - 1][col] = null;
+                    c4Game.board[r][col] = null;
+                    return !wouldEnableLoss;
+                });
+                if (safeCols.length > 0) {
+                    bestCol = safeCols[Math.floor(Math.random() * safeCols.length)];
+                }
+            }
         }
 
         // في المستوى السهل أو غياب الشروط: اختيار عمود عشوائي خفيف
