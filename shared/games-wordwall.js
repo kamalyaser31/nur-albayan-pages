@@ -38,8 +38,8 @@ const wordwallRoom = {
                 const promptEl = document.getElementById('box-prompt-text');
                 if (promptEl) {
                     promptEl.innerText = (mode === 'curtain')
-                        ? 'Tap any curtain to reveal the hidden word! 🎭'
-                        : 'Tap any box to reveal the hidden word! 🎁';
+                        ? i18n.t('prompt_curtain')
+                        : i18n.t('prompt_box');
                 }
                 this.renderBoxes();
             }
@@ -87,7 +87,7 @@ const wordwallRoom = {
                         <div class="box-front rounded-2xl flex flex-col items-center justify-center text-white border-[3px] border-amber-300 shadow-lg hover:scale-105 transition-transform overflow-hidden curtain-bg" style="--curtain-color: ${color};">
                             <div class="curtain-drape"></div>
                             <span class="text-4xl sm:text-5xl lg:text-6xl font-black drop-shadow-md z-10">${index + 1}</span>
-                            <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-2 bg-amber-400 text-slate-900 px-3 py-0.5 rounded-full shadow-sm z-10">Reveal</span>
+                            <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-2 bg-amber-400 text-slate-900 px-3 py-0.5 rounded-full shadow-sm z-10">${i18n.t('reveal')}</span>
                         </div>
                         <div class="box-back rounded-2xl flex items-center justify-center text-slate-400 bg-slate-100 border-[3px] border-slate-300 shadow-inner"><span class="text-4xl">✔</span></div>
                     </div>`;
@@ -96,7 +96,7 @@ const wordwallRoom = {
                     <div class="wordwall-box-inner relative w-full h-full duration-500" aria-hidden="true">
                         <div class="box-front rounded-2xl flex flex-col items-center justify-center text-white border-[3px] border-white/40 shadow-lg hover:scale-105 transition-transform" style="background-color: ${color}">
                             <span class="text-4xl sm:text-5xl lg:text-6xl font-black drop-shadow-md">${index + 1}</span>
-                            <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-2 bg-black/20 px-3 py-1 rounded-full backdrop-blur-sm">Open</span>
+                            <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-2 bg-black/20 px-3 py-1 rounded-full backdrop-blur-sm">${i18n.t('open')}</span>
                         </div>
                         <div class="box-back rounded-2xl flex items-center justify-center text-slate-400 bg-slate-100 border-[3px] border-slate-300 shadow-inner"><span class="text-4xl">✔</span></div>
                     </div>`;
@@ -455,7 +455,7 @@ const tilesGame = {
                 <div class="flip-tile-inner" aria-hidden="true">
                     <div class="tile-face tile-front flex flex-col items-center justify-center text-white border-[3px] border-white/40 shadow-lg hover:scale-105 transition-transform" style="background-color: ${color}">
                         <span class="text-4xl sm:text-5xl lg:text-6xl font-black drop-shadow-md">${index + 1}</span>
-                        <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-2 bg-black/25 px-3 py-0.5 rounded-full backdrop-blur-sm">Flip 🀄</span>
+                        <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-2 bg-black/25 px-3 py-0.5 rounded-full backdrop-blur-sm">${i18n.t('flip')} 🀄</span>
                     </div>
                     <div class="tile-face tile-back flex flex-col items-center justify-center p-2 bg-white border-[3px] border-emerald-400 text-slate-800 shadow-xl overflow-hidden">
                         <span class="font-amiri text-2xl sm:text-3xl md:text-4xl font-bold text-emerald-950 leading-relaxed text-center" style="letter-spacing: normal !important;">${wordText}</span>

@@ -79,7 +79,7 @@ function buildAppUI() {
 
     <!-- Navigation Header with Interactive Progress Bar -->
     <header id="top-nav" class="w-full bg-white/95 backdrop-blur-sm border-b border-slate-200/80 px-3 sm:px-6 py-2 flex justify-between items-center shadow-sm shrink-0 z-30 relative">
-        <div id="progress-bar" style="width: 0%;" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Reading progress"></div>
+        <div id="progress-bar" style="width: 0%;" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="${i18n.t('progress_aria')}"></div>
         <div class="w-full max-w-5xl mx-auto flex justify-between items-center gap-2">
             <!-- Score & Timer Pill -->
             <div class="flex items-center gap-2 sm:gap-3">
@@ -92,26 +92,26 @@ function buildAppUI() {
                 </div>
                 <div id="active-student-pill" class="flex items-center gap-1.5 bg-emerald-50/90 border border-emerald-200 px-2.5 sm:px-3 py-1 rounded-full shadow-inner text-xs sm:text-sm font-bold text-emerald-800" role="status" aria-label="الطالب الحالي">
                     <span id="active-student-avatar-icon" class="text-sm">👤</span>
-                    <span id="active-student-name-text" class="max-w-[80px] sm:max-w-[120px] truncate font-black">حصة عامة</span>
+                    <span id="active-student-name-text" class="max-w-[80px] sm:max-w-[120px] truncate font-black">${i18n.t('general_session')}</span>
                 </div>
             </div>
 
             <!-- Teacher Manual Feedback Triggers -->
             <div class="flex items-center gap-1 sm:gap-1.5 bg-slate-50 px-2 sm:px-2.5 py-1 rounded-full border border-slate-200" role="toolbar" aria-label="Teacher praise controls">
-                <button onclick="app.triggerFeedback('⭐', '#f59e0b', true)" class="p-1 sm:p-1.5 bg-amber-100 text-amber-500 rounded-full hover:bg-amber-200 hover:scale-110 transition-all shadow-sm text-base sm:text-lg leading-none" aria-label="Star praise" title="Star">⭐</button>
-                <button onclick="app.triggerFeedback('❤️', '#ef4444', true)" class="p-1 sm:p-1.5 bg-rose-100 text-rose-500 rounded-full hover:bg-rose-200 hover:scale-110 transition-all shadow-sm text-base sm:text-lg leading-none" aria-label="Heart praise" title="Heart">❤️</button>
+                <button onclick="app.triggerFeedback('⭐', '#f59e0b', true)" class="p-1 sm:p-1.5 bg-amber-100 text-amber-500 rounded-full hover:bg-amber-200 hover:scale-110 transition-all shadow-sm text-base sm:text-lg leading-none" aria-label="${i18n.t('praise_star')}" title="Star">⭐</button>
+                <button onclick="app.triggerFeedback('❤️', '#ef4444', true)" class="p-1 sm:p-1.5 bg-rose-100 text-rose-500 rounded-full hover:bg-rose-200 hover:scale-110 transition-all shadow-sm text-base sm:text-lg leading-none" aria-label="${i18n.t('praise_heart')}" title="Heart">❤️</button>
                 <div class="w-px h-4 bg-slate-200 mx-0.5" aria-hidden="true"></div>
-                <button onclick="app.triggerFeedback('Perfect! 🌟', '#8b5cf6', true)" class="px-2 py-0.5 bg-purple-100 text-purple-700 rounded-md font-black text-[10px] sm:text-xs hover:bg-purple-200 transition-colors" aria-label="Perfect praise">Perfect</button>
-                <button onclick="app.triggerFeedback('Excellent! 🏆', '#10b981', true)" class="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-md font-black text-[10px] sm:text-xs hover:bg-emerald-200 transition-colors" aria-label="Excellent praise">Excellent</button>
+                <button onclick="app.triggerFeedback('Perfect! 🌟', '#8b5cf6', true)" class="px-2 py-0.5 bg-purple-100 text-purple-700 rounded-md font-black text-[10px] sm:text-xs hover:bg-purple-200 transition-colors" aria-label="${i18n.t('praise_perfect')}">Perfect</button>
+                <button onclick="app.triggerFeedback('Excellent! 🏆', '#10b981', true)" class="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-md font-black text-[10px] sm:text-xs hover:bg-emerald-200 transition-colors" aria-label="${i18n.t('praise_excellent')}">Excellent</button>
             </div>
 
             <!-- Dropdown Navigator & Settings Button -->
             <div class="flex items-center gap-1.5">
                 <div id="selector-wrapper" class="flex items-center bg-slate-50 px-2 sm:px-3 py-1 rounded-full border border-slate-200 max-w-[130px] sm:max-w-[200px]">
-                    <select id="example-navigator" onchange="app.jumpTo(this.value)" class="bg-transparent text-emerald-700 font-bold text-xs sm:text-sm outline-none cursor-pointer w-full text-center truncate" aria-label="Lesson section navigator">
+                    <select id="example-navigator" onchange="app.jumpTo(this.value)" class="bg-transparent text-emerald-700 font-bold text-xs sm:text-sm outline-none cursor-pointer w-full text-center truncate" aria-label="${i18n.t('nav_section_aria')}">
                     </select>
                 </div>
-                <button onclick="if(typeof settingsManager!=='undefined')settingsManager.open()" class="p-1.5 sm:p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition-colors shadow-sm text-sm sm:text-base leading-none" aria-label="Open Teacher Settings" title="Teacher Settings">⚙️</button>
+                <button onclick="if(typeof settingsManager!=='undefined')settingsManager.open()" class="p-1.5 sm:p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition-colors shadow-sm text-sm sm:text-base leading-none" aria-label="${i18n.t('open_settings_btn')}" title="Teacher Settings">⚙️</button>
             </div>
         </div>
     </header>
@@ -188,16 +188,16 @@ function buildAppUI() {
 
             <div class="w-full max-w-md sm:max-w-lg space-y-2 shrink-0 pb-3 px-2">
                 <div class="grid grid-cols-2 gap-3 sm:gap-4">
-                    <button onclick="app.evaluate(false)" class="bg-rose-500 hover:bg-rose-600 text-white py-3.5 sm:py-4 rounded-[1.75rem] text-lg sm:text-xl shadow-[0_5px_0_#be123c] active:translate-y-[5px] active:shadow-none transition-all flex items-center justify-center gap-2 font-black" aria-label="Mark incorrect">
-                        ❌ Incorrect
+                    <button onclick="app.evaluate(false)" class="bg-rose-500 hover:bg-rose-600 text-white py-3.5 sm:py-4 rounded-[1.75rem] text-lg sm:text-xl shadow-[0_5px_0_#be123c] active:translate-y-[5px] active:shadow-none transition-all flex items-center justify-center gap-2 font-black" aria-label="${i18n.t('mark_incorrect_aria')}">
+                        ❌ ${i18n.t('btn_incorrect')}
                     </button>
-                    <button onclick="app.evaluate(true)" class="bg-emerald-500 hover:bg-emerald-600 text-white py-3.5 sm:py-4 rounded-[1.75rem] text-lg sm:text-xl shadow-[0_5px_0_#047857] active:translate-y-[5px] active:shadow-none transition-all flex items-center justify-center gap-2 font-black" aria-label="Mark correct">
-                        ✔ Correct
+                    <button onclick="app.evaluate(true)" class="bg-emerald-500 hover:bg-emerald-600 text-white py-3.5 sm:py-4 rounded-[1.75rem] text-lg sm:text-xl shadow-[0_5px_0_#047857] active:translate-y-[5px] active:shadow-none transition-all flex items-center justify-center gap-2 font-black" aria-label="${i18n.t('mark_correct_aria')}">
+                        ✔ ${i18n.t('btn_correct')}
                     </button>
                 </div>
                 <div class="flex justify-center pt-1">
-                    <button onclick="app.prev()" class="bg-slate-200/90 hover:bg-slate-300 text-slate-600 py-1.5 px-5 rounded-full text-xs font-bold transition-colors shadow-sm flex items-center gap-1.5" aria-label="Previous card">
-                        <span>⬅</span> <span>Previous Card</span>
+                    <button onclick="app.prev()" class="bg-slate-200/90 hover:bg-slate-300 text-slate-600 py-1.5 px-5 rounded-full text-xs font-bold transition-colors shadow-sm flex items-center gap-1.5" aria-label="${i18n.t('prev_card_aria')}">
+                        <span>⬅</span> <span>${i18n.t('prev_card_btn')}</span>
                     </button>
                 </div>
             </div>
@@ -255,29 +255,29 @@ function buildAppUI() {
         <section id="wordwall-stage" class="hidden w-full h-full flex flex-col items-center py-3 px-2 overflow-hidden bg-slate-50 rounded-3xl border border-slate-200 shadow-inner">
             <div class="w-full max-w-4xl flex flex-col sm:flex-row justify-between items-center mb-3 shrink-0 gap-3 px-3">
                 <h2 class="text-xl sm:text-2xl font-black text-emerald-600 drop-shadow-sm flex items-center gap-2">
-                    <span>🎡</span> Games Room
+                    <span>🎡</span> ${i18n.t('games_room_title')}
                 </h2>
                 <nav class="bg-white p-1 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap gap-1">
-                    <button onclick="wordwallRoom.switchMode('box')" id="tab-box" class="game-tab active py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" aria-label="Open Boxes game">
-                        <span class="text-base sm:text-lg">🎁</span> <span class="hidden sm:inline">Box</span>
+                    <button onclick="wordwallRoom.switchMode('box')" id="tab-box" class="game-tab active py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" aria-label="${i18n.t('game_box_tab')}">
+                        <span class="text-base sm:text-lg">🎁</span> <span class="hidden sm:inline">${i18n.t('game_box_tab')}</span>
                     </button>
-                    <button onclick="wordwallRoom.switchMode('curtain')" id="tab-curtain" class="game-tab py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" aria-label="Curtain Reveal game">
-                        <span class="text-base sm:text-lg">🎭</span> <span class="hidden sm:inline">Curtain</span>
+                    <button onclick="wordwallRoom.switchMode('curtain')" id="tab-curtain" class="game-tab py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" aria-label="${i18n.t('game_curtain_tab')}">
+                        <span class="text-base sm:text-lg">🎭</span> <span class="hidden sm:inline">${i18n.t('game_curtain_tab')}</span>
                     </button>
-                    <button onclick="wordwallRoom.switchMode('ladder')" id="tab-ladder" class="game-tab py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" aria-label="Mastery Ladder game">
-                        <span class="text-base sm:text-lg">🪜</span> <span class="hidden sm:inline">Ladder</span>
+                    <button onclick="wordwallRoom.switchMode('ladder')" id="tab-ladder" class="game-tab py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" aria-label="${i18n.t('game_ladder_tab')}">
+                        <span class="text-base sm:text-lg">🪜</span> <span class="hidden sm:inline">${i18n.t('game_ladder_tab')}</span>
                     </button>
-                    <button onclick="wordwallRoom.switchMode('wheel')" id="tab-wheel" class="game-tab py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" aria-label="Spin the wheel game">
-                        <span class="text-base sm:text-lg">🎡</span> <span class="hidden sm:inline">Wheel</span>
+                    <button onclick="wordwallRoom.switchMode('wheel')" id="tab-wheel" class="game-tab py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" aria-label="${i18n.t('game_wheel_tab')}">
+                        <span class="text-base sm:text-lg">🎡</span> <span class="hidden sm:inline">${i18n.t('game_wheel_tab')}</span>
                     </button>
-                    <button onclick="wordwallRoom.switchMode('cards')" id="tab-cards" class="game-tab py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" aria-label="Random cards game">
-                        <span class="text-base sm:text-lg">🃏</span> <span class="hidden sm:inline">Cards</span>
+                    <button onclick="wordwallRoom.switchMode('cards')" id="tab-cards" class="game-tab py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" aria-label="${i18n.t('game_cards_tab')}">
+                        <span class="text-base sm:text-lg">🃏</span> <span class="hidden sm:inline">${i18n.t('game_cards_tab')}</span>
                     </button>
-                    <button onclick="wordwallRoom.switchMode('tiles')" id="tab-tiles" class="game-tab py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" aria-label="3D Flip Tiles game">
-                        <span class="text-base sm:text-lg">🀄</span> <span class="hidden sm:inline">Tiles</span>
+                    <button onclick="wordwallRoom.switchMode('tiles')" id="tab-tiles" class="game-tab py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" aria-label="${i18n.t('game_tiles_tab')}">
+                        <span class="text-base sm:text-lg">🀄</span> <span class="hidden sm:inline">${i18n.t('game_tiles_tab')}</span>
                     </button>
-                    <button onclick="wordwallRoom.switchMode('honeycomb')" id="tab-honeycomb" class="game-tab py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" aria-label="Honeycomb Matrix game">
-                        <span class="text-base sm:text-lg">⬡</span> <span class="hidden sm:inline">Honeycomb</span>
+                    <button onclick="wordwallRoom.switchMode('honeycomb')" id="tab-honeycomb" class="game-tab py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" aria-label="${i18n.t('game_honeycomb_tab')}">
+                        <span class="text-base sm:text-lg">⬡</span> <span class="hidden sm:inline">${i18n.t('game_honeycomb_tab')}</span>
                     </button>
                 </nav>
             </div>
@@ -285,7 +285,7 @@ function buildAppUI() {
             <div class="flex-1 w-full flex flex-col items-center justify-center overflow-hidden relative min-h-0">
                 <div id="ww-box-container" class="w-full h-full flex flex-col items-center min-h-0 overflow-hidden">
                     <div id="box-prompt-text" class="bg-indigo-100 text-indigo-800 px-3.5 py-1 rounded-full text-xs font-bold mb-2 shrink-0 shadow-sm border border-indigo-200">
-                        Tap any box to reveal the hidden word!
+                        ${i18n.t('prompt_box')}
                     </div>
                     <div id="box-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2.5 sm:gap-3.5 w-full max-w-5xl flex-1 overflow-y-auto p-3 custom-scrollbar pb-20"></div>
                 </div>
@@ -319,10 +319,10 @@ function buildAppUI() {
                     <div class="w-full max-w-md shrink-0 space-y-2 pb-1">
                         <div class="grid grid-cols-2 gap-3">
                             <button onclick="ladderGame.grade(false)" class="bg-rose-500 hover:bg-rose-600 text-white py-3 rounded-2xl text-base font-black shadow-[0_4px_0_#be123c] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2" aria-label="Mark Missed, Step Down">
-                                ❌ Missed (1)
+                                ❌ ${i18n.t('btn_incorrect')} (1)
                             </button>
                             <button onclick="ladderGame.grade(true)" class="bg-emerald-500 hover:bg-emerald-600 text-white py-3 rounded-2xl text-base font-black shadow-[0_4px_0_#047857] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2" aria-label="Mark Correct, Step Up">
-                                ✔ Correct (2)
+                                ✔ ${i18n.t('btn_correct')} (2)
                             </button>
                         </div>
                         <div class="flex justify-center">
@@ -333,7 +333,7 @@ function buildAppUI() {
                     </div>
                 </div>
 
-                <div id="ww-wheel-container" class="hidden w-full h-full flex flex-col justify-center items-center gap-4" role="region" aria-label="Spin the wheel game">
+                <div id="ww-wheel-container" class="hidden w-full h-full flex flex-col justify-center items-center gap-4" role="region" aria-label="${i18n.t('game_wheel_tab')}">
                     <div class="bg-amber-100 text-amber-800 px-3.5 py-1 rounded-full text-xs font-bold shrink-0 shadow-sm border border-amber-200" id="wheel-status" role="status" aria-live="polite">
                         Tap SPIN or the center circle to rotate!
                     </div>
@@ -346,9 +346,9 @@ function buildAppUI() {
                     </div>
                 </div>
 
-                <div id="ww-cards-container" class="hidden w-full h-full flex flex-col justify-center items-center gap-6" role="region" aria-label="Random cards game">
+                <div id="ww-cards-container" class="hidden w-full h-full flex flex-col justify-center items-center gap-6" role="region" aria-label="${i18n.t('game_cards_tab')}">
                     <div class="bg-rose-100 text-rose-800 px-3.5 py-1 rounded-full text-xs font-bold shrink-0 shadow-sm border border-rose-200">
-                        Tap the deck to deal a random card!
+                        ${i18n.t('prompt_cards')}
                     </div>
                     <div class="card-pile flex justify-center items-center shrink-0 mt-2">
                         <div class="stacked-card bg-rose-700 border-[3px] border-white/50 transform rotate-6 translate-x-4 translate-y-3" aria-hidden="true"></div>
@@ -364,11 +364,11 @@ function buildAppUI() {
                 <div id="ww-tiles-container" class="hidden w-full h-full flex flex-col items-center min-h-0 overflow-hidden" role="region" aria-label="3D Flip Tiles Game">
                     <div class="w-full flex flex-col sm:flex-row justify-between items-center bg-white/90 border border-slate-200 rounded-2xl px-4 py-2 mb-2 shrink-0 shadow-sm max-w-5xl gap-2">
                         <div id="tiles-prompt-text" class="bg-indigo-100 text-indigo-900 px-3.5 py-1 rounded-full text-xs font-black shadow-xs border border-indigo-200">
-                            انقر على أي بلاطة لقلبها وقراءة الكلمة! 🀄
+                            ${i18n.t('prompt_tiles')}
                         </div>
                         <div class="flex items-center gap-2">
-                            <button onclick="tilesGame.flipAll()" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-black px-3.5 py-1 rounded-full text-xs shadow-xs transition-colors" aria-label="قلب جميع البلاطات">🔄 قلب الكل</button>
-                            <button onclick="tilesGame.reset()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-black px-3.5 py-1 rounded-full text-xs shadow-xs transition-colors" aria-label="إعادة ضبط البلاطات">⚡ إعادة ضبط</button>
+                            <button onclick="tilesGame.flipAll()" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-black px-3.5 py-1 rounded-full text-xs shadow-xs transition-colors" aria-label="قلب جميع البلاطات">🔄 ${i18n.t('flip_all_tiles')}</button>
+                            <button onclick="tilesGame.reset()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-black px-3.5 py-1 rounded-full text-xs shadow-xs transition-colors" aria-label="إعادة ضبط البلاطات">⚡ ${i18n.t('reset_tiles')}</button>
                         </div>
                     </div>
                     <div id="tiles-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2.5 sm:gap-3.5 w-full max-w-5xl flex-1 overflow-y-auto p-3 custom-scrollbar pb-20"></div>
@@ -378,10 +378,10 @@ function buildAppUI() {
                 <div id="ww-honeycomb-container" class="hidden w-full h-full flex flex-col items-center min-h-0 overflow-hidden" role="region" aria-label="Honeycomb Matrix Game">
                     <div class="w-full flex justify-between items-center bg-white/90 border border-slate-200 rounded-2xl px-4 py-2 mb-2 shrink-0 shadow-sm max-w-5xl">
                         <div class="flex items-center gap-2">
-                            <span class="text-amber-600 font-black text-sm">⬡ خريطة خلايا النحل</span>
+                            <span class="text-amber-600 font-black text-sm">⬡ ${i18n.t('honeycomb_map_title')}</span>
                             <span id="hex-progress-badge" class="bg-amber-100 text-amber-950 px-3 py-0.5 rounded-full text-xs font-black">المتقن: 0 من 0</span>
                         </div>
-                        <button onclick="honeycombGame.reset()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-black px-3.5 py-1 rounded-full text-xs shadow-xs transition-colors" aria-label="إعادة ضبط خلايا النحل">🔄 إعادة ضبط</button>
+                        <button onclick="honeycombGame.reset()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-black px-3.5 py-1 rounded-full text-xs shadow-xs transition-colors" aria-label="إعادة ضبط خلايا النحل">🔄 ${i18n.t('reset_honeycomb')}</button>
                     </div>
                     <div id="honeycomb-grid-container" class="w-full max-w-5xl flex-1 overflow-y-auto p-3 custom-scrollbar pb-20">
                         <div id="honeycomb-board" class="honeycomb-grid"></div>
@@ -390,8 +390,8 @@ function buildAppUI() {
             </div>
             
             <div class="flex justify-center w-full mt-2 shrink-0 pt-2 border-t border-slate-200">
-                <button onclick="app.finishToSummary()" class="bg-slate-800 hover:bg-slate-900 text-white px-6 py-2.5 rounded-full font-black text-xs sm:text-sm shadow-md transition-transform hover:-translate-y-0.5 flex items-center gap-2" aria-label="View final performance report">
-                    <span>View Final Report</span> <span class="text-base" aria-hidden="true">🏆</span>
+                <button onclick="app.finishToSummary()" class="bg-slate-800 hover:bg-slate-900 text-white px-6 py-2.5 rounded-full font-black text-xs sm:text-sm shadow-md transition-transform hover:-translate-y-0.5 flex items-center gap-2" aria-label="${i18n.t('view_final_report_aria')}">
+                    <span>${i18n.t('view_final_report_btn')}</span> <span class="text-base" aria-hidden="true">🏆</span>
                 </button>
             </div>
         </section>
@@ -401,17 +401,17 @@ function buildAppUI() {
             <div class="giant-word-overlay bg-white rounded-[2.5rem] w-full max-w-3xl max-h-[90vh] p-5 sm:p-8 flex flex-col justify-between items-center shadow-2xl border-4 border-emerald-400 overflow-y-auto custom-scrollbar">
                 <div class="w-full flex justify-between items-center px-2 shrink-0 mb-3">
                     <span id="revealed-info" class="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full font-bold text-xs uppercase tracking-wider">Question</span>
-                    <button onclick="app.closeOverlay()" class="bg-slate-100 text-slate-500 hover:bg-rose-100 hover:text-rose-600 px-3.5 py-1 rounded-full text-xs font-black transition-colors" aria-label="Close dialog">✕ Close</button>
+                    <button onclick="app.closeOverlay()" class="bg-slate-100 text-slate-500 hover:bg-rose-100 hover:text-rose-600 px-3.5 py-1 rounded-full text-xs font-black transition-colors" aria-label="${i18n.t('close')}">✕ ${i18n.t('close')}</button>
                 </div>
                 <div id="giant-arabic-word" class="flex-1 flex items-center justify-center w-full py-4 min-h-[160px]" role="region" aria-label="Revealed Word" aria-live="polite">
                 </div>
                 <div class="w-full max-w-sm shrink-0 mt-4">
                     <div class="grid grid-cols-2 gap-3">
                         <button onclick="app.gradeResult(false)" class="bg-rose-500 hover:bg-rose-600 text-white py-3.5 rounded-2xl text-base shadow-[0_4px_0_#be123c] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2 font-black" aria-label="Mark as missed">
-                            ❌ Missed
+                            ❌ ${i18n.t('btn_incorrect')}
                         </button>
                         <button onclick="app.gradeResult(true)" class="bg-emerald-500 hover:bg-emerald-600 text-white py-3.5 rounded-2xl text-base shadow-[0_4px_0_#047857] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2 font-black" aria-label="Mark as perfect">
-                            ✔ Perfect
+                            ✔ ${i18n.t('txt_perfect')}
                         </button>
                     </div>
                 </div>
@@ -420,10 +420,10 @@ function buildAppUI() {
 
         <!-- STAGE 5: FINAL SUMMARY SCREEN -->
         <section id="summary-screen" class="hidden w-full max-w-2xl bg-white rounded-[2.5rem] p-6 sm:p-8 shadow-2xl text-center space-y-5 border-4 border-emerald-100 shrink-0 my-auto z-10" role="region" aria-label="Final performance summary">
-            <h2 class="text-3xl sm:text-4xl font-black text-slate-800">Challenge Completed! 🎉</h2>
+            <h2 class="text-3xl sm:text-4xl font-black text-slate-800">${i18n.t('challenge_completed_title')}</h2>
             <div class="grid grid-cols-2 gap-4 items-center">
                 <div class="space-y-2">
-                    <span class="text-slate-400 font-bold uppercase text-xs sm:text-sm tracking-wider">Points Gathered</span>
+                    <span class="text-slate-400 font-bold uppercase text-xs sm:text-sm tracking-wider">${i18n.t('points_gathered_label')}</span>
                     <div id="final-score" class="text-5xl sm:text-6xl font-black text-emerald-600 drop-shadow-sm leading-none" role="status" aria-live="polite">0</div>
                 </div>
                 <div class="flex flex-col items-center">
@@ -432,10 +432,10 @@ function buildAppUI() {
             </div>
             <div class="flex flex-wrap justify-center pt-2 gap-3">
                 <button id="btn-review-mistakes" onclick="app.startReview()" class="hidden bg-rose-500 hover:bg-rose-600 text-white text-base font-bold py-3 px-8 rounded-full shadow-lg transition-all flex items-center gap-2" aria-label="Review mistakes made during challenge">
-                    <span>Review Mistakes</span> <span aria-hidden="true">🎯</span>
+                    <span>${i18n.t('review_mistakes_btn')}</span> <span aria-hidden="true">🎯</span>
                 </button>
-                <button onclick="app.jumpTo('ww_box')" class="bg-slate-200 text-slate-700 text-base font-bold py-3 px-6 rounded-full shadow-md hover:bg-slate-300 transition-all" aria-label="Open Games Room">Games Room 🎮</button>
-                <button onclick="location.reload()" class="bg-slate-900 text-white text-base font-bold py-3 px-8 rounded-full shadow-lg hover:bg-black transition-all" aria-label="Play lesson challenge again">Play Again 🔄</button>
+                <button onclick="app.jumpTo('ww_box')" class="bg-slate-200 text-slate-700 text-base font-bold py-3 px-6 rounded-full shadow-md hover:bg-slate-300 transition-all" aria-label="Open Games Room">${i18n.t('games_room_title')} 🎮</button>
+                <button onclick="location.reload()" class="bg-slate-900 text-white text-base font-bold py-3 px-8 rounded-full shadow-lg hover:bg-black transition-all" aria-label="Play lesson challenge again">${i18n.t('play_again_btn')}</button>
             </div>
         </section>
 
