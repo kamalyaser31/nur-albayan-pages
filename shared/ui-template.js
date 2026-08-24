@@ -203,6 +203,20 @@ function buildAppUI() {
                 <div id="status-banner" class="text-center py-1 px-4 rounded-full font-bold text-white shadow-md hidden text-xs uppercase tracking-wide" role="status" aria-live="polite"></div>
             </div>
 
+            <!-- Session Drill Active Banner -->
+            <div id="session-drill-banner" class="hidden w-full max-w-2xl mx-auto px-4 py-2 bg-gradient-to-r from-rose-500 via-amber-500 to-rose-600 text-white rounded-2xl shadow-md flex items-center justify-between gap-3 shrink-0" role="region" aria-label="${i18n.t('session_drill_title')}" aria-live="polite">
+                <div class="flex items-center gap-2 font-black text-xs sm:text-sm">
+                    <span class="text-base sm:text-lg animate-pulse" aria-hidden="true">🎯</span>
+                    <span id="session-drill-title">${i18n.t('session_drill_title')}</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span id="session-drill-step-indicator" class="bg-black/25 px-3 py-1 rounded-full text-xs font-bold font-mono tracking-wide" aria-live="polite">
+                        ${i18n.t('session_drill_banner_step', { current: '<span id="drill-cur">1</span>', total: '<span id="drill-total">3</span>' })}
+                    </span>
+                    <button type="button" onclick="app.openEarlyExitModal()" class="w-7 h-7 bg-white/20 hover:bg-white/30 text-white rounded-full flex items-center justify-center font-black text-xs transition-colors cursor-pointer" aria-label="${i18n.t('close')}" title="${i18n.t('close')}">✕</button>
+                </div>
+            </div>
+
             <div class="flex-1 flex items-center justify-center w-full px-2 py-1 overflow-hidden" id="word-display-area" role="region" aria-label="${i18n.t('aria_current_word')}" aria-live="polite" aria-atomic="true"></div>
 
             <div class="w-full max-w-md sm:max-w-lg space-y-2 shrink-0 pb-3 px-2">
@@ -273,9 +287,15 @@ function buildAppUI() {
         <!-- STAGE 4: WORDWALL PLAYROOM -->
         <section id="wordwall-stage" class="hidden w-full h-full flex flex-col items-center py-3 px-2 overflow-hidden bg-slate-50 rounded-3xl border border-slate-200 shadow-inner">
             <div class="w-full max-w-4xl flex flex-col sm:flex-row justify-between items-center mb-3 shrink-0 gap-3 px-3">
-                <h2 class="text-xl sm:text-2xl font-black text-emerald-600 drop-shadow-sm flex items-center gap-2">
-                    <span>🎡</span> ${i18n.t('games_room_title')}
-                </h2>
+                <div class="flex items-center gap-2.5 flex-wrap">
+                    <h2 class="text-xl sm:text-2xl font-black text-emerald-600 drop-shadow-sm flex items-center gap-2">
+                        <span>🎡</span> ${i18n.t('games_room_title')}
+                    </h2>
+                    <button type="button" id="btn-ww-mistakes-filter" onclick="if(typeof wordwallRoom !== 'undefined' && wordwallRoom.toggleMistakesFilter) wordwallRoom.toggleMistakesFilter();" class="px-3 py-1 bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 rounded-full font-bold text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer" aria-label="${i18n.t('aria_ww_filter_mistakes')}" title="${i18n.t('ww_filter_session_mistakes')}">
+                        <span aria-hidden="true">🎯</span>
+                        <span id="ww-filter-text">${i18n.t('ww_filter_session_mistakes')}</span>
+                    </button>
+                </div>
                 <nav class="bg-white p-1 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap gap-1">
                     <button onclick="wordwallRoom.switchMode('box')" id="tab-box" class="game-tab active py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" aria-label="${i18n.t('game_box_tab')}">
                         <span class="text-base sm:text-lg">🎁</span> <span class="hidden sm:inline">${i18n.t('game_box_tab')}</span>
@@ -437,6 +457,32 @@ function buildAppUI() {
             </div>
         </div>
 
+        <!-- EARLY EXIT MODAL FOR SESSION DRILL -->
+        <div id="early-exit-modal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex flex-col justify-center items-center p-4 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="early-exit-title">
+            <div class="bg-white rounded-[2.5rem] w-full max-w-md p-6 sm:p-7 flex flex-col items-center text-center shadow-2xl border-4 border-rose-200 animate-in fade-in zoom-in duration-150" dir="${(typeof i18n !== 'undefined' && i18n.getActiveMeta) ? i18n.getActiveMeta().dir : 'rtl'}">
+                <div class="w-16 h-16 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-3xl mb-3 shadow-inner" aria-hidden="true">
+                    ⚠️
+                </div>
+                <h3 id="early-exit-title" class="text-xl sm:text-2xl font-black text-slate-800 mb-2">
+                    ${i18n.t('early_exit_title')}
+                </h3>
+                <p id="early-exit-desc" class="text-slate-600 font-bold text-xs sm:text-sm leading-relaxed mb-6">
+                    ${i18n.t('early_exit_desc')}
+                </p>
+                <div class="w-full flex flex-col gap-2.5">
+                    <button type="button" id="btn-early-exit-save" onclick="app.confirmEarlyExit('save')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3 px-4 rounded-2xl text-sm shadow-[0_3px_0_#047857] active:translate-y-0.5 active:shadow-none transition-all flex items-center justify-center gap-2 cursor-pointer">
+                        <span>💾</span> <span>${i18n.t('early_exit_save_btn')}</span>
+                    </button>
+                    <button type="button" id="btn-early-exit-cancel" onclick="app.confirmEarlyExit('cancel')" class="w-full bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 font-black py-3 px-4 rounded-2xl text-sm transition-colors flex items-center justify-center gap-2 cursor-pointer">
+                        <span>🔄</span> <span>${i18n.t('early_exit_cancel_btn')}</span>
+                    </button>
+                    <button type="button" id="btn-early-exit-resume" onclick="app.closeEarlyExitModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 px-4 rounded-2xl text-xs transition-colors cursor-pointer mt-1">
+                        ${i18n.t('early_exit_resume_btn')}
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- STAGE 5: FINAL SUMMARY SCREEN -->
         <section id="summary-screen" class="hidden w-full max-w-2xl bg-white rounded-[2.5rem] p-6 sm:p-8 shadow-2xl text-center space-y-5 border-4 border-emerald-100 shrink-0 my-auto z-10" role="region" aria-label="${i18n.t('aria_final_summary')}">
             <h2 class="text-3xl sm:text-4xl font-black text-slate-800">${i18n.t('challenge_completed_title')}</h2>
@@ -450,7 +496,7 @@ function buildAppUI() {
                 </div>
             </div>
             <div class="flex flex-wrap justify-center pt-2 gap-3">
-                <button id="btn-review-mistakes" onclick="app.startReview()" class="hidden bg-rose-500 hover:bg-rose-600 text-white text-base font-bold py-3 px-8 rounded-full shadow-lg transition-all flex items-center gap-2" aria-label="${i18n.t('aria_review_mistakes')}">
+                <button type="button" id="btn-review-mistakes" onclick="app.startSessionDrill()" class="hidden bg-rose-500 hover:bg-rose-600 text-white text-base font-bold py-3 px-8 rounded-full shadow-lg transition-all flex items-center gap-2 cursor-pointer" aria-label="${i18n.t('aria_review_mistakes')}" title="${i18n.t('review_mistakes_btn')}">
                     <span>${i18n.t('review_mistakes_btn')}</span> <span aria-hidden="true">🎯</span>
                 </button>
                 <button onclick="app.jumpTo('ww_box')" class="bg-slate-200 text-slate-700 text-base font-bold py-3 px-6 rounded-full shadow-md hover:bg-slate-300 transition-all" aria-label="${i18n.t('aria_open_games')}">${i18n.t('games_room_title')} 🎮</button>
@@ -482,7 +528,7 @@ function buildAppUI() {
  * تطبيق حصر واستعادة التركيز (Focus Trap & Restoration) للنوافذ المنبثقة التفاعلية
  */
 function setupModalAccessibility() {
-    const modalIds = ['word-overlay', 'game-transition-stage'];
+    const modalIds = ['word-overlay', 'game-transition-stage', 'early-exit-modal'];
     const focusableSelector = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
     let lastFocusedElement = null;

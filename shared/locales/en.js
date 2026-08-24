@@ -345,7 +345,26 @@
         "aria_step_crown": "Step {step}, Top Crown 🏆",
         "aria_teacher_praise_toolbar": "Teacher praise and motivation toolbar",
         "skip_to_content": "Skip to main content",
-        "edit_student": "Edit Student Profile"
+        "edit_student": "Edit Student Profile",
+        "remediation_drill_mode_label": "Remediation Drill Mode:",
+        "drill_mode_loop": "Loop Words until Mastery (Loop)",
+        "drill_mode_single_pass": "Single Pass",
+        "drill_mode_instant_repeat": "Instant Repeat 3 Times (Instant Repeat)",
+        "session_drill_title": "Mistakes Correction Drill",
+        "session_drill_banner_step": "Word {current} of {total}",
+        "session_drill_completed": "Mistakes drill completed successfully! 🎉",
+        "btn_instant_remediation": "Instant Remediation",
+        "btn_repeat_drill": "Repeat Drill 🔄",
+        "early_exit_title": "End Remediation Session",
+        "early_exit_desc": "Would you like to save mastered words and exit, or cancel the drill?",
+        "early_exit_save_btn": "Save Mastered & Exit",
+        "early_exit_cancel_btn": "Cancel Drill & Reset",
+        "early_exit_resume_btn": "Resume Drill",
+        "ww_filter_all_words": "All Words 📚",
+        "ww_filter_session_mistakes": "Today's Mistakes 🎯",
+        "aria_early_exit_modal": "End mistakes drill confirmation modal",
+        "aria_drill_cur": "Current word in remediation drill",
+        "aria_ww_filter_mistakes": "Toggle word filter between session mistakes and all words"
 };
 
     if (typeof i18n !== 'undefined') {

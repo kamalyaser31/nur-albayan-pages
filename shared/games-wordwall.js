@@ -1,7 +1,99 @@
 const wordwallRoom = {
     mode: 'box', openedBoxes: new Set(),
+    filterSessionMistakes: false,
+
+    getActiveDataset() {
+        if (typeof dataset === 'undefined' || !Array.isArray(dataset)) return [];
+        if (!this.filterSessionMistakes) return dataset;
+
+        const mistakes = (typeof app !== 'undefined')
+            ? ((app.sessionMistakesHistory && app.sessionMistakesHistory.length > 0) ? app.sessionMistakesHistory : (app.mistakeIndices || []))
+            : [];
+
+        if (!mistakes || mistakes.length === 0) {
+            return dataset;
+        }
+
+        return mistakes.map(idx => {
+            const item = dataset[idx];
+            if (!item) return null;
+            return Object.assign({}, item, { _origIndex: idx });
+        }).filter(Boolean);
+    },
+
+    toggleMistakesFilter() {
+        const mistakes = (typeof app !== 'undefined')
+            ? ((app.sessionMistakesHistory && app.sessionMistakesHistory.length > 0) ? app.sessionMistakesHistory : (app.mistakeIndices || []))
+            : [];
+
+        if (!this.filterSessionMistakes && (!mistakes || mistakes.length === 0)) {
+            const isAr = (typeof i18n !== 'undefined' && i18n.getLocale() === 'ar');
+            const noMistakesMsg = isAr ? 'لا توجد عثرات مسجلة في هذه الجلسة! 🌟' : 'No session mistakes recorded! 🌟';
+            if (typeof app !== 'undefined' && typeof app.triggerFeedback === 'function') {
+                app.triggerFeedback(noMistakesMsg, '#10b981', true);
+            }
+            return;
+        }
+
+        this.filterSessionMistakes = !this.filterSessionMistakes;
+        this.updateFilterButtonUI();
+
+        // إعادة تحديث شبكة الألعاب فورياً لتقتصر على عثرات الجلسة أو جميع الكلمات
+        this.openedBoxes.clear();
+        if (this.mode === 'box' || this.mode === 'curtain') {
+            this.renderBoxes();
+        } else if (this.mode === 'wheel') {
+            if (typeof wheelGame !== 'undefined') {
+                wheelGame.reset();
+                wheelGame.draw();
+            }
+        } else if (this.mode === 'cards') {
+            if (typeof cardsGame !== 'undefined') {
+                cardsGame.init();
+            }
+        } else if (this.mode === 'ladder') {
+            if (typeof ladderGame !== 'undefined') {
+                ladderGame.init();
+            }
+        } else if (this.mode === 'tiles') {
+            if (typeof tilesGame !== 'undefined') {
+                tilesGame.reset();
+            }
+        } else if (this.mode === 'honeycomb') {
+            if (typeof honeycombGame !== 'undefined') {
+                honeycombGame.reset();
+            }
+        }
+    },
+
+    updateFilterButtonUI() {
+        const btn = document.getElementById('btn-ww-mistakes-filter');
+        const textEl = document.getElementById('ww-filter-text');
+        const isAr = (typeof i18n !== 'undefined' && i18n.getLocale() === 'ar');
+
+        const mistakes = (typeof app !== 'undefined')
+            ? ((app.sessionMistakesHistory && app.sessionMistakesHistory.length > 0) ? app.sessionMistakesHistory : (app.mistakeIndices || []))
+            : [];
+        const count = mistakes ? mistakes.length : 0;
+
+        if (this.filterSessionMistakes) {
+            if (textEl) textEl.textContent = isAr ? `عثرات الحصة (${count})` : `Session Mistakes (${count})`;
+            if (btn) {
+                btn.className = 'px-3 py-1 bg-rose-500 hover:bg-rose-600 text-white border border-rose-600 rounded-full font-black text-xs shadow-sm transition-all flex items-center gap-1.5 cursor-pointer';
+                btn.setAttribute('aria-pressed', 'true');
+            }
+        } else {
+            if (textEl) textEl.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('ww_filter_session_mistakes') : 'عثرات الحصة 🎯';
+            if (btn) {
+                btn.className = 'px-3 py-1 bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 rounded-full font-bold text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer';
+                btn.setAttribute('aria-pressed', 'false');
+            }
+        }
+    },
+
     init() {
         this.renderBoxes();
+        this.updateFilterButtonUI();
         if (typeof wheelGame !== 'undefined') wheelGame.init();
         if (typeof cardsGame !== 'undefined') cardsGame.init();
         if (typeof ladderGame !== 'undefined') ladderGame.init();
@@ -85,24 +177,26 @@ const wordwallRoom = {
         container.textContent = '';
         const isCurtain = (this.mode === 'curtain');
         const labelType = isCurtain ? 'Curtain' : 'Box';
+        const activeData = this.getActiveDataset();
 
-        dataset.forEach((item, index) => {
+        activeData.forEach((item, index) => {
+            const origIdx = (item && item._origIndex !== undefined) ? item._origIndex : index;
             const box = document.createElement('button');
             box.type = 'button';
-            box.className = `wordwall-box relative aspect-square w-full flex items-center justify-center rounded-2xl ${isCurtain ? 'curtain-box' : ''} ${this.openedBoxes.has(index) ? 'opened opacity-50 grayscale-[50%]' : ''}`;
-            box.id = `box-${index}`;
-            const isOpened = this.openedBoxes.has(index);
+            box.className = `wordwall-box relative aspect-square w-full flex items-center justify-center rounded-2xl ${isCurtain ? 'curtain-box' : ''} ${this.openedBoxes.has(origIdx) ? 'opened opacity-50 grayscale-[50%]' : ''}`;
+            box.id = `box-${origIdx}`;
+            const isOpened = this.openedBoxes.has(origIdx);
             const boxAriaKey = isCurtain ? (isOpened ? 'aria_curtain_opened' : 'aria_curtain_closed') : (isOpened ? 'aria_box_opened' : 'aria_box_closed');
-            const boxAriaText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(boxAriaKey, null, { num: index + 1 }) : `${labelType} ${index + 1}${isOpened ? ', opened' : ', closed'}`;
+            const boxAriaText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(boxAriaKey, null, { num: origIdx + 1 }) : `${labelType} ${origIdx + 1}${isOpened ? ', opened' : ', closed'}`;
             box.setAttribute('aria-label', boxAriaText);
-            const color = wordwallColors[index % wordwallColors.length];
+            const color = wordwallColors[origIdx % wordwallColors.length];
             
             if (isCurtain) {
                 box.innerHTML = `
                     <div class="wordwall-box-inner relative w-full h-full duration-500" aria-hidden="true">
                         <div class="box-front rounded-2xl flex flex-col items-center justify-center text-white border-[3px] border-amber-300 shadow-lg hover:scale-105 transition-transform overflow-hidden curtain-bg" style="--curtain-color: ${color};">
                             <div class="curtain-drape"></div>
-                            <span class="text-4xl sm:text-5xl lg:text-6xl font-black drop-shadow-md z-10">${index + 1}</span>
+                            <span class="text-4xl sm:text-5xl lg:text-6xl font-black drop-shadow-md z-10">${origIdx + 1}</span>
                             <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-2 bg-amber-400 text-slate-900 px-3 py-0.5 rounded-full shadow-sm z-10">${i18n.t('reveal')}</span>
                         </div>
                         <div class="box-back rounded-2xl flex items-center justify-center text-slate-400 bg-slate-100 border-[3px] border-slate-300 shadow-inner"><span class="text-4xl">✔</span></div>
@@ -111,7 +205,7 @@ const wordwallRoom = {
                 box.innerHTML = `
                     <div class="wordwall-box-inner relative w-full h-full duration-500" aria-hidden="true">
                         <div class="box-front rounded-2xl flex flex-col items-center justify-center text-white border-[3px] border-white/40 shadow-lg hover:scale-105 transition-transform" style="background-color: ${color}">
-                            <span class="text-4xl sm:text-5xl lg:text-6xl font-black drop-shadow-md">${index + 1}</span>
+                            <span class="text-4xl sm:text-5xl lg:text-6xl font-black drop-shadow-md">${origIdx + 1}</span>
                             <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-2 bg-black/20 px-3 py-1 rounded-full backdrop-blur-sm">${i18n.t('open')}</span>
                         </div>
                         <div class="box-back rounded-2xl flex items-center justify-center text-slate-400 bg-slate-100 border-[3px] border-slate-300 shadow-inner"><span class="text-4xl">✔</span></div>
@@ -119,10 +213,10 @@ const wordwallRoom = {
             }
             
             box.onclick = () => {
-                if (!this.openedBoxes.has(index)) {
+                if (!this.openedBoxes.has(origIdx)) {
                     const openedKey = isCurtain ? 'aria_curtain_opened' : 'aria_box_opened';
-                    box.setAttribute('aria-label', (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(openedKey, null, { num: index + 1 }) : `${labelType} ${index + 1}, opened`);
-                    app.revealWord(index, isCurtain ? 'curtain' : 'box');
+                    box.setAttribute('aria-label', (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(openedKey, null, { num: origIdx + 1 }) : `${labelType} ${origIdx + 1}, opened`);
+                    app.revealWord(origIdx, isCurtain ? 'curtain' : 'box');
                 }
             };
             container.appendChild(box);
@@ -156,8 +250,9 @@ const wheelGame = {
         this.angularVelocity = 0;
     },
     draw() {
-        if (!this.canvas || !this.ctx || typeof dataset === 'undefined' || dataset.length === 0) return;
-        const numSlices = dataset.length;
+        const activeData = (typeof wordwallRoom !== 'undefined' && wordwallRoom.getActiveDataset) ? wordwallRoom.getActiveDataset() : dataset;
+        if (!this.canvas || !this.ctx || !activeData || activeData.length === 0) return;
+        const numSlices = activeData.length;
         const sliceAngle = (Math.PI * 2) / numSlices;
         const radius = this.canvas.width / 2;
         const fontSize = numSlices > 24 ? 'bold 13px Fredoka' : 'bold 17px Fredoka';
@@ -170,7 +265,9 @@ const wheelGame = {
         const rLin = (c) => { const v = c / 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
 
         for (let i = 0; i < numSlices; i++) {
-            const col = wordwallColors[i % wordwallColors.length];
+            const item = activeData[i];
+            const origIdx = (item && item._origIndex !== undefined) ? item._origIndex : i;
+            const col = wordwallColors[origIdx % wordwallColors.length];
             this.ctx.beginPath();
             this.ctx.moveTo(0, 0);
             this.ctx.arc(0, 0, radius - 8, i * sliceAngle, (i + 1) * sliceAngle);
@@ -190,7 +287,7 @@ const wheelGame = {
             this.ctx.fillStyle = lum > 0.38 ? '#0f172a' : '#ffffff';
             this.ctx.font = fontSize;
             this.ctx.textAlign = 'right';
-            this.ctx.fillText((i + 1).toString(), radius - 25, 5);
+            this.ctx.fillText((origIdx + 1).toString(), radius - 25, 5);
             this.ctx.restore();
         }
         this.ctx.beginPath();
@@ -203,7 +300,8 @@ const wheelGame = {
         this.ctx.restore();
     },
     spin() {
-        if (this.isSpinning || typeof dataset === 'undefined' || dataset.length === 0) return;
+        const activeData = (typeof wordwallRoom !== 'undefined' && wordwallRoom.getActiveDataset) ? wordwallRoom.getActiveDataset() : dataset;
+        if (this.isSpinning || !activeData || activeData.length === 0) return;
         this.reset();
         this.isSpinning = true;
         this.angularVelocity = Math.random() * 0.4 + 0.4;
@@ -223,21 +321,25 @@ const wheelGame = {
         }
     },
     calculateStoppingSlice() {
-        if (typeof dataset === 'undefined' || dataset.length === 0) return;
-        const numSlices = dataset.length;
+        const activeData = (typeof wordwallRoom !== 'undefined' && wordwallRoom.getActiveDataset) ? wordwallRoom.getActiveDataset() : dataset;
+        if (!activeData || activeData.length === 0) return;
+        const numSlices = activeData.length;
         const sliceAngle = (Math.PI * 2) / numSlices;
         const TWO_PI = Math.PI * 2;
         // المؤشر يقع في قمة الدائرة عند 270 درجة (1.5 * PI)
         const normalizedAngle = ((1.5 * Math.PI - (this.angle % TWO_PI)) % TWO_PI + TWO_PI) % TWO_PI;
         const sliceIndex = Math.floor(normalizedAngle / sliceAngle) % numSlices;
+        const targetItem = activeData[sliceIndex];
+        const origIdx = (targetItem && targetItem._origIndex !== undefined) ? targetItem._origIndex : sliceIndex;
+
         const status = document.getElementById('wheel-status');
         if (status) {
             status.innerText = (typeof i18n !== 'undefined')
-                ? i18n.t('wheel_landed', 'استقرت العجلة على: {word}', { word: sliceIndex + 1 })
-                : `استقرت العجلة على: ${sliceIndex + 1}`;
+                ? i18n.t('wheel_landed', 'استقرت العجلة على: {word}', { word: origIdx + 1 })
+                : `استقرت العجلة على: ${origIdx + 1}`;
         }
         this.revealTimer = setTimeout(() => {
-            if (typeof app !== 'undefined') app.revealWord(sliceIndex, 'wheel');
+            if (typeof app !== 'undefined') app.revealWord(origIdx, 'wheel');
             this.revealTimer = null;
         }, 400);
     }
@@ -254,8 +356,9 @@ const cardsGame = {
             activeCard.style.opacity = '1';
             activeCard.onclick = () => this.dealNextCard();
         }
-        if (typeof dataset === 'undefined' || dataset.length === 0) return;
-        this.cardDeckIndices = Array.from({ length: dataset.length }, (_, i) => i);
+        const activeData = (typeof wordwallRoom !== 'undefined' && wordwallRoom.getActiveDataset) ? wordwallRoom.getActiveDataset() : dataset;
+        if (!activeData || activeData.length === 0) return;
+        this.cardDeckIndices = Array.from({ length: activeData.length }, (_, i) => i);
         this.shuffleDeck();
     },
     shuffleDeck() {
@@ -279,7 +382,11 @@ const cardsGame = {
             return;
         }
         this.isAnimating = true;
-        const activeCardIndex = this.cardDeckIndices.pop();
+        const deckIndex = this.cardDeckIndices.pop();
+        const activeData = (typeof wordwallRoom !== 'undefined' && wordwallRoom.getActiveDataset) ? wordwallRoom.getActiveDataset() : dataset;
+        const targetItem = activeData ? activeData[deckIndex] : null;
+        const activeCardIndex = (targetItem && targetItem._origIndex !== undefined) ? targetItem._origIndex : deckIndex;
+
         const activeUIElement = document.getElementById('active-deck-card');
         if (activeUIElement) {
             activeUIElement.style.transform = 'translateY(-120px) rotateY(360deg) scale(1.15)';
@@ -307,7 +414,8 @@ const ladderGame = {
     isCompleted: false,
 
     init() {
-        if (typeof dataset === 'undefined' || dataset.length === 0) return;
+        const activeData = (typeof wordwallRoom !== 'undefined' && wordwallRoom.getActiveDataset) ? wordwallRoom.getActiveDataset() : dataset;
+        if (!activeData || activeData.length === 0) return;
         this.currentStep = 0;
         this.isCompleted = false;
         this.queueIdx = 0;
@@ -340,7 +448,9 @@ const ladderGame = {
     },
 
     buildQueue() {
-        this.wordQueue = Array.from({ length: dataset.length }, (_, i) => i);
+        const activeData = (typeof wordwallRoom !== 'undefined' && wordwallRoom.getActiveDataset) ? wordwallRoom.getActiveDataset() : dataset;
+        if (!activeData || activeData.length === 0) { this.wordQueue = []; return; }
+        this.wordQueue = Array.from({ length: activeData.length }, (_, i) => i);
         if (typeof app !== 'undefined' && typeof app.shuffle === 'function') {
             app.shuffle(this.wordQueue);
         } else {
@@ -352,13 +462,14 @@ const ladderGame = {
     },
 
     showCurrentWord() {
-        if (typeof dataset === 'undefined') return;
+        const activeData = (typeof wordwallRoom !== 'undefined' && wordwallRoom.getActiveDataset) ? wordwallRoom.getActiveDataset() : dataset;
+        if (!activeData || activeData.length === 0) return;
         if (this.queueIdx >= this.wordQueue.length) {
             this.buildQueue();
             this.queueIdx = 0;
         }
         const wordIndex = this.wordQueue[this.queueIdx];
-        this.currentWordItem = dataset[wordIndex];
+        this.currentWordItem = activeData[wordIndex];
 
         const wordDisplay = document.getElementById('ladder-word-display');
         if (wordDisplay && this.currentWordItem && typeof app !== 'undefined') {
@@ -498,26 +609,29 @@ const tilesGame = {
     },
     renderTiles() {
         const container = document.getElementById('tiles-grid');
-        if (!container || typeof dataset === 'undefined') return;
+        if (!container) return;
+        const activeData = (typeof wordwallRoom !== 'undefined' && wordwallRoom.getActiveDataset) ? wordwallRoom.getActiveDataset() : dataset;
+        if (!activeData) return;
         container.textContent = '';
 
-        dataset.forEach((item, index) => {
+        activeData.forEach((item, index) => {
+            const origIdx = (item && item._origIndex !== undefined) ? item._origIndex : index;
             const tile = document.createElement('div');
-            tile.className = `flip-tile relative aspect-square w-full rounded-2xl ${this.flippedTiles.has(index) ? 'flipped' : ''}`;
-            tile.id = `tile-${index}`;
+            tile.className = `flip-tile relative aspect-square w-full rounded-2xl ${this.flippedTiles.has(origIdx) ? 'flipped' : ''}`;
+            tile.id = `tile-${origIdx}`;
             tile.setAttribute('role', 'button');
             tile.setAttribute('tabindex', '0');
-            const tileAriaKey = this.flippedTiles.has(index) ? 'aria_tile_revealed' : 'aria_tile_hidden';
-            const tileAria = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(tileAriaKey, null, { num: index + 1 }) : `Tile ${index + 1}`;
+            const tileAriaKey = this.flippedTiles.has(origIdx) ? 'aria_tile_revealed' : 'aria_tile_hidden';
+            const tileAria = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(tileAriaKey, null, { num: origIdx + 1 }) : `Tile ${origIdx + 1}`;
             tile.setAttribute('aria-label', tileAria);
             
-            const color = wordwallColors[index % wordwallColors.length];
-            const wordText = (typeof item === 'object' && item !== null) ? (item.display || item.word || item.text || '') : String(item || '');
+            const color = wordwallColors[origIdx % wordwallColors.length];
+            const wordText = (typeof item === 'object' && item !== null) ? (item.display || item.word || item.text || (typeof app !== 'undefined' ? app.getPlainWord(item) : '')) : String(item || '');
             
             tile.innerHTML = `
                 <div class="flip-tile-inner" aria-hidden="true">
                     <div class="tile-face tile-front flex flex-col items-center justify-center text-white border-[3px] border-white/40 shadow-lg hover:scale-105 transition-transform" style="background-color: ${color}">
-                        <span class="text-4xl sm:text-5xl lg:text-6xl font-black drop-shadow-md">${index + 1}</span>
+                        <span class="text-4xl sm:text-5xl lg:text-6xl font-black drop-shadow-md">${origIdx + 1}</span>
                         <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-2 bg-black/25 px-3 py-0.5 rounded-full backdrop-blur-sm">${i18n.t('flip')} 🀄</span>
                     </div>
                     <div class="tile-face tile-back flex flex-col items-center justify-center p-2 bg-white border-[3px] border-emerald-400 text-slate-800 shadow-xl overflow-hidden">
@@ -527,7 +641,7 @@ const tilesGame = {
             `;
 
             const doFlip = () => {
-                this.flipTile(index);
+                this.flipTile(origIdx);
             };
 
             tile.onclick = doFlip;
@@ -564,15 +678,19 @@ const tilesGame = {
         }
     },
     flipAll() {
-        if (typeof dataset === 'undefined') return;
-        const allFlipped = this.flippedTiles.size === dataset.length;
+        const activeData = (typeof wordwallRoom !== 'undefined' && wordwallRoom.getActiveDataset) ? wordwallRoom.getActiveDataset() : dataset;
+        if (!activeData || activeData.length === 0) return;
+        const allFlipped = this.flippedTiles.size === activeData.length;
         if (allFlipped) {
             this.flippedTiles.clear();
             if (typeof Sound !== 'undefined' && typeof Sound.playTone === 'function') {
                 Sound.playTone(350, 'sine', 0.1);
             }
         } else {
-            dataset.forEach((_, idx) => this.flippedTiles.add(idx));
+            activeData.forEach((item, idx) => {
+                const origIdx = (item && item._origIndex !== undefined) ? item._origIndex : idx;
+                this.flippedTiles.add(origIdx);
+            });
             if (typeof Sound !== 'undefined' && typeof Sound.playTone === 'function') {
                 Sound.playTone(700, 'sine', 0.15);
             }
@@ -601,30 +719,33 @@ const honeycombGame = {
     },
     renderBoard() {
         const board = document.getElementById('honeycomb-board');
-        if (!board || typeof dataset === 'undefined') return;
+        if (!board) return;
+        const activeData = (typeof wordwallRoom !== 'undefined' && wordwallRoom.getActiveDataset) ? wordwallRoom.getActiveDataset() : dataset;
+        if (!activeData) return;
         board.textContent = '';
 
-        dataset.forEach((item, index) => {
+        activeData.forEach((item, index) => {
+            const origIdx = (item && item._origIndex !== undefined) ? item._origIndex : index;
             const hex = document.createElement('button');
             hex.type = 'button';
-            const status = this.cellStatus[index] || '';
+            const status = this.cellStatus[origIdx] || '';
             hex.className = `hex-cell ${status}`;
-            hex.id = `hex-${index}`;
+            hex.id = `hex-${origIdx}`;
             
             const statusKey = status === 'mastered' ? 'status_mastered' : (status === 'review' ? 'status_review' : 'status_closed');
             const statusText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(statusKey) : (status === 'mastered' ? 'متقنة' : (status === 'review' ? 'مراجعة' : 'مغلقة'));
-            const hexAria = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('aria_honeycomb_cell', null, { num: index + 1, status: statusText }) : `Cell ${index + 1}: ${statusText}`;
+            const hexAria = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('aria_honeycomb_cell', null, { num: origIdx + 1, status: statusText }) : `Cell ${origIdx + 1}: ${statusText}`;
             hex.setAttribute('aria-label', hexAria);
 
             hex.innerHTML = `
                 <div class="flex flex-col items-center justify-center text-white drop-shadow-sm pointer-events-none">
-                    <span class="text-xl sm:text-2xl font-black">${index + 1}</span>
+                    <span class="text-xl sm:text-2xl font-black">${origIdx + 1}</span>
                     <span class="text-[10px] font-bold mt-0.5">${status === 'mastered' ? '✔' : (status === 'review' ? '📌' : '⬡')}</span>
                 </div>
             `;
 
             hex.onclick = () => {
-                this.selectHex(index);
+                this.selectHex(origIdx);
             };
 
             board.appendChild(hex);
@@ -654,9 +775,10 @@ const honeycombGame = {
         }
         this.updateBadge();
         
-        if (typeof dataset !== 'undefined') {
-            const masteredCount = Object.values(this.cellStatus).filter(s => s === 'mastered').length;
-            if (masteredCount >= dataset.length) {
+        const activeData = (typeof wordwallRoom !== 'undefined' && wordwallRoom.getActiveDataset) ? wordwallRoom.getActiveDataset() : dataset;
+        if (activeData) {
+            const masteredCount = Object.keys(this.cellStatus).filter(k => this.cellStatus[k] === 'mastered').length;
+            if (masteredCount >= activeData.length) {
                 if (typeof fireCelebration === 'function') fireCelebration();
                 if (typeof Sound !== 'undefined' && typeof Sound.playChime === 'function') Sound.playChime();
             }
@@ -664,9 +786,10 @@ const honeycombGame = {
     },
     updateBadge() {
         const badge = document.getElementById('hex-progress-badge');
-        if (!badge || typeof dataset === 'undefined') return;
-        const total = dataset.length;
-        const mastered = Object.values(this.cellStatus).filter(s => s === 'mastered').length;
+        const activeData = (typeof wordwallRoom !== 'undefined' && wordwallRoom.getActiveDataset) ? wordwallRoom.getActiveDataset() : dataset;
+        if (!badge || !activeData) return;
+        const total = activeData.length;
+        const mastered = Object.keys(this.cellStatus).filter(k => this.cellStatus[k] === 'mastered').length;
         badge.textContent = (typeof i18n !== 'undefined')
             ? i18n.t('honeycomb_mastered_badge', 'المتقن: {count} من {total}', { count: mastered, total: total })
             : `المتقن: ${mastered} من ${total}`;

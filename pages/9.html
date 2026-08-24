@@ -52,7 +52,7 @@
             ["غَـ","ـفَـ","ـرَ","normal"],
             ["ضَـ","ـغَـ","ـطَ","golden"]
         ];
-        const dataset = _raw.map((r,i)=>({w:[r[0],r[1],r[2]], t:r[3], theme:_themes[Math.floor(i/4)%4]}));
+        const dataset = _raw.map((r,i)=>({w:[r[0],r[1],r[2]], t:r[3], multiBox: true, theme:_themes[Math.floor(i/4)%4]}));
     </script>
     <script src="../shared/core.js"></script>
 </body>

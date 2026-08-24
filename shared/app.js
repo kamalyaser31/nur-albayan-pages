@@ -2,6 +2,7 @@ const app = {
     idx: 0, score: 0, stats: { ok: 0, err: 0 }, clock: 10.0, timer: null, feedbackTimer: null, advanceTimer: null, _isAdvancing: false,
     hasPlayedGame1: false, hasPlayedGame2: false, hasPlayedGame3: false, currentActiveIndex: null, pendingGame: 0, chartInstance: null,
     mistakeIndices: [], isReviewMode: false, reviewQueue: [], reviewIdx: 0, keyboardBound: false, _localeBound: false,
+    isSessionDrill: false, sessionDrillQueue: [], sessionDrillIdx: 0, initialSessionMistakes: [], sessionMistakesHistory: [],
     enableGameBreaks: false,
 
     init() {
@@ -51,6 +52,25 @@ const app = {
                 // حظر التفاعل بالمفاتيح إذا كانت نافذة قائمة الطلاب مفتوحة
                 const rosterModal = document.getElementById('student-roster-modal');
                 if (rosterModal && !rosterModal.classList.contains('hidden')) return;
+
+                // حظر التفاعل بالمفاتيح إذا كانت نافذة تأكيد الخروج المبكر مفتوحة
+                const earlyExitModal = document.getElementById('early-exit-modal');
+                if (earlyExitModal && !earlyExitModal.classList.contains('hidden')) {
+                    if (e.key === 'Escape') {
+                        e.preventDefault();
+                        app.closeEarlyExitModal();
+                    }
+                    return;
+                }
+
+                // تعطيل مفتاح Escape أثناء طور المعالجة الفورية وقصر الخروج على زر (✕) الذي يفتح نافذة التأكيد
+                if (app.isSessionDrill) {
+                    if (e.key === 'Escape') {
+                        e.preventDefault();
+                        app.openEarlyExitModal();
+                        return;
+                    }
+                }
 
                 const overlay = document.getElementById('word-overlay');
                 const isOverlayOpen = overlay && !overlay.classList.contains('hidden');
@@ -110,6 +130,9 @@ const app = {
         if (this.timer) { clearInterval(this.timer); this.timer = null; }
         if (this.feedbackTimer) { clearTimeout(this.feedbackTimer); this.feedbackTimer = null; }
         this.closeOverlay();
+        this.closeEarlyExitModal();
+        const drillBanner = document.getElementById('session-drill-banner');
+        if (drillBanner) drillBanner.classList.add('hidden');
         ['main-menu-stage', 'rule-stage', 'game-transition-stage', 'learning-stage', 'xo-stage', 'c4-stage', 'memory-stage', 'riddles-stage', 'wordwall-stage', 'summary-screen'].forEach(id => {
             const el = document.getElementById(id); if (el) el.classList.add('hidden');
         });
@@ -118,6 +141,7 @@ const app = {
     jumpTo(val) {
         this.hideAll();
         this.isReviewMode = false;
+        this.isSessionDrill = false;
         const topNav = document.getElementById('top-nav'); if (topNav) topNav.classList.remove('hidden');
         if (typeof val === 'string' && val.startsWith('word_')) {
             const targetWordIdx = parseInt(val.split('_')[1], 10);
@@ -138,6 +162,8 @@ const app = {
             const menu = document.getElementById('main-menu-stage'); if (menu) menu.classList.remove('hidden');
         } else if (val === 'rules') {
             const rStage = document.getElementById('rule-stage'); if (rStage) { rStage.classList.remove('hidden'); if (typeof ruleManager !== 'undefined') ruleManager.render(); }
+        } else if (val === 'session_drill') {
+            this.startSessionDrill();
         } else if (val === 'transition_1') { this.showGameTransition(1); }
         else if (val === 'transition_2') { this.showGameTransition(2); }
         else if (val === 'transition_3') { this.showGameTransition(3); }
@@ -160,6 +186,8 @@ const app = {
         this.idx = 0; this.score = 0; this.stats = { ok: 0, err: 0 };
         this.hasPlayedGame1 = false; this.hasPlayedGame2 = false; this.hasPlayedGame3 = false;
         this.mistakeIndices = []; this.isReviewMode = false; this.reviewQueue = []; this.reviewIdx = 0;
+        this.isSessionDrill = false; this.sessionDrillQueue = []; this.sessionDrillIdx = 0; this.sessionMistakesHistory = [];
+        this.updateDrillNavOption();
         const scoreEl = document.getElementById('score-val'); if (scoreEl) scoreEl.innerText = '0';
 
         if (typeof dataset !== 'undefined' && Array.isArray(dataset)) {
@@ -195,6 +223,15 @@ const app = {
             ruleOpt.textContent = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('rules_and_intro') : '📖 Rules';
             mainGroup.appendChild(ruleOpt);
         }
+
+        if (this.mistakeIndices && this.mistakeIndices.length > 0) {
+            const drillOpt = document.createElement('option');
+            drillOpt.value = 'session_drill';
+            drillOpt.id = 'nav-opt-session-drill';
+            const isAr = (typeof i18n !== 'undefined' && i18n.getLocale() === 'ar');
+            drillOpt.textContent = isAr ? `🎯 عالج عثرات اليوم (${this.mistakeIndices.length})` : `🎯 Drill Today's Mistakes (${this.mistakeIndices.length})`;
+            mainGroup.appendChild(drillOpt);
+        }
         selector.appendChild(mainGroup);
 
         const cardGroup = document.createElement('optgroup');
@@ -228,6 +265,29 @@ const app = {
         selector.appendChild(wwGroup);
 
         if (currentVal) selector.value = currentVal;
+    },
+
+    updateDrillNavOption() {
+        const selector = document.getElementById('example-navigator');
+        if (!selector) return;
+        let opt = document.getElementById('nav-opt-session-drill');
+        const count = (this.mistakeIndices) ? this.mistakeIndices.length : 0;
+        const isAr = (typeof i18n !== 'undefined' && i18n.getLocale() === 'ar');
+        const label = isAr
+            ? `🎯 عالج عثرات اليوم (${count})`
+            : `🎯 Drill Today's Mistakes (${count})`;
+
+        if (count > 0) {
+            if (opt) {
+                opt.textContent = label;
+            } else {
+                this.populateSelector();
+            }
+        } else {
+            if (opt) {
+                opt.remove();
+            }
+        }
     },
 
     shuffle(arr) {
@@ -436,6 +496,103 @@ const app = {
         if (this._isAdvancing) return; // حماية ضد السباق وتعدد الضغطات
         const settings = (typeof settingsManager !== 'undefined') ? settingsManager.get() : {};
 
+        // مسار طور المعالجة الفورية لعثرات الجلسة (Session Remediation Drill)
+        if (this.isSessionDrill) {
+            if (!this.sessionDrillQueue || this.sessionDrillIdx >= this.sessionDrillQueue.length) return;
+            const drillItem = this.sessionDrillQueue[this.sessionDrillIdx];
+            const origIndex = (typeof drillItem === 'object' && drillItem !== null) ? drillItem.index : drillItem;
+            const currentWord = (typeof dataset !== 'undefined' && dataset[origIndex]) ? dataset[origIndex] : null;
+            const drillMode = (typeof settingsManager !== 'undefined' && settingsManager.get().remediationDrillMode) ? settingsManager.get().remediationDrillMode : 'loop';
+            const isAr = (typeof i18n !== 'undefined' && i18n.getLocale() === 'ar');
+
+            let shouldAdvance = false;
+
+            if (isCorrect) {
+                this.stats.ok++;
+                this.score += 2;
+
+                if (drillMode === 'instant_repeat') {
+                    if (drillItem._hasFailed) {
+                        drillItem._inPlaceSuccessCount = (drillItem._inPlaceSuccessCount || 0) + 1;
+                        if (drillItem._inPlaceSuccessCount < 3) {
+                            const stepMsg = isAr ? `أحسنت! (${drillItem._inPlaceSuccessCount}/3) ⭐` : `Well done! (${drillItem._inPlaceSuccessCount}/3) ⭐`;
+                            this.triggerFeedback(stepMsg, '#10b981', true);
+                            shouldAdvance = false;
+                        } else {
+                            const masteredMsg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_mastered') : 'أتقنت الكلمة! 🌟';
+                            this.triggerFeedback(masteredMsg, '#10b981', true);
+                            this.mistakeIndices = this.mistakeIndices.filter(idx => idx !== origIndex);
+                            shouldAdvance = true;
+                        }
+                    } else {
+                        const masteredMsg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_mastered') : 'أتقنت الكلمة! 🌟';
+                        this.triggerFeedback(masteredMsg, '#10b981', true);
+                        this.mistakeIndices = this.mistakeIndices.filter(idx => idx !== origIndex);
+                        shouldAdvance = true;
+                    }
+                } else {
+                    // loop أو single_pass
+                    const masteredMsg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_mastered') : 'أتقنت الكلمة! 🌟';
+                    this.triggerFeedback(masteredMsg, '#10b981', true);
+                    this.mistakeIndices = this.mistakeIndices.filter(idx => idx !== origIndex);
+                    shouldAdvance = true;
+                }
+
+                // شطب الكلمة ذرياً من بنك الأخطاء وتحديث الدقة والنجوم في studentManager
+                if (typeof studentManager !== 'undefined') {
+                    const studentId = studentManager.getActiveStudentId ? studentManager.getActiveStudentId() : null;
+                    if (currentWord) {
+                        studentManager.recordRemediationAttempt(studentId, currentWord, true);
+                    }
+                    if (studentManager.hasActiveStudent && studentManager.hasActiveStudent()) {
+                        const lessonId = this.getLessonId();
+                        const total = this.stats.ok + this.stats.err;
+                        const accuracy = total > 0 ? Math.round((this.stats.ok / total) * 100) : 100;
+                        const stars = accuracy >= 90 ? 3 : (accuracy >= 70 ? 2 : 1);
+                        studentManager.recordLessonCompletion(lessonId, this.score, accuracy, stars);
+                    }
+                }
+            } else {
+                this.stats.err++;
+                const feedbackText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_needs_practice') : 'تحتاج تدريباً إضافياً ⭐';
+                this.triggerFeedback(feedbackText, '#f43f5e', false);
+                if (typeof Sound !== 'undefined' && typeof Sound.fail === 'function') Sound.fail();
+
+                if (drillMode === 'loop') {
+                    this.sessionDrillQueue.push({ index: origIndex, _inPlaceSuccessCount: 0, _hasFailed: true });
+                    shouldAdvance = true;
+                } else if (drillMode === 'instant_repeat') {
+                    drillItem._hasFailed = true;
+                    drillItem._inPlaceSuccessCount = 0;
+                    shouldAdvance = false;
+                } else if (drillMode === 'single_pass') {
+                    shouldAdvance = true;
+                }
+
+                if (typeof studentManager !== 'undefined' && currentWord) {
+                    const studentId = studentManager.getActiveStudentId ? studentManager.getActiveStudentId() : null;
+                    studentManager.recordRemediationAttempt(studentId, currentWord, false);
+                }
+            }
+
+            this.updateScoreUI();
+            this.updateDrillNavOption();
+
+            if (shouldAdvance) {
+                this.sessionDrillIdx++;
+            }
+
+            if (!settings.manualAdvance) {
+                this._isAdvancing = true;
+                this.clearAdvanceTimer();
+                this.advanceTimer = setTimeout(() => {
+                    this._isAdvancing = false;
+                    this.renderSessionDrill();
+                }, 600);
+            }
+            return;
+        }
+
         // مسار تقييم صفحة المعالجة المخصصة حصراً لمنع تكرار النقاط ومضاعفة مدخلات البنك
         if (typeof PAGE_CONFIG !== 'undefined' && PAGE_CONFIG.pageNumber === 'remediation') {
             const currentItemIdx = (this.order && this.order[this.idx] !== undefined) ? this.order[this.idx] : this.idx;
@@ -533,6 +690,11 @@ const app = {
             if (!this.mistakeIndices.includes(currentItemIdx)) {
                 this.mistakeIndices.push(currentItemIdx);
             }
+            if (!this.sessionMistakesHistory) this.sessionMistakesHistory = [];
+            if (!this.sessionMistakesHistory.includes(currentItemIdx)) {
+                this.sessionMistakesHistory.push(currentItemIdx);
+            }
+            this.updateDrillNavOption();
             let penalty = (settings.noPenaltyMode) ? 0 : ((type === 'danger') ? 5 : 2);
             this.score = Math.max(0, this.score - penalty);
             const feedbackText = (settings.noPenaltyMode) ?
@@ -556,6 +718,11 @@ const app = {
     next() {
         this.clearAdvanceTimer();
         this.updateScoreUI();
+
+        if (this.isSessionDrill) {
+            this.renderSessionDrill();
+            return;
+        }
 
         if (this.isReviewMode) {
             this.reviewIdx++;
@@ -587,6 +754,161 @@ const app = {
                 this.playWordwall();
             }
         }
+    },
+
+    startSessionDrill() {
+        const hasMistakes = (this.mistakeIndices && this.mistakeIndices.length > 0);
+        const hasHistory = (this.sessionMistakesHistory && this.sessionMistakesHistory.length > 0);
+
+        if (!hasMistakes && !hasHistory) {
+            const isAr = (typeof i18n !== 'undefined' && i18n.getLocale() === 'ar');
+            const noMistakesMsg = isAr ? 'ما شاء الله! لا توجد عثرات لمعالجتها في هذه الجلسة! 🌟' : 'Excellent! No mistakes to drill in this session! 🌟';
+            this.triggerFeedback(noMistakesMsg, '#10b981', true);
+            return;
+        }
+
+        if (!hasMistakes && hasHistory) {
+            this.mistakeIndices = [...this.sessionMistakesHistory];
+        }
+
+        if (typeof dataset === 'undefined' || dataset.length === 0) return;
+
+        this.isSessionDrill = true;
+        this.isReviewMode = false;
+
+        // حفظ نسخة أصلية من عثرات الجلسة لتمكين التراجع عند الإلغاء
+        this.initialSessionMistakes = [...this.mistakeIndices];
+
+        // تهيئة طابور المعالجة الفورية وخلط الكلمات عشوائياً
+        this.sessionDrillQueue = this.mistakeIndices.map(idx => ({
+            index: idx,
+            _inPlaceSuccessCount: 0,
+            _hasFailed: false
+        }));
+        this.shuffle(this.sessionDrillQueue);
+        this.sessionDrillIdx = 0;
+
+        // إيقاف وإخفاء مؤقت السرعة تماماً أثناء طور المعالجة
+        if (this.timer) {
+            clearInterval(this.timer);
+            this.timer = null;
+        }
+        const timerPill = document.getElementById('timer-pill') || document.getElementById('challenge-timer');
+        if (timerPill) timerPill.classList.add('hidden');
+
+        this.hideAll();
+        const topNav = document.getElementById('top-nav');
+        if (topNav) topNav.classList.remove('hidden');
+        const stage = document.getElementById('learning-stage');
+        if (stage) stage.classList.remove('hidden');
+
+        // إبقاء شريط تحفيز المعلم مفعلاً وظاهراً
+        const praiseBar = document.getElementById('teacher-praise-bar');
+        if (praiseBar) praiseBar.classList.remove('hidden');
+
+        this.renderSessionDrill();
+    },
+
+    renderSessionDrill() {
+        if (!this.sessionDrillQueue || this.sessionDrillIdx >= this.sessionDrillQueue.length) {
+            this.finishSessionDrill();
+            return;
+        }
+
+        const drillItem = this.sessionDrillQueue[this.sessionDrillIdx];
+        const origIndex = (typeof drillItem === 'object' && drillItem !== null) ? drillItem.index : drillItem;
+        const item = dataset[origIndex];
+        if (!item) {
+            this.sessionDrillIdx++;
+            this.renderSessionDrill();
+            return;
+        }
+
+        const area = document.getElementById('word-display-area');
+        this.hideAll();
+        const topNav = document.getElementById('top-nav');
+        if (topNav) topNav.classList.remove('hidden');
+        const stage = document.getElementById('learning-stage');
+        if (stage) stage.classList.remove('hidden');
+
+        const isAr = (typeof i18n !== 'undefined' && i18n.getLocale() === 'ar');
+        const progressLabel = isAr ? 'معالجة العثرات' : 'Remediation Drill';
+        this.updateProgress(this.sessionDrillIdx + 1, this.sessionDrillQueue.length, progressLabel);
+
+        // إظهار شريط المعالجة الفورية وتحديث العدادات
+        const drillBanner = document.getElementById('session-drill-banner');
+        if (drillBanner) {
+            drillBanner.classList.remove('hidden');
+            const drillCur = document.getElementById('drill-cur');
+            const drillTotal = document.getElementById('drill-total');
+            if (drillCur) drillCur.textContent = String(this.sessionDrillIdx + 1);
+            if (drillTotal) drillTotal.textContent = String(this.sessionDrillQueue.length);
+        }
+
+        // إخفاء مؤقت التحدي أثناء المعالجة
+        const timerPill = document.getElementById('timer-pill') || document.getElementById('challenge-timer');
+        if (timerPill) timerPill.classList.add('hidden');
+
+        // إبقاء شريط تحفيز المعلم مفعلاً وظاهراً
+        const praiseBar = document.getElementById('teacher-praise-bar');
+        if (praiseBar) praiseBar.classList.remove('hidden');
+
+        if (area) {
+            this.renderWordInto(area, item);
+            const plain = this.getPlainWord(item);
+            area.setAttribute('aria-label', `${progressLabel} ${this.sessionDrillIdx + 1} of ${this.sessionDrillQueue.length}: ${plain}`);
+            area.tabIndex = -1;
+            area.focus({ preventScroll: true });
+        }
+    },
+
+    finishSessionDrill() {
+        this.isSessionDrill = false;
+        if (typeof fireCelebration === 'function') fireCelebration();
+        if (typeof Sound !== 'undefined' && typeof Sound.playChime === 'function') Sound.playChime();
+
+        const isAr = (typeof i18n !== 'undefined' && i18n.getLocale() === 'ar');
+        const congratsMsg = isAr ? 'رائع جداً! تم إتقان جميع عثرات الجلسة بنجاح! 🏆' : 'Great Job! All session mistakes mastered! 🏆';
+        this.triggerFeedback(congratsMsg, '#10b981', true);
+        this.updateDrillNavOption();
+
+        // انتقال تلقائي بعد ثانيتين إلى ساحة الألعاب Wordwall
+        setTimeout(() => {
+            if (!this.isSessionDrill) {
+                this.playWordwall();
+            }
+        }, 2000);
+    },
+
+    openEarlyExitModal() {
+        const modal = document.getElementById('early-exit-modal');
+        if (modal) {
+            modal.classList.remove('hidden');
+            const saveBtn = document.getElementById('btn-early-exit-save');
+            if (saveBtn) saveBtn.focus();
+        }
+    },
+
+    closeEarlyExitModal() {
+        const modal = document.getElementById('early-exit-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+        }
+    },
+
+    confirmEarlyExit(action) {
+        this.closeEarlyExitModal();
+        this.isSessionDrill = false;
+
+        if (action === 'cancel') {
+            // استرجاع قائمة الأخطاء الأصلية دون تعديل
+            if (this.initialSessionMistakes) {
+                this.mistakeIndices = [...this.initialSessionMistakes];
+            }
+        }
+        // في حالة 'save' يتم الاحتفاظ بما تم إنجازه وشطبه تلقائياً
+        this.updateDrillNavOption();
+        this.finishToSummary();
     },
 
     startReview() {
@@ -629,6 +951,13 @@ const app = {
     prev() {
         this.clearAdvanceTimer();
         this.updateScoreUI();
+        if (this.isSessionDrill) {
+            if (this.sessionDrillIdx > 0) {
+                this.sessionDrillIdx--;
+                this.renderSessionDrill();
+            }
+            return;
+        }
         if (this.isReviewMode) {
             if (this.reviewIdx > 0) { this.reviewIdx--; this.renderReview(); }
         } else {
@@ -753,8 +1082,15 @@ const app = {
             this.triggerFeedback((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_magnificent') : 'Magnificent! ❤️⭐', '#10b981', true);
         } else {
             this.stats.err++;
-            if (this.currentActiveIndex !== null && !this.mistakeIndices.includes(this.currentActiveIndex)) {
-                this.mistakeIndices.push(this.currentActiveIndex);
+            if (this.currentActiveIndex !== null) {
+                if (!this.mistakeIndices.includes(this.currentActiveIndex)) {
+                    this.mistakeIndices.push(this.currentActiveIndex);
+                }
+                if (!this.sessionMistakesHistory) this.sessionMistakesHistory = [];
+                if (!this.sessionMistakesHistory.includes(this.currentActiveIndex)) {
+                    this.sessionMistakesHistory.push(this.currentActiveIndex);
+                }
+                this.updateDrillNavOption();
             }
             this.triggerFeedback((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_keep_trying') : 'Keep Trying! ⭐', '#f43f5e', false);
         }
@@ -781,8 +1117,22 @@ const app = {
         const finalScore = document.getElementById('final-score'); if (finalScore) finalScore.innerText = this.score;
         const reviewBtn = document.getElementById('btn-review-mistakes');
         if (reviewBtn) {
-            if (this.mistakeIndices.length > 0) reviewBtn.classList.remove('hidden');
-            else reviewBtn.classList.add('hidden');
+            const hasMistakes = (this.mistakeIndices && this.mistakeIndices.length > 0);
+            const hasHistory = (this.sessionMistakesHistory && this.sessionMistakesHistory.length > 0);
+            const isAr = (typeof i18n !== 'undefined' && i18n.getLocale() === 'ar');
+            if (hasMistakes || hasHistory) {
+                reviewBtn.classList.remove('hidden');
+                reviewBtn.onclick = () => {
+                    if (this.mistakeIndices.length === 0 && this.sessionMistakesHistory.length > 0) {
+                        this.mistakeIndices = [...this.sessionMistakesHistory];
+                    }
+                    this.startSessionDrill();
+                };
+                const btnText = isAr ? '🔄 إعادة مراجعة عثرات اليوم' : '🔄 Review Today\'s Mistakes';
+                reviewBtn.innerHTML = `<span>${btnText}</span> <span aria-hidden="true">🎯</span>`;
+            } else {
+                reviewBtn.classList.add('hidden');
+            }
         }
 
         // استدعاء إتمام الدرس وحفظ النتائج للطالب النشط

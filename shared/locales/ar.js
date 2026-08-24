@@ -345,7 +345,26 @@
         "aria_step_crown": "الدرجة {step}، القمة المحرزة 🏆",
         "aria_teacher_praise_toolbar": "شريط أزرار تحفيز وتشجيع المعلم",
         "skip_to_content": "تجاوز إلى المحتوى الرئيسي",
-        "edit_student": "تعديل بيانات الطالب"
+        "edit_student": "تعديل بيانات الطالب",
+        "remediation_drill_mode_label": "نمط المعالجة (Remediation Drill):",
+        "drill_mode_loop": "تدوير الكلمات حتى الإتقان (Loop)",
+        "drill_mode_single_pass": "مرور مفرد (Single Pass)",
+        "drill_mode_instant_repeat": "تكرار موضعي فوري 3 مرات (Instant Repeat)",
+        "session_drill_title": "جلسة تصويب العثرات",
+        "session_drill_banner_step": "الكلمة {current} من {total}",
+        "session_drill_completed": "اكتملت جلسة تصويب العثرات بنجاح! 🎉",
+        "btn_instant_remediation": "معالجة فورية للعثرات",
+        "btn_repeat_drill": "إعادة جلسة المعالجة 🔄",
+        "early_exit_title": "إنهاء جلسة المعالجة",
+        "early_exit_desc": "هل ترغب في حفظ ما تم تصويبه من كلمات أم إلغاء المعالجة؟",
+        "early_exit_save_btn": "حفظ ما تم تصويبه والخروج",
+        "early_exit_cancel_btn": "إلغاء المعالجة وإعادة ضبط العثرات",
+        "early_exit_resume_btn": "متابعة المعالجة",
+        "ww_filter_all_words": "كافة الكلمات 📚",
+        "ww_filter_session_mistakes": "عثرات الحصة 🎯",
+        "aria_early_exit_modal": "نافذة تأكيد إنهاء جلسة تصويب العثرات",
+        "aria_drill_cur": "الكلمة الحالية في المعالجة",
+        "aria_ww_filter_mistakes": "تبديل تصفية الكلمات بين عثرات الحصة وكافة الكلمات"
 };
 
     if (typeof i18n !== 'undefined') {

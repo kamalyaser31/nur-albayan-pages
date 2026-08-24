@@ -343,6 +343,8 @@ html[dir="ltr"] .lesson-card .lesson-star-badge {
     #nb-settings-modal,
     #nb-settings-toast,
     #word-overlay,
+    #early-exit-modal,
+    #session-drill-banner,
     .modal-backdrop,
     button:not(.print-keep),
     .action-btn,
@@ -431,4 +433,126 @@ html[dir="ltr"] .lesson-card .lesson-star-badge {
         height: auto !important;
     }
 }
+
+/* ==========================================================================
+   7. Session Drill Banner, Early Exit Modal & Wordwall Mistake Filter
+   ========================================================================== */
+
+/* Session Drill Active Banner */
+#session-drill-banner {
+    position: relative;
+    background: linear-gradient(135deg, #e11d48 0%, #d97706 50%, #e11d48 100%);
+    background-size: 200% 200%;
+    animation: drillGradientFlow 4s ease infinite;
+    box-shadow: 0 4px 14px rgba(225, 29, 72, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+}
+
+@keyframes drillGradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+#session-drill-banner #session-drill-title {
+    letter-spacing: 0.2px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+#session-drill-banner #session-drill-step-indicator {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+}
+
+#session-drill-banner #drill-cur {
+    color: #fef08a;
+    font-weight: 900;
+}
+
+#session-drill-banner #drill-total {
+    color: #ffffff;
+    font-weight: 800;
+}
+
+#session-drill-banner button {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+#session-drill-banner button:hover {
+    transform: scale(1.1);
+    background-color: rgba(255, 255, 255, 0.35);
+}
+
+#session-drill-banner button:active {
+    transform: scale(0.95);
+}
+
+/* Early Exit Modal & Dialog Elements */
+#early-exit-modal {
+    transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#btn-early-exit-save {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    box-shadow: 0 4px 10px rgba(4, 120, 87, 0.28);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#btn-early-exit-save:hover {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(4, 120, 87, 0.35);
+}
+
+#btn-early-exit-cancel {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#btn-early-exit-cancel:hover {
+    background-color: #fee2e2;
+    border-color: #f87171;
+    color: #991b1b;
+    transform: translateY(-1px);
+}
+
+#btn-early-exit-resume {
+    transition: all 0.15s ease;
+}
+
+#btn-early-exit-resume:hover {
+    background-color: #e2e8f0;
+    color: #0f172a;
+}
+
+/* Wordwall Mistakes Filter Toggle Button */
+#btn-ww-mistakes-filter {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+    white-space: nowrap;
+}
+
+#btn-ww-mistakes-filter:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(217, 119, 6, 0.2);
+}
+
+#btn-ww-mistakes-filter.active,
+#btn-ww-mistakes-filter[data-active="true"] {
+    background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+    color: #ffffff;
+    border-color: #be123c;
+    box-shadow: 0 2px 8px rgba(225, 29, 72, 0.35);
+}
+
+#btn-ww-mistakes-filter.active:hover,
+#btn-ww-mistakes-filter[data-active="true"]:hover {
+    background: linear-gradient(135deg, #fb7185 0%, #f43f5e 100%);
+    box-shadow: 0 4px 14px rgba(225, 29, 72, 0.45);
+}
+
 

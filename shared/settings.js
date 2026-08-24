@@ -25,8 +25,10 @@ const settingsManager = {
         shuffleCards: false, // الترتيب العشوائي للكلمات (منع حفظ الموضع)
         noPenaltyMode: false, // نمط التشجيع الإيجابي (بدون خصم نقاط عند الخطأ)
         manualAdvance: false, // التقدم اليدوي للبطاقات بعد التقييم (للشرح)
+        remediationDrillMode: 'loop', // نمط جلسة معالجة الأخطاء: 'loop' (تدوير الكلمات حتى الإتقان) | 'single_pass' (مرور مفرد) | 'instant_repeat' (تكرار موضعي فوري 3 مرات)
         repeatGradingPolicy: 'best' // سياسة تقييم تكرار الدروس: 'best' (أعلى نتيجة) | 'latest' (آخر محاولة) | 'cumulative' (نقاط تراكمية)
     },
+    get DEFAULTS() { return this.defaults; },
 
     // جلب الإعدادات الحالية من localStorage أو الذاكرة الوسيطة بنسخة معزولة
     get() {
@@ -160,6 +162,7 @@ const settingsManager = {
         setVal('cfg-shuffle-cards', 'shuffleCards', true);
         setVal('cfg-no-penalty', 'noPenaltyMode', true);
         setVal('cfg-manual-advance', 'manualAdvance', true);
+        setVal('cfg-remediation-drill-mode', 'remediationDrillMode');
         setVal('nb-opt-repeat-policy', 'repeatGradingPolicy');
 
         const langSelect = document.getElementById('cfg-language-select');
@@ -168,11 +171,9 @@ const settingsManager = {
         }
     },
 
-    // إنشاء هيكل النافذة المنبثقة إن لم تكن موجودة في الصفحة
-    ensureModalExists() {
-        if (document.getElementById('nb-settings-modal')) return;
-
-        const modalHtml = `
+    // توليد كود HTML لنافذة الإعدادات
+    getModalHTML() {
+        return `
         <div id="nb-settings-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-3 sm:p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title">
             <div class="bg-white w-full max-w-lg rounded-[2rem] shadow-2xl border border-emerald-100 overflow-hidden flex flex-col my-auto animate-in fade-in zoom-in duration-150" dir="${(typeof i18n !== 'undefined' && i18n.getActiveMeta) ? i18n.getActiveMeta().dir : 'rtl'}">
                 <!-- Header -->
@@ -292,6 +293,14 @@ const settingsManager = {
                             </div>
                             <input type="checkbox" id="cfg-manual-advance" onchange="settingsManager.save({manualAdvance: this.checked})" class="w-5 h-5 accent-emerald-600 rounded cursor-pointer">
                         </div>
+                        <div class="pt-2 border-t border-slate-200/80">
+                            <label for="cfg-remediation-drill-mode" class="block text-xs font-bold text-slate-600 mb-1">${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t("remediation_drill_mode_label") || 'نمط المعالجة (Remediation Drill):' : 'نمط المعالجة (Remediation Drill):'}</label>
+                            <select id="cfg-remediation-drill-mode" onchange="settingsManager.save({remediationDrillMode: this.value})" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-bold text-xs text-slate-700 outline-none focus:border-emerald-500">
+                                <option value="loop">${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t("drill_mode_loop") || 'تدوير الكلمات حتى الإتقان (Loop)' : 'تدوير الكلمات حتى الإتقان (Loop)'}</option>
+                                <option value="single_pass">${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t("drill_mode_single_pass") || 'مرور مفرد (Single Pass)' : 'مرور مفرد (Single Pass)'}</option>
+                                <option value="instant_repeat">${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t("drill_mode_instant_repeat") || 'تكرار موضعي فوري 3 مرات (Instant Repeat)' : 'تكرار موضعي فوري 3 مرات (Instant Repeat)'}</option>
+                            </select>
+                        </div>
                     </div>
 
                     <!-- Section 4: سياسة تقييم تكرار الدروس للطلاب -->
@@ -324,7 +333,12 @@ const settingsManager = {
             </div>
         </div>
         `;
+    },
 
+    // إنشاء هيكل النافذة المنبثقة إن لم تكن موجودة في الصفحة
+    ensureModalExists() {
+        if (document.getElementById('nb-settings-modal')) return;
+        const modalHtml = this.getModalHTML();
         document.body.insertAdjacentHTML('beforeend', modalHtml);
 
         // ربط حصر التركيز والإغلاق بمفتاح Escape
