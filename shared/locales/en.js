@@ -139,6 +139,7 @@
         "txt_perfect": "Perfect",
         "txt_excellent": "Excellent",
         "open_settings_btn": "Teacher Settings",
+        "settings_title": "Teacher Settings",
         "settings": "Settings",
         "settings_modal_title": "Teacher & System Settings",
         "settings_saved_notice": "Preferences saved locally in browser",

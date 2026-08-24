@@ -139,6 +139,7 @@
         "txt_perfect": "إتقان",
         "txt_excellent": "امتياز",
         "open_settings_btn": "إعدادات المعلم",
+        "settings_title": "إعدادات المعلم",
         "settings": "الإعدادات",
         "settings_modal_title": "إعدادات المعلم والمنظومة",
         "settings_saved_notice": "تُحفظ الخيارات محلياً في هذا المتصفح",

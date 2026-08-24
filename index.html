@@ -193,11 +193,11 @@
     <!-- LINKS-START -->
     <ul class="grid-container" role="list">
     <li class="card-item">
-      <a href="pages/remediation.html" class="lesson-card" aria-label="الصفحة 0: جلسة تدريب بنك الأخطاء التراكمي (Targeted Remediation)">
+      <a href="pages/remediation.html" class="lesson-card" aria-label="الصفحة 0: Targeted Remediation (جلسة تدريب بنك الأخطاء)">
         <div class="card-num" aria-hidden="true">0</div>
         <div class="card-info">
           <span class="card-badge">الصفحة 0</span>
-          <h3 class="card-title">جلسة تدريب بنك الأخطاء التراكمي (Targeted Remediation)</h3>
+          <h3 class="card-title">Targeted Remediation (جلسة تدريب بنك الأخطاء)</h3>
         </div>
         <div class="card-arrow" aria-hidden="true">←</div>
       </a>
@@ -593,9 +593,17 @@
         if (!titleEl.dataset.rawTitle) titleEl.dataset.rawTitle = titleEl.textContent.trim();
         const raw = titleEl.dataset.rawTitle;
         const parenMatch = raw.match(/\(([^)]+)\)/);
-        const arPart = parenMatch ? parenMatch[1].trim() : raw;
-        const enPart = raw.replace(/\s*\([^)]+\)/, '').trim();
-        titleEl.textContent = isAr ? arPart : (enPart || raw);
+        const partInside = parenMatch ? parenMatch[1].trim() : '';
+        const partOutside = raw.replace(/\s*\([^)]+\)/, '').trim();
+
+        let arPart = raw;
+        let enPart = raw;
+        if (partInside) {
+          const isInsideArabic = /[\u0600-\u06FF]/.test(partInside);
+          arPart = isInsideArabic ? partInside : partOutside;
+          enPart = isInsideArabic ? partOutside : partInside;
+        }
+        titleEl.textContent = isAr ? arPart : enPart;
       }
 
       if (pageNum) {

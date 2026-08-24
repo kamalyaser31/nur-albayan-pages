@@ -153,6 +153,9 @@
         color: var(--color-primary, #047857);
         transform: translateX(-4px);
     }
+    [dir="ltr"] .lesson-card:hover .card-arrow {
+        transform: translateX(4px);
+    }
 }
 
 .lesson-card:active {

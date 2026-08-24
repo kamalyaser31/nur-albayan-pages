@@ -89,3 +89,12 @@ body {
     background-size: 40px 40px;
     background-position: 0 0, 20px 20px;
 }
+
+header, main, footer {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+header, footer {
+    flex-shrink: 0;
+}
