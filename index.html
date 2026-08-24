@@ -2,10 +2,48 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>صفحات نور البيان التفاعلية</title>
-<meta name="description" content="منظومة صفحات نور البيان التفاعلية لتعليم القراءة وضبط الحركات والقرآن الكريم">
+<meta name="description" content="المنظومة التعليمية الرقمية الشاملة لضبط قراءة الكلمات والقرآن الكريم">
+<meta name="keywords" content="نور البيان, القرآن الكريم, تجويد, تعليم القراءة, الحركات, المدود, السكون">
+<meta name="author" content="كمال ياسر">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#047857" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#065f46" media="(prefers-color-scheme: dark)">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
+<!-- Canonical Link -->
+<link rel="canonical" href="https://kamalyaser31.github.io/nur-albayan-pages/">
+
+<!-- Social Metadata (Open Graph & Twitter Cards) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="صفحات نور البيان التفاعلية">
+<meta property="og:description" content="المنظومة التعليمية الرقمية الشاملة لضبط قراءة الكلمات والقرآن الكريم">
+<meta property="og:url" content="https://kamalyaser31.github.io/nur-albayan-pages/">
+<meta property="og:locale" content="ar_EG">
+<meta property="og:site_name" content="نور البيان">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="صفحات نور البيان التفاعلية">
+<meta name="twitter:description" content="المنظومة التعليمية الرقمية الشاملة لضبط قراءة الكلمات والقرآن الكريم">
+
+<!-- Critical Font Preloading -->
+<link rel="preload" href="shared/vendor/fonts/amiri-bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="shared/vendor/fonts/fredoka-bold.woff2" as="font" type="font/woff2" crossorigin>
+
 <link rel="stylesheet" href="shared/core.css">
+<script src="shared/settings.js" defer></script>
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalWebSite",
+  "name": "صفحات نور البيان التفاعلية",
+  "description": "المنظومة التعليمية الرقمية الشاملة لضبط قراءة الكلمات والقرآن الكريم",
+  "inLanguage": "ar"
+}
+</script>
+
 <style>
   :root {
     --primary: #047857;
@@ -15,8 +53,30 @@
     --bg: #f8fafc;
     --card-bg: #ffffff;
     --text-main: #0f172a;
-    --text-muted: #64748b;
+    --text-muted: #475569;
     --border-color: #e2e8f0;
+  }
+
+  /* رابط التخطي للوصولية */
+  .skip-link {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #047857;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 0 0 12px 12px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    z-index: 1000;
+    text-decoration: none;
+    transition: top 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .skip-link:focus-visible {
+    top: 0;
+    outline: 3px solid #fbbf24;
   }
 
   body {
@@ -28,13 +88,14 @@
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-font-smoothing: antialiased;
+    background-color: var(--bg);
   }
 
   header {
     background: linear-gradient(135deg, #065f46 0%, #047857 50%, #0d9488 100%);
     color: #ffffff;
     text-align: center;
-    padding: 44px 20px 36px;
+    padding: 40px 20px 32px;
     box-shadow: 0 4px 20px rgba(4, 120, 87, 0.15);
     position: relative;
     overflow: hidden;
@@ -59,8 +120,16 @@
 
   header p {
     font-size: clamp(0.95rem, 2vw, 1.15rem);
-    opacity: 0.92;
+    opacity: 0.95;
     font-weight: 500;
+  }
+
+  .header-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 16px;
+    flex-wrap: wrap;
   }
 
   .stats-pill {
@@ -70,116 +139,11 @@
     background: rgba(255, 255, 255, 0.18);
     backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 6px 18px;
+    padding: 7px 18px;
     border-radius: 9999px;
-    margin-top: 14px;
     font-size: 0.88rem;
     font-weight: 700;
-  }
-
-  main {
-    flex: 1;
-    width: 100%;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 32px 16px 48px;
-  }
-
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 16px;
-  }
-
-  .lesson-card {
-    background: var(--card-bg);
-    border: 2px solid var(--border-color);
-    border-radius: 20px;
-    padding: 16px 20px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    text-decoration: none;
-    color: inherit;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-    direction: ltr;
-  }
-
-  .lesson-card:hover {
-    transform: translateY(-3px);
-    border-color: #34d399;
-    box-shadow: 0 12px 24px -6px rgba(16, 185, 129, 0.18);
-    background: #ffffff;
-  }
-
-  .lesson-card:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  }
-
-  .card-num {
-    width: 52px;
-    height: 52px;
-    border-radius: 16px;
-    background: linear-gradient(135deg, #10b981, #059669);
     color: #ffffff;
-    font-size: 1.5rem;
-    font-weight: 900;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
-  }
-
-  .card-info {
-    flex: 1;
-    min-width: 0;
-    text-align: left;
-  }
-
-  .card-badge {
-    font-size: 0.72rem;
-    font-weight: 800;
-    color: var(--primary);
-    background: var(--primary-light);
-    padding: 2px 8px;
-    border-radius: 6px;
-    display: inline-block;
-    margin-bottom: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .card-title {
-    font-size: 0.98rem;
-    font-weight: 700;
-    color: var(--text-main);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .card-arrow {
-    font-size: 1.25rem;
-    color: #cbd5e1;
-    transition: transform 0.2s ease, color 0.2s ease;
-    flex-shrink: 0;
-  }
-
-  .lesson-card:hover .card-arrow {
-    color: var(--primary);
-    transform: translateX(4px);
-  }
-
-  .header-actions {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 14px;
-    flex-wrap: wrap;
   }
 
   .action-btn {
@@ -205,12 +169,25 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   }
 
+  .action-btn:focus-visible, .lesson-card:focus-visible {
+    outline: 3px solid #047857;
+    outline-offset: 3px;
+  }
+
+  main {
+    flex: 1;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 32px 16px 48px;
+  }
+
   .shortcuts-section {
     background: #ffffff;
     border: 2px solid #d1fae5;
     border-radius: 24px;
     padding: 22px 20px;
-    margin-bottom: 28px;
+    margin-bottom: 32px;
     box-shadow: 0 4px 16px rgba(4, 120, 87, 0.05);
   }
 
@@ -226,17 +203,18 @@
   }
 
   .shortcuts-title {
-    font-size: 1.12rem;
+    font-size: 1.15rem;
     font-weight: 900;
     color: #065f46;
     display: flex;
     align-items: center;
     gap: 8px;
+    margin: 0;
   }
 
   .shortcuts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 14px;
   }
 
@@ -251,14 +229,15 @@
   }
 
   .shortcut-card-title {
-    font-size: 0.82rem;
+    font-size: 0.84rem;
     font-weight: 800;
-    color: #0d9488;
+    color: #047857;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     display: flex;
     align-items: center;
     gap: 6px;
+    margin: 0;
   }
 
   .shortcut-item {
@@ -296,6 +275,124 @@
     white-space: nowrap;
   }
 
+  .kbd-hint {
+    font-size: 0.75rem;
+    color: #64748b;
+    font-weight: 600;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .card-item {
+    display: flex;
+  }
+
+  .lesson-card {
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 20px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    width: 100%;
+  }
+
+  @media (hover: hover) {
+    .lesson-card:hover {
+      transform: translateY(-3px);
+      border-color: #34d399;
+      box-shadow: 0 12px 24px -6px rgba(16, 185, 129, 0.18);
+      background: #ffffff;
+    }
+    .lesson-card:hover .card-arrow {
+      color: var(--primary);
+      transform: translateX(-4px);
+    }
+  }
+
+  .lesson-card:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .card-num {
+    width: 50px;
+    height: 50px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #059669, #047857);
+    color: #ffffff;
+    font-size: 1.45rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(4, 120, 87, 0.25);
+  }
+
+  .card-info {
+    flex: 1;
+    min-width: 0;
+    text-align: right;
+  }
+
+  .card-badge {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--primary);
+    background: var(--primary-light);
+    padding: 2px 8px;
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 4px;
+    letter-spacing: 0.3px;
+  }
+
+  .card-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0;
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-arrow {
+    font-size: 1.25rem;
+    color: #94a3b8;
+    transition: transform 0.2s ease, color 0.2s ease;
+    flex-shrink: 0;
+    font-weight: 900;
+  }
+
   .empty {
     grid-column: 1 / -1;
     text-align: center;
@@ -311,51 +408,55 @@
   footer {
     text-align: center;
     padding: 24px 20px;
-    font-size: 0.85rem;
-    color: var(--text-muted);
+    font-size: 0.88rem;
+    color: var(--text-main);
     border-top: 1px solid var(--border-color);
     background: #ffffff;
   }
 
   footer p {
     margin-top: 4px;
-    font-size: 0.8rem;
-    color: #94a3b8;
+    font-size: 0.82rem;
+    color: #475569;
   }
 </style>
 </head>
 <body>
+
+<a href="#main-content" class="skip-link">تخطي إلى قائمة الدروس</a>
 
 <header>
   <h1>صفحات نور البيان التفاعلية</h1>
   <p>المنظومة التعليمية الرقمية الشاملة لضبط قراءة الكلمات والقرآن الكريم</p>
   <div class="header-actions">
     <div class="stats-pill" id="count">
-      <span>📚 إجمالي الدروس: 33 صفحة تفاعلية</span>
+      <span aria-hidden="true">📚</span>
+      <span>إجمالي الدروس: 33 صفحة تفاعلية</span>
     </div>
     <button onclick="settingsManager.open()" class="action-btn" aria-label="فتح نافذة إعدادات المعلم">
-      <span>⚙️ إعدادات المعلم</span>
+      <span aria-hidden="true">⚙️</span>
+      <span>إعدادات المعلم</span>
     </button>
   </div>
 </header>
 
-<main>
+<main id="main-content">
   <!-- SHORTCUTS GUIDE SECTION -->
   <section class="shortcuts-section" aria-labelledby="shortcuts-guide-title">
     <div class="shortcuts-header">
-      <div class="shortcuts-title" id="shortcuts-guide-title">
+      <h2 class="shortcuts-title" id="shortcuts-guide-title">
         <span aria-hidden="true">⌨️</span>
         <span>دليل مفاتيح الاختصارات للمعلم (لوحة المفاتيح والشاشات الذكية)</span>
-      </div>
+      </h2>
       <span class="text-xs text-slate-500 font-bold">تسريع وإدارة التحديات المباشرة أثناء الحصة</span>
     </div>
 
     <div class="shortcuts-grid">
       <!-- Card 1: التقييم والتحفيز -->
       <div class="shortcut-card">
-        <div class="shortcut-card-title">
+        <h3 class="shortcut-card-title">
           <span aria-hidden="true">🎯</span> <span>التقييم والتحفيز</span>
-        </div>
+        </h3>
         <div class="shortcut-item">
           <span>إجابة صحيحة (إتقان)</span>
           <div class="kbd-group">
@@ -368,20 +469,22 @@
           <span>إجابة خاطئة (مراجعة)</span>
           <div class="kbd-group">
             <span class="kbd">1</span>
-            <span class="kbd">↓ سهم لأسفل</span>
+            <span class="kbd">↓</span>
+            <span class="kbd-hint">(سهم لأسفل)</span>
           </div>
         </div>
       </div>
 
       <!-- Card 2: التنقل بين الكلمات -->
       <div class="shortcut-card">
-        <div class="shortcut-card-title">
+        <h3 class="shortcut-card-title">
           <span aria-hidden="true">🔄</span> <span>التنقل وتصفح الكلمات</span>
-        </div>
+        </h3>
         <div class="shortcut-item">
           <span>البطاقة التالية (تقدم)</span>
           <div class="kbd-group">
-            <span class="kbd">← سهم لليسار</span>
+            <span class="kbd">←</span>
+            <span class="kbd-hint">(يسار)</span>
             <span class="kbd">PageDown</span>
             <span class="kbd">N</span>
           </div>
@@ -389,7 +492,8 @@
         <div class="shortcut-item">
           <span>البطاقة السابقة (رجوع)</span>
           <div class="kbd-group">
-            <span class="kbd">→ سهم لليمين</span>
+            <span class="kbd">→</span>
+            <span class="kbd-hint">(يمين)</span>
             <span class="kbd">PageUp</span>
           </div>
         </div>
@@ -397,9 +501,9 @@
 
       <!-- Card 3: التكبير وإدارة الألعاب -->
       <div class="shortcut-card">
-        <div class="shortcut-card-title">
+        <h3 class="shortcut-card-title">
           <span aria-hidden="true">🔍</span> <span>التكبير والألعاب</span>
-        </div>
+        </h3>
         <div class="shortcut-item">
           <span>إغلاق نافذة التكبير</span>
           <div class="kbd-group">
@@ -416,274 +520,344 @@
     </div>
   </section>
 
-  <!-- LINKS-START -->
-  <div class="grid-container">
-    <a href="pages/6.html" class="lesson-card" aria-label="Nour Al-Bayan Page 6: Page 6 • Letter Shapes (أشكال الحروف)">
-      <div class="card-num">6</div>
-      <div class="card-info">
-        <span class="card-badge">Page 6</span>
-        <h2 class="card-title">Page 6 • Letter Shapes (أشكال الحروف)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/7.html" class="lesson-card" aria-label="Nour Al-Bayan Page 7: Page 7 • Letters Comparison (مقارنة الحروف)">
-      <div class="card-num">7</div>
-      <div class="card-info">
-        <span class="card-badge">Page 7</span>
-        <h2 class="card-title">Page 7 • Letters Comparison (مقارنة الحروف)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/8.html" class="lesson-card" aria-label="Nour Al-Bayan Page 8: Page 8 • Segmented Letters (الحروف المجزأة)">
-      <div class="card-num">8</div>
-      <div class="card-info">
-        <span class="card-badge">Page 8</span>
-        <h2 class="card-title">Page 8 • Segmented Letters (الحروف المجزأة)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/9.html" class="lesson-card" aria-label="Nour Al-Bayan Page 9: Page 9 • Segmented Letters (الحروف المجزأة)">
-      <div class="card-num">9</div>
-      <div class="card-info">
-        <span class="card-badge">Page 9</span>
-        <h2 class="card-title">Page 9 • Segmented Letters (الحروف المجزأة)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/10.html" class="lesson-card" aria-label="Nour Al-Bayan Page 10: Page 10 • Segmented Letters (الحروف المجزأة)">
-      <div class="card-num">10</div>
-      <div class="card-info">
-        <span class="card-badge">Page 10</span>
-        <h2 class="card-title">Page 10 • Segmented Letters (الحروف المجزأة)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/11.html" class="lesson-card" aria-label="Nour Al-Bayan Page 11: Page 11 • Segmented Letters (الحروف المجزأة)">
-      <div class="card-num">11</div>
-      <div class="card-info">
-        <span class="card-badge">Page 11</span>
-        <h2 class="card-title">Page 11 • Segmented Letters (الحروف المجزأة)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/12.html" class="lesson-card" aria-label="Nour Al-Bayan Page 12: Page 12 • Segmented Letters (الحروف المجزأة)">
-      <div class="card-num">12</div>
-      <div class="card-info">
-        <span class="card-badge">Page 12</span>
-        <h2 class="card-title">Page 12 • Segmented Letters (الحروف المجزأة)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/13.html" class="lesson-card" aria-label="Nour Al-Bayan Page 13: Page 13 • Segmented Letters (الحروف المجزأة)">
-      <div class="card-num">13</div>
-      <div class="card-info">
-        <span class="card-badge">Page 13</span>
-        <h2 class="card-title">Page 13 • Segmented Letters (الحروف المجزأة)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/14.html" class="lesson-card" aria-label="Nour Al-Bayan Page 14: Page 14 • Segmented Letters (الحروف المجزأة)">
-      <div class="card-num">14</div>
-      <div class="card-info">
-        <span class="card-badge">Page 14</span>
-        <h2 class="card-title">Page 14 • Segmented Letters (الحروف المجزأة)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/15.html" class="lesson-card" aria-label="Nour Al-Bayan Page 15: Page 15 • Segmented Letters (الحروف المجزأة)">
-      <div class="card-num">15</div>
-      <div class="card-info">
-        <span class="card-badge">Page 15</span>
-        <h2 class="card-title">Page 15 • Segmented Letters (الحروف المجزأة)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/16.html" class="lesson-card" aria-label="Nour Al-Bayan Page 16: Page 16 • Segmented Letters (الحروف المجزأة)">
-      <div class="card-num">16</div>
-      <div class="card-info">
-        <span class="card-badge">Page 16</span>
-        <h2 class="card-title">Page 16 • Segmented Letters (الحروف المجزأة)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/17.html" class="lesson-card" aria-label="Nour Al-Bayan Page 17: Page 17 • Segmented Letters (الحروف المجزأة)">
-      <div class="card-num">17</div>
-      <div class="card-info">
-        <span class="card-badge">Page 17</span>
-        <h2 class="card-title">Page 17 • Segmented Letters (الحروف المجزأة)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/18.html" class="lesson-card" aria-label="Nour Al-Bayan Page 18: Page 18 • Segmented Letters (الحروف المجزأة)">
-      <div class="card-num">18</div>
-      <div class="card-info">
-        <span class="card-badge">Page 18</span>
-        <h2 class="card-title">Page 18 • Segmented Letters (الحروف المجزأة)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/19.html" class="lesson-card" aria-label="Nour Al-Bayan Page 19: Page 19 • Harakat (الضمة • الكسرة • الفتحة)">
-      <div class="card-num">19</div>
-      <div class="card-info">
-        <span class="card-badge">Page 19</span>
-        <h2 class="card-title">Page 19 • Harakat (الضمة • الكسرة • الفتحة)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/20.html" class="lesson-card" aria-label="Nour Al-Bayan Page 20: Page 20 • Harakat Examples (أمثلة الحركات)">
-      <div class="card-num">20</div>
-      <div class="card-info">
-        <span class="card-badge">Page 20</span>
-        <h2 class="card-title">Page 20 • Harakat Examples (أمثلة الحركات)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/21.html" class="lesson-card" aria-label="Nour Al-Bayan Page 21: Page 21 • Mutaharrik Syllables (أمثلة المتحرك)">
-      <div class="card-num">21</div>
-      <div class="card-info">
-        <span class="card-badge">Page 21</span>
-        <h2 class="card-title">Page 21 • Mutaharrik Syllables (أمثلة المتحرك)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/22.html" class="lesson-card" aria-label="Nour Al-Bayan Page 22: Page 22 • Mutaharrik Word Pairs (أمثلة الكلمات المتحركة)">
-      <div class="card-num">22</div>
-      <div class="card-info">
-        <span class="card-badge">Page 22</span>
-        <h2 class="card-title">Page 22 • Mutaharrik Word Pairs (أمثلة الكلمات المتحركة)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/23.html" class="lesson-card" aria-label="Nour Al-Bayan Page 23: Page 23 • Reading Sentences (جمل القراءة)">
-      <div class="card-num">23</div>
-      <div class="card-info">
-        <span class="card-badge">Page 23</span>
-        <h2 class="card-title">Page 23 • Reading Sentences (جمل القراءة)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/24.html" class="lesson-card" aria-label="Nour Al-Bayan Page 24: Page 24 • Madd Alif Training (تدريب المد بالألف)">
-      <div class="card-num">24</div>
-      <div class="card-info">
-        <span class="card-badge">Page 24</span>
-        <h2 class="card-title">Page 24 • Madd Alif Training (تدريب المد بالألف)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/25.html" class="lesson-card" aria-label="Nour Al-Bayan Page 25: Page 25 • Reading Madd Alif (قراءة كلمات المد بالألف)">
-      <div class="card-num">25</div>
-      <div class="card-info">
-        <span class="card-badge">Page 25</span>
-        <h2 class="card-title">Page 25 • Reading Madd Alif (قراءة كلمات المد بالألف)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/26.html" class="lesson-card" aria-label="Nour Al-Bayan Page 26: Page 26 • Madd Alif Words (كلمات المد بالألف)">
-      <div class="card-num">26</div>
-      <div class="card-info">
-        <span class="card-badge">Page 26</span>
-        <h2 class="card-title">Page 26 • Madd Alif Words (كلمات المد بالألف)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/27.html" class="lesson-card" aria-label="Nour Al-Bayan Page 27: Page 27 • Madd by Alif Khanjariyya (المد بالألف الخنجرية)">
-      <div class="card-num">27</div>
-      <div class="card-info">
-        <span class="card-badge">Page 27</span>
-        <h2 class="card-title">Page 27 • Madd by Alif Khanjariyya (المد بالألف الخنجرية)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/28.html" class="lesson-card" aria-label="Nour Al-Bayan Page 28: Page 28 • Madd by Yaa (المد بالياء)">
-      <div class="card-num">28</div>
-      <div class="card-info">
-        <span class="card-badge">Page 28</span>
-        <h2 class="card-title">Page 28 • Madd by Yaa (المد بالياء)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/29.html" class="lesson-card" aria-label="Nour Al-Bayan Page 29: Page 29 • Madd by Yaa Training (تدريب المد بالياء)">
-      <div class="card-num">29</div>
-      <div class="card-info">
-        <span class="card-badge">Page 29</span>
-        <h2 class="card-title">Page 29 • Madd by Yaa Training (تدريب المد بالياء)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/30.html" class="lesson-card" aria-label="Nour Al-Bayan Page 30: Page 30 • Reading Madd by Yaa (قراءة كلمات المد بالياء)">
-      <div class="card-num">30</div>
-      <div class="card-info">
-        <span class="card-badge">Page 30</span>
-        <h2 class="card-title">Page 30 • Reading Madd by Yaa (قراءة كلمات المد بالياء)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/31.html" class="lesson-card" aria-label="Nour Al-Bayan Page 31: Page 31 • Small Sillah Yaa (الياء الصغيرة والصلة)">
-      <div class="card-num">31</div>
-      <div class="card-info">
-        <span class="card-badge">Page 31</span>
-        <h2 class="card-title">Page 31 • Small Sillah Yaa (الياء الصغيرة والصلة)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/32.html" class="lesson-card" aria-label="Nour Al-Bayan Page 32: Page 32 • Short vs Long Vowels (الحركات والمدود)">
-      <div class="card-num">32</div>
-      <div class="card-info">
-        <span class="card-badge">Page 32</span>
-        <h2 class="card-title">Page 32 • Short vs Long Vowels (الحركات والمدود)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/33.html" class="lesson-card" aria-label="Nour Al-Bayan Page 33: Page 33 • Madd of Waw (المد بالواو)">
-      <div class="card-num">33</div>
-      <div class="card-info">
-        <span class="card-badge">Page 33</span>
-        <h2 class="card-title">Page 33 • Madd of Waw (المد بالواو)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/34.html" class="lesson-card" aria-label="Nour Al-Bayan Page 34: Page 34 • Madd of Waw Training (تدريب المد بالواو)">
-      <div class="card-num">34</div>
-      <div class="card-info">
-        <span class="card-badge">Page 34</span>
-        <h2 class="card-title">Page 34 • Madd of Waw Training (تدريب المد بالواو)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/35.html" class="lesson-card" aria-label="Nour Al-Bayan Page 35: Page 35 • Small Sillah Waw (الواو الصغيرة والصلة)">
-      <div class="card-num">35</div>
-      <div class="card-info">
-        <span class="card-badge">Page 35</span>
-        <h2 class="card-title">Page 35 • Small Sillah Waw (الواو الصغيرة والصلة)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/36.html" class="lesson-card" aria-label="Nour Al-Bayan Page 36: Page 36 • General Madd Training 1 (تدريبات المدود ١)">
-      <div class="card-num">36</div>
-      <div class="card-info">
-        <span class="card-badge">Page 36</span>
-        <h2 class="card-title">Page 36 • General Madd Training 1 (تدريبات المدود ١)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/37.html" class="lesson-card" aria-label="Nour Al-Bayan Page 37: Page 37 • General Madd Training 2 (تدريبات المدود ٢)">
-      <div class="card-num">37</div>
-      <div class="card-info">
-        <span class="card-badge">Page 37</span>
-        <h2 class="card-title">Page 37 • General Madd Training 2 (تدريبات المدود ٢)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-    <a href="pages/39.html" class="lesson-card" aria-label="Nour Al-Bayan Page 39: Page 39 • Quranic Sukun (السكون القرآني)">
-      <div class="card-num">39</div>
-      <div class="card-info">
-        <span class="card-badge">Page 39</span>
-        <h2 class="card-title">Page 39 • Quranic Sukun (السكون القرآني)</h2>
-      </div>
-      <div class="card-arrow" aria-hidden="true">➡</div>
-    </a>
-  </div>
-  <!-- LINKS-END -->
+  <!-- LESSONS INDEX NAVIGATION -->
+  <nav aria-label="فهرس صفحات الدروس">
+    <h2 class="sr-only">قائمة صفحات الدروس</h2>
+    <!-- LINKS-START -->
+    <ul class="grid-container" role="list">
+    <li class="card-item">
+      <a href="pages/6.html" class="lesson-card" aria-label="الصفحة 6: Letter Shapes (أشكال الحروف)">
+        <div class="card-num" aria-hidden="true">6</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 6</span>
+          <h3 class="card-title">Letter Shapes (أشكال الحروف)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/7.html" class="lesson-card" aria-label="الصفحة 7: Letters Comparison (مقارنة الحروف)">
+        <div class="card-num" aria-hidden="true">7</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 7</span>
+          <h3 class="card-title">Letters Comparison (مقارنة الحروف)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/8.html" class="lesson-card" aria-label="الصفحة 8: Segmented Letters (الحروف المجزأة)">
+        <div class="card-num" aria-hidden="true">8</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 8</span>
+          <h3 class="card-title">Segmented Letters (الحروف المجزأة)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/9.html" class="lesson-card" aria-label="الصفحة 9: Segmented Letters (الحروف المجزأة)">
+        <div class="card-num" aria-hidden="true">9</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 9</span>
+          <h3 class="card-title">Segmented Letters (الحروف المجزأة)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/10.html" class="lesson-card" aria-label="الصفحة 10: Segmented Letters (الحروف المجزأة)">
+        <div class="card-num" aria-hidden="true">10</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 10</span>
+          <h3 class="card-title">Segmented Letters (الحروف المجزأة)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/11.html" class="lesson-card" aria-label="الصفحة 11: Segmented Letters (الحروف المجزأة)">
+        <div class="card-num" aria-hidden="true">11</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 11</span>
+          <h3 class="card-title">Segmented Letters (الحروف المجزأة)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/12.html" class="lesson-card" aria-label="الصفحة 12: Segmented Letters (الحروف المجزأة)">
+        <div class="card-num" aria-hidden="true">12</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 12</span>
+          <h3 class="card-title">Segmented Letters (الحروف المجزأة)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/13.html" class="lesson-card" aria-label="الصفحة 13: Segmented Letters (الحروف المجزأة)">
+        <div class="card-num" aria-hidden="true">13</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 13</span>
+          <h3 class="card-title">Segmented Letters (الحروف المجزأة)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/14.html" class="lesson-card" aria-label="الصفحة 14: Segmented Letters (الحروف المجزأة)">
+        <div class="card-num" aria-hidden="true">14</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 14</span>
+          <h3 class="card-title">Segmented Letters (الحروف المجزأة)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/15.html" class="lesson-card" aria-label="الصفحة 15: Segmented Letters (الحروف المجزأة)">
+        <div class="card-num" aria-hidden="true">15</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 15</span>
+          <h3 class="card-title">Segmented Letters (الحروف المجزأة)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/16.html" class="lesson-card" aria-label="الصفحة 16: Segmented Letters (الحروف المجزأة)">
+        <div class="card-num" aria-hidden="true">16</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 16</span>
+          <h3 class="card-title">Segmented Letters (الحروف المجزأة)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/17.html" class="lesson-card" aria-label="الصفحة 17: Segmented Letters (الحروف المجزأة)">
+        <div class="card-num" aria-hidden="true">17</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 17</span>
+          <h3 class="card-title">Segmented Letters (الحروف المجزأة)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/18.html" class="lesson-card" aria-label="الصفحة 18: Segmented Letters (الحروف المجزأة)">
+        <div class="card-num" aria-hidden="true">18</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 18</span>
+          <h3 class="card-title">Segmented Letters (الحروف المجزأة)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/19.html" class="lesson-card" aria-label="الصفحة 19: Harakat (الضمة • الكسرة • الفتحة)">
+        <div class="card-num" aria-hidden="true">19</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 19</span>
+          <h3 class="card-title">Harakat (الضمة • الكسرة • الفتحة)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/20.html" class="lesson-card" aria-label="الصفحة 20: Harakat Examples (أمثلة الحركات)">
+        <div class="card-num" aria-hidden="true">20</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 20</span>
+          <h3 class="card-title">Harakat Examples (أمثلة الحركات)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/21.html" class="lesson-card" aria-label="الصفحة 21: Mutaharrik Syllables (أمثلة المتحرك)">
+        <div class="card-num" aria-hidden="true">21</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 21</span>
+          <h3 class="card-title">Mutaharrik Syllables (أمثلة المتحرك)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/22.html" class="lesson-card" aria-label="الصفحة 22: Mutaharrik Word Pairs (أمثلة الكلمات المتحركة)">
+        <div class="card-num" aria-hidden="true">22</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 22</span>
+          <h3 class="card-title">Mutaharrik Word Pairs (أمثلة الكلمات المتحركة)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/23.html" class="lesson-card" aria-label="الصفحة 23: Reading Sentences (جمل القراءة)">
+        <div class="card-num" aria-hidden="true">23</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 23</span>
+          <h3 class="card-title">Reading Sentences (جمل القراءة)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/24.html" class="lesson-card" aria-label="الصفحة 24: Madd Alif Training (تدريب المد بالألف)">
+        <div class="card-num" aria-hidden="true">24</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 24</span>
+          <h3 class="card-title">Madd Alif Training (تدريب المد بالألف)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/25.html" class="lesson-card" aria-label="الصفحة 25: Reading Madd Alif (قراءة كلمات المد بالألف)">
+        <div class="card-num" aria-hidden="true">25</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 25</span>
+          <h3 class="card-title">Reading Madd Alif (قراءة كلمات المد بالألف)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/26.html" class="lesson-card" aria-label="الصفحة 26: Madd Alif Words (كلمات المد بالألف)">
+        <div class="card-num" aria-hidden="true">26</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 26</span>
+          <h3 class="card-title">Madd Alif Words (كلمات المد بالألف)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/27.html" class="lesson-card" aria-label="الصفحة 27: Madd by Alif Khanjariyya (المد بالألف الخنجرية)">
+        <div class="card-num" aria-hidden="true">27</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 27</span>
+          <h3 class="card-title">Madd by Alif Khanjariyya (المد بالألف الخنجرية)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/28.html" class="lesson-card" aria-label="الصفحة 28: Madd by Yaa (المد بالياء)">
+        <div class="card-num" aria-hidden="true">28</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 28</span>
+          <h3 class="card-title">Madd by Yaa (المد بالياء)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/29.html" class="lesson-card" aria-label="الصفحة 29: Madd by Yaa Training (تدريب المد بالياء)">
+        <div class="card-num" aria-hidden="true">29</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 29</span>
+          <h3 class="card-title">Madd by Yaa Training (تدريب المد بالياء)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/30.html" class="lesson-card" aria-label="الصفحة 30: Reading Madd by Yaa (قراءة كلمات المد بالياء)">
+        <div class="card-num" aria-hidden="true">30</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 30</span>
+          <h3 class="card-title">Reading Madd by Yaa (قراءة كلمات المد بالياء)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/31.html" class="lesson-card" aria-label="الصفحة 31: Small Sillah Yaa (الياء الصغيرة والصلة)">
+        <div class="card-num" aria-hidden="true">31</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 31</span>
+          <h3 class="card-title">Small Sillah Yaa (الياء الصغيرة والصلة)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/32.html" class="lesson-card" aria-label="الصفحة 32: Short vs Long Vowels (الحركات والمدود)">
+        <div class="card-num" aria-hidden="true">32</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 32</span>
+          <h3 class="card-title">Short vs Long Vowels (الحركات والمدود)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/33.html" class="lesson-card" aria-label="الصفحة 33: Madd of Waw (المد بالواو)">
+        <div class="card-num" aria-hidden="true">33</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 33</span>
+          <h3 class="card-title">Madd of Waw (المد بالواو)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/34.html" class="lesson-card" aria-label="الصفحة 34: Madd of Waw Training (تدريب المد بالواو)">
+        <div class="card-num" aria-hidden="true">34</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 34</span>
+          <h3 class="card-title">Madd of Waw Training (تدريب المد بالواو)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/35.html" class="lesson-card" aria-label="الصفحة 35: Small Sillah Waw (الواو الصغيرة والصلة)">
+        <div class="card-num" aria-hidden="true">35</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 35</span>
+          <h3 class="card-title">Small Sillah Waw (الواو الصغيرة والصلة)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/36.html" class="lesson-card" aria-label="الصفحة 36: General Madd Training 1 (تدريبات المدود ١)">
+        <div class="card-num" aria-hidden="true">36</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 36</span>
+          <h3 class="card-title">General Madd Training 1 (تدريبات المدود ١)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/37.html" class="lesson-card" aria-label="الصفحة 37: General Madd Training 2 (تدريبات المدود ٢)">
+        <div class="card-num" aria-hidden="true">37</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 37</span>
+          <h3 class="card-title">General Madd Training 2 (تدريبات المدود ٢)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+    <li class="card-item">
+      <a href="pages/39.html" class="lesson-card" aria-label="الصفحة 39: Quranic Sukun (السكون القرآني)">
+        <div class="card-num" aria-hidden="true">39</div>
+        <div class="card-info">
+          <span class="card-badge">الصفحة 39</span>
+          <h3 class="card-title">Quranic Sukun (السكون القرآني)</h3>
+        </div>
+        <div class="card-arrow" aria-hidden="true">←</div>
+      </a>
+    </li>
+  </ul>
+    <!-- LINKS-END -->
+  </nav>
 </main>
 
 <footer>
@@ -691,6 +865,5 @@
   <p>تطوير الشيخ جهاد الصياد • نسألكم الدعاء لوالده ولأخيه محمد رحمهما الله</p>
 </footer>
 
-<script src="shared/settings.js"></script>
 </body>
 </html>
