@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>نور البيان - جلسة معالجة الأخطاء</title>
+    <script src="../shared/vendor/chart.umd.min.js"></script>
+    <script src="../shared/vendor/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="../shared/core.css">
+</head>
+<body class="flex flex-col items-center select-none bg-emerald-50/40">
+    <script>
+        window.PAGE_CONFIG = {
+            pageNumber: 'remediation',
+            title: 'نور البيان 🎯',
+            subtitle: 'جلسة تدريب بنك الأخطاء التراكمي (Targeted Remediation)',
+            footer: 'منظومة نور البيان التفاعلية • جلسة معالجة الأخطاء المخصصة',
+            game3: 'memory'
+        };
+
+        const _themes = ["pink", "green", "blue", "yellow"];
+
+        // استخراج أخطاء الطالب النشط من التخزين المحلي ديناميكياً
+        let rawMistakes = [];
+        try {
+            const rawData = localStorage.getItem('nb_students_data');
+            if (rawData) {
+                const parsed = JSON.parse(rawData);
+                const activeId = parsed.activeStudentId;
+                if (activeId && Array.isArray(parsed.students)) {
+                    const activeStudent = parsed.students.find(s => s.id === activeId);
+                    if (activeStudent && Array.isArray(activeStudent.mistakeBank)) {
+                        rawMistakes = activeStudent.mistakeBank;
+                    }
+                }
+            }
+        } catch (e) {
+            console.error('Error loading mistake bank:', e);
+        }
+
+        // بناء مصفوفة الكلمات التدريبية الحية
+        let dataset = [];
+        if (rawMistakes.length > 0) {
+            dataset = rawMistakes.map((m, i) => ({
+                w: [m.word],
+                t: (m.count > 2) ? 'danger' : 'normal',
+                multiBox: false,
+                theme: _themes[i % _themes.length],
+                info: `الدرس ${m.lessonId || 'عام'} • تعثر ${m.count || 1} مرات`
+            }));
+        } else {
+            dataset = [{
+                w: ['مَا شَاءَ اللهُ'],
+                t: 'golden',
+                multiBox: false,
+                theme: 'green',
+                info: 'بنك الأخطاء نقي وخالٍ من التعثرات'
+            }];
+        }
+    </script>
+    <script src="../shared/core.js"></script>
+</body>
+</html>

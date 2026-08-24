@@ -499,13 +499,15 @@
                     existingMistake.count = (existingMistake.count || 1) + 1;
                     existingMistake.timestamp = now;
                     existingMistake.mastered = false;
+                    existingMistake.consecutiveCorrect = 0;
                 } else {
                     student.mistakeBank.push({
                         word: plainWord,
                         lessonId: lessonKey,
                         timestamp: now,
                         count: 1,
-                        mastered: false
+                        mastered: false,
+                        consecutiveCorrect: 0
                     });
                 }
             }
@@ -669,6 +671,76 @@
             this._dispatchEvent('nb:student-progress-updated', { studentId: targetStudentId });
 
             return this._clone(student.mistakeBank);
+        },
+
+        /**
+         * تسجيل محاولة معالجة لكلمة في جلسة تدريب الأخطاء
+         * تطبيق قاعدة الإتقان الراسخ (Double-Check Mastery): تتطلب الكلمة إتقانها مرتين متتاليتين لحذفها
+         * @param {string} studentIdOrWord معرف الطالب أو الكلمة إن كان الطالب نشطاً
+         * @param {string|boolean} wordOrIsCorrect الكلمة أو صحة الإجابة
+         * @param {boolean} [isCorrectVal] صحة الإجابة إذا تم تمرير المعرف
+         * @returns {Object} { mastered: boolean, consecutiveCorrect: number, remainingMistakes: number }
+         */
+        recordRemediationAttempt(studentIdOrWord, wordOrIsCorrect, isCorrectVal) {
+            this.init();
+            let targetStudentId = this._state.activeStudentId;
+            let targetWord = studentIdOrWord;
+            let isCorrect = !!wordOrIsCorrect;
+
+            if (typeof wordOrIsCorrect === 'string') {
+                targetStudentId = studentIdOrWord;
+                targetWord = wordOrIsCorrect;
+                isCorrect = !!isCorrectVal;
+            }
+
+            if (!targetStudentId || !targetWord) {
+                return { mastered: false, consecutiveCorrect: 0, remainingMistakes: 0 };
+            }
+
+            const student = this._state.students.find(s => s.id === targetStudentId);
+            if (!student || !Array.isArray(student.mistakeBank)) {
+                return { mastered: false, consecutiveCorrect: 0, remainingMistakes: 0 };
+            }
+
+            const cleanTarget = this._extractPlainWord(targetWord);
+            const mistakeItem = student.mistakeBank.find(m => m.word === cleanTarget);
+
+            if (!mistakeItem) {
+                return { mastered: true, consecutiveCorrect: 2, remainingMistakes: student.mistakeBank.length };
+            }
+
+            let wasMastered = false;
+            if (isCorrect) {
+                mistakeItem.consecutiveCorrect = (mistakeItem.consecutiveCorrect || 0) + 1;
+                student.totalScore += 2; // نقطتان لكل قراءة صحيحة
+
+                if (mistakeItem.consecutiveCorrect >= 2) {
+                    // إتقان راسخ - حذف الكلمة من البنك ومنح مكافأة إضافية
+                    student.mistakeBank = student.mistakeBank.filter(m => m.word !== cleanTarget);
+                    student.totalScore += 3; // مكافأة إتمام الإتقان
+                    wasMastered = true;
+                }
+            } else {
+                mistakeItem.consecutiveCorrect = 0;
+                mistakeItem.count = (mistakeItem.count || 1) + 1;
+                mistakeItem.timestamp = Date.now();
+            }
+
+            student.lastActive = Date.now();
+            this._saveToStorage();
+
+            this._dispatchEvent('nb:student-progress-updated', {
+                studentId: student.id,
+                word: cleanTarget,
+                isCorrect,
+                wasMastered
+            });
+
+            return {
+                mastered: wasMastered,
+                consecutiveCorrect: wasMastered ? 2 : (mistakeItem.consecutiveCorrect || 0),
+                remainingMistakes: student.mistakeBank.length
+            };
         },
 
         /**

@@ -417,6 +417,34 @@ const app = {
             studentManager.recordCardEvaluation(lessonId, isCorrect, isCorrect ? pts : 0, currentWord, this.idx, dataset ? dataset.length : 0);
         }
 
+        if (typeof PAGE_CONFIG !== 'undefined' && PAGE_CONFIG.pageNumber === 'remediation') {
+            const currentItemIdx = (this.order && this.order[this.idx] !== undefined) ? this.order[this.idx] : this.idx;
+            const currentWord = (typeof dataset !== 'undefined' && dataset[currentItemIdx]) ? dataset[currentItemIdx] : null;
+            if (currentWord && typeof studentManager !== 'undefined') {
+                const res = studentManager.recordRemediationAttempt(studentManager.getActiveStudentId(), currentWord, isCorrect);
+                if (isCorrect) {
+                    this.stats.ok++;
+                    this.score += res.mastered ? 5 : 2;
+                    const feedback = res.mastered ? 'أتقنت الكلمة تماماً! 👑' : 'خطوة ممتازة (1/2) ⭐';
+                    this.triggerFeedback(feedback, '#10b981', true);
+                } else {
+                    this.stats.err++;
+                    this.triggerFeedback('تحتاج تدريباً إضافياً ⭐', '#f43f5e', false);
+                    if (typeof Sound !== 'undefined' && typeof Sound.fail === 'function') Sound.fail();
+                }
+                this.updateScoreUI();
+                if (!settings.manualAdvance) {
+                    this._isAdvancing = true;
+                    this.clearAdvanceTimer();
+                    this.advanceTimer = setTimeout(() => {
+                        this._isAdvancing = false;
+                        this.next();
+                    }, 600);
+                }
+                return;
+            }
+        }
+
         if (this.isReviewMode) {
             if (!this.reviewQueue || this.reviewIdx >= this.reviewQueue.length) return;
             if (isCorrect) {
@@ -650,6 +678,28 @@ const app = {
     closeOverlay() { const overlay = document.getElementById('word-overlay'); if (overlay) overlay.classList.add('hidden'); },
 
     gradeResult(isCorrect) {
+        if (typeof PAGE_CONFIG !== 'undefined' && PAGE_CONFIG.pageNumber === 'remediation') {
+            const currentWord = (typeof dataset !== 'undefined' && this.currentActiveIndex !== null && dataset[this.currentActiveIndex]) ? dataset[this.currentActiveIndex] : null;
+            if (currentWord && typeof studentManager !== 'undefined') {
+                const res = studentManager.recordRemediationAttempt(studentManager.getActiveStudentId(), currentWord, isCorrect);
+                if (isCorrect) {
+                    this.score += res.mastered ? 5 : 2;
+                    this.stats.ok++;
+                    const feedback = res.mastered ? 'أتقنت الكلمة تماماً! 👑' : 'خطوة ممتازة (1/2) ⭐';
+                    this.triggerFeedback(feedback, '#10b981', true);
+                } else {
+                    this.stats.err++;
+                    this.triggerFeedback('تحتاج تدريباً إضافياً ⭐', '#f43f5e', false);
+                }
+                if (typeof honeycombGame !== 'undefined' && this.currentActiveIndex !== null) {
+                    honeycombGame.markStatus(this.currentActiveIndex, isCorrect);
+                }
+                const scoreEl = document.getElementById('score-val'); if (scoreEl) scoreEl.innerText = this.score;
+                this.closeOverlay();
+                return;
+            }
+        }
+
         if (isCorrect) {
             this.score += 5;
             this.stats.ok++;

@@ -1445,6 +1445,13 @@ const rosterManager = {
         }
     },
 
+    launchRemediation(studentId) {
+        if (typeof studentManager !== 'undefined') {
+            studentManager.setActiveStudent(studentId);
+        }
+        window.location.href = 'pages/remediation.html';
+    },
+
     trapFocus(modal) {
         const focusableSelector = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
         
@@ -1700,7 +1707,14 @@ const rosterManager = {
                 </h4>
                 <p class="text-xs text-rose-700 font-medium mt-0.5">كلمات واجه الطالب صعوبة في قراءتها. تُعرض مشكولة بالرسم القرآني لمراجعتها شفوياً وتثبيتها.</p>
               </div>
-              <span class="text-xs font-bold text-rose-800 bg-rose-100 px-2.5 py-1 rounded-full border border-rose-200">${mistakes.length} كلمات</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-rose-800 bg-rose-100 px-2.5 py-1 rounded-full border border-rose-200">${mistakes.length} كلمات</span>
+                ${mistakes.length > 0 ? `
+                  <button onclick="rosterManager.launchRemediation('${student.id}')" class="inline-flex items-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white font-black text-xs px-3.5 py-1 rounded-full shadow-xs transition-transform hover:scale-105" aria-label="إطلاق جلسة تدريب الأخطاء التفاعلية">
+                    <span aria-hidden="true">🚀</span> <span>إطلاق التدريب التفاعلي</span>
+                  </button>
+                ` : ''}
+              </div>
             </div>
         `;
 
