@@ -164,10 +164,10 @@ function buildAppUI() {
             <h2 id="transition-title" class="text-3xl sm:text-5xl font-black text-yellow-300 drop-shadow-md mb-3 animate-bounce">Amazing Job! 🌟</h2>
             <p class="text-lg sm:text-2xl font-bold text-white mb-6">You are an excellent student!<br>You deserve a game break!</p>
             <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full max-w-md">
-                <button id="btn-play-game" class="flex-1 bg-yellow-400 hover:bg-yellow-300 text-indigo-900 py-3.5 sm:py-4 rounded-2xl text-lg font-black shadow-[0_5px_0_#ca8a04] active:translate-y-[5px] active:shadow-none transition-all" aria-label="Play game">
+                <button id="btn-play-game" onclick="app.enterGame()" class="flex-1 bg-yellow-400 hover:bg-yellow-300 text-indigo-900 py-3.5 sm:py-4 rounded-2xl text-lg font-black shadow-[0_5px_0_#ca8a04] active:translate-y-[5px] active:shadow-none transition-all" aria-label="Play game">
                     🎮 Play <span id="transition-game-name">Game</span>
                 </button>
-                <button id="btn-skip-game" onclick="app.skipGameAndResume()" class="flex-1 bg-white/20 hover:bg-white/30 text-white border-2 border-white/50 py-3.5 sm:py-4 rounded-2xl text-lg font-bold transition-all backdrop-blur-sm" aria-label="Skip game and resume">
+                <button id="btn-skip-game" onclick="app.resume(app.pendingGame)" class="flex-1 bg-white/20 hover:bg-white/30 text-white border-2 border-white/50 py-3.5 sm:py-4 rounded-2xl text-lg font-bold transition-all backdrop-blur-sm" aria-label="Skip game and resume">
                     ⏭️ Skip & Read
                 </button>
             </div>

@@ -22,7 +22,8 @@ const settingsManager = {
         defaultDifficulty: 'easy', // 'easy' (سهل) | 'smart' (ذكي)
         timerEnabled: false, // مؤقت القراءة
         timerDuration: 10, // بالثواني
-        fontScale: 'normal' // 'normal' (100%) | 'large' (122%) | 'xlarge' (145%)
+        fontScale: 'normal', // 'normal' (100%) | 'large' (122%) | 'xlarge' (145%)
+        shuffleCards: false // الترتيب العشوائي للكلمات (منع حفظ الموضع)
     },
 
     // جلب الإعدادات الحالية من localStorage أو الذاكرة الوسيطة
@@ -151,6 +152,7 @@ const settingsManager = {
 
         setVal('cfg-timer-duration', 'timerDuration');
         setVal('cfg-font-scale', 'fontScale');
+        setVal('cfg-shuffle-cards', 'shuffleCards', true);
     },
 
     // إنشاء هيكل النافذة المنبثقة إن لم تكن موجودة في الصفحة
@@ -222,10 +224,10 @@ const settingsManager = {
                         </div>
                     </div>
 
-                    <!-- Section 3: مؤقت القراءة وحجم الخط -->
+                    <!-- Section 3: مؤقت القراءة وحجم الخط والترتيب العشوائي -->
                     <div class="bg-slate-50 p-3.5 sm:p-4 rounded-2xl border border-slate-200 space-y-3">
                         <h3 class="font-black text-emerald-800 flex items-center gap-2 text-xs sm:text-sm">
-                            <span aria-hidden="true">⏱️</span> <span>المؤقت وحجم الخط القرآني</span>
+                            <span aria-hidden="true">⏱️</span> <span>المؤقت وحجم الخط ونظام القراءة</span>
                         </h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                             <div>
@@ -244,6 +246,13 @@ const settingsManager = {
                                     <option value="xlarge">كبير جداً (145%) 🔎</option>
                                 </select>
                             </div>
+                        </div>
+                        <div class="pt-2 border-t border-slate-200/80 flex items-center justify-between">
+                            <div>
+                                <label for="cfg-shuffle-cards" class="font-bold text-slate-700 cursor-pointer select-none text-xs sm:text-sm block">ترتيب عشوائي لبطاقات التحدي</label>
+                                <span class="text-[11px] text-slate-400 block">خلط الكلمات لاختبار التهجي ومنع حفظ موضعها</span>
+                            </div>
+                            <input type="checkbox" id="cfg-shuffle-cards" onchange="settingsManager.save({shuffleCards: this.checked})" class="w-5 h-5 accent-emerald-600 rounded cursor-pointer">
                         </div>
                     </div>
 

@@ -75,9 +75,19 @@ const app = {
 
     jumpTo(val) {
         this.hideAll();
+        this.isReviewMode = false;
         const topNav = document.getElementById('top-nav'); if (topNav) topNav.classList.remove('hidden');
         if (val.startsWith('word_')) {
-            this.idx = parseInt(val.split('_')[1], 10);
+            const targetWordIdx = parseInt(val.split('_')[1], 10);
+            if (!this.order && typeof dataset !== 'undefined') {
+                this.order = Array.from({ length: dataset.length }, (_, i) => i);
+                const settings = (typeof settingsManager !== 'undefined') ? settingsManager.get() : {};
+                if (settings.shuffleCards) {
+                    this.shuffle(this.order);
+                }
+            }
+            const foundPos = (this.order) ? this.order.indexOf(targetWordIdx) : targetWordIdx;
+            this.idx = (foundPos !== -1) ? foundPos : targetWordIdx;
             const stage = document.getElementById('learning-stage'); if (stage) stage.classList.remove('hidden');
             this.render();
         } else if (val === 'menu') {
@@ -105,7 +115,19 @@ const app = {
         this.hasPlayedGame1 = false; this.hasPlayedGame2 = false; this.hasPlayedGame3 = false;
         this.mistakeIndices = []; this.isReviewMode = false; this.reviewQueue = []; this.reviewIdx = 0;
         const scoreEl = document.getElementById('score-val'); if (scoreEl) scoreEl.innerText = '0';
-        this.jumpTo('word_0');
+
+        if (typeof dataset !== 'undefined' && Array.isArray(dataset)) {
+            this.order = Array.from({ length: dataset.length }, (_, i) => i);
+            const settings = (typeof settingsManager !== 'undefined') ? settingsManager.get() : {};
+            if (settings.shuffleCards) {
+                this.shuffle(this.order);
+            }
+        } else {
+            this.order = null;
+        }
+
+        const firstWordIdx = (this.order && this.order.length > 0) ? this.order[0] : 0;
+        this.jumpTo(`word_${firstWordIdx}`);
     },
 
     populateSelector() {
@@ -267,13 +289,16 @@ const app = {
     },
 
     render() {
-        if (typeof dataset === 'undefined' || !dataset[this.idx]) return;
-        const item = dataset[this.idx];
+        if (typeof dataset === 'undefined' || dataset.length === 0) return;
+        const currentItemIdx = (this.order && this.order[this.idx] !== undefined) ? this.order[this.idx] : this.idx;
+        const item = dataset[currentItemIdx];
+        if (!item) return;
+
         const area = document.getElementById('word-display-area');
         const banner = document.getElementById('status-banner');
         const timerBox = document.getElementById('challenge-timer');
         const navSelect = document.getElementById('example-navigator');
-        if (navSelect) navSelect.value = `word_${this.idx}`;
+        if (navSelect) navSelect.value = `word_${currentItemIdx}`;
         this.updateProgress(this.idx + 1, dataset.length, 'Card');
         if (area) {
             this.renderWordInto(area, item);
@@ -336,8 +361,10 @@ const app = {
     },
 
     evaluate(isCorrect) {
-        if (typeof dataset === 'undefined' || !dataset[this.idx]) return;
-        const item = dataset[this.idx];
+        if (typeof dataset === 'undefined' || dataset.length === 0) return;
+        const currentItemIdx = (this.order && this.order[this.idx] !== undefined) ? this.order[this.idx] : this.idx;
+        const item = dataset[currentItemIdx];
+        if (!item) return;
         const type = item.t;
         if (isCorrect) {
             this.stats.ok++;
@@ -373,12 +400,44 @@ const app = {
             }
         } else {
             this.stats.err++;
-            if (!this.mistakeIndices.includes(this.idx)) {
-                this.mistakeIndices.push(this.idx);
+            if (!this.mistakeIndices.includes(currentItemIdx)) {
+                this.mistakeIndices.push(currentItemIdx);
             }
             let points = (type === 'danger') ? -5 : -2;
             this.score += points; if (this.score < 0) this.score = 0;
-            this.triggerFeedback('Try Again! 🔄', '#f43f5e', false);
+            this.triggerFeedback(type === 'danger' ? '-5 Warning! ⚠️' : '-2 Needs Practice', '#f43f5e', true);
+            Sound.fail();
+
+            if (this.isReviewMode) {
+                this.reviewIdx++;
+                if (this.reviewIdx < this.reviewQueue.length) {
+                    setTimeout(() => this.renderReview(), 600);
+                } else {
+                    this.isReviewMode = false;
+                    setTimeout(() => this.finishToSummary(), 600);
+                }
+                return;
+            }
+
+            if (this.idx < dataset.length - 1) {
+                const third1 = Math.floor(dataset.length / 3) - 1;
+                const third2 = Math.floor((dataset.length * 2) / 3) - 1;
+                if (this.enableGameBreaks && this.idx === third1 && !this.hasPlayedGame1 && dataset.length >= 3) {
+                    setTimeout(() => this.jumpTo('transition_1'), 600);
+                } else if (this.enableGameBreaks && this.idx === third2 && !this.hasPlayedGame2 && dataset.length >= 3) {
+                    setTimeout(() => this.jumpTo('transition_2'), 600);
+                } else if (this.enableGameBreaks && this.idx === dataset.length - 1 && !this.hasPlayedGame3 && dataset.length >= 3) {
+                    setTimeout(() => this.jumpTo('transition_3'), 600);
+                } else {
+                    this.idx++; setTimeout(() => this.render(), 600);
+                }
+            } else {
+                if (this.enableGameBreaks && !this.hasPlayedGame3 && dataset.length >= 3) {
+                    setTimeout(() => this.jumpTo('transition_3'), 600);
+                } else {
+                    setTimeout(() => this.playWordwall(), 600);
+                }
+            }
         }
         const scoreEl = document.getElementById('score-val'); if (scoreEl) scoreEl.innerText = this.score;
     },
@@ -468,9 +527,9 @@ const app = {
         const stage = document.getElementById('game-transition-stage'); if (stage) stage.classList.remove('hidden');
         let gameName = "";
         if (gameNum === 1) gameName = "Tic-Tac-Toe";
-        if (gameNum === 2) gameName = "Connect 4";
-        if (gameNum === 3) gameName = "Wordwall Arena";
-        const titleEl = document.getElementById('game-title'); if (titleEl) titleEl.innerText = gameName;
+        else if (gameNum === 2) gameName = "Connect 4";
+        else if (gameNum === 3) gameName = "Wordwall Arena";
+        const titleEl = document.getElementById('transition-game-name'); if (titleEl) titleEl.innerText = gameName;
     },
 
     enterGame() {
@@ -483,7 +542,11 @@ const app = {
         if (gameNum === 1) this.hasPlayedGame1 = true;
         if (gameNum === 2) this.hasPlayedGame2 = true;
         if (gameNum === 3) { this.hasPlayedGame3 = true; this.playWordwall(); return; }
-        if (typeof dataset !== 'undefined' && this.idx < dataset.length - 1) { this.idx++; this.jumpTo(`word_${this.idx}`); }
+        if (typeof dataset !== 'undefined' && this.idx < dataset.length - 1) {
+            this.idx++;
+            const wordIdx = (this.order && this.order[this.idx] !== undefined) ? this.order[this.idx] : this.idx;
+            this.jumpTo(`word_${wordIdx}`);
+        }
         else { this.playWordwall(); }
     },
 
