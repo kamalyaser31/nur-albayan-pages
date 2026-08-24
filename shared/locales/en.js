@@ -322,7 +322,27 @@
         "initial_ladder_indicator": "Step 0 of {total}",
         "initial_hex_badge": "Mastered: 0 / {total}",
         "first_letter_avatar_btn": "🔤 First letter of name",
-        "save_student_btn": "Save Student 💾"
+        "save_student_btn": "Save Student 💾",
+        "delete_lesson_progress": "Delete lesson progress",
+        "confirm_delete_lesson_progress": "Delete stars and progress for lesson ({lesson})?",
+        "aria_delete_lesson_progress": "Delete progress for lesson {lesson}",
+        "aria_board_cell_empty": "Cell {num}, empty",
+        "aria_board_cell_filled": "Cell {num}, {player}",
+        "aria_c4_cell_empty": "Row {row}, Column {col}, empty",
+        "aria_c4_cell_filled": "Row {row}, Column {col}, {player}",
+        "aria_tile_revealed": "Tile {num}, revealed",
+        "aria_tile_hidden": "Tile {num}, hidden",
+        "aria_box_opened": "Box {num}, opened",
+        "aria_box_closed": "Box {num}, closed",
+        "aria_curtain_opened": "Curtain {num}, opened",
+        "aria_curtain_closed": "Curtain {num}, closed",
+        "aria_honeycomb_cell": "Honeycomb cell {num}, status: {status}",
+        "status_mastered": "Mastered",
+        "status_review": "Review",
+        "status_closed": "Closed",
+        "aria_step_reached": "Step {step}, reached",
+        "aria_step_unreached": "Step {step}, locked",
+        "aria_step_crown": "Step {step}, Top Crown 🏆"
 };
 
     if (typeof i18n !== 'undefined') {

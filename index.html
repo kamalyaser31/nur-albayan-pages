@@ -589,6 +589,13 @@
   document.addEventListener('DOMContentLoaded', () => {
     updateIndexLanguage();
     window.addEventListener('nb:locale-changed', updateIndexLanguage);
+
+    // تسجيل عامل الخدمة لدعم تطبيقات الويب التقدمية (PWA Offline Support)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
   });
 </script>
 

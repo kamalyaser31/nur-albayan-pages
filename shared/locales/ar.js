@@ -322,7 +322,27 @@
         "initial_ladder_indicator": "الدرجة 0 من {total}",
         "initial_hex_badge": "المتقن: 0 من {total}",
         "first_letter_avatar_btn": "🔤 الحرف الأول من الاسم",
-        "save_student_btn": "حفظ بيانات الطالب 💾"
+        "save_student_btn": "حفظ بيانات الطالب 💾",
+        "delete_lesson_progress": "إلغاء نتيجة هذا الدرس",
+        "confirm_delete_lesson_progress": "أتريد إلغاء نتيجة ونجوم الصفحة ({lesson}) لهذا الطالب؟",
+        "aria_delete_lesson_progress": "إلغاء نتيجة الصفحة {lesson}",
+        "aria_board_cell_empty": "الخلية {num}، فارغة",
+        "aria_board_cell_filled": "الخلية {num}، {player}",
+        "aria_c4_cell_empty": "الصف {row}، العمود {col}، فارغ",
+        "aria_c4_cell_filled": "الصف {row}، العمود {col}، {player}",
+        "aria_tile_revealed": "الرقعة {num}، مفتوحة",
+        "aria_tile_hidden": "الرقعة {num}، مقلوبة",
+        "aria_box_opened": "الصندوق {num}، مفتوح",
+        "aria_box_closed": "الصندوق {num}، مغلق",
+        "aria_curtain_opened": "الستار {num}، مكشوف",
+        "aria_curtain_closed": "الستار {num}، مسدول",
+        "aria_honeycomb_cell": "الخلية {num}، الحالة: {status}",
+        "status_mastered": "متقنة",
+        "status_review": "مراجعة",
+        "status_closed": "مغلقة",
+        "aria_step_reached": "الدرجة {step}، منجزة",
+        "aria_step_unreached": "الدرجة {step}، مقفلة",
+        "aria_step_crown": "الدرجة {step}، القمة المحرزة 🏆"
 };
 
     if (typeof i18n !== 'undefined') {

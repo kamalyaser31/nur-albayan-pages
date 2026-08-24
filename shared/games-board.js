@@ -7,7 +7,8 @@ const xoGame = {
             let cell = document.createElement('button');
             cell.type = 'button';
             cell.className = 'xo-cell-new shadow-[0_4px_0_#047857] active:shadow-none active:translate-y-1';
-            cell.setAttribute('aria-label', `Cell ${i + 1}, empty`);
+            const emptyLabel = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('aria_board_cell_empty', null, { num: i + 1 }) : `Cell ${i + 1}, empty`;
+            cell.setAttribute('aria-label', emptyLabel);
             cell.onclick = () => {
                 if (typeof gameAI !== 'undefined' && gameAI.mode === 'computer' && this.currentPlayer === 'O') return;
                 this.play(i, cell);
@@ -19,7 +20,8 @@ const xoGame = {
         if (this.board[idx] !== '' || !this.gameActive) return;
         this.board[idx] = this.currentPlayer;
         cell.innerText = this.currentPlayer;
-        cell.setAttribute('aria-label', `Cell ${idx + 1}, ${this.currentPlayer}`);
+        const filledLabel = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('aria_board_cell_filled', null, { num: idx + 1, player: this.currentPlayer }) : `Cell ${idx + 1}, ${this.currentPlayer}`;
+        cell.setAttribute('aria-label', filledLabel);
         cell.classList.add(this.currentPlayer === 'X' ? 'xo-x' : 'xo-o');
         let winLine = this.checkWin();
         if (winLine) {
@@ -98,7 +100,8 @@ const c4Game = {
                 cell.type = 'button';
                 cell.className = 'c4-cell-new';
                 cell.id = `c4-${r}-${c}`;
-                cell.setAttribute('aria-label', `Row ${r + 1}, Column ${c + 1}`);
+                const c4EmptyLabel = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('aria_c4_cell_empty', null, { row: r + 1, col: c + 1 }) : `Row ${r + 1}, Column ${c + 1}`;
+                cell.setAttribute('aria-label', c4EmptyLabel);
                 cell.onclick = () => {
                     if (typeof gameAI !== 'undefined' && gameAI.mode === 'computer' && this.currentPlayer === 'yellow') return;
                     this.drop(c);
@@ -116,7 +119,9 @@ const c4Game = {
                 let cell = document.getElementById(`c4-${row}-${col}`);
                 if (cell) {
                     cell.classList.add(this.currentPlayer === 'red' ? 'c4-red' : 'c4-yellow');
-                    cell.setAttribute('aria-label', `Row ${row + 1}, Column ${col + 1}, ${this.currentPlayer}`);
+                    const playerLocalized = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(this.currentPlayer === 'red' ? 'c4_red' : 'c4_yellow') : this.currentPlayer;
+                    const c4FilledLabel = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('aria_c4_cell_filled', null, { row: row + 1, col: col + 1, player: playerLocalized }) : `Row ${row + 1}, Column ${col + 1}, ${this.currentPlayer}`;
+                    cell.setAttribute('aria-label', c4FilledLabel);
                     let piece = document.createElement('div');
                     piece.className = `absolute inset-0 rounded-full w-full h-full ${this.currentPlayer === 'red' ? 'c4-red-new' : 'c4-yellow-new'}`;
                     cell.appendChild(piece);

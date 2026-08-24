@@ -622,6 +622,36 @@
             return this._clone(updatedLesson);
         },
 
+        /**
+         * حذف تقدم درس محدد لطالب وإعادة احتساب النقاط
+         * @param {string} studentId معرف الطالب
+         * @param {string|number} lessonId رقم الدرس المراد إلغاء تقدمه
+         * @returns {boolean} نجاح العملية
+         */
+        deleteLessonProgress(studentId, lessonId) {
+            this.init();
+            if (!studentId || lessonId === undefined) return false;
+            const student = this._state.students.find(s => s.id === studentId);
+            if (!student || !student.completedLessons) return false;
+
+            const lessonKey = String(lessonId).trim();
+            if (!student.completedLessons[lessonKey]) return false;
+
+            const lessonScore = Number(student.completedLessons[lessonKey].score || student.completedLessons[lessonKey].bestScore) || 0;
+            delete student.completedLessons[lessonKey];
+
+            // خصم نقاط الدرس من المجموع الكلي مع ضمان عدم النزول تحت الصفر
+            student.totalScore = Math.max(0, (student.totalScore || 0) - lessonScore);
+            student.lastActive = Date.now();
+
+            this._saveToStorage();
+            this._dispatchEvent('nb:student-updated', { student: this._clone(student) });
+            this._dispatchEvent('nb:lesson-progress-deleted', { studentId, lessonId: lessonKey });
+            this.updateIndexBadges();
+
+            return true;
+        },
+
         // ========================================================================
         // 5. بنك الأخطاء والنسخ الاحتياطي (Mistake Bank & JSON Backup)
         // ========================================================================

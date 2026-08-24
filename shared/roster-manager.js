@@ -753,12 +753,17 @@ const rosterManager = {
                 html += `
                 <div class="bg-white p-3 rounded-2xl border border-slate-200 flex items-center justify-between gap-2 shadow-2xs">
                   <div>
-                    <span class="font-black text-slate-800 text-xs block">الصفحة ${lId}</span>
-                    <span class="text-[11px] text-slate-500 font-medium">الدرجة: ${rec.score || rec.bestScore || 0} • دقة: ${rec.accuracy || 100}%</span>
+                    <span class="font-black text-slate-800 text-xs block">${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('lesson_label', null, { num: lId }) : `الصفحة ${lId}`}</span>
+                    <span class="text-[11px] text-slate-500 font-medium">${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('score') : 'الدرجة'}: ${rec.score || rec.bestScore || 0} • ${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('accuracy_label') : 'دقة'}: ${rec.accuracy || 100}%</span>
                   </div>
                   <div class="flex flex-col items-end gap-1">
                     <span class="text-amber-500 font-bold text-xs">${starsStr}</span>
-                    <a href="pages/${lId}.html" class="text-[10px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-2 py-0.5 rounded-md transition-colors">فتح ↗</a>
+                    <div class="flex items-center gap-1">
+                      <button type="button" onclick="rosterManager.handleDeleteLessonProgress('${student.id}', '${lId}')" class="text-slate-400 hover:text-rose-600 hover:bg-rose-50 p-1 rounded-lg transition-colors cursor-pointer" title="${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('delete_lesson_progress') : 'إلغاء نتيجة هذا الدرس'}" aria-label="${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('aria_delete_lesson_progress', null, { lesson: lId }) : `إلغاء نتيجة الصفحة ${lId}`}">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                      </button>
+                      <a href="pages/${lId}.html" class="text-[10px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-2 py-0.5 rounded-md transition-colors">فتح ↗</a>
+                    </div>
                   </div>
                 </div>
                 `;
@@ -997,6 +1002,20 @@ const rosterManager = {
                 avatar: this._editSelectedAvatar,
                 color: this._editSelectedColor
             });
+            this.updateHeaderBar();
+            studentManager.updateIndexBadges();
+            this.viewStudentProfile(studentId);
+        }
+    },
+
+    handleDeleteLessonProgress(studentId, lessonId) {
+        if (typeof studentManager === 'undefined') return;
+        const confirmMsg = (typeof i18n !== 'undefined' && i18n.t)
+            ? i18n.t('confirm_delete_lesson_progress', null, { lesson: lessonId })
+            : `أتريد إلغاء نتيجة ونجوم الصفحة (${lessonId}) لهذا الطالب؟`;
+
+        if (confirm(confirmMsg)) {
+            studentManager.deleteLessonProgress(studentId, lessonId);
             this.updateHeaderBar();
             studentManager.updateIndexBadges();
             this.viewStudentProfile(studentId);

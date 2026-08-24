@@ -83,7 +83,10 @@ const wordwallRoom = {
             box.type = 'button';
             box.className = `wordwall-box relative aspect-square w-full flex items-center justify-center rounded-2xl ${isCurtain ? 'curtain-box' : ''} ${this.openedBoxes.has(index) ? 'opened opacity-50 grayscale-[50%]' : ''}`;
             box.id = `box-${index}`;
-            box.setAttribute('aria-label', `${labelType} ${index + 1}${this.openedBoxes.has(index) ? ', opened' : ', closed'}`);
+            const isOpened = this.openedBoxes.has(index);
+            const boxAriaKey = isCurtain ? (isOpened ? 'aria_curtain_opened' : 'aria_curtain_closed') : (isOpened ? 'aria_box_opened' : 'aria_box_closed');
+            const boxAriaText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(boxAriaKey, null, { num: index + 1 }) : `${labelType} ${index + 1}${isOpened ? ', opened' : ', closed'}`;
+            box.setAttribute('aria-label', boxAriaText);
             const color = wordwallColors[index % wordwallColors.length];
             
             if (isCurtain) {
@@ -109,7 +112,8 @@ const wordwallRoom = {
             
             box.onclick = () => {
                 if (!this.openedBoxes.has(index)) {
-                    box.setAttribute('aria-label', `${labelType} ${index + 1}, opened`);
+                    const openedKey = isCurtain ? 'aria_curtain_opened' : 'aria_box_opened';
+                    box.setAttribute('aria-label', (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(openedKey, null, { num: index + 1 }) : `${labelType} ${index + 1}, opened`);
                     app.revealWord(index, isCurtain ? 'curtain' : 'box');
                 }
             };
@@ -387,7 +391,9 @@ const ladderGame = {
             } ${isCurrent ? 'ring-4 ring-emerald-300 scale-102 font-black' : ''}`;
             
             rung.id = `ladder-rung-${s}`;
-            rung.setAttribute('aria-label', `Step ${s}${isReached ? ', reached' : ''}${isCrown ? ', top crown' : ''}`);
+            const stepAriaKey = isCrown ? (isReached ? 'aria_step_crown' : 'aria_step_unreached') : (isReached ? 'aria_step_reached' : 'aria_step_unreached');
+            const stepAriaText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(stepAriaKey, null, { step: s }) : `Step ${s}`;
+            rung.setAttribute('aria-label', stepAriaText);
 
             const crownLabel = (typeof i18n !== 'undefined') ? i18n.t('ladder_peak_label', '👑 القمة') : '👑 القمة';
             const stepLabel = (typeof i18n !== 'undefined') ? i18n.t('ladder_rung_label', 'الدرجة {step}', { step: s }) : `الدرجة ${s}`;
@@ -481,7 +487,9 @@ const tilesGame = {
             tile.id = `tile-${index}`;
             tile.setAttribute('role', 'button');
             tile.setAttribute('tabindex', '0');
-            tile.setAttribute('aria-label', `البلاطة ${index + 1}${this.flippedTiles.has(index) ? '، مفتوحة' : '، مقلوبة'}`);
+            const tileAriaKey = this.flippedTiles.has(index) ? 'aria_tile_revealed' : 'aria_tile_hidden';
+            const tileAria = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(tileAriaKey, null, { num: index + 1 }) : `Tile ${index + 1}`;
+            tile.setAttribute('aria-label', tileAria);
             
             const color = wordwallColors[index % wordwallColors.length];
             const wordText = (typeof item === 'object' && item !== null) ? (item.display || item.word || item.text || '') : String(item || '');
@@ -520,16 +528,18 @@ const tilesGame = {
         if (this.flippedTiles.has(index)) {
             this.flippedTiles.delete(index);
             tile.classList.remove('flipped');
-            tile.setAttribute('aria-label', `البلاطة ${index + 1}، مقلوبة`);
+            const tileHiddenAria = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('aria_tile_hidden', null, { num: index + 1 }) : `Tile ${index + 1}, hidden`;
+            tile.setAttribute('aria-label', tileHiddenAria);
             if (typeof Sound !== 'undefined' && typeof Sound.playTone === 'function') {
                 Sound.playTone(400, 'sine', 0.08);
             }
         } else {
             this.flippedTiles.add(index);
             tile.classList.add('flipped');
-            tile.setAttribute('aria-label', `البلاطة ${index + 1}، مفتوحة`);
+            const tileRevealedAria = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('aria_tile_revealed', null, { num: index + 1 }) : `Tile ${index + 1}, revealed`;
+            tile.setAttribute('aria-label', tileRevealedAria);
             if (typeof Sound !== 'undefined' && typeof Sound.playTone === 'function') {
-                Sound.playTone(600, 'sine', 0.12);
+                Sound.playTone(600, 'sine', 0.1);
             }
         }
     },
@@ -581,8 +591,10 @@ const honeycombGame = {
             hex.className = `hex-cell ${status}`;
             hex.id = `hex-${index}`;
             
-            const statusText = status === 'mastered' ? 'متقنة' : (status === 'review' ? 'مراجعة' : 'مغلقة');
-            hex.setAttribute('aria-label', `الخلية السداسية ${index + 1}، الحالة: ${statusText}`);
+            const statusKey = status === 'mastered' ? 'status_mastered' : (status === 'review' ? 'status_review' : 'status_closed');
+            const statusText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(statusKey) : (status === 'mastered' ? 'متقنة' : (status === 'review' ? 'مراجعة' : 'مغلقة'));
+            const hexAria = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('aria_honeycomb_cell', null, { num: index + 1, status: statusText }) : `Cell ${index + 1}: ${statusText}`;
+            hex.setAttribute('aria-label', hexAria);
 
             hex.innerHTML = `
                 <div class="flex flex-col items-center justify-center text-white drop-shadow-sm pointer-events-none">
@@ -613,8 +625,10 @@ const honeycombGame = {
         if (hex) {
             hex.classList.remove('mastered', 'review');
             hex.classList.add(this.cellStatus[index]);
-            const statusText = isMastered ? 'متقنة' : 'مراجعة';
-            hex.setAttribute('aria-label', `الخلية السداسية ${index + 1}، الحالة: ${statusText}`);
+            const statusKey = isMastered ? 'status_mastered' : 'status_review';
+            const statusText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(statusKey) : (isMastered ? 'متقنة' : 'مراجعة');
+            const hexAria = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('aria_honeycomb_cell', null, { num: index + 1, status: statusText }) : `Cell ${index + 1}: ${statusText}`;
+            hex.setAttribute('aria-label', hexAria);
             const iconSpan = hex.querySelector('span:last-child');
             if (iconSpan) iconSpan.textContent = isMastered ? '✔' : '📌';
         }
