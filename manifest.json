@@ -1,0 +1,28 @@
+{
+  "name": "منظومة نور البيان التفاعلية",
+  "short_name": "نور البيان",
+  "description": "المنظومة التعليمية الرقمية الشاملة لضبط قراءة الكلمات والقرآن الكريم",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#064e3b",
+  "theme_color": "#047857",
+  "lang": "ar",
+  "dir": "rtl",
+  "categories": ["education", "books"],
+  "icons": [
+    {
+      "src": "shared/vendor/icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "shared/vendor/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -285,7 +285,7 @@ const rosterManager = {
 
         const name = nameInput.value.trim();
         if (!name) {
-            alert('يرجى إدخال اسم الطالب أولاً.');
+            alert((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('toast_enter_student_name') : 'يرجى إدخال اسم الطالب أولاً.');
             nameInput.focus();
             return;
         }
@@ -323,7 +323,8 @@ const rosterManager = {
         const student = studentManager.getStudent(studentId);
         const name = student ? student.name : 'الطالب';
 
-        if (confirm(`هل أنت متأكد من حذف الطالب (${name}) وجميع سجلاته ودرجاته وبنك أخطائه نهائياً؟`)) {
+        const confirmMsg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('confirm_delete_student', null, { name }) : `هل أنت متأكد من حذف الطالب (${name})؟`;
+        if (confirm(confirmMsg)) {
             studentManager.deleteStudent(studentId);
             if (this._selectedStudentIdForView === studentId) {
                 this._selectedStudentIdForView = null;
@@ -346,7 +347,8 @@ const rosterManager = {
         const student = studentManager.getStudent(studentId);
         const name = student ? student.name : 'الطالب';
 
-        if (confirm(`هل تريد مسح كافة الكلمات المتعثرة من بنك أخطاء (${name})؟`)) {
+        const confirmMsg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('confirm_clear_mistakes') : `هل تريد مسح كافة الكلمات المتعثرة من بنك أخطاء (${name})؟`;
+        if (confirm(confirmMsg)) {
             if (student && Array.isArray(student.mistakeBank)) {
                 student.mistakeBank.forEach(m => {
                     studentManager.removeMistake(studentId, m.word);
@@ -379,7 +381,8 @@ const rosterManager = {
                     }
                 }
             } catch (err) {
-                alert('فشل قراءة الملف: ' + err.message);
+                const errMsg = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('toast_file_read_failed', null, { err: err.message }) : ('فشل قراءة الملف: ' + err.message);
+                alert(errMsg);
             }
             input.value = '';
         };
@@ -392,7 +395,7 @@ const rosterManager = {
         if (!textarea) return;
         const raw = textarea.value.trim();
         if (!raw) {
-            alert('يرجى لصق نص JSON في الحقل المخصص أولاً.');
+            alert((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('toast_paste_json') : 'يرجى لصق نص JSON في الحقل المخصص أولاً.');
             return;
         }
 
@@ -548,32 +551,32 @@ const rosterManager = {
                       </div>
                     </div>
 
-                    <button onclick="rosterManager.handleDeleteStudent('${s.id}')" class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors" title="حذف الطالب" aria-label="حذف الطالب ${s.name}">
+                    <button onclick="rosterManager.handleDeleteStudent('${s.id}')" class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors cursor-pointer" title="${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('delete_student') : 'حذف'}" aria-label="${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('aria_delete_student', null, { name: s.name }) : `حذف الطالب ${s.name}`}">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                     </button>
                   </div>
 
                   <div class="grid grid-cols-2 gap-2 text-center text-xs py-1.5 px-2 bg-slate-50 rounded-xl border border-slate-100 font-bold">
                     <div class="text-slate-600">
-                      <span class="text-slate-400 text-[10px] block font-normal">الدروس المكتملة</span>
+                      <span class="text-slate-400 text-[10px] block font-normal">${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('total_completed_lessons') : 'الدروس المكتملة'}</span>
                       <span class="text-slate-800 font-black">📖 ${completedCount}</span>
                     </div>
                     <div class="text-slate-600">
-                      <span class="text-slate-400 text-[10px] block font-normal">بنك الأخطاء</span>
+                      <span class="text-slate-400 text-[10px] block font-normal">${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('mistakes_count') : 'بنك الأخطاء'}</span>
                       <span class="${mistakesCount > 0 ? 'text-rose-600' : 'text-emerald-600'} font-black">📌 ${mistakesCount}</span>
                     </div>
                   </div>
 
                   <div class="flex items-center gap-2 pt-1">
                     ${isActive ? `
-                      <span class="flex-1 text-center py-1.5 bg-emerald-100 text-emerald-800 rounded-xl font-black text-xs select-none">✓ الطالب النشط</span>
+                      <span class="flex-1 text-center py-1.5 bg-emerald-100 text-emerald-800 rounded-xl font-black text-xs select-none">✓ ${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('active_badge') : 'الطالب النشط'}</span>
                     ` : `
-                      <button onclick="rosterManager.handleActivateStudent('${s.id}')" class="flex-1 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-xs transition-colors">
-                        تفعيل كطالب نشط ⭐
+                      <button onclick="rosterManager.handleActivateStudent('${s.id}')" class="flex-1 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-xs transition-colors cursor-pointer">
+                        ${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('set_active_student') : 'تفعيل كطالب نشط'} ⭐
                       </button>
                     `}
-                    <button onclick="rosterManager.viewStudentProfile('${s.id}')" class="py-1.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold text-xs transition-colors" aria-label="عرض ملف الطالب وبنك أخطائه">
-                      الملف والأخطاء 📋
+                    <button onclick="rosterManager.viewStudentProfile('${s.id}')" class="py-1.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold text-xs transition-colors cursor-pointer" aria-label="${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('aria_view_profile') : 'عرض ملف الطالب وبنك أخطائه'}">
+                      ${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('mistake_bank_title') : 'الملف والأخطاء'} 📋
                     </button>
                   </div>
 
@@ -626,15 +629,19 @@ const rosterManager = {
             </button>
 
             <div class="flex items-center gap-2">
+              <button onclick="rosterManager.openEditStudentModal('${student.id}')" class="inline-flex items-center gap-1.5 text-xs font-black text-slate-700 hover:text-slate-900 bg-white hover:bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl shadow-xs transition-colors cursor-pointer" title="${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('edit_student_title') : 'تعديل بيانات الطالب'}">
+                <span aria-hidden="true">✏️</span> <span>${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('edit_student_btn') : 'تعديل البيانات ✏️'}</span>
+              </button>
+
               <button onclick="rosterManager.printStudentReport('${student.id}')" class="inline-flex items-center gap-1.5 text-xs font-black text-slate-700 hover:text-slate-900 bg-white hover:bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl shadow-xs transition-colors cursor-pointer" title="طباعة تقرير الطالب">
                 <span aria-hidden="true">🖨️</span> <span>${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('print_report_btn') : 'طباعة تقرير الطالب 🖨️'}</span>
               </button>
 
               ${isActive ? `
-                <span class="text-xs font-black text-emerald-700 bg-emerald-100 border border-emerald-200 px-3 py-1.5 rounded-xl">✓ الطالب النشط</span>
+                <span class="text-xs font-black text-emerald-700 bg-emerald-100 border border-emerald-200 px-3 py-1.5 rounded-xl">✓ ${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('active_badge') : 'الطالب النشط'}</span>
               ` : `
                 <button onclick="rosterManager.handleActivateStudent('${student.id}')" class="text-xs font-black text-white bg-emerald-600 hover:bg-emerald-700 px-3.5 py-1.5 rounded-xl shadow-xs transition-colors cursor-pointer">
-                  تفعيل كطالب نشط ⭐
+                  ${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('set_active_student') : 'تفعيل كطالب نشط'} ⭐
                 </button>
               `}
             </div>
@@ -674,10 +681,10 @@ const rosterManager = {
                 <p class="text-xs text-rose-700 font-medium mt-0.5">كلمات واجه الطالب صعوبة في قراءتها. تُعرض مشكولة بالرسم القرآني لمراجعتها شفوياً وتثبيتها.</p>
               </div>
               <div class="flex items-center gap-2">
-                <span class="text-xs font-bold text-rose-800 bg-rose-100 px-2.5 py-1 rounded-full border border-rose-200">${mistakes.length} كلمات</span>
+                <span class="text-xs font-bold text-rose-800 bg-rose-100 px-2.5 py-1 rounded-full border border-rose-200">${mistakes.length} ${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('mistakes_count') : 'كلمات'}</span>
                 ${mistakes.length > 0 ? `
-                  <button onclick="rosterManager.launchRemediation('${student.id}')" class="inline-flex items-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white font-black text-xs px-3.5 py-1 rounded-full shadow-xs transition-transform hover:scale-105" aria-label="إطلاق جلسة تدريب الأخطاء التفاعلية">
-                    <span aria-hidden="true">🚀</span> <span>إطلاق التدريب التفاعلي</span>
+                  <button onclick="rosterManager.launchRemediation('${student.id}')" class="inline-flex items-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white font-black text-xs px-3.5 py-1 rounded-full shadow-xs transition-transform hover:scale-105 cursor-pointer" aria-label="${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('aria_launch_remediation') : 'إطلاق جلسة تدريب الأخطاء التفاعلية'}">
+                    <span aria-hidden="true">🚀</span> <span>${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('remediation_btn') : 'إطلاق التدريب التفاعلي'}</span>
                   </button>
                 ` : ''}
               </div>
@@ -694,13 +701,13 @@ const rosterManager = {
                 html += `
                 <div class="mistake-word-card">
                   <div class="text-[10px] text-rose-700 font-bold bg-rose-100/80 px-2 py-0.5 rounded-full mb-1">
-                    درس ${m.lessonId || '-'} • تكرار (${m.count || 1})
+                    ${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('lesson_label', null, { num: m.lessonId || '-' }) : `درس ${m.lessonId || '-'}`} • (${m.count || 1})
                   </div>
                   <div class="mistake-quran-text">
                     ${m.word}
                   </div>
-                  <button onclick="rosterManager.handleRemoveMistake('${student.id}', '${safeWord}')" class="mt-2 text-[11px] font-bold bg-emerald-100 hover:bg-emerald-200 text-emerald-900 border border-emerald-300 px-2.5 py-1 rounded-xl transition-colors flex items-center gap-1 w-full justify-center shadow-2xs" aria-label="تمييز الكلمة كمتقنة وحذفها">
-                    <span aria-hidden="true">✓</span> <span>تم الإتقان</span>
+                  <button onclick="rosterManager.handleRemoveMistake('${student.id}', '${safeWord}')" class="mt-2 text-[11px] font-bold bg-emerald-100 hover:bg-emerald-200 text-emerald-900 border border-emerald-300 px-2.5 py-1 rounded-xl transition-colors flex items-center gap-1 w-full justify-center shadow-2xs cursor-pointer" aria-label="${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('aria_master_mistake') : 'تمييز الكلمة كمتقنة وحذفها'}">
+                    <span aria-hidden="true">✓</span> <span>${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('eval_correct_label') : 'تم الإتقان'}</span>
                   </button>
                 </div>
                 `;
@@ -853,6 +860,147 @@ const rosterManager = {
             const input = document.getElementById('new-student-name-input');
             if (input) input.focus();
         }, 50);
+    },
+
+    openEditStudentModal(studentId) {
+        if (typeof studentManager === 'undefined') return;
+        const student = studentManager.getStudent(studentId);
+        if (!student) return;
+
+        this._editingStudentId = studentId;
+        this._editSelectedAvatar = student.avatar || '👤';
+        this._editSelectedColor = student.color || '#059669';
+
+        const container = document.getElementById('roster-tab-content');
+        if (!container) return;
+
+        const avatarsHtml = this._avatars.map(av => `
+          <button type="button" onclick="rosterManager.selectEditAvatar('${av}')" class="avatar-option-btn ${av === this._editSelectedAvatar ? 'selected' : ''}" data-avatar="${av}">
+            <span>${av}</span>
+          </button>
+        `).join('');
+
+        const colorsHtml = this._colors.map(c => `
+          <button type="button" onclick="rosterManager.selectEditColor('${c}')" class="color-swatch-btn ${c === this._editSelectedColor ? 'selected' : ''}" data-color="${c}" style="background-color: ${c};">
+          </button>
+        `).join('');
+
+        const html = `
+        <form onsubmit="rosterManager.handleSaveEditedStudent(event, '${student.id}')" class="space-y-4 max-w-lg mx-auto bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+          
+          <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+            <h3 class="font-black text-slate-800 text-sm flex items-center gap-2">
+              <span>✏️</span> <span>${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('edit_student_title') : 'تعديل بيانات الطالب'}</span>
+            </h3>
+            <button type="button" onclick="rosterManager.viewStudentProfile('${student.id}')" class="text-xs text-slate-500 hover:text-slate-800 font-bold cursor-pointer">
+              ${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('cancel') : 'إلغاء'} ✕
+            </button>
+          </div>
+
+          <!-- Preview Card -->
+          <div class="p-4 rounded-2xl text-center flex flex-col items-center justify-center gap-2 transition-all shadow-inner" style="background: linear-gradient(135deg, ${this._editSelectedColor}, #0f172a)">
+            <div id="edit-student-preview-avatar" class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl font-black text-white shadow-md border-2 border-white/40">
+              ${this._editSelectedAvatar}
+            </div>
+            <h4 id="edit-student-preview-name" class="font-black text-base text-white">${student.name}</h4>
+          </div>
+
+          <!-- Student Name Input -->
+          <div>
+            <label for="edit-student-name-input" class="block font-black text-slate-800 text-xs mb-1.5">
+              ${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('add_student_label') : 'اسم الطالب'} <span class="text-rose-500">*</span>
+            </label>
+            <input type="text" id="edit-student-name-input" required value="${student.name}" oninput="rosterManager.updateEditStudentPreview()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 font-bold text-sm text-slate-800 outline-none focus:border-emerald-500 focus:bg-white transition-colors" autocomplete="off">
+          </div>
+
+          <!-- Avatar Selection Grid -->
+          <div>
+            <label class="block font-black text-slate-800 text-xs mb-1.5">
+              ${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('avatar_picker_title') : 'الأيقونة'}
+            </label>
+            <div id="edit-roster-avatar-grid" class="avatar-picker-grid">
+              ${avatarsHtml}
+            </div>
+          </div>
+
+          <!-- Color Palette Selection -->
+          <div>
+            <label class="block font-black text-slate-800 text-xs mb-1.5">
+              ${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('color_palette_title') : 'اللون المميز'}
+            </label>
+            <div id="edit-roster-color-grid" class="color-picker-grid">
+              ${colorsHtml}
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="pt-2 flex gap-3">
+            <button type="button" onclick="rosterManager.viewStudentProfile('${student.id}')" class="w-1/3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-colors cursor-pointer">
+              ${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('cancel') : 'إلغاء'}
+            </button>
+            <button type="submit" class="w-2/3 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs rounded-xl shadow-md transition-colors flex items-center justify-center gap-2 cursor-pointer">
+              <span>💾</span> <span>${(typeof i18n !== 'undefined' && i18n.t) ? i18n.t('save') : 'حفظ التعديلات'}</span>
+            </button>
+          </div>
+
+        </form>
+        `;
+
+        container.innerHTML = html;
+    },
+
+    selectEditAvatar(av) {
+        this._editSelectedAvatar = av;
+        const grid = document.getElementById('edit-roster-avatar-grid');
+        if (grid) {
+            grid.querySelectorAll('.avatar-option-btn').forEach(btn => {
+                btn.classList.toggle('selected', btn.getAttribute('data-avatar') === av);
+            });
+        }
+        this.updateEditStudentPreview();
+    },
+
+    selectEditColor(hex) {
+        this._editSelectedColor = hex;
+        const grid = document.getElementById('edit-roster-color-grid');
+        if (grid) {
+            grid.querySelectorAll('.color-swatch-btn').forEach(btn => {
+                btn.classList.toggle('selected', btn.getAttribute('data-color') === hex);
+            });
+        }
+        this.updateEditStudentPreview();
+    },
+
+    updateEditStudentPreview() {
+        const nameInput = document.getElementById('edit-student-name-input');
+        const nameEl = document.getElementById('edit-student-preview-name');
+        const avEl = document.getElementById('edit-student-preview-avatar');
+        const enteredName = nameInput ? nameInput.value.trim() : '';
+
+        if (nameEl) nameEl.textContent = enteredName || 'اسم الطالب';
+        if (avEl) {
+            avEl.textContent = this._editSelectedAvatar;
+            avEl.parentElement.style.background = `linear-gradient(135deg, ${this._editSelectedColor}, #0f172a)`;
+        }
+    },
+
+    handleSaveEditedStudent(e, studentId) {
+        if (e && e.preventDefault) e.preventDefault();
+        const nameInput = document.getElementById('edit-student-name-input');
+        if (!nameInput) return;
+        const name = nameInput.value.trim();
+        if (!name) return;
+
+        if (typeof studentManager !== 'undefined') {
+            studentManager.updateStudent(studentId, {
+                name: name,
+                avatar: this._editSelectedAvatar,
+                color: this._editSelectedColor
+            });
+            this.updateHeaderBar();
+            studentManager.updateIndexBadges();
+            this.viewStudentProfile(studentId);
+        }
     },
 
     renderBackupSection(container) {

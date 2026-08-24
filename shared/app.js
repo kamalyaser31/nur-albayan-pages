@@ -343,7 +343,8 @@ const app = {
         if (area) {
             this.renderWordInto(area, item);
             const plain = this.getPlainWord(item);
-            area.setAttribute('aria-label', `Card ${this.idx + 1} of ${dataset.length}: ${plain}`);
+            const cardLabel = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('card_label', null, { num: this.idx + 1, word: plain }) : `Card ${this.idx + 1}: ${plain}`;
+            area.setAttribute('aria-label', cardLabel);
             area.tabIndex = -1;
             area.focus({ preventScroll: true });
         }
@@ -354,14 +355,14 @@ const app = {
         if (item.t === 'golden') {
             if (typeof Sound !== 'undefined' && typeof Sound.playChime === 'function') Sound.playChime();
             if (banner) {
-                banner.innerText = "🌟 Golden Word! (+10)";
+                banner.innerText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_golden_word') : "🌟 Golden Word! (+10)";
                 banner.className = "text-center py-1 px-4 rounded-full font-bold text-white shadow-md w-fit bg-amber-500 block animate-bounce uppercase tracking-wide text-xs shrink-0";
                 banner.classList.remove('hidden');
             }
         } else if (item.t === 'danger') {
             if (typeof Sound !== 'undefined' && typeof Sound.danger === 'function') Sound.danger();
             if (banner) {
-                banner.innerText = "⚠️ High Focus! (-5)";
+                banner.innerText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('warning_danger_penalty') : "⚠️ High Focus! (-5)";
                 banner.className = "text-center py-1 px-4 rounded-full font-bold text-white shadow-md w-fit bg-rose-600 block pulse-danger uppercase tracking-wide text-xs shrink-0";
                 banner.classList.remove('hidden');
             }
@@ -430,20 +431,20 @@ const app = {
                 if (isCorrect) {
                     this.stats.ok++;
                     this.score += res.mastered ? 5 : 2;
-                    const feedback = res.mastered ? 'أتقنت الكلمة تماماً! 👑' : 'خطوة ممتازة (1/2) ⭐';
+                    const feedback = res.mastered ? ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_mastered') : 'أتقنت الكلمة! 🌟') : ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_well_done') : 'أحسنت! ⭐');
                     this.triggerFeedback(feedback, '#10b981', true);
                 } else {
                     this.stats.err++;
-                    this.triggerFeedback('تحتاج تدريباً إضافياً ⭐', '#f43f5e', false);
+                    this.triggerFeedback((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_needs_practice') : 'تحتاج تدريباً إضافياً ⭐', '#f43f5e', false);
                     if (typeof Sound !== 'undefined' && typeof Sound.fail === 'function') Sound.fail();
                 }
             } else if (isCorrect) {
                 this.stats.ok++;
                 this.score += 2;
-                this.triggerFeedback('أحسنت! ⭐', '#10b981', true);
+                this.triggerFeedback((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_well_done') : 'أحسنت! ⭐', '#10b981', true);
             } else {
                 this.stats.err++;
-                this.triggerFeedback('تحتاج تدريباً إضافياً ⭐', '#f43f5e', false);
+                this.triggerFeedback((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_needs_practice') : 'تحتاج تدريباً إضافياً ⭐', '#f43f5e', false);
                 if (typeof Sound !== 'undefined' && typeof Sound.fail === 'function') Sound.fail();
             }
             this.updateScoreUI();
@@ -478,10 +479,10 @@ const app = {
             if (isCorrect) {
                 this.stats.ok++;
                 this.score += 2;
-                this.triggerFeedback('Mastered! 🌟', '#10b981', true);
+                this.triggerFeedback((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_mastered') : 'Mastered! 🌟', '#10b981', true);
             } else {
                 this.stats.err++;
-                this.triggerFeedback('Keep Practicing ⭐', '#f43f5e', false);
+                this.triggerFeedback((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_keep_practicing') : 'Keep Practicing ⭐', '#f43f5e', false);
                 if (typeof Sound !== 'undefined' && typeof Sound.fail === 'function') Sound.fail();
             }
             this.updateScoreUI();
@@ -506,7 +507,11 @@ const app = {
             this.stats.ok++;
             let points = (type === 'golden') ? 10 : (type === 'speed' && this.clock > 0) ? 5 : 2;
             this.score += points;
-            const feedbacks = ['Excellent! 🌟', 'Awesome! 🏆', 'Hero! 🧠', 'Great Job! ❤️⭐', 'Very Good! ⭐', 'Genius! 🎓', 'Perfect! 👏', '⭐⭐⭐⭐⭐', '❤️❤️❤️❤️❤️'];
+            const perfWord = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('txt_perfect') : 'Perfect';
+            const excWord = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('txt_excellent') : 'Excellent';
+            const wellDone = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_well_done') : 'Well done! ⭐';
+            const magnif = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_magnificent') : 'Magnificent! ❤️⭐';
+            const feedbacks = [`${excWord}! 🌟`, `${perfWord}! 🏆`, wellDone, magnif, '⭐⭐⭐⭐⭐', '❤️❤️❤️❤️❤️'];
             const randomFeedback = feedbacks[Math.floor(Math.random() * feedbacks.length)];
             this.triggerFeedback(randomFeedback, '#10b981', true);
         } else {
@@ -517,9 +522,11 @@ const app = {
             let penalty = (settings.noPenaltyMode) ? 0 : ((type === 'danger') ? 5 : 2);
             this.score = Math.max(0, this.score - penalty);
             const feedbackText = (settings.noPenaltyMode) ?
-                ((type === 'danger') ? 'High Focus! ⚠️' : 'Needs Practice ⭐') :
-                ((type === 'danger') ? '-5 Warning! ⚠️' : '-2 Needs Practice');
+                ((type === 'danger') ? ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('warning_danger_penalty') : 'High Focus! ⚠️') : ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_needs_practice') : 'Needs Practice ⭐')) :
+                ((type === 'danger') ? ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('warning_danger_penalty') : '-5 Warning! ⚠️') : ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_needs_practice') : '-2 Needs Practice'));
             this.triggerFeedback(feedbackText, '#f43f5e', false);
+            if (typeof Sound !== 'undefined' && typeof Sound.fail === 'function') Sound.fail();
+        }
             if (typeof Sound !== 'undefined' && typeof Sound.fail === 'function') Sound.fail();
         }
         this.updateScoreUI();
@@ -656,9 +663,9 @@ const app = {
         this.pendingGame = gameNum;
         const stage = document.getElementById('game-transition-stage'); if (stage) stage.classList.remove('hidden');
         let gameName = "";
-        if (gameNum === 1) gameName = "Tic-Tac-Toe";
-        else if (gameNum === 2) gameName = "Connect 4";
-        else if (gameNum === 3) gameName = "Wordwall Arena";
+        if (gameNum === 1) gameName = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('game_xo') : "Tic-Tac-Toe";
+        else if (gameNum === 2) gameName = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('game_c4') : "Connect 4";
+        else if (gameNum === 3) gameName = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t('games_room_title') : "Wordwall Arena";
         const titleEl = document.getElementById('transition-game-name'); if (titleEl) titleEl.innerText = gameName;
     },
 
@@ -686,7 +693,7 @@ const app = {
         if (typeof dataset === 'undefined' || !dataset[index]) return;
         this.currentActiveIndex = index;
         const item = dataset[index];
-        const infoEl = document.getElementById('revealed-info'); if (infoEl) infoEl.innerText = `${item.info || 'Card'} • #${index + 1}`;
+        const infoEl = document.getElementById('revealed-info'); if (infoEl) infoEl.innerText = `${item.info || (typeof i18n !== 'undefined' && i18n.t ? i18n.t('question_card_badge') : 'Card')} • #${index + 1}`;
         const giantSpan = document.getElementById('giant-arabic-word');
         if (giantSpan) {
             this.renderWordInto(giantSpan, item);
@@ -713,11 +720,11 @@ const app = {
                 if (isCorrect) {
                     this.score += res.mastered ? 5 : 2;
                     this.stats.ok++;
-                    const feedback = res.mastered ? 'أتقنت الكلمة تماماً! 👑' : 'خطوة ممتازة (1/2) ⭐';
+                    const feedback = res.mastered ? ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_mastered') : 'أتقنت الكلمة! 🌟') : ((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_well_done') : 'أحسنت! ⭐');
                     this.triggerFeedback(feedback, '#10b981', true);
                 } else {
                     this.stats.err++;
-                    this.triggerFeedback('تحتاج تدريباً إضافياً ⭐', '#f43f5e', false);
+                    this.triggerFeedback((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_needs_practice') : 'تحتاج تدريباً إضافياً ⭐', '#f43f5e', false);
                 }
                 if (typeof honeycombGame !== 'undefined' && this.currentActiveIndex !== null) {
                     honeycombGame.markStatus(this.currentActiveIndex, isCorrect);
@@ -731,13 +738,13 @@ const app = {
         if (isCorrect) {
             this.score += 5;
             this.stats.ok++;
-            this.triggerFeedback('Magnificent! ❤️⭐', '#10b981', true);
+            this.triggerFeedback((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_magnificent') : 'Magnificent! ❤️⭐', '#10b981', true);
         } else {
             this.stats.err++;
             if (this.currentActiveIndex !== null && !this.mistakeIndices.includes(this.currentActiveIndex)) {
                 this.mistakeIndices.push(this.currentActiveIndex);
             }
-            this.triggerFeedback('Keep Trying! ⭐', '#f43f5e', false);
+            this.triggerFeedback((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_keep_trying') : 'Keep Trying! ⭐', '#f43f5e', false);
         }
 
         // تحديث حالة خلية النحل إذا كانت اللعبة نشطة
