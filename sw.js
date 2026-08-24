@@ -12,8 +12,10 @@ const CACHE_RUNTIME_NAME = `nur-albayan-runtime-${CACHE_VERSION}`;
 const PRECACHE_ASSETS = [
     './',
     './index.html',
+    './guide.html',
     './manifest.json',
     // Core Scripts
+    './shared/store.js',
     './shared/core.js',
     './shared/app.js',
     './shared/i18n.js',

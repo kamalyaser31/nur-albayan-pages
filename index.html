@@ -62,8 +62,6 @@
 </head>
 <body>
 
-<a href="#main-content" class="skip-link" data-i18n="skip_to_content">تخطي إلى قائمة الدروس</a>
-
 <header>
   <h1 data-i18n="hero_title">صفحات نور البيان التفاعلية</h1>
   <p data-i18n="hero_subtitle">المنظومة التعليمية الرقمية الشاملة لضبط قراءة الكلمات والقرآن الكريم</p>
@@ -86,6 +84,12 @@
       <span data-i18n="roster_btn_text">إدارة الطلاب</span>
     </button>
 
+    <!-- زر دليل الاستخدام والشرح الشامل -->
+    <a href="guide.html" class="action-btn" data-i18n-aria="guide_nav_btn" aria-label="دليل الاستخدام والشرح الشامل">
+      <span aria-hidden="true">📖</span>
+      <span data-i18n="guide_nav_btn">دليل الاستخدام</span>
+    </a>
+
     <!-- زر تبديل اللغة -->
     <button id="lang-switch-btn" onclick="i18n.toggleLocale()" class="action-btn" aria-label="التحويل إلى اللغة الإنجليزية">
       <span aria-hidden="true">🌐</span>
@@ -95,21 +99,24 @@
     <!-- زر إعدادات المعلم -->
     <button onclick="settingsManager.open()" class="action-btn" aria-label="فتح نافذة إعدادات المعلم">
       <span aria-hidden="true">⚙️</span>
-      <span>إعدادات المعلم</span>
+      <span data-i18n="settings_title">إعدادات المعلم</span>
     </button>
   </div>
 </header>
 
 <main id="main-content">
-  <!-- SHORTCUTS GUIDE SECTION -->
-  <section class="shortcuts-section" aria-labelledby="shortcuts-guide-title">
-    <div class="shortcuts-header">
+  <!-- SHORTCUTS GUIDE ACCORDION (COLLAPSED BY DEFAULT) -->
+  <details class="shortcuts-section" aria-labelledby="shortcuts-guide-title">
+    <summary class="shortcuts-header">
       <h2 class="shortcuts-title" id="shortcuts-guide-title">
         <span aria-hidden="true">⌨️</span>
         <span data-i18n="shortcuts_guide_title">دليل مفاتيح الاختصارات</span>
       </h2>
-      <span class="text-xs text-slate-500 font-bold" data-i18n="shortcuts_guide_subtitle">لتسريع إدارة الحصة</span>
-    </div>
+      <div class="shortcuts-toggle-badge">
+        <span class="text-xs text-slate-500 font-bold" data-i18n="shortcuts_guide_subtitle">لتسريع إدارة الحصة</span>
+        <span class="shortcuts-toggle-icon" aria-hidden="true">▼</span>
+      </div>
+    </summary>
 
     <div class="shortcuts-grid">
       <!-- Card 1: التقييم والتحفيز -->
@@ -178,7 +185,7 @@
         </div>
       </div>
     </div>
-  </section>
+  </details>
 
   <!-- LESSONS INDEX NAVIGATION -->
   <nav aria-label="فهرس صفحات الدروس">
@@ -533,6 +540,9 @@
 <footer>
   <strong>منظومة نور البيان التفاعلية</strong>
   <p>تطوير الشيخ جهاد الصياد • نسألكم الدعاء لوالده ولأخيه محمد رحمهما الله</p>
+  <div style="margin-top: 8px;">
+    <a href="guide.html" style="color: #a7f3d0; text-decoration: underline; font-weight: 700; font-size: 0.85rem;" data-i18n="guide_nav_btn">دليل الاستخدام والشرح الشامل ↗</a>
+  </div>
 </footer>
 
 <script>

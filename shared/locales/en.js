@@ -417,7 +417,27 @@
         "aria_mem_card_revealed": "Memory card, icon {icon}",
         "aria_mem_card_matched": "Matched pair: {icon}",
         "aria_student_lesson_badge": "Student achievement: {stars} stars, {score} pts",
-        "progress_step_indicator": "{prefix} {current} of {total}"
+        "progress_step_indicator": "{prefix} {current} of {total}",
+        "guide_nav_btn": "User Guide",
+        "guide_page_title": "Comprehensive Platform Guide",
+        "guide_page_subtitle": "A detailed overview of all interactive Nur Al-Bayan platform features & smart teaching workflows",
+        "back_to_home": "Back to Home",
+        "guide_sec1_title": "1. Overview & Educational Vision",
+        "guide_sec1_desc": "Nur Al-Bayan Interactive Platform is a complete digital solution for Arabic reading and Quran recitation mastery, built upon the proven pedagogy of Nur Al-Bayan and enhanced with modern interactive web technologies for educators and students.",
+        "guide_sec2_title": "2. Learning Screen & Instant Grading",
+        "guide_sec2_desc": "Features prominent word cards in authentic Quranic typography with Tajweed color coding, auto-scaling sentence containers, and one-click grading buttons (Mastered / Review) that automatically record points into the student's profile.",
+        "guide_sec3_title": "3. Rapid Keyboard Shortcuts",
+        "guide_sec3_desc": "Designed for complete keyboard control to save teaching time: (2 or Enter for Mastered), (1 or Down Arrow for Review), (Arrow keys for navigation), (Escape to close zoom), (R to reset games).",
+        "guide_sec4_title": "4. Wordwall Interactive Games Suite",
+        "guide_sec4_desc": "Includes 7 engaging game modes: Magic Boxes, Stage Curtains, Wheel of Fortune, Deck Cards, Quranic Ladder, 3D Flip Tiles, and Honeycomb Matrix, with instant session mistake filtering.",
+        "guide_sec5_title": "5. Competitive AI Mini-Games",
+        "guide_sec5_desc": "Gamified reward challenges that build strategic thinking: Smart Tic-Tac-Toe, Tactical Connect 4, Memory Tiles, and Letter Riddles.",
+        "guide_sec6_title": "6. Mistake Bank & Instant Remediation",
+        "guide_sec6_desc": "Automated logging of words requiring practice, coupled with the Instant Session Drill system (Loop, Single Pass, and Instant Repeat modes) with atomic removal from the mistake bank upon mastery.",
+        "guide_sec7_title": "7. Student Roster, Analytics & Backups",
+        "guide_sec7_desc": "A comprehensive roster system for student profiles, personalized avatars and colors, star tracking, accuracy charts, and complete JSON data export/import.",
+        "guide_sec8_title": "8. Offline-First PWA & 100% Privacy",
+        "guide_sec8_desc": "A Progressive Web App engineered to operate 100% offline, keeping all student records strictly local on your device with complete privacy."
 };
 
     if (typeof i18n !== 'undefined') {

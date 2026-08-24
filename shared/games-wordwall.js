@@ -328,6 +328,17 @@ const cardsGame = {
         if (!activeData || activeData.length === 0) return;
         this.cardDeckIndices = Array.from({ length: activeData.length }, (_, i) => i);
         this.shuffleDeck();
+        this.updateBadge();
+    },
+
+    updateBadge() {
+        const badge = document.getElementById('cards-remaining-badge');
+        if (!badge) return;
+        const activeData = GameCore.getDataset();
+        const total = activeData ? activeData.length : 0;
+        const remaining = this.cardDeckIndices ? this.cardDeckIndices.length : 0;
+        const isAr = (typeof i18n !== 'undefined' && i18n.getLocale() === 'ar');
+        badge.textContent = isAr ? `المتبقي: ${remaining} من ${total}` : `Remaining: ${remaining} of ${total}`;
     },
 
     shuffleDeck() {
@@ -365,6 +376,7 @@ const cardsGame = {
 
         this.isAnimating = true;
         const deckIndex = this.cardDeckIndices.pop();
+        this.updateBadge();
         const targetItem = activeData[deckIndex];
         const activeCardIndex = (targetItem && targetItem._origIndex !== undefined) ? targetItem._origIndex : deckIndex;
 
@@ -485,29 +497,30 @@ const ladderGame = {
         for (let s = this.targetSteps; s >= 1; s--) {
             const rung = document.createElement('div');
             const isReached = s <= this.currentStep;
-            const isCurrent = s === this.currentStep;
+            const isTarget = !this.isCompleted && (s === this.currentStep + 1);
             const isCrown = s === this.targetSteps;
-            
-            rung.className = `rung-step flex items-center justify-between p-2.5 rounded-xl font-bold text-xs transition-all duration-300 ${
-                isCrown ? (isReached ? 'bg-amber-400 text-slate-900 border-2 border-amber-300 shadow-lg scale-105' : 'bg-amber-100 text-amber-800 border-2 border-amber-300/60') :
-                isReached ? 'bg-emerald-500 text-white shadow-md' :
-                'bg-white/60 text-slate-400 border border-slate-200'
-            } ${isCurrent ? 'ring-4 ring-emerald-300 scale-102 font-black' : ''}`;
-            
+
+            const bgClass = isCrown
+                ? (isReached ? 'bg-amber-400 text-slate-900 border-2 border-amber-300 shadow-lg scale-105' : (isTarget ? 'bg-amber-200 text-amber-950 border-2 border-amber-400 ring-4 ring-amber-300 animate-pulse scale-105 font-black' : 'bg-amber-100 text-amber-800 border-2 border-amber-300/60'))
+                : (isReached ? 'bg-emerald-500 text-white shadow-md' : (isTarget ? 'bg-emerald-100 text-emerald-950 border-2 border-emerald-400 ring-4 ring-emerald-300 scale-102 font-black shadow-sm' : 'bg-white/60 text-slate-400 border border-slate-200'));
+
+            rung.className = `rung-step flex items-center justify-between p-2.5 rounded-xl font-bold text-xs transition-all duration-300 ${bgClass}`;
             rung.id = `ladder-rung-${s}`;
+
             const stepAriaKey = isCrown ? (isReached ? 'aria_step_crown' : 'aria_step_unreached') : (isReached ? 'aria_step_reached' : 'aria_step_unreached');
             const stepAriaText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(stepAriaKey, null, { step: s }) : `Step ${s}`;
             rung.setAttribute('aria-label', stepAriaText);
 
             const crownLabel = (typeof i18n !== 'undefined') ? i18n.t('ladder_peak_label', '👑 القمة') : '👑 القمة';
             const stepLabel = (typeof i18n !== 'undefined') ? i18n.t('ladder_rung_label', 'الدرجة {step}', { step: s }) : `الدرجة ${s}`;
+            const stepIcon = isReached ? (isCrown ? '🏆' : '✔') : (isTarget ? '🎯' : '🔒');
 
             rung.innerHTML = `
                 <div class="flex items-center gap-2">
-                    <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs ${isReached ? 'bg-white text-emerald-700 font-black' : 'bg-slate-200 text-slate-600'}">${s}</span>
+                    <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs ${isReached ? 'bg-white text-emerald-700 font-black' : (isTarget ? 'bg-emerald-600 text-white font-black' : 'bg-slate-200 text-slate-600')}">${s}</span>
                     <span>${isCrown ? crownLabel : stepLabel}</span>
                 </div>
-                <span class="text-sm">${isReached ? (isCrown ? '🏆' : '✔') : '🔒'}</span>
+                <span class="text-sm">${stepIcon}</span>
             `;
             fragment.appendChild(rung);
         }
@@ -524,8 +537,23 @@ const ladderGame = {
     grade(isCorrect) {
         if (this.isCompleted) return;
 
+        const activeData = GameCore.getDataset();
+        const wordIndex = (this.wordQueue && this.wordQueue[this.queueIdx] !== undefined) ? this.wordQueue[this.queueIdx] : 0;
+        const currentWord = (activeData && activeData[wordIndex]) ? activeData[wordIndex] : this.currentWordItem;
+        const origIdx = (currentWord && currentWord._origIndex !== undefined) ? currentWord._origIndex : wordIndex;
+        const lessonId = (typeof app !== 'undefined' && typeof app.getLessonId === 'function') ? app.getLessonId() : 'current';
+        const activeStudentId = (typeof studentManager !== 'undefined') ? studentManager.getActiveStudentId() : null;
+
         if (isCorrect) {
             this.currentStep++;
+            if (typeof app !== 'undefined') {
+                app.score += 2;
+                app.stats.ok++;
+                app.updateScoreUI();
+            }
+            if (typeof studentManager !== 'undefined' && activeStudentId) {
+                studentManager.recordCardEvaluation(activeStudentId, origIdx, true, lessonId, 2);
+            }
             if (typeof Sound !== 'undefined' && typeof Sound.stepUp === 'function') {
                 Sound.stepUp(this.currentStep, this.targetSteps);
             }
@@ -534,6 +562,10 @@ const ladderGame = {
             if (this.currentStep >= this.targetSteps) {
                 this.isCompleted = true;
                 GameCore.celebrate(true);
+                if (typeof app !== 'undefined') {
+                    app.score += 5;
+                    app.updateScoreUI();
+                }
                 const wordDisplay = document.getElementById('ladder-word-display');
                 if (wordDisplay) {
                     const congratsHeading = (typeof i18n !== 'undefined')
@@ -559,11 +591,22 @@ const ladderGame = {
                 return;
             }
         } else {
+            if (typeof app !== 'undefined') {
+                app.stats.err++;
+                app.recordMistake(origIdx);
+            }
+            if (typeof studentManager !== 'undefined' && activeStudentId) {
+                studentManager.recordCardEvaluation(activeStudentId, origIdx, false, lessonId, 0);
+            }
             this.currentStep = Math.max(0, this.currentStep - 1);
             if (typeof Sound !== 'undefined' && typeof Sound.stepDown === 'function') {
                 Sound.stepDown();
             }
             this.renderLadder();
+            // إعادة إدراج الكلمة المتعثرة في نهاية الطابور لضمان إتقانها
+            if (this.wordQueue) {
+                this.wordQueue.push(wordIndex);
+            }
         }
 
         this.queueIdx++;
@@ -610,10 +653,28 @@ const tilesGame = {
             tile.setAttribute('aria-label', tileAria);
             
             const color = wordwallColors[origIdx % wordwallColors.length];
-            const wordText = (typeof item === 'object' && item !== null)
-                ? (item.display || item.word || item.text || (typeof app !== 'undefined' ? app.getPlainWord(item) : ''))
-                : String(item || '');
-            
+            let innerHtml = '';
+            if (typeof item === 'object' && item !== null) {
+                if (item.html) {
+                    innerHtml = item.html;
+                } else if (item.w && typeof item.w === 'string') {
+                    innerHtml = item.w;
+                } else if (Array.isArray(item.w)) {
+                    innerHtml = item.w.map((seg, i) => `<span class="color-${i % 3}">${seg}</span>`).join('');
+                } else if (item.segs && Array.isArray(item.segs)) {
+                    const colorClasses = ['c-red', 'c-blue', 'c-black'];
+                    innerHtml = item.segs.map((ch, i) => `<span class="${colorClasses[i % 3]}">${ch}</span>`).join(' ');
+                } else {
+                    innerHtml = (typeof app !== 'undefined' ? app.getPlainWord(item) : String(item));
+                }
+            } else {
+                innerHtml = String(item || '');
+            }
+
+            const plainText = (typeof app !== 'undefined') ? app.getPlainWord(item) : String(item);
+            const charLen = plainText.replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g, '').length;
+            const tileFontSize = charLen > 18 ? 'text-xs sm:text-sm md:text-base' : (charLen > 12 ? 'text-sm sm:text-base md:text-lg' : (charLen > 6 ? 'text-lg sm:text-xl md:text-2xl' : 'text-2xl sm:text-3xl md:text-4xl'));
+
             tile.innerHTML = `
                 <div class="flip-tile-inner" aria-hidden="true">
                     <div class="tile-face tile-front flex flex-col items-center justify-center text-white border-[3px] border-white/40 shadow-lg hover:scale-105 transition-transform" style="background-color: ${color}">
@@ -621,7 +682,7 @@ const tilesGame = {
                         <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-2 bg-black/25 px-3 py-0.5 rounded-full backdrop-blur-sm">${i18n.t('flip')} 🀄</span>
                     </div>
                     <div class="tile-face tile-back flex flex-col items-center justify-center p-2 bg-white border-[3px] border-emerald-400 text-slate-800 shadow-xl overflow-hidden">
-                        <span class="font-amiri text-2xl sm:text-3xl md:text-4xl font-bold text-emerald-950 leading-relaxed text-center" style="letter-spacing: normal !important;">${wordText}</span>
+                        <div class="quran-font ${tileFontSize} font-bold text-slate-900 leading-snug text-center" style="letter-spacing: normal !important;">${innerHtml}</div>
                     </div>
                 </div>
             `;
@@ -797,7 +858,8 @@ const honeycombGame = {
     updateBadge() {
         const badge = document.getElementById('hex-progress-badge');
         if (!badge) return;
-        const total = dataset ? dataset.length : 0;
+        const activeData = GameCore.getDataset();
+        const total = activeData ? activeData.length : (dataset ? dataset.length : 0);
         const mastered = Object.values(this.cellStatus).filter(s => s === 'mastered').length;
         const isAr = (typeof i18n !== 'undefined' && i18n.getLocale() === 'ar');
         badge.textContent = isAr ? `المتقن: ${mastered} من ${total}` : `Mastered: ${mastered} of ${total}`;
@@ -816,6 +878,7 @@ const honeycombGame = {
 const wordwallRoom = {
     mode: 'box',
     openedBoxes: new Set(),
+    boxStatus: {},
     filterSessionMistakes: false,
 
     // سجل الألعاب كـ Plugins
@@ -852,6 +915,7 @@ const wordwallRoom = {
 
         // إعادة ضبط اللعبة الحالية بعد تغيير الفلترة
         this.openedBoxes.clear();
+        this.boxStatus = {};
         if (this.mode === 'box' || this.mode === 'curtain') {
             this.renderBoxes();
         } else if (this.games[this.mode]) {
@@ -961,6 +1025,22 @@ const wordwallRoom = {
         if (navSelect) navSelect.value = `ww_${mode}`;
     },
 
+    markBoxStatus(index, isCorrect) {
+        this.boxStatus[index] = isCorrect ? 'mastered' : 'review';
+        const box = document.getElementById(`box-${index}`);
+        if (box) {
+            box.classList.remove('status-mastered', 'status-review');
+            box.classList.add(isCorrect ? 'status-mastered' : 'status-review');
+            const backFace = box.querySelector('.box-back');
+            if (backFace) {
+                backFace.className = `box-back rounded-2xl flex items-center justify-center border-[3px] shadow-inner ${
+                    isCorrect ? 'bg-emerald-50 text-emerald-600 border-emerald-400' : 'bg-rose-50 text-rose-600 border-rose-400'
+                }`;
+                backFace.innerHTML = `<span class="text-4xl">${isCorrect ? '✔' : '📌'}</span>`;
+            }
+        }
+    },
+
     renderBoxes() {
         const container = document.getElementById('box-grid');
         if (!container || typeof dataset === 'undefined') return;
@@ -974,9 +1054,19 @@ const wordwallRoom = {
             const origIdx = (item && item._origIndex !== undefined) ? item._origIndex : index;
             const box = document.createElement('button');
             box.type = 'button';
-            box.className = `wordwall-box relative aspect-square w-full flex items-center justify-center rounded-2xl ${isCurtain ? 'curtain-box' : ''} ${this.openedBoxes.has(origIdx) ? 'opened opacity-50 grayscale-[50%]' : ''}`;
-            box.id = `box-${origIdx}`;
             const isOpened = this.openedBoxes.has(origIdx);
+            const status = this.boxStatus[origIdx];
+            const isMastered = status === 'mastered';
+            const isReview = status === 'review';
+            const statusClass = isMastered ? 'status-mastered' : (isReview ? 'status-review' : '');
+            const backClass = isMastered
+                ? 'bg-emerald-50 text-emerald-600 border-emerald-400'
+                : (isReview ? 'bg-rose-50 text-rose-600 border-rose-400' : 'bg-slate-100 text-slate-400 border-slate-300');
+            const backIcon = isMastered ? '✔' : (isReview ? '📌' : '✔');
+
+            box.className = `wordwall-box relative aspect-square w-full flex items-center justify-center rounded-2xl ${isCurtain ? 'curtain-box' : ''} ${isOpened ? 'opened' : ''} ${statusClass}`.trim();
+            box.id = `box-${origIdx}`;
+            
             const boxAriaKey = isCurtain ? (isOpened ? 'aria_curtain_opened' : 'aria_curtain_closed') : (isOpened ? 'aria_box_opened' : 'aria_box_closed');
             const boxAriaText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(boxAriaKey, null, { num: origIdx + 1 }) : `${labelType} ${origIdx + 1}${isOpened ? ', opened' : ', closed'}`;
             box.setAttribute('aria-label', boxAriaText);
@@ -990,7 +1080,7 @@ const wordwallRoom = {
                             <span class="text-4xl sm:text-5xl lg:text-6xl font-black drop-shadow-md z-10">${origIdx + 1}</span>
                             <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-2 bg-amber-400 text-slate-900 px-3 py-0.5 rounded-full shadow-sm z-10">${i18n.t('reveal')}</span>
                         </div>
-                        <div class="box-back rounded-2xl flex items-center justify-center text-slate-400 bg-slate-100 border-[3px] border-slate-300 shadow-inner"><span class="text-4xl">✔</span></div>
+                        <div class="box-back rounded-2xl flex items-center justify-center border-[3px] shadow-inner ${backClass}"><span class="text-4xl">${backIcon}</span></div>
                     </div>`;
             } else {
                 box.innerHTML = `
@@ -999,7 +1089,7 @@ const wordwallRoom = {
                             <span class="text-4xl sm:text-5xl lg:text-6xl font-black drop-shadow-md">${origIdx + 1}</span>
                             <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-2 bg-black/20 px-3 py-1 rounded-full backdrop-blur-sm">${i18n.t('open')}</span>
                         </div>
-                        <div class="box-back rounded-2xl flex items-center justify-center text-slate-400 bg-slate-100 border-[3px] border-slate-300 shadow-inner"><span class="text-4xl">✔</span></div>
+                        <div class="box-back rounded-2xl flex items-center justify-center border-[3px] shadow-inner ${backClass}"><span class="text-4xl">${backIcon}</span></div>
                     </div>`;
             }
             
@@ -1020,6 +1110,7 @@ const wordwallRoom = {
      */
     reset() {
         this.openedBoxes.clear();
+        this.boxStatus = {};
         Object.values(this.games).forEach(game => {
             if (game && typeof game.reset === 'function') {
                 game.reset();

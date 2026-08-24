@@ -114,9 +114,6 @@ function buildAppUI() {
         </section>`;
 
     const fullHtml = `
-    <!-- Accessibility Skip Link -->
-    <a href="#word-display-area" class="skip-link sr-only focus:not-sr-only" data-i18n="skip_to_content">${escapeHTML(i18n.t('skip_to_content') || 'تجاوز إلى المحتوى الرئيسي')}</a>
-
     <!-- Interactive Feedback Badge -->
     <div id="badge-ui" class="feedback-badge bg-white shadow-xl px-8 py-3 rounded-full text-2xl sm:text-3xl font-black border-4 border-emerald-400 whitespace-nowrap" role="status" aria-live="assertive"></div>
 
@@ -391,9 +388,12 @@ ${wordwallTabsHtml}
                     </div>
                 </div>
 
-                <div id="ww-cards-container" role="tabpanel" aria-labelledby="tab-cards" class="hidden w-full h-full flex flex-col justify-center items-center gap-6" data-i18n-aria="game_cards_tab" aria-label="${escapeHTML(i18n.t('game_cards_tab'))}">
-                    <div class="bg-rose-100 text-rose-800 px-3.5 py-1 rounded-full text-xs font-bold shrink-0 shadow-sm border border-rose-200" data-i18n="prompt_cards">
-                        ${escapeHTML(i18n.t('prompt_cards'))}
+                <div id="ww-cards-container" role="tabpanel" aria-labelledby="tab-cards" class="hidden w-full h-full flex flex-col justify-center items-center gap-5" data-i18n-aria="game_cards_tab" aria-label="${escapeHTML(i18n.t('game_cards_tab'))}">
+                    <div class="flex items-center gap-2.5 flex-wrap justify-center">
+                        <div class="bg-rose-100 text-rose-800 px-3.5 py-1 rounded-full text-xs font-bold shrink-0 shadow-sm border border-rose-200" data-i18n="prompt_cards">
+                            ${escapeHTML(i18n.t('prompt_cards'))}
+                        </div>
+                        <span id="cards-remaining-badge" class="bg-rose-50 text-rose-900 border border-rose-200 px-3 py-0.5 rounded-full text-xs font-black shadow-2xs" aria-live="polite">0</span>
                     </div>
                     <div class="card-pile flex justify-center items-center shrink-0 mt-2">
                         <div class="stacked-card bg-rose-700 border-[3px] border-white/50 transform rotate-6 translate-x-4 translate-y-3" aria-hidden="true"></div>

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل الاستخدام والشرح الشامل - صفحات نور البيان التفاعلية</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#047857">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+    
+    <link rel="stylesheet" href="shared/core.css">
+    <link rel="stylesheet" href="shared/css/tokens.css">
+    <link rel="stylesheet" href="shared/css/base.css">
+    <link rel="stylesheet" href="shared/css/typography.css">
+    <link rel="stylesheet" href="shared/css/components.css">
+    <link rel="stylesheet" href="shared/css/cards.css">
+    <link rel="stylesheet" href="shared/css/index.css">
+
+    <style>
+        .guide-container {
+            max-width: 1100px;
+            margin-inline: auto;
+            padding: 32px 16px 64px;
+        }
+        .guide-card {
+            background: var(--surface-card, #ffffff);
+            border: 1.5px solid var(--border-color, #e2e8f0);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            transition: all 0.25s ease;
+        }
+        .guide-card:hover {
+            border-color: var(--color-primary-light, #10b981);
+            box-shadow: 0 8px 24px rgba(4, 120, 87, 0.08);
+            transform: translateY(-2px);
+        }
+        .guide-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            border-bottom: 1.5px solid #f1f5f9;
+            padding-bottom: 12px;
+        }
+        .guide-icon-badge {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: #ecfdf5;
+            color: #047857;
+            border: 1px solid #a7f3d0;
+            flex-shrink: 0;
+        }
+        .guide-card-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #065f46;
+            margin: 0;
+        }
+        .guide-card-text {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-main, #334155);
+            margin-bottom: 16px;
+        }
+        .guide-feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 12px;
+            margin-top: 14px;
+        }
+        .guide-feature-item {
+            background: var(--surface-page, #f8fafc);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1e293b;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .guide-feature-item span:first-child {
+            font-size: 1.1rem;
+            line-height: 1;
+        }
+    </style>
+
+    <script src="shared/store.js"></script>
+    <script src="shared/i18n.js"></script>
+    <script src="shared/locales/ar.js"></script>
+    <script src="shared/locales/en.js"></script>
+    <script src="shared/settings.js"></script>
+</head>
+<body>
+
+<header>
+    <h1 data-i18n="guide_page_title">دليل المنظومة والشرح الشامل</h1>
+    <p data-i18n="guide_page_subtitle">شرح تفصيلي لكافة ميزات منصة نور البيان التفاعلية وطرق التدريس الذكية</p>
+    
+    <div class="header-actions">
+        <!-- زر العودة للفهرس الرئيسي -->
+        <a href="index.html" class="action-btn bg-white/20 hover:bg-white/30 text-white border border-white/40" data-i18n-aria="back_to_home" aria-label="العودة للفهرس الرئيسي">
+            <span aria-hidden="true">🏠</span>
+            <span data-i18n="back_to_home">العودة للفهرس الرئيسي</span>
+        </a>
+
+        <!-- زر تبديل اللغة -->
+        <button id="lang-switch-btn" onclick="i18n.toggleLocale()" class="action-btn" aria-label="التحويل إلى اللغة الإنجليزية">
+            <span aria-hidden="true">🌐</span>
+            <span id="lang-switch-text">English</span>
+        </button>
+
+        <!-- زر إعدادات المعلم -->
+        <button onclick="settingsManager.open()" class="action-btn" aria-label="فتح نافذة إعدادات المعلم">
+            <span aria-hidden="true">⚙️</span>
+            <span data-i18n="settings_title">إعدادات المعلم</span>
+        </button>
+    </div>
+</header>
+
+<main class="guide-container">
+    <!-- Section 1: الرؤية التعليمية -->
+    <article class="guide-card">
+        <div class="guide-card-header">
+            <div class="guide-icon-badge" aria-hidden="true">🌱</div>
+            <h2 class="guide-card-title" data-i18n="guide_sec1_title">1. نبذة عن المنظومة والرؤية التعليمية</h2>
+        </div>
+        <p class="guide-card-text" data-i18n="guide_sec1_desc">
+            منصة نور البيان التفاعلية هي منظومة رقمية متكاملة لتعليم القراءة العربية وتجويد القرآن الكريم، تعتمد على التدرج البيداغوجي المعتمد في منهج نور البيان، مع توظيف أحدث تقنيات الويب التفاعلية لتقديم تجربة تعليمية ممتعة وجذابة للطلاب والمعلمين.
+        </p>
+        <div class="guide-feature-list">
+            <div class="guide-feature-item">
+                <span aria-hidden="true">📖</span>
+                <span>34 صفحة تعليمية متدرجة تبدأ من الحروف المفردة وتنتهي بأحكام التجويد والآيات.</span>
+            </div>
+            <div class="guide-feature-item">
+                <span aria-hidden="true">🎨</span>
+                <span>الرسم العثماني المصحفي مع التلوين البصري التجويدي للحركات والمدود.</span>
+            </div>
+            <div class="guide-feature-item">
+                <span aria-hidden="true">⚡</span>
+                <span>استجابة فورية بدون أي تأخير زمني وتوافق تام مع كافة مقاسات الشاشات.</span>
+            </div>
+        </div>
+    </article>
+
+    <!-- Section 2: شاشة التعلم والتقييم -->
+    <article class="guide-card">
+        <div class="guide-card-header">
+            <div class="guide-icon-badge" aria-hidden="true">🎯</div>
+            <h2 class="guide-card-title" data-i18n="guide_sec2_title">2. شاشة التعلم والتقييم اللحظي</h2>
+        </div>
+        <p class="guide-card-text" data-i18n="guide_sec2_desc">
+            تتميز شاشة التعلم بعرض الكلمات والجمل في بطاقات مركزية بخط قرآني أصيل مع تلوين تجويدي للحركات والمدود، ونظام تحجيم تكيفي للجمل الطويلة، وأزرار تقييم فورية (إتقان / مراجعة) تسجل الدرجات والنقاط في ملف الطالب تلقائياً.
+        </p>
+        <div class="guide-feature-list">
+            <div class="guide-feature-item">
+                <span aria-hidden="true">🟢</span>
+                <span>زر (إتقان / صحيح): يمنح الطالب نقاطاً ويحتسب الكلمة متقنة في تقرير الدرس.</span>
+            </div>
+            <div class="guide-feature-item">
+                <span aria-hidden="true">🔴</span>
+                <span>زر (مراجعة / خطأ): يُدرج الكلمة فورياً في بنك عثرات الطالب لمعالجتها لاحقاً.</span>
+            </div>
+            <div class="guide-feature-item">
+                <span aria-hidden="true">📐</span>
+                <span>التحجيم التلقائي للخط القرآني حسب طول الجملة لمنع خروج النصوص خارج البطاقة.</span>
+            </div>
+        </div>
+    </article>
+
+    <!-- Section 3: مفاتيح الاختصارات -->
+    <article class="guide-card">
+        <div class="guide-card-header">
+            <div class="guide-icon-badge" aria-hidden="true">⌨️</div>
+            <h2 class="guide-card-title" data-i18n="guide_sec3_title">3. مفاتيح الاختصارات السريعة لإدارة الحصة</h2>
+        </div>
+        <p class="guide-card-text" data-i18n="guide_sec3_desc">
+            صُممت المنظومة لتدار بالكامل عبر لوحة المفاتيح لتوفير الوقت والجهد على المعلم: (2 أو Enter للإتقان)، (1 أو السهم لأسفل للمراجعة)، (الأسهم الجانبية للتنقل)، (Escape لإغلاق التكبير)، (R لإعادة ضبط الألعاب).
+        </p>
+        <div class="guide-feature-list">
+            <div class="guide-feature-item">
+                <span aria-hidden="true">✅</span>
+                <span>التقييم بالإتقان: اضغط مفتاح (2) أو (Enter) أو (مسافة).</span>
+            </div>
+            <div class="guide-feature-item">
+                <span aria-hidden="true">❌</span>
+                <span>التقييم بالمراجعة: اضغط مفتاح (1) أو (السهم لأسفل).</span>
+            </div>
+            <div class="guide-feature-item">
+                <span aria-hidden="true">↔️</span>
+                <span>التنقل بين الكلمات: اضغط (السهم الأيسر للتالي) و (الأيمن للسابق).</span>
+            </div>
+            <div class="guide-feature-item">
+                <span aria-hidden="true">🔄</span>
+                <span>إعادة الضبط: اضغط (R) لإعادة خلط الألعاب، و (Escape) لإغلاق النوافذ.</span>
+            </div>
+        </div>
+    </article>
+
+    <!-- Section 4: ألعاب جدار الكلمات -->
+    <article class="guide-card">
+        <div class="guide-card-header">
+            <div class="guide-icon-badge" aria-hidden="true">🧱</div>
+            <h2 class="guide-card-title" data-i18n="guide_sec4_title">4. حزمة ألعاب جدار الكلمات (Wordwall)</h2>
+        </div>
+        <p class="guide-card-text" data-i18n="guide_sec4_desc">
+            تتضمن 7 ألعاب تفاعلية متنوعة: الصناديق السحرية، الستار المسرحي، العجلة الدوارة، بطاقات السحب المتقلبة، سلم الارتقاء القرآني، بطاقات الكشف ثلاثية الأبعاد، ومصفوفة خلية النحل التعليمية، مع إمكانية تصفية الألعاب لعرض عثرات الحصة فقط.
+        </p>
+        <div class="guide-feature-list">
+            <div class="guide-feature-item">
+                <span aria-hidden="true">📦</span>
+                <span>الصناديق والستار: فتح وكشف الكلمات تدريجياً مع وسم النتيجة على الوجه الخلفي.</span>
+            </div>
+            <div class="guide-feature-item">
+                <span aria-hidden="true">🎡</span>
+                <span>العجلة الدوارة: اختيار عشوائي حماسي بمعدل 60 إطاراً في الثانية.</span>
+            </div>
+            <div class="guide-feature-item">
+                <span aria-hidden="true">🃏</span>
+                <span>رزمة البطاقات: سحب متتابع مع عداد للبطاقات المتبقية قبل إعادة الخلط.</span>
+            </div>
+            <div class="guide-feature-item">
+                <span aria-hidden="true">🪜</span>
+                <span>سلم الارتقاء: صعود الدرجات نحو التتويج بالتاج مع إعادة إدراج الكلمات المتعثرة.</span>
+            </div>
+            <div class="guide-feature-item">
+                <span aria-hidden="true">🀄</span>
+                <span>بطاقات الكشف 3D: قلب البطاقات مع الحفاظ الكامل على ألوان التجويد والتشكيل.</span>
+            </div>
+            <div class="guide-feature-item">
+                <span aria-hidden="true">⬡</span>
+                <span>خلية النحل: مصفوفة سداسية تضيء بالأخضر للإتقان وبالوردي للمراجعة.</span>
+            </div>
+        </div>
+    </article>
+
+    <!-- Section 5: ألعاب الذكاء الاصطناعي -->
+    <article class="guide-card">
+        <div class="guide-card-header">
+            <div class="guide-icon-badge" aria-hidden="true">🤖</div>
+            <h2 class="guide-card-title" data-i18n="guide_sec5_title">5. ألعاب الذكاء الاصطناعي التنافسية</h2>
+        </div>
+        <p class="guide-card-text" data-i18n="guide_sec5_desc">
+            ألعاب إضافية تنمي التفكير الاستراتيجي وتكافئ القراءة الصحيحة: لعبة إكس-أو الذكية، ولعبة الأربعة تربح (Connect 4) بمستويات تكتيكية، ولعبة بطاقات الذاكرة، وفوازير الحروف والكلمات.
+        </p>
+        <div class="guide-feature-list">
+            <div class="guide-feature-item">
+                <span aria-hidden="true">❌</span>
+                <span>إكس-أو الذكية: ذكاء اصطناعي يتدرج بين السهل والمتوسط والمستحيل.</span>
+            </div>
+            <div class="guide-feature-item">
+                <span aria-hidden="true">🔴</span>
+                <span>الأربعة تربح (Connect 4): منافسة تكتيكية تتطلب قراءة الكلمة لإسقاط القرص.</span>
+            </div>
+            <div class="guide-feature-item">
+                <span aria-hidden="true">🧠</span>
+                <span>تطابق الذاكرة وفوازير الكلمات: تحفيز الذاكرة البصرية وتثبيت المتشابهات.</span>
+            </div>
+        </div>
+    </article>
+
+    <!-- Section 6: بنك العثرات والمعالجة الفورية -->
+    <article class="guide-card">
+        <div class="guide-card-header">
+            <div class="guide-icon-badge" aria-hidden="true">🩹</div>
+            <h2 class="guide-card-title" data-i18n="guide_sec6_title">6. بنك العثرات والمعالجة الفورية الذكية</h2>
+        </div>
+        <p class="guide-card-text" data-i18n="guide_sec6_desc">
+            تسجيل تلقائي لكافة الكلمات التي يواجه فيها الطالب صعوبة، مع ميزة (جلسة تصويب العثرات الفورية) بأنماطها الثلاثة: حلقة التدوير، المرور المفرد، والتكرار الموضعي، مع شطب الكلمة تلقائياً من بنك الأخطاء بمجرد إتقانها.
+        </p>
+        <div class="guide-feature-list">
+            <div class="guide-feature-item">
+                <span aria-hidden="true">🔁</span>
+                <span>نمط التدوير (Loop): يعيد الكلمة المتعثرة حتى يتقنها الطالب بنجاح.</span>
+            </div>
+            <div class="guide-feature-item">
+                <span aria-hidden="true">➡️</span>
+                <span>المرور المفرد (Single Pass): جلسة تصويب سريعة تمر على كل خطأ مرة واحدة.</span>
+            </div>
+            <div class="guide-feature-item">
+                <span aria-hidden="true">✨</span>
+                <span>الشطب الذري: الكلمة التي يُتقنها الطالب تُشطب تلقائياً ولحظياً من بنك أخطائه.</span>
+            </div>
+        </div>
+    </article>
+
+    <!-- Section 7: إدارة ومتابعة الطلاب -->
+    <article class="guide-card">
+        <div class="guide-card-header">
+            <div class="guide-icon-badge" aria-hidden="true">👥</div>
+            <h2 class="guide-card-title" data-i18n="guide_sec7_title">7. إدارة ومتابعة الطلاب والتقارير</h2>
+        </div>
+        <p class="guide-card-text" data-i18n="guide_sec7_desc">
+            لوحة شاملة لإدارة قوائم الطلاب، تخصيص الرموز والألوان، رصد النجوم والدرجات التراكمية، تتبع الرسوم البيانية لنسب الدقة والإتقان، والنسخ الاحتياطي الكامل للسجلات بصيغة JSON.
+        </p>
+        <div class="guide-feature-list">
+            <div class="guide-feature-item">
+                <span aria-hidden="true">👤</span>
+                <span>ملف مخصص لكل طالب برمز تعبيري ولون مميز وإجمالي نقاط تراكمي.</span>
+            </div>
+            <div class="guide-feature-item">
+                <span aria-hidden="true">📊</span>
+                <span>مخطط بياني ومعدل دقة لكل درس لتقييم تطور مستوى القراءة عبر الزمن.</span>
+            </div>
+            <div class="guide-feature-item">
+                <span aria-hidden="true">💾</span>
+                <span>تصدير واستيراد النسخ الاحتياطية بضغطة زر لنقل بيانات الطلاب بين الأجهزة.</span>
+            </div>
+        </div>
+    </article>
+
+    <!-- Section 8: العمل دون اتصال والخصوصية -->
+    <article class="guide-card">
+        <div class="guide-card-header">
+            <div class="guide-icon-badge" aria-hidden="true">🔒</div>
+            <h2 class="guide-card-title" data-i18n="guide_sec8_title">8. التشغيل دون اتصال والخصوصية التامة</h2>
+        </div>
+        <p class="guide-card-text" data-i18n="guide_sec8_desc">
+            تطبيق تقدمي (PWA) يعمل بكفاءة 100% دون اتصال بالإنترنت، مع حفظ كافة السجلات والبيانات محلياً على جهاز المستخدم (Local-First) دون إرسال أي بيانات إلى خوادم خارجية.
+        </p>
+        <div class="guide-feature-list">
+            <div class="guide-feature-item">
+                <span aria-hidden="true">📡</span>
+                <span>جاهز للعمل في الفصول والقاعات دون الحاجة لاتصال بالإنترنت.</span>
+            </div>
+            <div class="guide-feature-item">
+                <span aria-hidden="true">🛡️</span>
+                <span>أمان وخصوصية تامة؛ لا يتم جمع أو مشاركة أي بيانات شخصية نهائياً.</span>
+            </div>
+        </div>
+    </article>
+</main>
+
+<script>
+    function updateGuideLanguage() {
+        if (typeof i18n === 'undefined') return;
+        const currentLocale = i18n.getLocale();
+        const isAr = (currentLocale === 'ar');
+        document.documentElement.lang = currentLocale;
+        document.documentElement.dir = isAr ? 'rtl' : 'ltr';
+        i18n.translateDOM();
+        const langText = document.getElementById('lang-switch-text');
+        if (langText) langText.textContent = isAr ? 'English' : 'العربية';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof i18n !== 'undefined') {
+            i18n.init();
+            updateGuideLanguage();
+        }
+
+        window.addEventListener('nb:locale-changed', updateGuideLanguage);
+
+        if (typeof nbStore !== 'undefined') {
+            nbStore.subscribe('locale', () => {
+                updateGuideLanguage();
+            });
+        }
+    });
+</script>
+
+</body>
+</html>

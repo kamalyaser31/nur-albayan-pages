@@ -375,6 +375,18 @@ const app = {
         container.innerHTML = '';
         const currentTheme = item.theme || 'pink';
 
+        const plain = this.getPlainWord(item);
+        const words = plain ? plain.split(/\s+/).filter(Boolean) : [];
+        const charCount = plain ? plain.replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g, '').length : 0;
+        let lengthClass = '';
+        if (charCount > 16 || words.length >= 4) {
+            lengthClass = 'text-xlong';
+        } else if (charCount > 10 || words.length === 3) {
+            lengthClass = 'text-long';
+        } else if (charCount > 5 || words.length === 2) {
+            lengthClass = 'text-medium';
+        }
+
         if (item.segs && Array.isArray(item.segs)) {
             const colorClasses = ['c-red', 'c-blue', 'c-black'];
             const wrap = document.createElement('div');
@@ -410,26 +422,26 @@ const app = {
             container.appendChild(wrap);
         } else if (item.groups && Array.isArray(item.groups)) {
             const box = document.createElement('div');
-            box.className = `letter-box quran-font theme-${currentTheme}`;
+            box.className = `letter-box quran-font theme-${currentTheme} ${lengthClass}`.trim();
             box.style.direction = 'rtl';
             this.setSafeHTML(box, item.groups.map(g => `<span class="${g[1]}" style="margin:0 .25em">${g[0]}</span>`).join(''));
             container.appendChild(box);
         } else if (item.html) {
             const box = document.createElement('div');
-            box.className = `letter-box quran-font theme-${currentTheme}`;
+            box.className = `letter-box quran-font theme-${currentTheme} ${lengthClass}`.trim();
             box.style.direction = 'rtl';
             this.setSafeHTML(box, item.html);
             container.appendChild(box);
         } else if (Array.isArray(item.w)) {
             const box = document.createElement('div');
-            box.className = `letter-box quran-font theme-${currentTheme}`;
+            box.className = `letter-box quran-font theme-${currentTheme} ${lengthClass}`.trim();
             box.style.direction = 'rtl';
             const inner = item.w.map((seg, i) => `<span class="color-${i % 3}">${seg}</span>`).join('');
             this.setSafeHTML(box, `<bdi style="white-space:nowrap">${inner}</bdi>`);
             container.appendChild(box);
         } else {
             const box = document.createElement('div');
-            box.className = `letter-box theme-${currentTheme}`;
+            box.className = `letter-box theme-${currentTheme} ${lengthClass}`.trim();
             this.setSafeHTML(box, `<span class="word-wrapper quran-font text-center">${item.w}</span>`);
             container.appendChild(box);
         }
@@ -1096,9 +1108,12 @@ const app = {
             this.triggerFeedback((typeof i18n !== 'undefined' && i18n.t) ? i18n.t('fb_keep_trying') : 'Keep Trying! ⭐', '#f43f5e', false);
         }
 
-        // تحديث حالة خلية النحل إذا كانت اللعبة نشطة
+        // تحديث حالة خلية النحل والصناديق إذا كانت الألعاب نشطة
         if (typeof honeycombGame !== 'undefined' && this.currentActiveIndex !== null) {
             honeycombGame.markStatus(this.currentActiveIndex, isCorrect);
+        }
+        if (typeof wordwallRoom !== 'undefined' && this.currentActiveIndex !== null && typeof wordwallRoom.markBoxStatus === 'function') {
+            wordwallRoom.markBoxStatus(this.currentActiveIndex, isCorrect);
         }
 
         // التسجيل الذري اللحظي للطالب النشط
