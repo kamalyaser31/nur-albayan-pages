@@ -15,6 +15,9 @@
     }
 
     const modules = [
+        'i18n.js',
+        'locales/ar.js',
+        'locales/en.js',
         'settings.js',
         'student-manager.js',
         'sound.js',
