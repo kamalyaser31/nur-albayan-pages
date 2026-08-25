@@ -337,8 +337,15 @@ let _celebrationActive = false;
 let _celebrationTimer = null;
 
 function fireCelebration() {
-    if (typeof confetti !== 'function') return;
     if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (typeof confetti !== 'function') {
+        if (typeof VendorLoader !== 'undefined') {
+            VendorLoader.loadConfetti()
+                .then(() => fireCelebration())
+                .catch(error => console.warn('Celebration effect could not be loaded:', error));
+        }
+        return;
+    }
     if (_celebrationActive) return; // حماية ضد الاستدعاء المتزامن المتكرر
 
     _celebrationActive = true;

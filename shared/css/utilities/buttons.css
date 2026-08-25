@@ -32,7 +32,7 @@ button[disabled],
     box-shadow: none !important;
 }
 
-.focus\:outline-none:focus { outline: none !important; }
+.focus\:outline-none:focus:not(:focus-visible) { outline: none !important; }
 .focus\:ring-2:focus { box-shadow: 0 0 0 2px var(--tw-ring-color, #818cf8) !important; }
 .focus\:ring-indigo-400:focus { --tw-ring-color: #818cf8; }
 .focus\:ring-emerald-400:focus { --tw-ring-color: #34d399; }

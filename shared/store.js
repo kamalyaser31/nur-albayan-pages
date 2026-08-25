@@ -23,7 +23,7 @@
  *    - 'nb:student-changed' (detail: { activeStudentId, student })
  *    - 'nb:settings-changed' (detail: { settings, previousSettings })
  * 4. حماية منيعة ضد الحلقات اللانهائية والارتداد (Re-entrancy & Infinite Loop Guard).
- * 5. استعادة المزامنة والتهيئة الذاتية مع localStorage وسائر المديرين (i18n, studentManager, settingsManager).
+ * 5. توزيع الحالة والأحداث في الذاكرة، مع تفويض الحفظ الدائم إلى المدير المختص.
  */
 
 (function (global) {
@@ -89,14 +89,6 @@
      * @private
      */
     function _getSavedLocale() {
-        try {
-            if (typeof localStorage !== 'undefined') {
-                const saved = localStorage.getItem('nb_language');
-                if (saved && typeof saved === 'string') {
-                    return saved.trim().toLowerCase();
-                }
-            }
-        } catch (_) {}
         if (typeof global.i18n !== 'undefined' && typeof global.i18n.getLocale === 'function') {
             return global.i18n.getLocale();
         }
@@ -108,17 +100,6 @@
      * @private
      */
     function _getSavedActiveStudentId() {
-        try {
-            if (typeof localStorage !== 'undefined') {
-                const raw = localStorage.getItem('nb_students_data');
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    if (parsed && parsed.activeStudentId !== undefined) {
-                        return parsed.activeStudentId || null;
-                    }
-                }
-            }
-        } catch (_) {}
         if (typeof global.studentManager !== 'undefined' && typeof global.studentManager.getActiveStudentId === 'function') {
             return global.studentManager.getActiveStudentId();
         }
@@ -130,17 +111,6 @@
      * @private
      */
     function _getSavedSettings() {
-        try {
-            if (typeof localStorage !== 'undefined') {
-                const raw = localStorage.getItem('nb_teacher_settings');
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    if (parsed && typeof parsed === 'object') {
-                        return Object.assign({}, DEFAULT_SETTINGS, parsed);
-                    }
-                }
-            }
-        } catch (_) {}
         if (typeof global.settingsManager !== 'undefined' && typeof global.settingsManager.get === 'function') {
             return Object.assign({}, DEFAULT_SETTINGS, global.settingsManager.get());
         }
@@ -386,11 +356,6 @@
             if (options && options.fromManager) return;
 
             if (slice === 'locale') {
-                try {
-                    if (typeof localStorage !== 'undefined') {
-                        localStorage.setItem('nb_language', nextVal);
-                    }
-                } catch (_) {}
                 if (typeof global.i18n !== 'undefined' && typeof global.i18n.setLocale === 'function') {
                     if (global.i18n.getLocale() !== nextVal) {
                         global.i18n.setLocale(nextVal, { fromStore: true });
@@ -403,18 +368,11 @@
                     }
                 }
             } else if (slice === 'settings') {
-                try {
-                    if (typeof localStorage !== 'undefined') {
-                        localStorage.setItem('nb_teacher_settings', JSON.stringify(nextVal));
-                    }
-                } catch (_) {}
                 if (typeof global.settingsManager !== 'undefined') {
                     if (typeof global.settingsManager.apply === 'function') {
                         global.settingsManager.apply(nextVal);
                     }
-                    if (global.settingsManager._memoryCache) {
-                        global.settingsManager._memoryCache = Object.assign({}, nextVal);
-                    }
+                    if (global.SettingsValues) global.SettingsValues.replaceMemory(nextVal);
                 }
             } else if (slice === 'score') {
                 if (typeof global.app !== 'undefined' && global.app && global.app.score !== undefined) {
@@ -468,30 +426,20 @@
             if (options && options.fromDOMEvent) return;
 
             if (slice === 'locale') {
-                const meta = (typeof global.i18n !== 'undefined' && typeof global.i18n.getActiveMeta === 'function')
-                    ? global.i18n.getActiveMeta()
-                    : { name: nextVal === 'en' ? 'English' : 'العربية', dir: nextVal === 'en' ? 'ltr' : 'rtl' };
-
-                window.dispatchEvent(new CustomEvent('nb:locale-changed', {
-                    detail: {
-                        locale: nextVal,
-                        previousLocale: prevVal,
-                        meta: meta
-                    }
-                }));
+                return;
             } else if (slice === 'activeStudentId') {
                 const student = (typeof global.studentManager !== 'undefined' && typeof global.studentManager.getActiveStudent === 'function')
                     ? global.studentManager.getActiveStudent()
                     : null;
 
-                window.dispatchEvent(new CustomEvent('nb:student-changed', {
+                window.dispatchEvent(new CustomEvent(global.NBContracts.EVENTS.STUDENT_CHANGED, {
                     detail: {
                         activeStudentId: nextVal,
                         student: student
                     }
                 }));
             } else if (slice === 'settings') {
-                window.dispatchEvent(new CustomEvent('nb:settings-changed', {
+                window.dispatchEvent(new CustomEvent(global.NBContracts.EVENTS.SETTINGS_CHANGED, {
                     detail: {
                         settings: _clone(nextVal),
                         previousSettings: _clone(prevVal)
@@ -529,21 +477,22 @@
             this._domEventsBound = true;
 
             // المزامنة عند تغيير اللغة من خارج المتجر
-            window.addEventListener('nb:locale-changed', (e) => {
+            const events = global.NBContracts ? global.NBContracts.EVENTS : {};
+            window.addEventListener(events.LOCALE_CHANGED || 'nb:locale-changed', (e) => {
                 if (e.detail && e.detail.locale && e.detail.locale !== _state.locale) {
                     this.set('locale', e.detail.locale, { fromDOMEvent: true });
                 }
             });
 
             // المزامنة عند تغيير الطالب النشط من خارج المتجر
-            window.addEventListener('nb:student-changed', (e) => {
+            window.addEventListener(events.STUDENT_CHANGED || 'nb:student-changed', (e) => {
                 if (e.detail && e.detail.activeStudentId !== undefined && e.detail.activeStudentId !== _state.activeStudentId) {
                     this.set('activeStudentId', e.detail.activeStudentId, { fromDOMEvent: true });
                 }
             });
 
             // المزامنة عند تغيير الإعدادات من خارج المتجر
-            window.addEventListener('nb:settings-changed', (e) => {
+            window.addEventListener(events.SETTINGS_CHANGED || 'nb:settings-changed', (e) => {
                 if (e.detail && e.detail.settings && !_isEqual(e.detail.settings, _state.settings)) {
                     this.set('settings', e.detail.settings, { fromDOMEvent: true });
                 }
@@ -552,7 +501,11 @@
             // مزامنة التخزين عبر النوافذ والألسنة المتعددة (Multi-tab Storage Sync)
             window.addEventListener('storage', (e) => {
                 if (e.key === 'nb_language' && e.newValue) {
-                    this.set('locale', e.newValue);
+                    if (global.i18n && typeof global.i18n.setLocale === 'function') {
+                        global.i18n.setLocale(e.newValue);
+                    } else {
+                        this.set('locale', e.newValue);
+                    }
                 } else if (e.key === 'nb_students_data') {
                     try {
                         const parsed = JSON.parse(e.newValue || '{}');
@@ -591,6 +544,12 @@
             if (!_state.activeStudentId && typeof global.studentManager !== 'undefined') {
                 const stdId = global.studentManager.getActiveStudentId();
                 if (stdId) nbStore.set('activeStudentId', stdId, { silent: true });
+            }
+            if (typeof global.settingsManager !== 'undefined') {
+                nbStore.set('settings', global.settingsManager.get(), {
+                    silent: true,
+                    fromManager: true
+                });
             }
         };
 

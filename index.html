@@ -39,12 +39,22 @@
 
 <link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="shared/core.css">
+<script src="shared/contracts.js" defer></script>
 <script src="shared/store.js" defer></script>
 <script src="shared/i18n.js" defer></script>
 <script src="shared/locales/ar.js" defer></script>
 <script src="shared/locales/en.js" defer></script>
+<script src="shared/settings-values.js" defer></script>
+<script src="shared/settings-dialog.js" defer></script>
 <script src="shared/settings.js" defer></script>
+<script src="shared/student-repository.js" defer></script>
+<script src="shared/student-progress.js" defer></script>
+<script src="shared/mistake-bank.js" defer></script>
+<script src="shared/student-backup.js" defer></script>
+<script src="shared/index-progress-view.js" defer></script>
 <script src="shared/student-manager.js" defer></script>
+<script src="shared/roster-views.js" defer></script>
+<script src="shared/student-report.js" defer></script>
 <script src="shared/roster-manager.js" defer></script>
 
 <!-- Structured Data -->
@@ -105,93 +115,12 @@
 </header>
 
 <main id="main-content">
-  <!-- SHORTCUTS GUIDE ACCORDION (COLLAPSED BY DEFAULT) -->
-  <details class="shortcuts-section" aria-labelledby="shortcuts-guide-title">
-    <summary class="shortcuts-header">
-      <h2 class="shortcuts-title" id="shortcuts-guide-title">
-        <span aria-hidden="true">⌨️</span>
-        <span data-i18n="shortcuts_guide_title">دليل مفاتيح الاختصارات</span>
-      </h2>
-      <div class="shortcuts-toggle-badge">
-        <span class="text-xs text-slate-500 font-bold" data-i18n="shortcuts_guide_subtitle">لتسريع إدارة الحصة</span>
-        <span class="shortcuts-toggle-icon" aria-hidden="true">▼</span>
-      </div>
-    </summary>
-
-    <div class="shortcuts-grid">
-      <!-- Card 1: التقييم والتحفيز -->
-      <div class="shortcut-card">
-        <h3 class="shortcut-card-title">
-          <span aria-hidden="true">🎯</span> <span data-i18n="section_evaluation">التقييم</span>
-        </h3>
-        <div class="shortcut-item">
-          <span data-i18n="eval_correct_label">إتقان (صحيح)</span>
-          <div class="kbd-group">
-            <span class="kbd">2</span>
-            <span class="kbd">Enter</span>
-            <span class="kbd">Space</span>
-          </div>
-        </div>
-        <div class="shortcut-item">
-          <span data-i18n="eval_incorrect_label">مراجعة (خطأ)</span>
-          <div class="kbd-group">
-            <span class="kbd">1</span>
-            <span class="kbd">↓</span>
-            <span class="kbd-hint" data-i18n="kbd_hint_down">(سهم لأسفل)</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 2: التنقل بين الكلمات -->
-      <div class="shortcut-card">
-        <h3 class="shortcut-card-title">
-          <span aria-hidden="true">🔄</span> <span data-i18n="section_navigation">التنقل</span>
-        </h3>
-        <div class="shortcut-item">
-          <span data-i18n="nav_next_label">التالي</span>
-          <div class="kbd-group">
-            <span class="kbd">←</span>
-            <span class="kbd-hint" data-i18n="kbd_hint_left">(يسار)</span>
-            <span class="kbd">PageDown</span>
-            <span class="kbd">N</span>
-          </div>
-        </div>
-        <div class="shortcut-item">
-          <span data-i18n="nav_prev_label">السابق</span>
-          <div class="kbd-group">
-            <span class="kbd">→</span>
-            <span class="kbd-hint" data-i18n="kbd_hint_right">(يمين)</span>
-            <span class="kbd">PageUp</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 3: التكبير وإدارة الألعاب -->
-      <div class="shortcut-card">
-        <h3 class="shortcut-card-title">
-          <span aria-hidden="true">🔍</span> <span data-i18n="section_zoom_games">التكبير والألعاب</span>
-        </h3>
-        <div class="shortcut-item">
-          <span data-i18n="zoom_close_label">إغلاق التكبير</span>
-          <div class="kbd-group">
-            <span class="kbd">Escape</span>
-          </div>
-        </div>
-        <div class="shortcut-item">
-          <span data-i18n="games_reset_label">إعادة ضبط الألعاب</span>
-          <div class="kbd-group">
-            <span class="kbd">R</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </details>
-
   <!-- LESSONS INDEX NAVIGATION -->
   <nav aria-label="فهرس صفحات الدروس">
     <h2 class="sr-only">قائمة صفحات الدروس</h2>
     <!-- LINKS-START -->
     <ul class="grid-container" role="list">
+    <li class="stage-heading"><h2 data-i18n="stage_remediation">المعالجة والمراجعة</h2></li>
     <li class="card-item">
       <a href="pages/remediation.html" class="lesson-card" aria-label="الصفحة 0: Targeted Remediation (جلسة تدريب بنك الأخطاء)">
         <div class="card-num" aria-hidden="true">0</div>
@@ -202,6 +131,7 @@
         <div class="card-arrow" aria-hidden="true">←</div>
       </a>
     </li>
+    <li class="stage-heading"><h2 data-i18n="stage_letters">الحروف وأشكالها</h2></li>
     <li class="card-item">
       <a href="pages/6.html" class="lesson-card" aria-label="الصفحة 6: Letter Shapes (أشكال الحروف)">
         <div class="card-num" aria-hidden="true">6</div>
@@ -332,6 +262,7 @@
         <div class="card-arrow" aria-hidden="true">←</div>
       </a>
     </li>
+    <li class="stage-heading"><h2 data-i18n="stage_harakat">الحركات والقراءة</h2></li>
     <li class="card-item">
       <a href="pages/19.html" class="lesson-card" aria-label="الصفحة 19: Harakat (الضمة • الكسرة • الفتحة)">
         <div class="card-num" aria-hidden="true">19</div>
@@ -382,6 +313,7 @@
         <div class="card-arrow" aria-hidden="true">←</div>
       </a>
     </li>
+    <li class="stage-heading"><h2 data-i18n="stage_madd_alif">المد بالألف</h2></li>
     <li class="card-item">
       <a href="pages/24.html" class="lesson-card" aria-label="الصفحة 24: Madd Alif Training (تدريب المد بالألف)">
         <div class="card-num" aria-hidden="true">24</div>
@@ -422,6 +354,7 @@
         <div class="card-arrow" aria-hidden="true">←</div>
       </a>
     </li>
+    <li class="stage-heading"><h2 data-i18n="stage_madd_yaa">المد بالياء</h2></li>
     <li class="card-item">
       <a href="pages/28.html" class="lesson-card" aria-label="الصفحة 28: Madd by Yaa (المد بالياء)">
         <div class="card-num" aria-hidden="true">28</div>
@@ -472,6 +405,7 @@
         <div class="card-arrow" aria-hidden="true">←</div>
       </a>
     </li>
+    <li class="stage-heading"><h2 data-i18n="stage_madd_waw">المد بالواو والتدريب العام</h2></li>
     <li class="card-item">
       <a href="pages/33.html" class="lesson-card" aria-label="الصفحة 33: Madd of Waw (المد بالواو)">
         <div class="card-num" aria-hidden="true">33</div>
@@ -629,14 +563,36 @@
     }
   }
 
+  function reportOfflineSetupFailure(error) {
+    console.warn('Service Worker setup failed:', error);
+    if (document.querySelector('.pwa-status')) return;
+    const status = document.createElement('p');
+    status.className = 'pwa-status';
+    status.setAttribute('role', 'alert');
+    status.textContent = typeof i18n !== 'undefined'
+      ? i18n.t('offline_setup_failed')
+      : 'تعذر تجهيز العمل دون اتصال. يمكنك متابعة الدروس وأنت متصل.';
+    document.querySelector('main')?.prepend(status);
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     updateIndexLanguage();
-    window.addEventListener('nb:locale-changed', updateIndexLanguage);
+    window.addEventListener(NBContracts.EVENTS.LOCALE_CHANGED, updateIndexLanguage);
 
     // تسجيل عامل الخدمة لدعم تطبيقات الويب التقدمية (PWA Offline Support)
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(() => {});
+        navigator.serviceWorker.register('./sw.js').then((registration) => {
+          const installing = registration.installing;
+          if (!installing) return;
+          const checkState = () => {
+            if (installing.state === 'redundant' && !registration.active) {
+              reportOfflineSetupFailure(new Error('The offline cache was incomplete.'));
+            }
+          };
+          installing.addEventListener('statechange', checkState);
+          checkState();
+        }).catch(reportOfflineSetupFailure);
       });
     }
   });

@@ -552,7 +552,14 @@ const ladderGame = {
                 app.updateScoreUI();
             }
             if (typeof studentManager !== 'undefined' && activeStudentId) {
-                studentManager.recordCardEvaluation(activeStudentId, origIdx, true, lessonId, 2);
+                studentManager.recordCardEvaluation({
+                    lessonId,
+                    isCorrect: true,
+                    pointsAwarded: 2,
+                    wordData: currentWord || '',
+                    cardIndex: origIdx,
+                    totalCards: activeData.length
+                });
             }
             if (typeof Sound !== 'undefined' && typeof Sound.stepUp === 'function') {
                 Sound.stepUp(this.currentStep, this.targetSteps);
@@ -596,7 +603,14 @@ const ladderGame = {
                 app.recordMistake(origIdx);
             }
             if (typeof studentManager !== 'undefined' && activeStudentId) {
-                studentManager.recordCardEvaluation(activeStudentId, origIdx, false, lessonId, 0);
+                studentManager.recordCardEvaluation({
+                    lessonId,
+                    isCorrect: false,
+                    pointsAwarded: 0,
+                    wordData: currentWord || '',
+                    cardIndex: origIdx,
+                    totalCards: activeData.length
+                });
             }
             this.currentStep = Math.max(0, this.currentStep - 1);
             if (typeof Sound !== 'undefined' && typeof Sound.stepDown === 'function') {
@@ -956,11 +970,37 @@ const wordwallRoom = {
 
     init() {
         this.updateFilterButtonUI();
+        this.bindTabKeyboardNavigation();
         this.renderBoxes();
         Object.values(this.games).forEach(game => {
             if (game && typeof game.init === 'function') {
                 game.init();
             }
+        });
+    },
+
+    bindTabKeyboardNavigation() {
+        const tabList = document.getElementById('wordwall-tabs');
+        if (!tabList || tabList.dataset.keyboardBound === 'true') return;
+        tabList.dataset.keyboardBound = 'true';
+        tabList.addEventListener('keydown', event => {
+            const currentTab = event.target.closest('.game-tab');
+            if (!currentTab) return;
+            const tabs = Array.from(tabList.querySelectorAll('.game-tab'));
+            const currentIndex = tabs.indexOf(currentTab);
+            let nextIndex = currentIndex;
+            const isRtl = document.documentElement.dir === 'rtl';
+            if (event.key === 'Home') nextIndex = 0;
+            else if (event.key === 'End') nextIndex = tabs.length - 1;
+            else if (event.key === 'ArrowRight') nextIndex = (currentIndex + (isRtl ? -1 : 1) + tabs.length) % tabs.length;
+            else if (event.key === 'ArrowLeft') nextIndex = (currentIndex + (isRtl ? 1 : -1) + tabs.length) % tabs.length;
+            else return;
+
+            event.preventDefault();
+            const nextTab = tabs[nextIndex];
+            this.switchMode(nextTab.id.replace('tab-', ''));
+            nextTab.focus();
+            nextTab.scrollIntoView({ block: 'nearest', inline: 'nearest' });
         });
     },
 
@@ -988,11 +1028,13 @@ const wordwallRoom = {
         document.querySelectorAll('#wordwall-stage .game-tab').forEach(tab => {
             tab.classList.remove('active');
             tab.setAttribute('aria-selected', 'false');
+            tab.setAttribute('tabindex', '-1');
         });
         const activeTab = document.getElementById(`tab-${mode}`);
         if (activeTab) {
             activeTab.classList.add('active');
             activeTab.setAttribute('aria-selected', 'true');
+            activeTab.setAttribute('tabindex', '0');
         }
 
         // 2. إخفاء كافة الحاويات الفرعية المسجلة بحلقة واحدة

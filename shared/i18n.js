@@ -33,13 +33,7 @@ const i18n = {
     init() {
         if (this._isInitialized) return;
 
-        let saved = null;
-        if (typeof window !== 'undefined' && window.nbStore && typeof window.nbStore.get === 'function') {
-            saved = window.nbStore.get('locale');
-        }
-        if (!saved) {
-            saved = this._getSavedLocale() || this._fallbackLocale;
-        }
+        const saved = this._getSavedLocale() || this._fallbackLocale;
 
         if (this._locales[saved]) {
             this._activeLocale = saved;
@@ -71,13 +65,7 @@ const i18n = {
             strings: dictionary && typeof dictionary === 'object' ? { ...dictionary } : {}
         };
 
-        let saved = null;
-        if (typeof window !== 'undefined' && window.nbStore && typeof window.nbStore.get === 'function') {
-            saved = window.nbStore.get('locale');
-        }
-        if (!saved) {
-            saved = this._getSavedLocale() || this._fallbackLocale;
-        }
+        const saved = this._getSavedLocale() || this._fallbackLocale;
 
         // ضبط سباق التهيئة الأولية للغة المستعادة من التخزين بعد تسجيل اللغات
         if (cleanCode === saved || cleanCode === this._activeLocale) {
@@ -281,13 +269,16 @@ const i18n = {
         // مزامنة موزع الحالة الموحد
         if (typeof window !== 'undefined' && window.nbStore && typeof window.nbStore.set === 'function') {
             if (window.nbStore.get('locale') !== cleanCode) {
-                window.nbStore.set('locale', cleanCode, { source: 'i18n', fromManager: true });
+                window.nbStore.set('locale', cleanCode, { source: 'i18n', fromManager: true, silent: true });
             }
         }
 
         // بث حدث تغيير اللغة لتحديث الواجهات التفاعلية
         if (typeof window !== 'undefined' && !options.silent) {
-            window.dispatchEvent(new CustomEvent('nb:locale-changed', {
+            const eventName = window.NBContracts
+                ? NBContracts.EVENTS.LOCALE_CHANGED
+                : 'nb:locale-changed';
+            window.dispatchEvent(new CustomEvent(eventName, {
                 detail: {
                     locale: cleanCode,
                     previousLocale: previousLocale,

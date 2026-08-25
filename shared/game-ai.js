@@ -236,7 +236,7 @@ if (typeof document !== 'undefined') {
     });
 }
 if (typeof window !== 'undefined') {
-    window.addEventListener('nb:locale-changed', () => {
+    window.addEventListener(NBContracts.EVENTS.LOCALE_CHANGED, () => {
         if (typeof gameAI !== 'undefined') gameAI.updateUI();
     });
     window.gameAI = gameAI;

@@ -30,7 +30,7 @@
 
         // الحالة الحية في الذاكرة الوسيطة (In-Memory Cache)
         _state: {
-            version: 1,
+            version: NBContracts.DATA_SCHEMA_VERSION,
             activeStudentId: null,
             students: []
         },
@@ -58,15 +58,15 @@
                         if (event.newValue === null) {
                             // تم تفريغ أو مسح التخزين في لسان آخر - إعادة تعيين الحالة فوراً
                             this._state = {
-                                version: 1,
+                                version: NBContracts.DATA_SCHEMA_VERSION,
                                 activeStudentId: null,
                                 students: []
                             };
                         } else {
                             this._loadFromStorage();
                         }
-                        this._dispatchEvent('nb:student-progress-updated', { studentId: this._state.activeStudentId });
-                        this._dispatchEvent('nb:student-changed', { activeStudentId: this._state.activeStudentId, student: this.getActiveStudent() });
+                        this._dispatchEvent(NBContracts.EVENTS.STUDENT_PROGRESS_UPDATED, { studentId: this._state.activeStudentId });
+                        this._dispatchEvent(NBContracts.EVENTS.STUDENT_CHANGED, { activeStudentId: this._state.activeStudentId, student: this.getActiveStudent() });
                         this.updateIndexBadges();
                     }
                 });
@@ -113,14 +113,7 @@
                     if (FORBIDDEN_KEYS.has(cleanKey)) return;
                     const l = raw.completedLessons[key];
                     if (l && typeof l === 'object') {
-                        completedLessons[cleanKey] = {
-                            score: Math.max(0, Math.floor(Number(l.score) || 0)),
-                            bestScore: Math.max(0, Math.floor(Number(l.bestScore !== undefined ? l.bestScore : l.score) || 0)),
-                            accuracy: Math.min(100, Math.max(0, Math.round(Number(l.accuracy !== undefined ? l.accuracy : 100)) || 0)),
-                            stars: Math.min(3, Math.max(0, Math.floor(Number(l.stars) || 0))),
-                            attempts: Math.max(1, Math.floor(Number(l.attempts) || 1)),
-                            lastStudiedAt: Number(l.lastStudiedAt) || Date.now()
-                        };
+                        completedLessons[cleanKey] = StudentProgress.normalizedRecord(l);
                     }
                 });
             }
@@ -167,20 +160,22 @@
          */
         _loadFromStorage() {
             try {
-                if (typeof localStorage !== 'undefined') {
-                    const raw = localStorage.getItem(STORAGE_KEY);
-                    if (raw) {
-                        const parsed = JSON.parse(raw);
-                        if (parsed && typeof parsed === 'object') {
-                            this._state.version = parsed.version || 1;
-                            this._state.activeStudentId = parsed.activeStudentId || null;
-                            const rawStudents = Array.isArray(parsed.students) ? parsed.students : [];
-                            this._state.students = rawStudents
-                                .map((s, idx) => this._normalizeStudent(s, idx))
-                                .filter(Boolean);
-                            return;
-                        }
+                const parsed = StudentRepository.read(STORAGE_KEY);
+                if (parsed && typeof parsed === 'object') {
+                    this._state.version = NBContracts.DATA_SCHEMA_VERSION;
+                    this._state.activeStudentId = parsed.activeStudentId || null;
+                    const rawStudents = Array.isArray(parsed.students) ? parsed.students : [];
+                    this._state.students = rawStudents
+                        .map((student, index) => this._normalizeStudent(student, index))
+                        .filter(Boolean);
+                    const policy = this._getRepeatPolicy();
+                    this._state.students.forEach(student => {
+                        student.totalScore = StudentProgress.totalScore(student.completedLessons, policy);
+                    });
+                    if ((parsed.version || 1) < NBContracts.DATA_SCHEMA_VERSION) {
+                        this._saveToStorage();
                     }
+                    return;
                 }
             } catch (err) {
                 console.warn('[studentManager] تعذر قراءة البيانات من LocalStorage (تصفح خاص أو قيود أمان):', err);
@@ -188,7 +183,7 @@
 
             // في حال عدم وجود بيانات صالحة، نبقي الحالة الافتراضية
             this._state = {
-                version: 1,
+                version: NBContracts.DATA_SCHEMA_VERSION,
                 activeStudentId: null,
                 students: []
             };
@@ -201,11 +196,7 @@
          */
         _saveToStorage() {
             try {
-                if (typeof localStorage !== 'undefined') {
-                    const payload = JSON.stringify(this._state);
-                    localStorage.setItem(STORAGE_KEY, payload);
-                    return true;
-                }
+                return StudentRepository.write(STORAGE_KEY, this._state);
             } catch (err) {
                 // فحص خطأ نفاد السعة أو حظر التخزين
                 const isQuota = err && (
@@ -216,12 +207,29 @@
                 );
 
                 if (isQuota) {
-                    console.error('[studentManager] نفاد مساحة LocalStorage! جارٍ الاعتماد على الذاكرة الحية:', err);
-                    this._showNotification('⚠️ تنبيه: نفدت سعة تخزين المتصفح، تم الحفظ مؤقتاً في الذاكرة الحالية.');
+                    console.error('[studentManager] نفدت مساحة LocalStorage؛ رُفض التغيير:', err);
                 } else {
                     console.warn('[studentManager] تعذر الحفظ في LocalStorage (جلسة تصفح خاصة):', err);
                 }
             }
+            return false;
+        },
+
+        _getRepeatPolicy() {
+            if (typeof settingsManager === 'undefined' || typeof settingsManager.get !== 'function') {
+                return NBContracts.SCORE_POLICIES.BEST;
+            }
+            return NBContracts.normalizeScorePolicy(settingsManager.get().repeatGradingPolicy);
+        },
+
+        _snapshotState() {
+            return StudentRepository.clone(this._state);
+        },
+
+        _persistOrRollback(previousState) {
+            if (this._saveToStorage()) return true;
+            this._state = previousState;
+            this._showNotification('تعذر حفظ التغيير. لم تُمس بيانات الطالب السابقة.');
             return false;
         },
 
@@ -383,6 +391,7 @@
          */
         createStudent({ name, avatar, color } = {}) {
             this.init();
+            const previousState = this._snapshotState();
 
             const sanitizedName = this._sanitizeText(name, 'طالب جديد');
             const chosenAvatar = this._sanitizeText(avatar) || sanitizedName.charAt(0) || DEFAULT_AVATARS[Math.floor(Math.random() * DEFAULT_AVATARS.length)];
@@ -411,9 +420,9 @@
                 this._state.activeStudentId = newStudent.id;
             }
 
-            this._saveToStorage();
-            this._dispatchEvent('nb:student-created', { student: this._clone(newStudent) });
-            this._dispatchEvent('nb:student-progress-updated', { studentId: newStudent.id });
+            if (!this._persistOrRollback(previousState)) return null;
+            this._dispatchEvent(NBContracts.EVENTS.STUDENT_CREATED, { student: this._clone(newStudent) });
+            this._dispatchEvent(NBContracts.EVENTS.STUDENT_PROGRESS_UPDATED, { studentId: newStudent.id });
             this.updateIndexBadges();
 
             return this._clone(newStudent);
@@ -427,6 +436,7 @@
          */
         updateStudent(id, patchData = {}) {
             this.init();
+            const previousState = this._snapshotState();
             const student = this._state.students.find(s => s.id === id);
             if (!student) return null;
 
@@ -447,8 +457,8 @@
             }
 
             student.lastActive = Date.now();
-            this._saveToStorage();
-            this._dispatchEvent('nb:student-updated', { student: this._clone(student) });
+            if (!this._persistOrRollback(previousState)) return null;
+            this._dispatchEvent(NBContracts.EVENTS.STUDENT_UPDATED, { student: this._clone(student) });
             this.updateIndexBadges();
 
             return this._clone(student);
@@ -461,6 +471,7 @@
          */
         deleteStudent(id) {
             this.init();
+            const previousState = this._snapshotState();
             const idx = this._state.students.findIndex(s => s.id === id);
             if (idx === -1) return false;
 
@@ -471,10 +482,10 @@
                 this._state.activeStudentId = null;
             }
 
-            this._saveToStorage();
-            this._dispatchEvent('nb:student-deleted', { studentId: id });
-            this._dispatchEvent('nb:student-changed', { activeStudentId: this._state.activeStudentId, student: null });
-            this._dispatchEvent('nb:student-progress-updated', { studentId: null });
+            if (!this._persistOrRollback(previousState)) return false;
+            this._dispatchEvent(NBContracts.EVENTS.STUDENT_DELETED, { studentId: id });
+            this._dispatchEvent(NBContracts.EVENTS.STUDENT_CHANGED, { activeStudentId: this._state.activeStudentId, student: null });
+            this._dispatchEvent(NBContracts.EVENTS.STUDENT_PROGRESS_UPDATED, { studentId: null });
             this.updateIndexBadges();
 
             return true;
@@ -507,6 +518,7 @@
          */
         setActiveStudent(id) {
             this.init();
+            const previousState = this._snapshotState();
 
             if (!id || id === 'guest' || id === 'null') {
                 this._state.activeStudentId = null;
@@ -521,10 +533,10 @@
                 }
             }
 
-            this._saveToStorage();
+            if (!this._persistOrRollback(previousState)) return this.getActiveStudent();
             const active = this.getActiveStudent();
-            this._dispatchEvent('nb:student-changed', { activeStudentId: this._state.activeStudentId, student: active });
-            this._dispatchEvent('nb:student-progress-updated', { studentId: this._state.activeStudentId });
+            this._dispatchEvent(NBContracts.EVENTS.STUDENT_CHANGED, { activeStudentId: this._state.activeStudentId, student: active });
+            this._dispatchEvent(NBContracts.EVENTS.STUDENT_PROGRESS_UPDATED, { studentId: this._state.activeStudentId });
             this.updateIndexBadges();
 
             return active;
@@ -546,104 +558,54 @@
 
         /**
          * تسجيل تقييم بطاقة/كلمة فردية لحظياً وبشكل ذري
-         * @param {string|number} lessonId رقم الدرس / الصفحة (مثل "10")
-         * @param {boolean} isCorrect نتيجة القراءة (صواب / خطأ)
-         * @param {number} pointsAwarded النقاط المكتسبة أو المخصومة
-         * @param {string|Object} wordData بيانات الكلمة المقروءة
-         * @param {number} [cardIndex=0] موضع البطاقة في الدرس
-         * @param {number} [totalCards=0] إجمالي بطاقات الدرس
+         * الواجهة المعتمدة كائن CardEvaluationRequest. تبقى الوسائط الموضعية
+         * القديمة مدة انتقالية لحماية المستدعين الخارجيين.
+         * @param {CardEvaluationRequest|string|number} requestOrLessonId الطلب أو رقم الدرس القديم
+         * @param {...*} legacyArguments الوسائط الموضعية القديمة
          * @returns {Object|null} الطالب المحدث أو null
          */
-        recordCardEvaluation(lessonIdOrConfig, isCorrect, pointsAwarded = 0, wordData = '', cardIndex = 0, totalCards = 0) {
+        recordCardEvaluation(requestOrLessonId, ...legacyArguments) {
             this.init();
             if (!this.hasActiveStudent()) {
-                // وضع الضيف — لا يتم التسجيل في ملف طالب محدد
                 return null;
             }
 
-            // دعم كل من الوسائط الموضعية وكائن الخيارات (DTO)
-            let lessonId, correct, points, word, cIdx, tCards;
-            if (typeof lessonIdOrConfig === 'object' && lessonIdOrConfig !== null) {
-                lessonId = lessonIdOrConfig.lessonId;
-                correct = Boolean(lessonIdOrConfig.isCorrect);
-                points = Number(lessonIdOrConfig.pointsAwarded || lessonIdOrConfig.points) || 0;
-                word = lessonIdOrConfig.wordData || lessonIdOrConfig.word || '';
-                cIdx = Number(lessonIdOrConfig.cardIndex) || 0;
-                tCards = Number(lessonIdOrConfig.totalCards) || 0;
-            } else {
-                lessonId = lessonIdOrConfig;
-                correct = Boolean(isCorrect);
-                points = Number(pointsAwarded) || 0;
-                word = wordData;
-                cIdx = Number(cardIndex) || 0;
-                tCards = Number(totalCards) || 0;
-            }
+            const request = typeof requestOrLessonId === 'object'
+                ? NBContracts.cardEvaluationRequest(requestOrLessonId)
+                : NBContracts.cardEvaluationRequest({
+                    lessonId: requestOrLessonId,
+                    isCorrect: legacyArguments[0],
+                    pointsAwarded: legacyArguments[1],
+                    wordData: legacyArguments[2],
+                    cardIndex: legacyArguments[3],
+                    totalCards: legacyArguments[4]
+                });
 
             const student = this._state.students.find(s => s.id === this._state.activeStudentId);
             if (!student) return null;
 
-            const lessonKey = String(lessonId).trim();
-            const plainWord = this._extractPlainWord(word);
+            const previousState = this._snapshotState();
+            const lessonKey = request.lessonId;
+            const plainWord = this._extractPlainWord(request.wordData);
             const now = Date.now();
 
-            // 1. زيادة إجمالي النقاط التراكمية فوراً
-            student.totalScore = Math.max(0, (student.totalScore || 0) + points);
             student.lastActive = now;
 
-            // 2. تسجيل/تحديث تقدم الدرس
-            if (!student.completedLessons) student.completedLessons = {};
-            if (!student.completedLessons[lessonKey]) {
-                student.completedLessons[lessonKey] = {
-                    score: 0,
-                    bestScore: 0,
-                    accuracy: 100,
-                    stars: 0,
-                    attempts: 0,
-                    lastStudiedAt: now
-                };
-            }
-
-            const lessonRecord = student.completedLessons[lessonKey];
-            lessonRecord.lastStudiedAt = now;
-
-            // 3. إدارة بنك الأخطاء الذكي
             if (!student.mistakeBank) student.mistakeBank = [];
-
-            if (!correct && plainWord) {
-                // إضافة الكلمة إلى بنك الأخطاء أو زيادة عداد تكرارها
-                const existingMistake = student.mistakeBank.find(
-                    m => m.word === plainWord && String(m.lessonId) === lessonKey
-                );
-
-                if (existingMistake) {
-                    existingMistake.count = (existingMistake.count || 1) + 1;
-                    existingMistake.timestamp = now;
-                    existingMistake.mastered = false;
-                    existingMistake.consecutiveCorrect = 0;
-                } else {
-                    student.mistakeBank.push({
-                        word: plainWord,
-                        lessonId: lessonKey,
-                        timestamp: now,
-                        count: 1,
-                        mastered: false,
-                        consecutiveCorrect: 0
-                    });
-                }
+            if (!request.isCorrect) {
+                MistakeBank.recordIncorrect(student.mistakeBank, lessonKey, plainWord, now);
             }
 
-            // 4. الحفظ الفوري في التخزين
-            this._saveToStorage();
+            if (!this._persistOrRollback(previousState)) return null;
 
-            // 5. بث حدث التحديث اللحظي للربط مع واجهات المستخدم المختلفة
-            this._dispatchEvent('nb:student-progress-updated', {
+            this._dispatchEvent(NBContracts.EVENTS.STUDENT_PROGRESS_UPDATED, {
                 studentId: student.id,
                 lessonId: lessonKey,
-                isCorrect: !!isCorrect,
-                pointsAwarded: points,
+                isCorrect: request.isCorrect,
+                pointsAwarded: request.pointsAwarded,
                 totalScore: student.totalScore,
-                cardIndex,
-                totalCards,
+                cardIndex: request.cardIndex,
+                totalCards: request.totalCards,
                 word: plainWord
             });
 
@@ -665,6 +627,7 @@
             const student = this._state.students.find(s => s.id === this._state.activeStudentId);
             if (!student) return null;
 
+            const previousState = this._snapshotState();
             const lessonKey = String(lessonId).trim();
             const scoreNum = Math.max(0, Math.floor(Number(finalScore) || 0));
             const accNum = Math.min(100, Math.max(0, Math.round(Number(accuracy) || 0)));
@@ -672,67 +635,29 @@
             const now = Date.now();
 
             if (!student.completedLessons) student.completedLessons = {};
-            const prev = student.completedLessons[lessonKey] || {
-                score: 0,
-                bestScore: 0,
-                accuracy: 0,
-                stars: 0,
-                attempts: 0,
-                lastStudiedAt: now
-            };
+            const prev = student.completedLessons[lessonKey] || null;
 
-            // قراءة سياسة احتساب درجات التكرار من إعدادات المعلم إن وجدت
-            let policy = 'best';
-            if (typeof settingsManager !== 'undefined' && typeof settingsManager.get === 'function') {
-                const s = settingsManager.get();
-                if (s && s.repeatGradingPolicy) {
-                    policy = s.repeatGradingPolicy;
-                }
-            }
-
-            let nextScore = scoreNum;
-            let nextAccuracy = accNum;
-            let nextStars = starNum;
-
-            if (policy === 'latest') {
-                nextScore = scoreNum;
-                nextAccuracy = accNum;
-                nextStars = starNum;
-            } else if (policy === 'cumulative') {
-                nextScore = (prev.score || 0) + scoreNum;
-                const totalAttempts = (prev.attempts || 0) + 1;
-                nextAccuracy = prev.attempts > 0 
-                    ? Math.round(((prev.accuracy || 0) * prev.attempts + accNum) / totalAttempts) 
-                    : accNum;
-                nextStars = Math.max(prev.stars || 0, starNum);
-            } else {
-                // السياسة القياسية الافتراضية 'best' (الأعلى إنجازاً)
-                nextScore = Math.max(prev.score || 0, scoreNum);
-                nextAccuracy = Math.max(prev.accuracy || 0, accNum);
-                nextStars = Math.max(prev.stars || 0, starNum);
-            }
-
-            const updatedLesson = {
-                score: nextScore,
-                bestScore: Math.max(prev.bestScore || 0, scoreNum),
-                accuracy: nextAccuracy,
-                stars: nextStars,
-                attempts: (prev.attempts || 0) + 1,
-                lastStudiedAt: now
-            };
+            const policy = this._getRepeatPolicy();
+            const updatedLesson = StudentProgress.completion(prev, {
+                score: scoreNum,
+                accuracy: accNum,
+                stars: starNum,
+                completedAt: now
+            }, policy);
 
             student.completedLessons[lessonKey] = updatedLesson;
+            student.totalScore = StudentProgress.totalScore(student.completedLessons, policy);
             student.lastActive = now;
 
-            this._saveToStorage();
+            if (!this._persistOrRollback(previousState)) return null;
 
-            this._dispatchEvent('nb:lesson-completed', {
+            this._dispatchEvent(NBContracts.EVENTS.LESSON_COMPLETED, {
                 studentId: student.id,
                 lessonId: lessonKey,
                 lessonData: this._clone(updatedLesson)
             });
 
-            this._dispatchEvent('nb:student-progress-updated', {
+            this._dispatchEvent(NBContracts.EVENTS.STUDENT_PROGRESS_UPDATED, {
                 studentId: student.id,
                 lessonId: lessonKey
             });
@@ -757,19 +682,18 @@
             const lessonKey = String(lessonId).trim();
             if (!student.completedLessons[lessonKey]) return false;
 
-            // تحديد النقاط المسجلة لهذا الدرس فقط لخصمها بدقة دون الإخلال بالمجموع التراكمي
-            const lessonData = student.completedLessons[lessonKey];
-            const lessonScore = Math.max(0, Math.floor(Number(lessonData.score) || 0));
+            const previousState = this._snapshotState();
             delete student.completedLessons[lessonKey];
-
-            // خصم نقاط الدرس المحذوف من المجموع التراكمي مع الحفاظ على الحد الأدنى 0
-            student.totalScore = Math.max(0, (student.totalScore || 0) - lessonScore);
+            student.totalScore = StudentProgress.totalScore(
+                student.completedLessons,
+                this._getRepeatPolicy()
+            );
             student.lastActive = Date.now();
 
-            this._saveToStorage();
-            this._dispatchEvent('nb:student-updated', { student: this._clone(student) });
-            this._dispatchEvent('nb:lesson-progress-deleted', { studentId, lessonId: lessonKey });
-            this._dispatchEvent('nb:student-progress-updated', { studentId, lessonId: lessonKey });
+            if (!this._persistOrRollback(previousState)) return false;
+            this._dispatchEvent(NBContracts.EVENTS.STUDENT_UPDATED, { student: this._clone(student) });
+            this._dispatchEvent(NBContracts.EVENTS.LESSON_PROGRESS_DELETED, { studentId, lessonId: lessonKey });
+            this._dispatchEvent(NBContracts.EVENTS.STUDENT_PROGRESS_UPDATED, { studentId, lessonId: lessonKey });
             this.updateIndexBadges();
 
             return true;
@@ -788,25 +712,38 @@
             const student = this._state.students.find(s => s.id === targetId);
             if (!student) return 0;
 
-            let recalculated = 0;
-            if (student.completedLessons && typeof student.completedLessons === 'object') {
-                for (const l of Object.values(student.completedLessons)) {
-                    if (l && typeof l === 'object') {
-                        const s = Math.max(0, Math.floor(Number(l.bestScore !== undefined ? l.bestScore : l.score) || 0));
-                        recalculated += s;
-                    }
-                }
-            }
+            const previousState = this._snapshotState();
+            const recalculated = StudentProgress.totalScore(
+                student.completedLessons,
+                this._getRepeatPolicy()
+            );
 
             student.totalScore = recalculated;
             student.lastActive = Date.now();
 
-            this._saveToStorage();
-            this._dispatchEvent('nb:student-updated', { student: this._clone(student) });
-            this._dispatchEvent('nb:student-progress-updated', { studentId: targetId, totalScore: recalculated });
+            if (!this._persistOrRollback(previousState)) return previousState.students
+                .find(entry => entry.id === targetId)?.totalScore || 0;
+            this._dispatchEvent(NBContracts.EVENTS.STUDENT_UPDATED, { student: this._clone(student) });
+            this._dispatchEvent(NBContracts.EVENTS.STUDENT_PROGRESS_UPDATED, { studentId: targetId, totalScore: recalculated });
             this.updateIndexBadges();
 
             return recalculated;
+        },
+
+        recalculateAllStudentScores() {
+            this.init();
+            const previousState = this._snapshotState();
+            const policy = this._getRepeatPolicy();
+            this._state.students.forEach(student => {
+                student.totalScore = StudentProgress.totalScore(student.completedLessons, policy);
+            });
+            if (!this._persistOrRollback(previousState)) return false;
+            this._dispatchEvent(NBContracts.EVENTS.STUDENT_PROGRESS_UPDATED, {
+                studentId: null,
+                scorePolicy: policy
+            });
+            this.updateIndexBadges();
+            return true;
         },
 
         // ========================================================================
@@ -874,7 +811,7 @@
             student.lastActive = Date.now();
 
             this._saveToStorage();
-            this._dispatchEvent('nb:student-progress-updated', { studentId: targetStudentId });
+            this._dispatchEvent(NBContracts.EVENTS.STUDENT_PROGRESS_UPDATED, { studentId: targetStudentId });
 
             return this._clone(student.mistakeBank);
         },
@@ -941,7 +878,7 @@
             student.lastActive = Date.now();
             this._saveToStorage();
 
-            this._dispatchEvent('nb:student-progress-updated', {
+            this._dispatchEvent(NBContracts.EVENTS.STUDENT_PROGRESS_UPDATED, {
                 studentId: student.id,
                 word: cleanTarget,
                 isCorrect,
@@ -982,7 +919,7 @@
                 mistake.mastered = true;
                 student.lastActive = Date.now();
                 this._saveToStorage();
-                this._dispatchEvent('nb:student-progress-updated', { studentId: targetStudentId });
+                this._dispatchEvent(NBContracts.EVENTS.STUDENT_PROGRESS_UPDATED, { studentId: targetStudentId });
                 return true;
             }
             return false;
@@ -1007,8 +944,8 @@
             student.lastActive = Date.now();
 
             this._saveToStorage();
-            this._dispatchEvent('nb:student-updated', { student: this._clone(student) });
-            this._dispatchEvent('nb:student-progress-updated', {
+            this._dispatchEvent(NBContracts.EVENTS.STUDENT_UPDATED, { student: this._clone(student) });
+            this._dispatchEvent(NBContracts.EVENTS.STUDENT_PROGRESS_UPDATED, {
                 studentId: targetId,
                 mistakesCleared: countBefore,
                 mistakeBank: []
@@ -1024,15 +961,7 @@
         exportJSON() {
             this.init();
 
-            const exportPayload = {
-                app: 'nur-albayan-pages',
-                schemaVersion: 1,
-                exportedAt: new Date().toISOString(),
-                activeStudentId: this._state.activeStudentId,
-                students: this._state.students
-            };
-
-            const jsonText = JSON.stringify(exportPayload, null, 2);
+            const jsonText = StudentBackup.stringify(this._state);
 
             // تشغيل تنزيل الملف في بيئة المتصفح
             if (typeof window !== 'undefined' && typeof document !== 'undefined') {
@@ -1065,24 +994,9 @@
             this.init();
 
             try {
-                let parsed = jsonInput;
-                if (typeof jsonInput === 'string') {
-                    parsed = JSON.parse(jsonInput);
-                }
-
-                if (!parsed || typeof parsed !== 'object') {
-                    throw new Error('صيغة الملف غير صالحة، يجب أن يكون كائناً بصيغة JSON.');
-                }
-
-                // استخراج مصفوفة الطلاب المدخلة
-                let candidateStudents = [];
-                if (Array.isArray(parsed)) {
-                    candidateStudents = parsed;
-                } else if (Array.isArray(parsed.students)) {
-                    candidateStudents = parsed.students;
-                } else {
-                    throw new Error('لم يتم العثور على مصفوفة طلاب صالحة داخل الملف.');
-                }
+                const parsed = StudentBackup.parse(jsonInput);
+                const previousState = this._snapshotState();
+                const candidateStudents = parsed.students;
 
                 const validatedStudents = candidateStudents
                     .map((raw, i) => this._normalizeStudent(raw, i))
@@ -1092,10 +1006,13 @@
                     throw new Error('الملف لا يحتوي على أي سجلات طلاب صالحة للاستيراد.');
                 }
 
-                // تعيين الحالة الجديدة
                 this._state.students = validatedStudents;
+                this._state.version = NBContracts.DATA_SCHEMA_VERSION;
+                const policy = this._getRepeatPolicy();
+                validatedStudents.forEach(student => {
+                    student.totalScore = StudentProgress.totalScore(student.completedLessons, policy);
+                });
 
-                // التحقق من تعيين الطالب النشط إذا وجد في النسخة
                 if (parsed.activeStudentId && validatedStudents.some(s => s.id === parsed.activeStudentId)) {
                     this._state.activeStudentId = parsed.activeStudentId;
                 } else if (validatedStudents.length > 0) {
@@ -1104,9 +1021,11 @@
                     this._state.activeStudentId = null;
                 }
 
-                this._saveToStorage();
-                this._dispatchEvent('nb:student-changed', { activeStudentId: this._state.activeStudentId, student: this.getActiveStudent() });
-                this._dispatchEvent('nb:student-progress-updated', { studentId: this._state.activeStudentId });
+                if (!this._persistOrRollback(previousState)) {
+                    throw new Error('تعذر حفظ النسخة المستوردة؛ أُبقيت البيانات السابقة.');
+                }
+                this._dispatchEvent(NBContracts.EVENTS.STUDENT_CHANGED, { activeStudentId: this._state.activeStudentId, student: this.getActiveStudent() });
+                this._dispatchEvent(NBContracts.EVENTS.STUDENT_PROGRESS_UPDATED, { studentId: this._state.activeStudentId });
                 this.updateIndexBadges();
                 this._showNotification(`✓ تم استيراد بيانات (${validatedStudents.length}) طالب بنجاح`);
 
@@ -1134,59 +1053,9 @@
          * البحث في بطاقات الدروس في DOM وتحديث عناصر النجوم وشارات الإنجاز للطالب النشط
          */
         updateIndexBadges() {
-            if (typeof document === 'undefined') return;
-
-            const cards = document.querySelectorAll('.lesson-card, a[href*="pages/"]');
-            if (!cards || cards.length === 0) return;
-
-            const activeStudent = this.getActiveStudent();
-
-            cards.forEach(card => {
-                // إزالة الشارات المحقونة مسبقاً
-                const oldBadges = card.querySelectorAll('.nb-student-lesson-badge');
-                oldBadges.forEach(el => el.remove());
-
-                if (!activeStudent || !activeStudent.completedLessons) return;
-
-                // استخراج رقم الدرس من رابط الصفحة أو وسم الرقم
-                let lessonId = null;
-                const href = card.getAttribute('href') || '';
-                const match = href.match(/pages\/(\d+)\.html/);
-                if (match && match[1]) {
-                    lessonId = match[1];
-                } else {
-                    const numEl = card.querySelector('.card-num');
-                    if (numEl && numEl.textContent) {
-                        lessonId = numEl.textContent.trim();
-                    }
-                }
-
-                if (!lessonId) return;
-
-                const lessonData = activeStudent.completedLessons[lessonId];
-                if (!lessonData || lessonData.attempts <= 0) return;
-
-                // إنشاء شارة الإنجاز والنجوم
-                const starsCount = Math.min(3, Math.max(0, lessonData.stars || 0));
-                const starsDisplay = starsCount > 0 ? '⭐'.repeat(starsCount) : '✓';
-                const scoreText = `${lessonData.bestScore || lessonData.score || 0} نقطة`;
-
-                const badgeEl = document.createElement('div');
-                badgeEl.className = 'nb-student-lesson-badge inline-flex items-center gap-1.5 text-[11px] font-bold mt-1 px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-900 border border-amber-200/80 shadow-xs select-none animate-in fade-in duration-200';
-                badgeEl.setAttribute('aria-label', `إنجاز الطالب: ${starsCount} نجوم، ${scoreText}`);
-                badgeEl.innerHTML = `
-                    <span class="text-amber-500 font-bold">${starsDisplay}</span>
-                    <span class="text-slate-600 font-mono text-[10px]">(${scoreText})</span>
-                `;
-
-                // حقن الشارة داخل معلومات البطاقة
-                const infoContainer = card.querySelector('.card-info');
-                if (infoContainer) {
-                    infoContainer.appendChild(badgeEl);
-                } else {
-                    card.appendChild(badgeEl);
-                }
-            });
+            if (typeof IndexProgressView !== 'undefined') {
+                IndexProgressView.update(this.getActiveStudent());
+            }
         }
     };
 

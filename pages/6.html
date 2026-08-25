@@ -1,25 +1,29 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nour Al-Bayan - Page 6 • Letter Shapes (أشكال الحروف)</title>
     
     <link rel="stylesheet" href="../shared/core.css">
-    <script src="../shared/vendor/confetti.browser.min.js"></script>
+    <script src="../shared/contracts.js"></script>
+    <script src="../shared/vendor-loader.js"></script>
+    <script src="../shared/store.js"></script>
+    <script src="../shared/i18n.js"></script>
+    <script src="../shared/locales/ar.js"></script>
+    <script src="../shared/locales/en.js"></script>
+    <script src="../shared/games-board.js"></script>
+    <script src="../shared/game-ai.js"></script>
+    <script src="../shared/games-extra.js"></script>
+    <script src="../shared/settings-values.js"></script>
+    <script src="../shared/settings-dialog.js"></script>
+    <script src="../shared/settings.js"></script>
+    <script src="../shared/sound.js"></script>
     
     <style>
         body {
             font-family: var(--font-sans);
             background-color: var(--color-bg-green, #f0fdf4);
-            background-image: radial-gradient(#dcfce7 1px, transparent 1px), radial-gradient(#f0fdf4 1px, #f0fdf4 1px);
-            background-size: 40px 40px;
-            background-position: 0 0, 20px 20px;
-        }
-
-        .amiri-font {
-            font-family: var(--font-quran, 'Amiri', serif);
-            letter-spacing: normal !important;
         }
 
         .letter-card {
@@ -36,194 +40,169 @@
             font-weight: bold;
         }
 
-        @keyframes bounce-scale {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-        .animate-bounce-scale {
-            animation: bounce-scale 0.5s ease-in-out;
-        }
 
-        @keyframes star-float {
-            0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-100px) scale(2) rotate(45deg); opacity: 0; }
-        }
-        .animate-star-float {
-            animation: star-float 1s ease-out forwards;
-        }
-        
-        @keyframes border-pulse {
-            0%, 100% { border-color: #a855f7; box-shadow: 0 0 15px rgba(168, 85, 247, 0.5); }
-            50% { border-color: #fcd34d; box-shadow: 0 0 30px rgba(252, 211, 77, 0.8); }
-        }
-        .golden-border {
-            animation: border-pulse 1.5s infinite;
-        }
+        .golden-border { border-color: #d97706; }
     </style>
 </head>
-<body class="h-screen w-full overflow-hidden flex flex-col">
+<body class="min-h-screen w-full flex flex-col">
 
     <!-- Top Navigation Bar -->
-    <div class="flex-none h-16 w-full bg-white shadow-md flex justify-between items-center px-2 md:px-6 border-b-4 border-indigo-500 z-20 relative">
-        <button id="prevBtn" class="bg-indigo-500 hover:bg-indigo-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-1 px-3 md:py-2 md:px-4 rounded-lg shadow transition-transform hover:scale-105 flex items-center text-sm md:text-base">
-            ⬅️ Prev
+    <div class="flex-none h-16 w-full bg-white shadow-md flex justify-between items-center px-2 md:px-6 border-b-4 border-emerald-500 z-20 relative">
+        <button id="prevBtn" class="bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-2 px-3 md:px-4 rounded-lg shadow flex items-center text-sm md:text-base">
+            <span aria-hidden="true">⬅️</span> <span data-i18n="page6_previous">السابق</span>
         </button>
         
-        <select id="letterSelect" class="mx-1 md:mx-4 flex-grow min-w-0 max-w-sm text-center text-sm sm:text-lg md:text-xl py-1 px-1 sm:px-2 bg-indigo-50 border-2 border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 font-bold text-indigo-800 cursor-pointer" dir="ltr">
+        <label for="letterSelect" class="sr-only" data-i18n="page6_select_label">اختر الحرف أو النشاط</label>
+        <select id="letterSelect" class="mx-1 md:mx-4 flex-grow min-w-0 max-w-sm text-center text-sm sm:text-lg md:text-xl py-1 px-1 sm:px-2 bg-emerald-50 border-2 border-emerald-200 rounded-lg focus:ring-2 focus:ring-emerald-400 font-bold text-emerald-800 cursor-pointer">
             <!-- Options populated by JS -->
         </select>
         
-        <button id="nextBtn" class="bg-indigo-500 hover:bg-indigo-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-1 px-3 md:py-2 md:px-4 rounded-lg shadow transition-transform hover:scale-105 flex items-center text-sm md:text-base">
-            Next ➡️
+        <button id="nextBtn" class="bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-2 px-3 md:px-4 rounded-lg shadow flex items-center text-sm md:text-base">
+            <span data-i18n="page6_next">التالي</span> <span aria-hidden="true">➡️</span>
         </button>
+        <button id="page6LangBtn" type="button" class="bg-white text-emerald-700 border-2 border-emerald-200 font-bold py-2 px-3 rounded-lg" data-i18n="page6_language_switch">Switch to English</button>
     </div>
 
     <!-- Main Content Area -->
-    <main class="flex-grow flex items-center justify-center p-2 md:p-4 min-h-0 w-full relative overflow-hidden">
+    <main class="flex-grow flex items-center justify-center p-2 md:p-4 min-h-0 w-full relative">
         
         <!-- 1. HOME SLIDE -->
-        <div id="homeSlide" class="w-full h-full flex flex-col items-center justify-center text-center max-w-4xl mx-auto">
+        <div id="homeSlide" class="w-full flex flex-col items-center justify-center text-center max-w-4xl mx-auto py-6">
             <div class="text-5xl md:text-7xl mb-2">🌟🎈</div>
-            <h1 class="text-3xl md:text-5xl font-black text-indigo-600 mb-2 drop-shadow-sm">
-                Arabic Letters Heroes 🦸‍♂️
+            <h1 class="text-3xl md:text-5xl font-black text-emerald-600 mb-2 drop-shadow-sm">
+                <span data-i18n="page6_hero_title">أبطال الحروف العربية</span> <span aria-hidden="true">🦸‍♂️</span>
             </h1>
-            <p class="text-lg md:text-xl text-gray-600 font-bold mb-4">Let's learn letter shapes in words!</p>
+            <p class="text-lg md:text-xl text-gray-600 font-bold mb-4" data-i18n="page6_hero_subtitle">هيا نتعلم أشكال الحروف في الكلمات</p>
             
-            <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl px-4 py-3 shadow-sm text-indigo-800 font-bold text-sm md:text-lg mb-4 w-full max-w-2xl transform transition hover:scale-105">
-                <p dir="rtl" class="mb-1">🤲 نسألكم الدعاء لوالدي وأخي بالرحمة والمغفرة 🤲</p>
-                <p dir="ltr" class="text-indigo-600 opacity-90">🤲 Please pray for my father and brother for mercy and forgiveness 🤲</p>
+            <div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl px-4 py-3 shadow-sm text-emerald-800 font-bold text-sm md:text-lg mb-4 w-full max-w-2xl transform transition hover:scale-105">
+                <p data-i18n="page6_prayer">نسألكم الدعاء لوالدي وأخي بالرحمة والمغفرة</p>
             </div>
 
             <div class="bg-white rounded-2xl p-3 md:p-4 mb-6 border border-pink-200 shadow-md inline-block text-gray-700 font-bold text-base md:text-lg w-full max-w-md">
-                <p class="mb-1 text-indigo-700 text-xl font-black">👨‍🏫 Sheikh Gehad Elsayad</p>
+                <p class="mb-1 text-emerald-700 text-xl font-black">👨‍🏫 Sheikh Gehad Elsayad</p>
                 <p class="mb-1 text-gray-600">📞 01147992249</p>
                 <p class="text-gray-600">✉️ gehadnagah789@gmail.com</p>
             </div>
 
-            <button id="startBtn" class="bg-green-500 hover:bg-green-600 text-white font-black py-3 px-8 rounded-full shadow-xl text-xl md:text-2xl transition-transform hover:scale-105 animate-bounce-scale">
-                Start Learning 🚀
+            <button id="startBtn" class="bg-green-600 hover:bg-green-700 text-white font-black py-3 px-8 rounded-full shadow-xl text-xl md:text-2xl ">
+                <span data-i18n="page6_start_learning">ابدأ التعلم</span> <span aria-hidden="true">🚀</span>
             </button>
         </div>
 
         <!-- 2. LEARNING SECTION -->
-        <div id="learningSection" class="hidden w-full h-full max-w-6xl grid grid-cols-3 gap-2 md:gap-6" dir="rtl">
-            <div class="letter-card bg-white rounded-3xl shadow-xl border-t-8 border-green-400 flex flex-col items-center justify-center h-full p-2 md:p-6 text-center">
-                <div class="bg-green-100 text-green-800 px-3 py-1 md:px-6 md:py-2 rounded-full font-bold text-sm md:text-lg mb-4 shadow-sm">Start 🏁</div>
-                <div id="shapeStart" class="text-5xl md:text-8xl mb-2 amiri-font text-gray-800" dir="rtl"></div>
+        <div id="learningSection" class="hidden w-full max-w-6xl grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6 py-4" dir="rtl" lang="ar">
+            <div class="letter-card bg-white rounded-3xl shadow-xl border-2 border-green-400 flex flex-col items-center justify-center h-full p-2 md:p-6 text-center">
+                <div class="bg-green-100 text-green-800 px-3 py-1 md:px-6 md:py-2 rounded-full font-bold text-sm md:text-lg mb-4 shadow-sm"><span data-i18n="page6_shape_start">أول الكلمة</span> <span aria-hidden="true">🏁</span></div>
+                <div id="shapeStart" class="text-5xl md:text-8xl mb-2 quran-font text-gray-800" dir="rtl"></div>
                 <div class="w-3/4 h-px bg-gray-200 my-4"></div>
-                <div id="wordStart" class="text-4xl md:text-7xl amiri-font text-gray-800 mt-2" dir="rtl"></div>
+                <div id="wordStart" class="text-4xl md:text-7xl quran-font text-gray-800 mt-2" dir="rtl"></div>
             </div>
 
-            <div class="letter-card bg-white rounded-3xl shadow-xl border-t-8 border-yellow-400 flex flex-col items-center justify-center h-full p-2 md:p-6 text-center">
-                <div class="bg-yellow-100 text-yellow-800 px-3 py-1 md:px-6 md:py-2 rounded-full font-bold text-sm md:text-lg mb-4 shadow-sm">Middle 🔗</div>
-                <div id="shapeMiddle" class="text-5xl md:text-8xl mb-2 amiri-font text-gray-800" dir="rtl"></div>
+            <div class="letter-card bg-white rounded-3xl shadow-xl border-2 border-yellow-400 flex flex-col items-center justify-center h-full p-2 md:p-6 text-center">
+                <div class="bg-yellow-100 text-yellow-800 px-3 py-1 md:px-6 md:py-2 rounded-full font-bold text-sm md:text-lg mb-4 shadow-sm"><span data-i18n="page6_shape_middle">وسط الكلمة</span> <span aria-hidden="true">🔗</span></div>
+                <div id="shapeMiddle" class="text-5xl md:text-8xl mb-2 quran-font text-gray-800" dir="rtl"></div>
                 <div class="w-3/4 h-px bg-gray-200 my-4"></div>
-                <div id="wordMiddle" class="text-4xl md:text-7xl amiri-font text-gray-800 mt-2" dir="rtl"></div>
+                <div id="wordMiddle" class="text-4xl md:text-7xl quran-font text-gray-800 mt-2" dir="rtl"></div>
             </div>
 
-            <div class="letter-card bg-white rounded-3xl shadow-xl border-t-8 border-pink-400 flex flex-col items-center justify-center h-full p-2 md:p-6 text-center">
-                <div class="bg-pink-100 text-pink-800 px-3 py-1 md:px-6 md:py-2 rounded-full font-bold text-sm md:text-lg mb-4 shadow-sm">End 🛑</div>
-                <div id="shapeEnd" class="text-5xl md:text-8xl mb-2 amiri-font text-gray-800" dir="rtl"></div>
+            <div class="letter-card bg-white rounded-3xl shadow-xl border-2 border-pink-400 flex flex-col items-center justify-center h-full p-2 md:p-6 text-center">
+                <div class="bg-pink-100 text-pink-800 px-3 py-1 md:px-6 md:py-2 rounded-full font-bold text-sm md:text-lg mb-4 shadow-sm"><span data-i18n="page6_shape_end">آخر الكلمة</span> <span aria-hidden="true">🛑</span></div>
+                <div id="shapeEnd" class="text-5xl md:text-8xl mb-2 quran-font text-gray-800" dir="rtl"></div>
                 <div class="w-3/4 h-px bg-gray-200 my-4"></div>
-                <div id="wordEnd" class="text-4xl md:text-7xl amiri-font text-gray-800 mt-2" dir="rtl"></div>
+                <div id="wordEnd" class="text-4xl md:text-7xl quran-font text-gray-800 mt-2" dir="rtl"></div>
             </div>
         </div>
 
         <!-- 3. QUIZ SECTION -->
-        <div id="quizSection" class="hidden w-full h-full max-w-4xl bg-white rounded-3xl shadow-2xl border-4 p-4 md:p-8 flex flex-col justify-center items-center relative transition-all duration-300">
+        <div id="quizSection" class="hidden w-full max-w-4xl bg-white rounded-3xl shadow-2xl border-4 p-4 md:p-8 flex flex-col justify-center items-center relative transition-all duration-300 my-6">
             
             <div class="absolute top-4 left-4 md:left-8 bg-gray-100 px-4 py-2 rounded-xl shadow-inner font-black text-xl md:text-2xl text-gray-700 flex items-center gap-2">
-                <span id="timerDisplay">⏳ 10s</span>
+                <span id="timerDisplay" role="timer" aria-live="off">⏳ 10s</span>
             </div>
             
             <div class="absolute top-4 right-4 md:right-8 bg-green-100 px-4 py-2 rounded-xl shadow-inner font-black text-xl md:text-2xl text-green-700 flex items-center gap-2 transition-transform" id="scoreContainer">
-                🏆 Score: <span id="scoreDisplay">0</span>
+                <span aria-hidden="true">🏆</span> <span data-i18n="score">الدرجة</span>: <span id="scoreDisplay">0</span>
             </div>
 
             <div id="qTypeBadge" class="absolute -top-5 left-1/2 transform -translate-x-1/2 text-white font-black text-lg md:text-2xl px-6 md:px-10 py-1 rounded-full shadow-md whitespace-nowrap">
-                Challenge Time!
+                <span data-i18n="page6_challenge">وقت التحدي</span>
             </div>
             
             <div id="quizContainer" class="w-full flex flex-col items-center justify-center mt-12 md:mt-8">
-                <h3 class="text-lg md:text-2xl font-bold text-gray-500 mb-4 text-center">Choose the correct shape quickly!</h3>
-                <div id="quizWord" class="text-6xl md:text-8xl amiri-font font-bold text-gray-800 mb-8 tracking-wider text-center" dir="rtl"></div>
+                <h3 class="text-lg md:text-2xl font-bold text-gray-600 mb-4 text-center" data-i18n="page6_choose_shape">اختر الشكل الصحيح سريعاً</h3>
+                <div id="quizWord" class="text-6xl md:text-8xl quran-font font-bold text-gray-800 mb-8 text-center" dir="rtl" lang="ar"></div>
                 <div id="quizOptions" class="flex justify-center items-center gap-3 md:gap-6 flex-wrap flex-row-reverse" dir="rtl"></div>
-                <div id="quizFeedback" class="mt-4 md:mt-8 text-2xl md:text-4xl font-bold h-10 transition-all text-center"></div>
-                <button id="nextQuizBtn" class="hidden mt-4 md:mt-6 bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-10 rounded-full shadow-lg transition-transform hover:scale-105">
-                    Next Question ➡️
+                <div id="quizFeedback" class="mt-4 md:mt-8 text-2xl md:text-4xl font-bold min-h-10 transition-all text-center" role="status" aria-live="polite"></div>
+                <button id="nextQuizBtn" class="hidden mt-4 md:mt-6 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-10 rounded-full shadow-lg transition-transform hover:scale-105">
+                    <span data-i18n="page6_next_question">السؤال التالي</span> <span aria-hidden="true">➡️</span>
                 </button>
             </div>
 
             <div id="quizComplete" class="hidden w-full flex flex-col items-center justify-center text-center">
                 <div class="text-7xl md:text-9xl mb-4">🎉👑🎉</div>
-                <h2 class="text-4xl md:text-5xl font-black text-green-600 mb-2">You are a hero!</h2>
-                <p class="text-2xl md:text-3xl font-bold text-gray-700 mb-6">Final Score: <span id="finalScoreDisplay" class="text-indigo-600">0</span> 🏆</p>
+                <h2 class="text-4xl md:text-5xl font-black text-green-700 mb-2" data-i18n="page6_quiz_complete">أنت بطل</h2>
+                <p class="text-2xl md:text-3xl font-bold text-gray-700 mb-6"><span data-i18n="page6_final_score">الدرجة النهائية:</span> <span id="finalScoreDisplay" class="text-emerald-600">0</span> <span aria-hidden="true">🏆</span></p>
                 <button id="backToLettersFromQuizBtn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg text-xl md:text-2xl transition-transform hover:scale-105">
-                    Continue Journey ➡️
+                    <span data-i18n="page6_continue">واصل الرحلة</span> <span aria-hidden="true">➡️</span>
                 </button>
             </div>
         </div>
 
         <!-- 4. FUN BREAK (TIC-TAC-TOE) -->
-        <div id="gameSectionTTT" class="hidden w-full h-full max-w-2xl bg-white rounded-3xl shadow-2xl border-4 border-blue-400 p-4 md:p-8 flex flex-col justify-center items-center relative transition-all duration-300">
+        <div id="gameSectionTTT" class="hidden w-full max-w-2xl bg-white rounded-3xl shadow-2xl border-4 border-blue-400 p-4 md:p-8 flex flex-col justify-center items-center relative transition-all duration-300 my-6">
             <div class="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white font-black text-xl md:text-2xl px-8 py-1 rounded-full shadow-md whitespace-nowrap">
-                Fun Break! 🎮
+                <span data-i18n="page6_fun_break">استراحة ممتعة</span> <span aria-hidden="true">🎮</span>
             </div>
             
-            <h2 class="text-3xl md:text-4xl font-black text-indigo-600 mb-2 text-center">Tic-Tac-Toe</h2>
-            <div id="gameTurnTTT" class="text-xl md:text-2xl font-bold text-gray-600 mb-6">Player 🌟's Turn</div>
-
-            <div id="ticTacToeBoard" class="grid grid-cols-3 gap-2 md:gap-4 w-full max-w-sm aspect-square mb-6"></div>
-
-            <div id="gameResultTTT" class="hidden text-3xl font-black text-center mb-6 h-10"></div>
+            <h2 class="text-3xl md:text-4xl font-black text-emerald-600 mb-2 text-center" data-i18n="game_xo">إكس-أو</h2>
+            <div class="flex flex-wrap justify-center gap-2 mb-3" role="toolbar" data-i18n-aria="aria_game_mode_controls" aria-label="ضبط نمط اللعبة">
+                <button id="xo-mode-btn" type="button" onclick="gameAI.toggleMode('xo')" class="bg-emerald-600 text-white px-4 py-2 rounded-full font-bold" data-i18n-aria="aria_toggle_opponent" aria-label="تبديل الخصم">ضد الحاسوب</button>
+                <button id="xo-diff-btn" type="button" onclick="gameAI.toggleDifficulty()" class="bg-amber-300 text-amber-950 px-4 py-2 rounded-full font-bold" data-i18n-aria="aria_toggle_diff" aria-label="تبديل الصعوبة">سهل</button>
+            </div>
+            <div id="xo-status" class="text-xl md:text-2xl font-bold text-gray-700 mb-4" aria-live="polite">دور اللاعب X</div>
+            <div class="xo-board-container mb-4"><div id="xo-board" class="grid grid-cols-3 gap-2 md:gap-3 bg-emerald-100 p-3 rounded-3xl w-full h-full"></div></div>
 
             <div class="flex gap-4">
-                <button id="resetGameBtnTTT" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-transform hover:scale-105 flex items-center gap-2">
-                    Play Again 🔄
+                <button id="resetGameBtnTTT" type="button" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-6 rounded-full shadow-lg flex items-center gap-2">
+                    <span data-i18n="page6_play_again">العب ثانية</span> <span aria-hidden="true">🔄</span>
                 </button>
             </div>
         </div>
 
         <!-- 5. FUN BREAK (CONNECT FOUR) -->
-        <div id="gameSectionC4" class="hidden w-full h-full max-w-3xl bg-white rounded-3xl shadow-2xl border-4 border-purple-400 p-2 md:p-8 flex flex-col justify-center items-center relative transition-all duration-300">
-            <div class="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-purple-500 text-white font-black text-xl md:text-2xl px-8 py-1 rounded-full shadow-md whitespace-nowrap">
-                Fun Break! 🎮
+        <div id="gameSectionC4" class="hidden w-full max-w-3xl bg-white rounded-3xl shadow-2xl border-4 border-emerald-400 p-3 md:p-8 flex flex-col justify-center items-center relative transition-all duration-300 my-6">
+            <div class="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-emerald-500 text-white font-black text-xl md:text-2xl px-8 py-1 rounded-full shadow-md whitespace-nowrap">
+                <span data-i18n="page6_fun_break">استراحة ممتعة</span> <span aria-hidden="true">🎮</span>
             </div>
             
-            <h2 class="text-3xl md:text-4xl font-black text-purple-600 mb-2 text-center mt-6 md:mt-0">Connect Four</h2>
-            <div id="gameTurnC4" class="text-xl md:text-2xl font-bold text-gray-600 mb-4 text-center">Player 🌟's Turn</div>
-
-            <div class="bg-blue-600 p-2 md:p-4 rounded-2xl shadow-inner mb-4 w-full max-w-lg mx-auto">
-                <div id="connectFourBoard" class="grid grid-cols-7 gap-1 md:gap-2"></div>
+            <h2 class="text-3xl md:text-4xl font-black text-emerald-600 mb-2 text-center mt-6 md:mt-0" data-i18n="game_c4">أربعة في خط</h2>
+            <div class="flex flex-wrap justify-center gap-2 mb-3" role="toolbar" data-i18n-aria="aria_game_mode_controls" aria-label="ضبط نمط اللعبة">
+                <button id="c4-mode-btn" type="button" onclick="gameAI.toggleMode('c4')" class="bg-sky-600 text-white px-4 py-2 rounded-full font-bold" data-i18n-aria="aria_toggle_opponent" aria-label="تبديل الخصم">ضد الحاسوب</button>
+                <button id="c4-diff-btn" type="button" onclick="gameAI.toggleDifficulty()" class="bg-amber-300 text-amber-950 px-4 py-2 rounded-full font-bold" data-i18n-aria="aria_toggle_diff" aria-label="تبديل الصعوبة">سهل</button>
             </div>
-
-            <div id="gameResultC4" class="hidden text-2xl md:text-3xl font-black text-center mb-4 h-10"></div>
+            <div id="c4-status" class="text-xl md:text-2xl font-bold text-gray-700 mb-4 text-center" aria-live="polite">دور الأحمر</div>
+            <div id="c4-board-container" class="c4-board-new grid-cols-7 mx-auto mb-4"></div>
 
             <div class="flex gap-4">
-                <button id="resetGameBtnC4" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 md:py-3 px-6 rounded-full shadow-lg transition-transform hover:scale-105 flex items-center gap-2 text-lg">
-                    Play Again 🔄
+                <button id="resetGameBtnC4" type="button" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 md:py-3 px-6 rounded-full shadow-lg flex items-center gap-2 text-lg">
+                    <span data-i18n="page6_play_again">العب ثانية</span> <span aria-hidden="true">🔄</span>
                 </button>
             </div>
         </div>
 
         <!-- 6. FUN BREAK (MEMORY PUZZLE) -->
-        <div id="gameSectionMem" class="hidden w-full h-full max-w-3xl bg-white rounded-3xl shadow-2xl border-4 border-orange-400 p-4 md:p-8 flex flex-col justify-center items-center relative transition-all duration-300">
+        <div id="gameSectionMem" class="hidden w-full max-w-3xl bg-white rounded-3xl shadow-2xl border-4 border-orange-400 p-4 md:p-8 flex flex-col justify-center items-center relative transition-all duration-300 my-6">
             <div class="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-orange-500 text-white font-black text-xl md:text-2xl px-8 py-1 rounded-full shadow-md whitespace-nowrap">
-                Fun Break! 🧩
+                <span data-i18n="page6_fun_break">استراحة ممتعة</span> <span aria-hidden="true">🧩</span>
             </div>
             
-            <h2 class="text-3xl md:text-4xl font-black text-orange-600 mb-2 text-center">Memory Match</h2>
-            <div id="gameTurnMem" class="text-xl md:text-2xl font-bold text-gray-600 mb-4 text-center">Find all the matching pairs!</div>
-
-            <div id="memoryBoard" class="grid grid-cols-4 gap-2 md:gap-4 w-full max-w-md aspect-[4/3] mb-6">
-                <!-- 12 Cards injected by JS -->
-            </div>
-
-            <div id="gameResultMem" class="hidden text-3xl font-black text-center mb-6 h-10"></div>
+            <h2 class="text-3xl md:text-4xl font-black text-orange-600 mb-2 text-center" data-i18n="game_memory">تحدي الذاكرة</h2>
+            <div id="memory-status" class="text-xl md:text-2xl font-bold text-gray-700 mb-4 text-center" aria-live="polite">ابحث عن الأزواج المتطابقة</div>
+            <div id="memory-board" class="mem-board mb-6"></div>
 
             <div class="flex gap-4">
-                <button id="resetGameBtnMem" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-transform hover:scale-105 flex items-center gap-2">
-                    Play Again 🔄
+                <button id="resetGameBtnMem" type="button" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-full shadow-lg flex items-center gap-2">
+                    <span data-i18n="page6_play_again">العب ثانية</span> <span aria-hidden="true">🔄</span>
                 </button>
             </div>
         </div>
@@ -386,7 +365,6 @@
         let timerInterval;
         let timeLeft = 10;
         let currentQType = 'normal';
-        let audioCtx = null;
 
         const selectEl = document.getElementById('letterSelect');
         const homeSlide = document.getElementById('homeSlide');
@@ -399,68 +377,17 @@
         let currentQuizQuestions = [];
         let currentQuestionIndex = 0;
 
-        function getAudioContext() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            return audioCtx;
-        }
-
         function playTickSound(urgent = false) {
-            const ctx = getAudioContext();
-            if (!ctx) return;
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(urgent ? 1000 : 600, ctx.currentTime);
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            gain.gain.setValueAtTime(0, ctx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.1, ctx.currentTime + 0.01);
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
-            osc.start(ctx.currentTime);
-            osc.stop(ctx.currentTime + 0.05);
+            Sound.tone(urgent ? 1000 : 600, 0.05, 'triangle');
         }
 
         function playSuccessSound() {
-            const ctx = getAudioContext();
-            if (!ctx) return;
-            const playTone = (freq, startTime, duration) => {
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.value = freq;
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                gain.gain.setValueAtTime(0, startTime);
-                gain.gain.linearRampToValueAtTime(0.3, startTime + 0.05);
-                gain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
-                osc.start(startTime);
-                osc.stop(startTime + duration);
-            };
-            const now = ctx.currentTime;
-            playTone(523.25, now, 0.4);       
-            playTone(659.25, now + 0.1, 0.4); 
-            playTone(783.99, now + 0.2, 0.4); 
-            playTone(1046.50, now + 0.3, 0.6); 
+            Sound.playChime();
         }
 
         function playWrongSound() {
-            const ctx = getAudioContext();
-            if (!ctx) return;
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(200, ctx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(50, ctx.currentTime + 0.3);
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            gain.gain.setValueAtTime(0.3, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-            osc.start();
-            osc.stop(ctx.currentTime + 0.3);
+            Sound.fail();
         }
-
-        document.body.addEventListener('click', getAudioContext, { once: true });
 
         function init() {
             populateDropdown();
@@ -482,7 +409,7 @@
             });
             
             document.getElementById('startBtn').addEventListener('click', () => {
-                getAudioContext();
+                Sound.init();
                 selectEl.selectedIndex = 1; 
                 handleSelectionChange();
             });
@@ -493,26 +420,36 @@
                     handleSelectionChange();
                 }
             });
+            document.getElementById('page6LangBtn').addEventListener('click', () => i18n.toggleLocale());
+            window.addEventListener(NBContracts.EVENTS.LOCALE_CHANGED, () => {
+                populateDropdown();
+                gameAI.updateUI();
+            });
+            Sound.setupUnlock();
         }
 
         function populateDropdown() {
-            let html = `<option value="home">🏠 Home (الرئيسية)</option>`;
+            const selectedValue = selectEl.value || 'home';
+            let html = `<option value="home">🏠 ${i18n.t('page6_home_option')}</option>`;
             let quizCounter = 0;
 
             alphabetData.forEach((item, index) => {
-                html += `<option value="letter_${index}">Letter ${item.letter}</option>`;
+                html += `<option value="letter_${index}">${i18n.t('page6_letter_option', { letter: item.letter })}</option>`;
                 if ((index + 1) % 5 === 0 || index === alphabetData.length - 1) {
                     if (quizCounter < quizzes.length) {
-                        html += `<option value="quiz_${quizCounter}" class="font-bold text-yellow-600 bg-yellow-50">🎯 ${quizzes[quizCounter].groupName}</option>`;
-                        // Add ALL THREE games to the dropdown
-                        html += `<option value="game_ttt_${quizCounter}" class="font-bold text-blue-600 bg-blue-50">🎮 Break: Tic-Tac-Toe</option>`;
-                        html += `<option value="game_c4_${quizCounter}" class="font-bold text-purple-600 bg-purple-50">🎮 Break: Connect 4</option>`;
-                        html += `<option value="game_mem_${quizCounter}" class="font-bold text-orange-600 bg-orange-50">🧩 Break: Memory Match</option>`;
+                        const groupNumber = quizCounter + 1;
+                        html += `<option value="quiz_${quizCounter}" class="font-bold text-yellow-700 bg-yellow-50">🎯 ${i18n.t('page6_quiz_option', { num: groupNumber })}</option>`;
+                        html += `<option value="game_ttt_${quizCounter}" class="font-bold text-blue-700 bg-blue-50">🎮 ${i18n.t('page6_break_ttt')}</option>`;
+                        html += `<option value="game_c4_${quizCounter}" class="font-bold text-emerald-700 bg-emerald-50">🎮 ${i18n.t('page6_break_c4')}</option>`;
+                        html += `<option value="game_mem_${quizCounter}" class="font-bold text-orange-700 bg-orange-50">🧩 ${i18n.t('page6_break_memory')}</option>`;
                         quizCounter++;
                     }
                 }
             });
             selectEl.innerHTML = html;
+            if (selectEl.querySelector(`option[value="${selectedValue}"]`)) {
+                selectEl.value = selectedValue;
+            }
         }
 
         function hideAllSections() {
@@ -522,6 +459,9 @@
             gameSectionTTT.classList.add('hidden');
             gameSectionC4.classList.add('hidden');
             gameSectionMem.classList.add('hidden');
+            xoGame.cleanup();
+            c4Game.cleanup();
+            memoryGame.cleanup();
         }
 
         function handleSelectionChange() {
@@ -561,9 +501,9 @@
             
             const cards = document.querySelectorAll('.letter-card');
             cards.forEach(card => {
-                card.classList.remove('animate-bounce-scale');
+                card.classList.remove('');
                 void card.offsetWidth; 
-                card.classList.add('animate-bounce-scale');
+                card.classList.add('');
             });
         }
 
@@ -573,18 +513,18 @@
             const container = document.getElementById('scoreContainer');
             display.innerText = score;
             
-            container.classList.remove('animate-bounce-scale', 'bg-green-100', 'bg-red-100', 'text-green-700', 'text-red-700');
+            container.classList.remove('', 'bg-green-100', 'bg-red-100', 'text-green-700', 'text-red-700');
             void container.offsetWidth;
             
             if (pointsAdded >= 0) {
-                container.classList.add('animate-bounce-scale', 'bg-green-100', 'text-green-700');
+                container.classList.add('', 'bg-green-100', 'text-green-700');
             } else {
-                container.classList.add('animate-bounce-scale', 'bg-red-100', 'text-red-700');
+                container.classList.add('', 'bg-red-100', 'text-red-700');
             }
         }
 
         function startQuiz(quizObj) {
-            getAudioContext();
+            Sound.init();
             score = 0;
             updateScoreUI(0);
             
@@ -608,22 +548,22 @@
             const rand = Math.random();
             const badge = document.getElementById('qTypeBadge');
             
-            quizSection.classList.remove('border-yellow-400', 'border-purple-500', 'border-red-500', 'golden-border');
+            quizSection.classList.remove('border-yellow-400', 'border-emerald-500', 'border-red-500', 'golden-border');
             
             if (rand < 0.15) {
                 currentQType = 'golden';
-                quizSection.classList.add('golden-border', 'border-purple-500');
-                badge.innerHTML = "🌟 Golden Question (+10) 🌟";
-                badge.className = "absolute -top-5 left-1/2 transform -translate-x-1/2 bg-purple-500 text-white font-black text-lg md:text-2xl px-6 md:px-10 py-1 rounded-full shadow-md whitespace-nowrap animate-pulse";
+                quizSection.classList.add('golden-border', 'border-emerald-500');
+                badge.textContent = `🌟 ${i18n.t('page6_golden_question')} 🌟`;
+                badge.className = "absolute -top-5 left-1/2 transform -translate-x-1/2 bg-emerald-500 text-white font-black text-lg md:text-2xl px-6 md:px-10 py-1 rounded-full shadow-md whitespace-nowrap animate-pulse";
             } else if (rand < 0.30) {
                 currentQType = 'trap';
                 quizSection.classList.add('border-red-500');
-                badge.innerHTML = "💣 Trap! Be Careful (-5) 💣";
+                badge.textContent = `💣 ${i18n.t('page6_trap_question')} 💣`;
                 badge.className = "absolute -top-5 left-1/2 transform -translate-x-1/2 bg-red-500 text-white font-black text-lg md:text-2xl px-6 md:px-10 py-1 rounded-full shadow-md whitespace-nowrap";
             } else {
                 currentQType = 'normal';
                 quizSection.classList.add('border-yellow-400');
-                badge.innerHTML = "Challenge Time! 🏆";
+                badge.textContent = `${i18n.t('page6_challenge')} 🏆`;
                 badge.className = "absolute -top-5 left-1/2 transform -translate-x-1/2 bg-yellow-400 text-white font-black text-lg md:text-2xl px-6 md:px-10 py-1 rounded-full shadow-md whitespace-nowrap";
             }
 
@@ -632,7 +572,7 @@
             
             q.options.forEach(opt => {
                 const btn = document.createElement('button');
-                btn.className = "relative text-4xl md:text-6xl amiri-font font-bold bg-white border-4 border-indigo-200 text-indigo-700 py-3 px-6 md:py-4 md:px-8 rounded-2xl hover:bg-indigo-50 hover:border-indigo-400 transition-all shadow-md focus:outline-none";
+                btn.className = "relative text-4xl md:text-6xl quran-font font-bold bg-white border-4 border-emerald-200 text-emerald-700 py-3 px-6 md:py-4 md:px-8 rounded-2xl hover:bg-emerald-50 hover:border-emerald-400 transition-all shadow-md";
                 btn.innerHTML = opt;
                 btn.onclick = () => checkAnswer(opt, q.answer, btn);
                 optionsContainer.appendChild(btn);
@@ -672,25 +612,10 @@
             playWrongSound();
             
             const feedback = document.getElementById('quizFeedback');
-            feedback.innerHTML = `⏰ Time Out! It was <span class="text-green-500">${correctAnswer}</span>`;
+            feedback.textContent = `⏰ ${i18n.t('page6_timeout', { answer: correctAnswer })}`;
             feedback.className = "mt-4 md:mt-8 text-2xl md:text-4xl font-bold text-red-500 transition-all text-center";
             
             document.getElementById('nextQuizBtn').classList.remove('hidden');
-        }
-
-        function createEffects(element, shapes) {
-            for (let i = 0; i < 8; i++) {
-                const shape = document.createElement('div');
-                shape.innerHTML = shapes[Math.floor(Math.random() * shapes.length)];
-                shape.style.position = 'absolute';
-                shape.style.left = (Math.random() * 80 + 10) + '%';
-                shape.style.top = '50%';
-                shape.style.fontSize = (Math.random() * 2 + 1) + 'rem';
-                shape.style.pointerEvents = 'none';
-                shape.className = 'animate-star-float';
-                element.appendChild(shape);
-                setTimeout(() => shape.remove(), 1000);
-            }
         }
 
         function checkAnswer(selected, correct, btnEl) {
@@ -706,15 +631,14 @@
                 score += pts;
                 updateScoreUI(pts);
 
-                btnEl.classList.remove('border-indigo-200', 'text-indigo-700');
-                btnEl.classList.add('bg-green-400', 'border-green-500', 'text-white', 'animate-bounce-scale');
+                btnEl.classList.remove('border-emerald-200', 'text-emerald-700');
+                btnEl.classList.add('bg-green-400', 'border-green-500', 'text-white', '');
                 
-                const praises = ["Perfect! 🌟", "Excellent! 💖", "Smart! 🧠", "Genius! 👑", "Awesome! 🚀"];
-                feedback.innerHTML = praises[Math.floor(Math.random() * praises.length)];
+                feedback.textContent = `${i18n.t('page6_praise')} 🌟`;
                 feedback.className = "mt-4 md:mt-8 text-2xl md:text-4xl font-bold text-green-500 transition-all text-center";
                 
                 playSuccessSound();
-                createEffects(btnEl, ['⭐', '💖', '🌟', '🎉', '🚀']);
+                fireCelebration();
                 
                 const q = currentQuizQuestions[currentQuestionIndex];
                 document.getElementById('quizWord').innerHTML = q.full;
@@ -725,9 +649,9 @@
                 score = Math.max(0, score + penalty);
                 updateScoreUI(penalty);
 
-                btnEl.classList.remove('border-indigo-200', 'text-indigo-700');
+                btnEl.classList.remove('border-emerald-200', 'text-emerald-700');
                 btnEl.classList.add('bg-red-400', 'border-red-500', 'text-white');
-                feedback.innerHTML = 'Try Again ❌';
+                feedback.textContent = `${i18n.t('page6_try_again')} ❌`;
                 feedback.className = "mt-4 md:mt-8 text-2xl md:text-4xl font-bold text-red-500 transition-all text-center";
                 
                 playWrongSound();
@@ -735,7 +659,7 @@
                 setTimeout(() => {
                     allBtns.forEach(b => b.disabled = false);
                     btnEl.classList.remove('bg-red-400', 'border-red-500', 'text-white');
-                    btnEl.classList.add('border-indigo-200', 'text-indigo-700');
+                    btnEl.classList.add('border-emerald-200', 'text-emerald-700');
                     feedback.innerHTML = '';
                     
                     timerInterval = setInterval(() => {
@@ -754,7 +678,7 @@
         }
 
         document.getElementById('nextQuizBtn').addEventListener('click', () => {
-            getAudioContext();
+            Sound.init();
             currentQuestionIndex++;
             if (currentQuestionIndex < currentQuizQuestions.length) {
                 loadQuestion();
@@ -766,346 +690,37 @@
             }
         });
 
-        // --- Tic-Tac-Toe Logic ---
-        let tttCurrentPlayer = '🌟';
-        let tttBoard = new Array(9).fill('');
-        let tttActive = false;
-
         function showGameTTT() {
             gameSectionTTT.classList.remove('hidden');
-            initGameTTT();
+            xoGame.reset();
         }
 
-        function initGameTTT() {
-            tttCurrentPlayer = '🌟';
-            tttBoard.fill('');
-            tttActive = true;
-            
-            document.getElementById('gameResultTTT').classList.add('hidden');
-            const turnEl = document.getElementById('gameTurnTTT');
-            turnEl.innerText = `Player ${tttCurrentPlayer}'s Turn`;
-            turnEl.classList.remove('hidden');
-
-            const boardEl = document.getElementById('ticTacToeBoard');
-            boardEl.innerHTML = '';
-
-            for (let i = 0; i < 9; i++) {
-                const cell = document.createElement('button');
-                cell.className = 'bg-blue-50 border-4 border-blue-200 rounded-2xl text-6xl md:text-8xl flex items-center justify-center hover:bg-blue-100 transition-colors duration-200 aspect-square shadow-sm focus:outline-none';
-                cell.onclick = () => handleCellClickTTT(i, cell);
-                boardEl.appendChild(cell);
-            }
-        }
-
-        function handleCellClickTTT(index, cellEl) {
-            if (tttBoard[index] !== '' || !tttActive) return;
-
-            tttBoard[index] = tttCurrentPlayer;
-            cellEl.innerText = tttCurrentPlayer;
-            cellEl.classList.add('animate-bounce-scale', 'bg-white');
-            cellEl.classList.remove('bg-blue-50');
-            
-            getAudioContext();
-            playTickSound();
-
-            checkWinTTT();
-        }
-
-        function checkWinTTT() {
-            const winConditions = [
-                [0, 1, 2], [3, 4, 5], [6, 7, 8],
-                [0, 3, 6], [1, 4, 7], [2, 5, 8],
-                [0, 4, 8], [2, 4, 6]            
-            ];
-
-            let roundWon = false;
-            for (let i = 0; i < winConditions.length; i++) {
-                const [a, b, c] = winConditions[i];
-                if (tttBoard[a] && tttBoard[a] === tttBoard[b] && tttBoard[a] === tttBoard[c]) {
-                    roundWon = true;
-                    const cells = document.getElementById('ticTacToeBoard').children;
-                    cells[a].classList.add('border-green-400', 'bg-green-100');
-                    cells[b].classList.add('border-green-400', 'bg-green-100');
-                    cells[c].classList.add('border-green-400', 'bg-green-100');
-                    break;
-                }
-            }
-
-            const resultEl = document.getElementById('gameResultTTT');
-            const turnEl = document.getElementById('gameTurnTTT');
-
-            if (roundWon) {
-                tttActive = false;
-                turnEl.classList.add('hidden');
-                resultEl.innerHTML = `Player ${tttCurrentPlayer} Wins! 🎉`;
-                resultEl.className = 'text-3xl font-black text-center mb-6 text-green-500 animate-bounce-scale h-10';
-                resultEl.classList.remove('hidden');
-                playSuccessSound();
-                return;
-            }
-
-            if (!tttBoard.includes('')) {
-                tttActive = false;
-                turnEl.classList.add('hidden');
-                resultEl.innerHTML = `It's a Draw! 🤝`;
-                resultEl.className = 'text-3xl font-black text-center mb-6 text-yellow-500 h-10';
-                resultEl.classList.remove('hidden');
-                playWrongSound(); 
-                return;
-            }
-
-            tttCurrentPlayer = tttCurrentPlayer === '🌟' ? '🎈' : '🌟';
-            turnEl.innerText = `Player ${tttCurrentPlayer}'s Turn`;
-        }
-
-        document.getElementById('resetGameBtnTTT').addEventListener('click', initGameTTT);
-
-        // --- Connect Four Logic ---
-        let c4CurrentPlayer = '🌟';
-        let c4Board = new Array(42).fill('');
-        let c4Active = false;
+        document.getElementById('resetGameBtnTTT').addEventListener('click', () => xoGame.reset());
 
         function showGameC4() {
             gameSectionC4.classList.remove('hidden');
-            initGameC4();
+            c4Game.reset();
         }
 
-        function initGameC4() {
-            c4CurrentPlayer = '🌟';
-            c4Board.fill('');
-            c4Active = true;
-            
-            document.getElementById('gameResultC4').classList.add('hidden');
-            const turnEl = document.getElementById('gameTurnC4');
-            turnEl.innerText = `Player ${c4CurrentPlayer}'s Turn`;
-            turnEl.classList.remove('hidden');
-
-            const boardEl = document.getElementById('connectFourBoard');
-            boardEl.innerHTML = '';
-
-            for (let i = 0; i < 42; i++) {
-                const cell = document.createElement('button');
-                cell.className = 'w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 bg-blue-50 rounded-full flex items-center justify-center text-xl md:text-3xl shadow-inner transition-all duration-200 focus:outline-none hover:bg-gray-200 cursor-pointer';
-                cell.onclick = () => handleCellClickC4(i % 7);
-                cell.onmouseenter = () => highlightColumn(i % 7, true);
-                cell.onmouseleave = () => highlightColumn(i % 7, false);
-                boardEl.appendChild(cell);
-            }
-        }
-
-        function highlightColumn(col, isHover) {
-            if (!c4Active) return;
-            const boardEl = document.getElementById('connectFourBoard');
-            for (let r = 0; r < 6; r++) {
-                const index = r * 7 + col;
-                if (c4Board[index] === '') {
-                    if (isHover) boardEl.children[index].classList.replace('bg-blue-50', 'bg-gray-200');
-                    else boardEl.children[index].classList.replace('bg-gray-200', 'bg-blue-50');
-                }
-            }
-        }
-
-        function handleCellClickC4(col) {
-            if (!c4Active) return;
-
-            let targetRow = -1;
-            for (let r = 5; r >= 0; r--) {
-                if (c4Board[r * 7 + col] === '') {
-                    targetRow = r;
-                    break;
-                }
-            }
-
-            if (targetRow === -1) return;
-
-            const index = targetRow * 7 + col;
-            c4Board[index] = c4CurrentPlayer;
-            
-            const cellEl = document.getElementById('connectFourBoard').children[index];
-            cellEl.innerText = c4CurrentPlayer;
-            cellEl.classList.add('animate-bounce-scale');
-            cellEl.classList.remove('bg-blue-50', 'bg-gray-200', 'hover:bg-gray-200');
-            
-            if (c4CurrentPlayer === '🌟') {
-                cellEl.classList.add('bg-yellow-100');
-            } else {
-                cellEl.classList.add('bg-red-100');
-            }
-            
-            getAudioContext();
-            playTickSound();
-
-            if (checkWinC4(targetRow, col)) {
-                c4Active = false;
-                const resultEl = document.getElementById('gameResultC4');
-                const turnEl = document.getElementById('gameTurnC4');
-                turnEl.classList.add('hidden');
-                resultEl.innerHTML = `Player ${c4CurrentPlayer} Wins! 🎉`;
-                resultEl.className = 'text-2xl md:text-3xl font-black text-center mb-4 text-green-500 animate-bounce-scale h-10';
-                resultEl.classList.remove('hidden');
-                playSuccessSound();
-                return;
-            }
-
-            if (!c4Board.includes('')) {
-                c4Active = false;
-                const resultEl = document.getElementById('gameResultC4');
-                const turnEl = document.getElementById('gameTurnC4');
-                turnEl.classList.add('hidden');
-                resultEl.innerHTML = `It's a Draw! 🤝`;
-                resultEl.className = 'text-2xl md:text-3xl font-black text-center mb-4 text-yellow-500 h-10';
-                resultEl.classList.remove('hidden');
-                playWrongSound(); 
-                return;
-            }
-
-            c4CurrentPlayer = c4CurrentPlayer === '🌟' ? '🎈' : '🌟';
-            document.getElementById('gameTurnC4').innerText = `Player ${c4CurrentPlayer}'s Turn`;
-        }
-
-        function checkWinC4(row, col) {
-            const directions = [
-                [0, 1], [1, 0], [1, 1], [1, -1]
-            ];
-            const player = c4Board[row * 7 + col];
-
-            for (const [dr, dc] of directions) {
-                let count = 1;
-                let winningCells = [[row, col]];
-
-                let r = row + dr;
-                let c = col + dc;
-                while (r >= 0 && r < 6 && c >= 0 && c < 7 && c4Board[r * 7 + c] === player) {
-                    count++;
-                    winningCells.push([r, c]);
-                    r += dr;
-                    c += dc;
-                }
-
-                r = row - dr;
-                c = col - dc;
-                while (r >= 0 && r < 6 && c >= 0 && c < 7 && c4Board[r * 7 + c] === player) {
-                    count++;
-                    winningCells.push([r, c]);
-                    r -= dr;
-                    c -= dc;
-                }
-
-                if (count >= 4) {
-                    const boardEl = document.getElementById('connectFourBoard');
-                    winningCells.forEach(([wr, wc]) => {
-                        const idx = wr * 7 + wc;
-                        boardEl.children[idx].classList.add('border-4', 'border-green-500', 'animate-pulse');
-                    });
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        document.getElementById('resetGameBtnC4').addEventListener('click', initGameC4);
-
-        // --- Memory Match Puzzle Logic ---
-        const memEmojis = ['🌟', '🎈', '🦸‍♂️', '🚀', '👑', '🎯'];
-        let memBoard = [];
-        let flippedIndices = [];
-        let matchedPairs = 0;
-        let memActive = false;
+        document.getElementById('resetGameBtnC4').addEventListener('click', () => c4Game.reset());
 
         function showGameMem() {
             gameSectionMem.classList.remove('hidden');
-            initGameMem();
+            memoryGame.currentSetIndex = 0;
+            memoryGame.init();
         }
 
-        function initGameMem() {
-            // Duplicate and shuffle emojis
-            memBoard = [...memEmojis, ...memEmojis].sort(() => Math.random() - 0.5);
-            flippedIndices = [];
-            matchedPairs = 0;
-            memActive = true;
+        memoryGame.iconSets = [['🌟', '🎈', '🦸‍♂️', '🚀', '👑', '🎯']];
+        document.getElementById('resetGameBtnMem').addEventListener('click', () => memoryGame.reset());
 
-            document.getElementById('gameResultMem').classList.add('hidden');
-            document.getElementById('gameTurnMem').classList.remove('hidden');
-
-            const boardEl = document.getElementById('memoryBoard');
-            boardEl.innerHTML = '';
-
-            for (let i = 0; i < 12; i++) {
-                const card = document.createElement('button');
-                card.className = 'bg-orange-100 border-4 border-orange-300 rounded-2xl text-4xl md:text-5xl flex items-center justify-center hover:bg-orange-200 transition-all duration-300 aspect-square shadow-sm focus:outline-none';
-                card.innerHTML = '<span class="opacity-0">❓</span>'; // Hide text initially
-                card.onclick = () => handleCardClickMem(i, card);
-                boardEl.appendChild(card);
-            }
-        }
-
-        function handleCardClickMem(index, cardEl) {
-            if (!memActive) return;
-            if (flippedIndices.length >= 2) return; // wait for check
-            if (flippedIndices.includes(index)) return; // already flipped
-            if (cardEl.classList.contains('matched')) return; // already matched
-
-            getAudioContext();
-            playTickSound();
-
-            // Flip Card
-            flippedIndices.push(index);
-            cardEl.innerHTML = memBoard[index];
-            cardEl.classList.add('bg-white', 'border-orange-500', 'animate-bounce-scale');
-            cardEl.classList.remove('bg-orange-100', 'hover:bg-orange-200');
-
-            if (flippedIndices.length === 2) {
-                setTimeout(checkMatchMem, 800);
-            }
-        }
-
-        function checkMatchMem() {
-            const [idx1, idx2] = flippedIndices;
-            const boardEl = document.getElementById('memoryBoard');
-            const card1 = boardEl.children[idx1];
-            const card2 = boardEl.children[idx2];
-
-            if (memBoard[idx1] === memBoard[idx2]) {
-                // Match
-                card1.classList.add('matched', 'border-green-400', 'bg-green-100');
-                card1.classList.remove('border-orange-500');
-                card2.classList.add('matched', 'border-green-400', 'bg-green-100');
-                card2.classList.remove('border-orange-500');
-                
-                matchedPairs++;
-                flippedIndices = [];
-                
-                if (matchedPairs === 6) {
-                    memActive = false;
-                    const resultEl = document.getElementById('gameResultMem');
-                    document.getElementById('gameTurnMem').classList.add('hidden');
-                    resultEl.innerHTML = `You Win! 🎉`;
-                    resultEl.className = 'text-3xl font-black text-center mb-6 text-green-500 animate-bounce-scale h-10';
-                    resultEl.classList.remove('hidden');
-                    playSuccessSound();
-                } else {
-                    // Small click for partial success
-                    playTickSound(true);
-                }
-            } else {
-                // No Match
-                playWrongSound();
-                card1.innerHTML = '<span class="opacity-0">❓</span>';
-                card2.innerHTML = '<span class="opacity-0">❓</span>';
-                
-                card1.classList.remove('bg-white', 'border-orange-500', 'animate-bounce-scale');
-                card1.classList.add('bg-orange-100', 'hover:bg-orange-200');
-                
-                card2.classList.remove('bg-white', 'border-orange-500', 'animate-bounce-scale');
-                card2.classList.add('bg-orange-100', 'hover:bg-orange-200');
-                
-                flippedIndices = [];
-            }
-        }
-
-        document.getElementById('resetGameBtnMem').addEventListener('click', initGameMem);
-
-        window.onload = init;
+        window.addEventListener('beforeunload', () => {
+            clearInterval(timerInterval);
+            clearTimeout(autoAdvanceTimeout);
+            xoGame.cleanup();
+            c4Game.cleanup();
+            memoryGame.cleanup();
+        });
+        window.addEventListener('load', init);
     </script>
 </body>
 </html>

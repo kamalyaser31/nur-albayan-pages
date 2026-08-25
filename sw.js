@@ -5,7 +5,7 @@
  * - Cache-First with Dynamic Runtime Fallback for Static Assets & Offline Fonts
  */
 
-const CACHE_VERSION = 'v3';
+const CACHE_VERSION = 'v4';
 const CACHE_STATIC_NAME = `nur-albayan-static-${CACHE_VERSION}`;
 const CACHE_RUNTIME_NAME = `nur-albayan-runtime-${CACHE_VERSION}`;
 
@@ -16,15 +16,31 @@ const PRECACHE_ASSETS = [
     './manifest.json',
     // Core Scripts
     './shared/store.js',
+    './shared/contracts.js',
     './shared/core.js',
+    './shared/lesson-session.js',
+    './shared/remediation-session.js',
+    './shared/lesson-summary.js',
     './shared/app.js',
     './shared/i18n.js',
     './shared/locales/ar.js',
     './shared/locales/en.js',
+    './shared/settings-values.js',
+    './shared/settings-dialog.js',
     './shared/settings.js',
     './shared/student-manager.js',
+    './shared/vendor-loader.js',
+    './shared/student-repository.js',
+    './shared/student-progress.js',
+    './shared/mistake-bank.js',
+    './shared/student-backup.js',
+    './shared/index-progress-view.js',
+    './shared/roster-views.js',
+    './shared/student-report.js',
     './shared/roster-manager.js',
     './shared/sound.js',
+    './shared/lesson-template.js',
+    './shared/modal-accessibility.js',
     './shared/ui-template.js',
     './shared/games-wordwall.js',
     './shared/games-board.js',
@@ -34,6 +50,7 @@ const PRECACHE_ASSETS = [
     // Core Stylesheets
     './shared/core.css',
     './shared/css/index.css',
+    './shared/css/guide.css',
     './shared/css/tokens.css',
     './shared/css/base.css',
     './shared/css/typography.css',
@@ -103,19 +120,7 @@ const PRECACHE_ASSETS = [
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_STATIC_NAME)
-            .then(async (cache) => {
-                try {
-                    await cache.addAll(PRECACHE_ASSETS);
-                    console.log('[SW] All precache assets successfully stored in static cache.');
-                } catch (err) {
-                    console.error('[SW] Atomic precache failed, falling back to individual caching:', err);
-                    await Promise.allSettled(
-                        PRECACHE_ASSETS.map((asset) => cache.add(asset).catch((itemErr) => {
-                            console.error(`[SW] Precache item failed: "${asset}"`, itemErr);
-                        }))
-                    );
-                }
-            })
+            .then((cache) => cache.addAll(PRECACHE_ASSETS))
             .then(() => self.skipWaiting())
     );
 });

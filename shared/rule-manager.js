@@ -142,7 +142,7 @@ const ruleManager = {
 
 // مستمع لحدث تغيير اللغة لتحديث نصوص القواعد ومؤشر الخطوات فورياً
 if (typeof window !== 'undefined') {
-    window.addEventListener('nb:locale-changed', () => {
+    window.addEventListener(NBContracts.EVENTS.LOCALE_CHANGED, () => {
         if (typeof ruleManager !== 'undefined' && ruleManager.getRules().length > 0) {
             ruleManager.render();
         }
