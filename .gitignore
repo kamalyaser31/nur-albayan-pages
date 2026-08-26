@@ -10,6 +10,7 @@ new pages/
 Extracted Pages/
 .tmp/
 .backups/
+scratch/
 
 # Python & Environment
 __pycache__/
