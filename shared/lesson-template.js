@@ -137,10 +137,12 @@ function buildAppUI() {
             </div>
 
             <!-- Teacher Manual Feedback Triggers -->
-            <div class="flex items-center gap-1 sm:gap-1.5 bg-slate-50 px-2 sm:px-2.5 py-1 rounded-full border border-slate-200" role="toolbar" data-i18n-aria="aria_teacher_praise_toolbar" aria-label="${escapeHTML(i18n.t('aria_teacher_praise_toolbar'))}">
+            <div class="flex items-center gap-1 sm:gap-1.5 bg-slate-50 px-1.5 sm:px-2.5 py-1 rounded-full border border-slate-200 shrink-0" role="toolbar" data-i18n-aria="aria_teacher_praise_toolbar" aria-label="${escapeHTML(i18n.t('aria_teacher_praise_toolbar'))}">
                 ${teacherPraiseIconButtonsHtml}
-                <div class="w-px h-4 bg-slate-200 mx-0.5" aria-hidden="true"></div>
-                ${teacherPraiseTextButtonsHtml}
+                <div class="w-px h-4 bg-slate-200 mx-0.5 hidden md:block" aria-hidden="true"></div>
+                <div class="hidden md:flex items-center gap-1">
+                    ${teacherPraiseTextButtonsHtml}
+                </div>
             </div>
 
             <!-- Dropdown Navigator & Settings Button & Language Switcher -->

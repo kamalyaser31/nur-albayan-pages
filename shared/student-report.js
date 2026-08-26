@@ -45,10 +45,16 @@
             mistakesHtml = `
             <div style="margin-top: 24px; padding: 16px; background: #fff1f2; border: 1px solid #fecdd3; border-radius: 16px;">
                 <h3 style="margin: 0 0 12px 0; color: #9f1239; font-size: 15px;">📌 ${isAr ? 'الكلمات المستهدفة للمراجعة والتثبيت (سجل العثرات)' : 'Target Words for Review (Mistake Bank)'}</h3>
-                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
                     ${mistakes.map(m => {
                         const cleanWord = escapeHTML(m.word);
-                        return `<span style="display: inline-block; padding: 6px 14px; background: #ffffff; border: 1px solid #fda4af; border-radius: 12px; font-size: 20px; font-family: 'Amiri', serif; color: #1e293b;">${cleanWord}</span>`;
+                        const lessonId = escapeHTML(m.lessonId || '');
+                        const badgeText = isAr ? `درس ${lessonId || '-'}` : `Lesson ${lessonId || '-'}`;
+                        if (m.item && typeof WordRenderer !== 'undefined') {
+                            const wordHtml = WordRenderer.toHTML(m.item);
+                            return `<div class="report-word-item"><div class="report-word-badge">${badgeText}</div>${wordHtml}</div>`;
+                        }
+                        return `<div class="report-word-item"><div class="report-word-badge">${badgeText}</div><div class="letter-box theme-pink"><span class="word-wrapper quran-font text-center">${cleanWord}</span></div></div>`;
                     }).join('')}
                 </div>
             </div>`;
@@ -76,6 +82,19 @@
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
         th { background: #f1f5f9; padding: 8px 12px; text-align: ${dir === 'rtl' ? 'right' : 'left'}; font-weight: 900; color: #334155; }
         .footer-sig { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 20px; border-top: 1px solid #cbd5e1; font-size: 13px; font-weight: bold; color: #475569; }
+        .report-word-item { display: inline-flex; flex-direction: column; align-items: center; background: #ffffff; border: 1.5px solid #fda4af; border-radius: 14px; padding: 6px 10px; break-inside: avoid; }
+        .report-word-badge { font-size: 10px; font-weight: bold; color: #be123c; background: #ffe4e6; padding: 1px 6px; border-radius: 6px; margin-bottom: 4px; }
+        .segmented-container { display: inline-flex; flex-direction: row; direction: rtl; justify-content: center; align-items: center; gap: 4px; }
+        .seg-box { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; height: 38px; border-radius: 10px; font-family: 'Amiri', 'Traditional Arabic', serif; font-size: 20px; font-weight: bold; padding: 2px 6px; line-height: 1.2; border: 2px solid #e2e8f0; }
+        .letter-box { display: inline-flex; align-items: center; justify-content: center; min-height: 38px; border-radius: 10px; font-family: 'Amiri', 'Traditional Arabic', serif; font-size: 20px; font-weight: bold; padding: 4px 10px; border: 2px solid #e2e8f0; }
+        .quran-font { font-family: 'Amiri', 'Traditional Arabic', serif; }
+        .theme-pink { background: #fff1f2; border-color: #f43f5e; color: #881337; }
+        .theme-green { background: #f0fdf4; border-color: #059669; color: #064e3b; }
+        .theme-yellow { background: #fefce8; border-color: #d97706; color: #78350f; }
+        .theme-blue { background: #eff6ff; border-color: #2563eb; color: #1e3a8a; }
+        .c-red, .color-0 { color: #dc2626 !important; }
+        .c-blue, .color-1 { color: #2563eb !important; }
+        .c-black, .color-2 { color: #0f172a !important; }
         @media print {
             .no-print { display: none; }
             body { padding: 0; }

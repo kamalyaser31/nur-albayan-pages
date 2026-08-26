@@ -95,3 +95,13 @@ header, main, footer {
 header, footer {
     flex-shrink: 0;
 }
+
+/* 3. Global Accessible Focus Indicator */
+button:focus-visible,
+select:focus-visible,
+input:focus-visible,
+a:focus-visible,
+[tabindex]:focus-visible {
+    outline: 3px solid var(--color-primary, #047857) !important;
+    outline-offset: 2px !important;
+}

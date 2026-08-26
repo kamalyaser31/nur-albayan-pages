@@ -45,6 +45,7 @@
      * @property {string} lessonId
      * @property {number} count
      * @property {number} consecutiveCorrect
+     * @property {Object} [item]
      */
 
     /**

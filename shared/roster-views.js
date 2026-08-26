@@ -245,9 +245,9 @@
                   <div class="text-[10px] text-rose-700 font-bold bg-rose-100/80 px-2 py-0.5 rounded-full mb-1">
                     ${this._escapeHTML(lessonLabel)} • (${safeCount})
                   </div>
-                  <div class="mistake-quran-text">
-                    ${safeWord}
-                  </div>
+                  ${(m.item && typeof WordRenderer !== 'undefined')
+                    ? WordRenderer.toHTML(m.item)
+                    : `<div class="mistake-quran-text">${safeWord}</div>`}
                   <button type="button" data-action="remove-mistake" data-student-id="${safeStudentId}" data-word="${safeWord}" data-lesson-id="${safeLessonId}" data-i18n-aria="aria_master_mistake" class="mt-2 text-[11px] font-bold bg-emerald-100 hover:bg-emerald-200 text-emerald-900 border border-emerald-300 px-2.5 py-1 rounded-xl transition-colors flex items-center gap-1 w-full justify-center shadow-2xs cursor-pointer" aria-label="${this._escapeHTML(this._t('aria_master_mistake', 'تمييز الكلمة كمتقنة وحذفها'))}">
                     <span aria-hidden="true">✓</span> <span data-i18n="eval_correct_label">${this._escapeHTML(this._t('eval_correct_label', 'تم الإتقان'))}</span>
                   </button>

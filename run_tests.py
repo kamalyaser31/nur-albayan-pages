@@ -66,10 +66,12 @@ assert.strictEqual(studentManager.importJSON({ students: [{ id: 's1', name: 'أ�
 studentManager.setActiveStudent('s1');
 studentManager.recordCardEvaluation({
     lessonId: '7', isCorrect: false, pointsAwarded: 0,
-    wordData: 'كَتَبَ', cardIndex: 0, totalCards: 2
+    wordData: { segs: ['كspace', 'تَ', 'بَ'], theme: 'yellow' }, cardIndex: 0, totalCards: 2
 });
 assert.strictEqual(studentManager.getActiveStudent().totalScore, 0);
 assert.strictEqual(studentManager.getActiveStudent().mistakeBank.length, 1);
+assert.deepStrictEqual(studentManager.getActiveStudent().mistakeBank[0].item.segs, ['كspace', 'تَ', 'بَ']);
+assert.strictEqual(studentManager.getActiveStudent().mistakeBank[0].item.theme, 'yellow');
 
 studentManager.recordLessonCompletion('7', 10, 90, 2);
 studentManager.recordLessonCompletion('7', 5, 80, 1);
@@ -205,6 +207,7 @@ def test_module_syntax_and_loading() -> None:
     core = (ROOT / "shared/core.js").read_text(encoding="utf-8")
     expected = (
         "contracts.js",
+        "word-renderer.js",
         "student-repository.js",
         "student-progress.js",
         "mistake-bank.js",

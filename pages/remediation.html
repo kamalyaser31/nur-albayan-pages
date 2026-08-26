@@ -39,16 +39,29 @@
         // ترشيح بنك الأخطاء لاستبعاد الكلمات المتقنة مسبقاً
         rawMistakes = rawMistakes.filter(m => !m.mastered);
 
-        // بناء مصفوفة الكلمات التدريبية الحية
+        // بناء مصفوفة الكلمات التدريبية الحية مع وراثة كافة الخصائص الأصلية
         let dataset = [];
         if (rawMistakes.length > 0) {
-            dataset = rawMistakes.map((m, i) => ({
-                w: [m.word],
-                t: (m.count > 2) ? 'danger' : 'normal',
-                multiBox: false,
-                theme: _themes[i % _themes.length],
-                info: `الدرس ${m.lessonId || 'عام'} • (${m.count || 1})`
-            }));
+            dataset = rawMistakes.map((m, i) => {
+                const lessonLabel = m.lessonId ? `الدرس ${m.lessonId}` : 'جلسة المعالجة';
+                const infoText = `${lessonLabel} • (${m.count || 1})`;
+                if (m.item && typeof m.item === 'object') {
+                    const cloned = JSON.parse(JSON.stringify(m.item));
+                    cloned.t = (m.count > 2) ? 'danger' : (cloned.t || 'normal');
+                    cloned.info = cloned.info || infoText;
+                    if (!cloned.theme) {
+                        cloned.theme = _themes[i % _themes.length];
+                    }
+                    return cloned;
+                }
+                return {
+                    w: [m.word],
+                    t: (m.count > 2) ? 'danger' : 'normal',
+                    multiBox: false,
+                    theme: _themes[i % _themes.length],
+                    info: infoText
+                };
+            });
         } else {
             dataset = [{
                 w: ['مَا شَاءَ اللهُ'],

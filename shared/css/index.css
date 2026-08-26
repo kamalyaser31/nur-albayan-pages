@@ -275,6 +275,44 @@ header p {
   letter-spacing: normal !important;
 }
 
+.mistake-word-card .segmented-container {
+  display: flex;
+  flex-direction: row;
+  direction: rtl;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  max-width: 100%;
+  flex-wrap: wrap;
+  margin: 4px 0;
+}
+
+.mistake-word-card .seg-box {
+  min-width: 38px;
+  max-width: 80px;
+  height: auto;
+  min-height: 48px;
+  border-radius: 12px;
+  font-size: 1.65rem;
+  padding: 2px 6px;
+  line-height: 1.2;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.12);
+  border-width: 2px;
+}
+
+.mistake-word-card .letter-box {
+  min-height: 48px;
+  height: auto;
+  border-radius: 14px;
+  font-size: 1.65rem;
+  padding: 4px 10px;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.12);
+  width: 100%;
+  margin: 4px 0;
+  border-width: 2px;
+}
+
 main {
   flex: 1;
   width: 100%;

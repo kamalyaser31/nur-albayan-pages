@@ -25,6 +25,7 @@
     const modules = [
         'contracts.js',
         'store.js',
+        'word-renderer.js',
         'i18n.js',
         'locales/ar.js',
         'locales/en.js',

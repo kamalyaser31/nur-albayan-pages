@@ -131,7 +131,8 @@
                                 timestamp: Number(m.timestamp) || Date.now(),
                                 count: Math.max(1, Math.floor(Number(m.count) || 1)),
                                 mastered: !!m.mastered,
-                                consecutiveCorrect: Math.max(0, Math.floor(Number(m.consecutiveCorrect) || 0))
+                                consecutiveCorrect: Math.max(0, Math.floor(Number(m.consecutiveCorrect) || 0)),
+                                item: (m.item && typeof m.item === 'object') ? this._clone(m.item) : null
                             });
                         }
                     }
@@ -593,7 +594,7 @@
 
             if (!student.mistakeBank) student.mistakeBank = [];
             if (!request.isCorrect) {
-                MistakeBank.recordIncorrect(student.mistakeBank, lessonKey, plainWord, now);
+                MistakeBank.recordIncorrect(student.mistakeBank, lessonKey, plainWord, now, request.wordData);
             }
 
             if (!this._persistOrRollback(previousState)) return null;

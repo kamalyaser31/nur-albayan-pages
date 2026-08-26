@@ -13,10 +13,12 @@ const PRECACHE_ASSETS = [
     './',
     './index.html',
     './guide.html',
+    './pages/remediation.html',
     './manifest.json',
     // Core Scripts
     './shared/store.js',
     './shared/contracts.js',
+    './shared/word-renderer.js',
     './shared/core.js',
     './shared/lesson-session.js',
     './shared/remediation-session.js',

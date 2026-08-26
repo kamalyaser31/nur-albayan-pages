@@ -26,7 +26,7 @@
     flex-direction: column;
     font-size: calc(clamp(3rem, 8.5vw, 6.5rem) * var(--font-scale-factor, 1));
     padding: clamp(0.75rem, 2vw, 1.5rem) clamp(1rem, 3vw, 2.5rem);
-    line-height: 2.1;
+    line-height: 1.5;
     letter-spacing: normal !important;
     overflow: hidden;
     box-sizing: border-box;
@@ -34,22 +34,23 @@
 
 .letter-box.text-medium {
     font-size: calc(clamp(2.3rem, 6.2vw, 4.6rem) * var(--font-scale-factor, 1));
-    line-height: 2.0;
+    line-height: 1.45;
 }
 
 .letter-box.text-long {
     font-size: calc(clamp(1.8rem, 4.6vw, 3.4rem) * var(--font-scale-factor, 1));
-    line-height: 1.9;
+    line-height: 1.4;
 }
 
 .letter-box.text-xlong {
     font-size: calc(clamp(1.45rem, 3.6vw, 2.7rem) * var(--font-scale-factor, 1));
-    line-height: 1.85;
+    line-height: 1.35;
 }
 
 .segmented-container {
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: row;
+    direction: rtl;
     justify-content: center;
     align-items: center;
     gap: clamp(6px, 1.8vw, 20px);
@@ -68,10 +69,24 @@
     min-height: 160px;
     font-size: calc(clamp(2.8rem, 7.5vw, 6rem) * var(--font-scale-factor, 1));
     padding: 0.5rem 1.25rem;
-    line-height: 2.1;
+    line-height: 1.4;
     white-space: normal;
     word-break: break-word;
     letter-spacing: normal !important;
+    direction: rtl;
+}
+
+.seg-box bdi {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    direction: rtl;
+    unicode-bidi: isolate;
+}
+
+.seg-box span {
+    display: inline;
+    position: relative;
 }
 
 .word-wrapper {
@@ -101,10 +116,10 @@
         inset 0 0 20px rgba(var(--theme-rgb), 0.04);
 }
 
-.theme-green  { --theme-color: #10b981; --theme-rgb: 16, 185, 129; }
-.theme-pink   { --theme-color: #f472b6; --theme-rgb: 244, 114, 182; }
-.theme-yellow { --theme-color: #f59e0b; --theme-rgb: 245, 158, 11; }
-.theme-blue   { --theme-color: #3b82f6; --theme-rgb: 59, 130, 246; }
+.theme-green  { --theme-color: #059669; --theme-rgb: 5, 150, 105; }
+.theme-pink   { --theme-color: #db2777; --theme-rgb: 219, 39, 119; }
+.theme-yellow { --theme-color: #d97706; --theme-rgb: 217, 119, 6; }
+.theme-blue   { --theme-color: #2563eb; --theme-rgb: 37, 99, 235; }
 
 /* Special Challenge Modes */
 .card-golden {
