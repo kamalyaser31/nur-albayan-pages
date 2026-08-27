@@ -139,6 +139,8 @@
         "guest_session": "Guest / General",
         "praise_star": "Star ⭐",
         "praise_heart": "Heart ❤️",
+        "praise_crown": "Crown 👑",
+        "praise_trophy": "Trophy 🏆",
         "praise_perfect": "Perfect 🌟",
         "praise_excellent": "Excellent 🏆",
         "txt_perfect": "Perfect",

@@ -23,7 +23,9 @@
     function renderTeacherToolbar() {
         const iconButtons = [
             { icon: '⭐', color: '#f59e0b', bg: 'bg-amber-100', text: 'text-amber-500', hoverBg: 'hover:bg-amber-200', ariaKey: 'praise_star' },
-            { icon: '❤️', color: '#ef4444', bg: 'bg-rose-100', text: 'text-rose-500', hoverBg: 'hover:bg-rose-200', ariaKey: 'praise_heart' }
+            { icon: '❤️', color: '#ef4444', bg: 'bg-rose-100', text: 'text-rose-500', hoverBg: 'hover:bg-rose-200', ariaKey: 'praise_heart' },
+            { icon: '👑', color: '#8b5cf6', bg: 'bg-purple-100', text: 'text-purple-600', hoverBg: 'hover:bg-purple-200', ariaKey: 'praise_crown' },
+            { icon: '🏆', color: '#10b981', bg: 'bg-emerald-100', text: 'text-emerald-600', hoverBg: 'hover:bg-emerald-200', ariaKey: 'praise_trophy' }
         ].map(b => `
             <button onclick="app.triggerFeedback('${b.icon}', '${b.color}', true)" class="p-1 sm:p-1.5 ${b.bg} ${b.text} rounded-full ${b.hoverBg} hover:scale-110 transition-all shadow-sm text-base sm:text-lg leading-none" data-i18n-aria="${b.ariaKey}" data-i18n-title="${b.ariaKey}" aria-label="${escapeHTML(i18n.t(b.ariaKey))}" title="${escapeHTML(i18n.t(b.ariaKey))}">
                 <span aria-hidden="true">${b.icon}</span>
