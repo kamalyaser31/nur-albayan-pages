@@ -98,6 +98,7 @@ header p {
   cursor: pointer;
   text-decoration: none;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 44px;
 }
 
 .action-btn:hover {
@@ -205,13 +206,15 @@ header p {
   border-color: #10b981;
   background: #f0fdf4;
 }
-.avatar-option-btn.selected {
+.avatar-option-btn.selected,
+#roster-letter-btn.selected {
   border-color: var(--color-primary, #047857);
   background: #d1fae5;
   box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.25);
   transform: scale(1.08);
 }
-.avatar-option-btn:focus-visible {
+.avatar-option-btn:focus-visible,
+#roster-letter-btn:focus-visible {
   outline: 2px solid var(--color-primary, #047857);
   outline-offset: 2px;
 }

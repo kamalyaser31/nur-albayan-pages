@@ -231,13 +231,19 @@ const gameAI = {
 
 // تهيئة تلقائية للواجهة عند التحميل وتحديثها عند تبديل اللغة
 if (typeof document !== 'undefined') {
-    document.addEventListener('DOMContentLoaded', () => {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof gameAI !== 'undefined') gameAI.updateUI();
+        });
+    } else {
         if (typeof gameAI !== 'undefined') gameAI.updateUI();
-    });
+    }
 }
 if (typeof window !== 'undefined') {
-    window.addEventListener(NBContracts.EVENTS.LOCALE_CHANGED, () => {
-        if (typeof gameAI !== 'undefined') gameAI.updateUI();
-    });
+    if (typeof window.addEventListener === 'function') {
+        window.addEventListener(NBContracts.EVENTS.LOCALE_CHANGED, () => {
+            if (typeof gameAI !== 'undefined') gameAI.updateUI();
+        });
+    }
     window.gameAI = gameAI;
 }

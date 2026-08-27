@@ -5,7 +5,7 @@
  * - Cache-First with Dynamic Runtime Fallback for Static Assets & Offline Fonts
  */
 
-const CACHE_VERSION = 'v4';
+const CACHE_VERSION = 'v6';
 const CACHE_STATIC_NAME = `nur-albayan-static-${CACHE_VERSION}`;
 const CACHE_RUNTIME_NAME = `nur-albayan-runtime-${CACHE_VERSION}`;
 
@@ -13,7 +13,6 @@ const PRECACHE_ASSETS = [
     './',
     './index.html',
     './guide.html',
-    './pages/remediation.html',
     './manifest.json',
     // Core Scripts
     './shared/store.js',
@@ -48,6 +47,7 @@ const PRECACHE_ASSETS = [
     './shared/games-board.js',
     './shared/game-ai.js',
     './shared/games-extra.js',
+    './shared/rules-data.js',
     './shared/rule-manager.js',
     // Core Stylesheets
     './shared/core.css',
@@ -61,7 +61,6 @@ const PRECACHE_ASSETS = [
     './shared/css/games-wordwall.css',
     './shared/css/games-board.css',
     './shared/css/animations.css',
-    './shared/css/utilities.css',
     // Granular CSS Utilities Modules
     './shared/css/utilities/borders.css',
     './shared/css/utilities/buttons.css',

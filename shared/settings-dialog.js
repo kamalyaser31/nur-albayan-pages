@@ -47,6 +47,7 @@
             { id: 'cfg-game-diff', prop: 'defaultDifficulty' },
             { id: 'cfg-timer-duration', prop: 'timerDuration' },
             { id: 'cfg-font-scale', prop: 'fontScale' },
+            { id: 'cfg-theme-mode', prop: 'themeMode' },
             { id: 'cfg-shuffle-cards', prop: 'shuffleCards', check: true },
             { id: 'cfg-no-penalty', prop: 'noPenaltyMode', check: true },
             { id: 'cfg-manual-advance', prop: 'manualAdvance', check: true },
@@ -66,11 +67,6 @@
 
         const volVal = document.getElementById('cfg-volume-val');
         if (volVal) volVal.innerText = `${s.volume || 0}%`;
-
-        const langSelect = document.getElementById('cfg-language-select');
-        if (langSelect && typeof i18n !== 'undefined') {
-            langSelect.value = i18n.getLocale();
-        }
     },
 
     // توليد كود HTML لنافذة الإعدادات مزيناً بكافة سمات data-i18n*
@@ -96,17 +92,6 @@
                 <!-- Body Controls -->
                 <div class="p-4 sm:p-6 space-y-4 sm:space-y-5 overflow-y-auto max-h-[70vh] text-slate-700 text-sm">
                     
-                    <!-- Section 0: لغة الواجهة والمنظومة -->
-                    <div class="bg-emerald-50/70 p-3.5 sm:p-4 rounded-2xl border border-emerald-200/80 flex items-center justify-between gap-3">
-                        <label for="cfg-language-select" class="font-black text-emerald-900 cursor-pointer select-none text-xs sm:text-sm flex items-center gap-2">
-                            <span aria-hidden="true">🌐</span> <span data-i18n="language_label">${t("language_label", "اللغة")}</span>
-                        </label>
-                        <select id="cfg-language-select" onchange="if(typeof i18n !== 'undefined') i18n.setLocale(this.value)" class="bg-white border border-emerald-300 rounded-xl px-3 py-1.5 font-bold text-xs text-emerald-800 outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm cursor-pointer">
-                            <option value="ar" ${(typeof i18n !== 'undefined' && i18n.getLocale() === 'ar') ? 'selected' : ''}>العربية</option>
-                            <option value="en" ${(typeof i18n !== 'undefined' && i18n.getLocale() === 'en') ? 'selected' : ''}>English</option>
-                        </select>
-                    </div>
-
                     <!-- Section 1: الصوتيات -->
                     <div class="bg-slate-50 p-3.5 sm:p-4 rounded-2xl border border-slate-200 space-y-3">
                         <h3 class="font-black text-emerald-800 flex items-center gap-2 text-xs sm:text-sm">
@@ -172,6 +157,14 @@
                                     <option value="normal" data-i18n="font_normal">${t("font_normal", "افتراضي (100%)")}</option>
                                     <option value="large" data-i18n="font_large">${t("font_large", "كبير (122%)")}</option>
                                     <option value="xlarge" data-i18n="font_xlarge">${t("font_xlarge", "كبير جداً (145%)")}</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="cfg-theme-mode" data-i18n="theme_mode_label" class="block text-xs font-bold text-slate-600 mb-1">${t("theme_mode_label", "سمة العرض")}</label>
+                                <select id="cfg-theme-mode" onchange="settingsManager.save({themeMode: this.value}, {silent: true})" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-bold text-xs text-slate-700 outline-none focus:border-emerald-500">
+                                    <option value="system" data-i18n="theme_system">${t("theme_system", "وفق النظام")}</option>
+                                    <option value="light" data-i18n="theme_light">${t("theme_light", "فاتحة")}</option>
+                                    <option value="dark" data-i18n="theme_dark">${t("theme_dark", "داكنة")}</option>
                                 </select>
                             </div>
                         </div>

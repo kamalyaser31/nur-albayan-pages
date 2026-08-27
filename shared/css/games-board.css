@@ -37,6 +37,8 @@
 .c4-cell-new {
     width: clamp(34px, 8.5vw, 52px);
     height: clamp(34px, 8.5vw, 52px);
+    min-width: 34px;
+    min-height: 34px;
     border-radius: 50%;
     cursor: pointer;
     background: #0f172a;
@@ -78,6 +80,7 @@
     position: relative; 
     transition: transform 0.4s; 
     transform-style: preserve-3d; 
+    -webkit-transform-style: preserve-3d;
     cursor: pointer; 
     background: transparent !important;
     border: none !important;
@@ -95,6 +98,7 @@
     height: 100%;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+    transform: translateZ(0);
     border-radius: 0.85rem;
     display: flex;
     align-items: center;

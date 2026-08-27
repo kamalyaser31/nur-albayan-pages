@@ -176,3 +176,15 @@
     background: linear-gradient(145deg, #f43f5e 0%, #be123c 100%) !important;
     filter: drop-shadow(0 4px 8px rgba(190, 18, 60, 0.5)) !important;
 }
+
+/* Wheel Spin Center Button Target */
+#spin-btn {
+    width: 72px;
+    height: 72px;
+}
+@media (min-width: 640px) {
+    #spin-btn {
+        width: 88px;
+        height: 88px;
+    }
+}

@@ -1,0 +1,32 @@
+name: Continuous Integration & Test Suite
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
+  workflow_dispatch:
+
+jobs:
+  validate-and-test:
+    name: Run Tests & Integrity Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # scripts/ أدوات محلية متجاهلة عمداً؛ يحوي المشغل المتتبع الفحوص اللازمة
+      # كي يعمل CI من نسخة checkout نظيفة.
+      - name: Run Self-Contained Regression Suite
+        run: python run_tests.py

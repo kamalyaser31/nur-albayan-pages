@@ -16,6 +16,7 @@
 .my-4 { margin-block: 1rem; }
 .my-6 { margin-block: 1.5rem; }
 
+.mx-0\.5 { margin-inline: 0.125rem; }
 .mx-1 { margin-inline: 0.25rem; }
 .mx-2 { margin-inline: 0.5rem; }
 .mx-3 { margin-inline: 0.75rem; }
@@ -108,6 +109,7 @@
 .pb-3 { padding-block-end: 0.75rem; padding-bottom: 0.75rem; }
 .pb-4 { padding-block-end: 1rem; padding-bottom: 1rem; }
 .pb-16 { padding-block-end: 4rem; padding-bottom: 4rem; }
+.pb-20 { padding-block-end: 5rem; padding-bottom: 5rem; }
 
 /* Logical Inline Paddings */
 .ps-0 { padding-inline-start: 0px; }

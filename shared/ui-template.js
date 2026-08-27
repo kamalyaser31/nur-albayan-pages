@@ -1,20 +1,4 @@
 /**
- * تحديث زر اللغة وشارة الطالب النشط في ترويسة الدرس تلقائياً
- */
-function updateTopNavLang() {
-    if (typeof i18n === 'undefined') return;
-    const isAr = i18n.getLocale() === 'ar';
-    const langBtnText = document.getElementById('top-nav-lang-text');
-    const langBtn = document.getElementById('top-nav-lang-btn');
-    if (langBtnText) {
-        langBtnText.textContent = isAr ? 'EN' : 'عربي';
-    }
-    if (langBtn) {
-        langBtn.setAttribute('aria-label', isAr ? 'التحويل إلى اللغة الإنجليزية' : 'Switch to Arabic language');
-    }
-}
-
-/**
  * تحديث شارة الطالب النشط في ترويسة الدرس تلقائياً عبر studentManager
  */
 function updateActiveStudentPill() {
@@ -74,21 +58,18 @@ function updateDynamicLessonUI() {
     if (typeof i18n !== 'undefined' && typeof i18n.translateDOM === 'function') {
         i18n.translateDOM();
     }
-    updateTopNavLang();
     updateActiveStudentPill();
     updateTemplateFooter();
 }
 
 // إتاحة الدوال عالمياً وتحديث الشارة عند جاهزية الصفحة
 window.updateActiveStudentPill = updateActiveStudentPill;
-window.updateTopNavLang = updateTopNavLang;
 window.updateTemplateFooter = updateTemplateFooter;
 window.updateDynamicLessonUI = updateDynamicLessonUI;
 
 if (typeof document !== 'undefined') {
     const initTopBar = () => {
         updateActiveStudentPill();
-        updateTopNavLang();
         setupModalAccessibility();
     };
     if (document.readyState === 'loading') {
@@ -100,7 +81,9 @@ if (typeof document !== 'undefined') {
 
 // الاستماع لحدث تغيير اللغة أو الاشتراك في المتجر الموحد لتحديث الواجهة تلقائياً
 if (typeof window !== 'undefined') {
-    window.addEventListener(NBContracts.EVENTS.LOCALE_CHANGED, updateDynamicLessonUI);
+    if (typeof window.addEventListener === 'function') {
+        window.addEventListener(NBContracts.EVENTS.LOCALE_CHANGED, updateDynamicLessonUI);
+    }
     if (typeof nbStore !== 'undefined' && typeof nbStore.subscribe === 'function') {
         nbStore.subscribe('locale', updateDynamicLessonUI);
     }

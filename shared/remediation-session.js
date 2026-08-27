@@ -113,7 +113,7 @@
             clearInterval(this.timer);
             this.timer = null;
         }
-        const timerPill = document.getElementById('timer-pill') || document.getElementById('challenge-timer');
+        const timerPill = document.getElementById('challenge-timer');
         if (timerPill) timerPill.classList.add('hidden');
 
         this.hideAll();
@@ -168,7 +168,7 @@
         }
 
         // إخفاء مؤقت التحدي أثناء المعالجة
-        const timerPill = document.getElementById('timer-pill') || document.getElementById('challenge-timer');
+        const timerPill = document.getElementById('challenge-timer');
         if (timerPill) timerPill.classList.add('hidden');
 
         // إبقاء شريط تحفيز المعلم مفعلاً وظاهراً

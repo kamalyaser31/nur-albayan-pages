@@ -1,168 +1,95 @@
-function escapeHTML(str) {
-    return String(str || '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-}
+/**
+ * منصة نور البيان — محرك توليد واجهة الدروس التفاعلية (Micro-Component Architecture)
+ * Modular UI Template Engine for Nur Al-Bayan Lesson Pages
+ *
+ * تم تفكيك هذا القالب إلى مكونات واجهة صغيرة مستقلة (Micro-Renderers) لسهولة
+ * القراءة والصيانة وتطوير ميزات المنظومة.
+ */
+(function (global) {
+    'use strict';
 
-function buildAppUI() {
-    if (document.getElementById('learning-stage')) return; // Already exists
-
-    const cfg = window.PAGE_CONFIG || {};
-    const isAr = (typeof i18n !== 'undefined' && i18n.getLocale() === 'ar');
-    const title = escapeHTML(isAr ? (i18n.t('app_title') || 'نور البيان') : (cfg.title || 'Nour Al-Bayan'));
-
-    let rawSub = cfg.subtitle || '';
-    if (isAr) {
-        const pageMatch = rawSub.match(/Page\s+(\d+)/i);
-        const arBracketMatch = rawSub.match(/\(([^)]+)\)/);
-        if (pageMatch && arBracketMatch) {
-            rawSub = `الصفحة ${pageMatch[1]} • ${arBracketMatch[1]}`;
-        } else if (arBracketMatch) {
-            rawSub = arBracketMatch[1];
-        }
+    function escapeHTML(str) {
+        return String(str || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
     }
-    const subtitle = escapeHTML(rawSub || (isAr ? 'تعليم القراءة وضبط الحركات' : 'Harakat & Reading Practice'));
-    const footerText = escapeHTML(isAr ? `منظومة نور البيان التعليمية • ${subtitle}` : (cfg.footer || 'Nour Al-Bayan Learning System'));
-    const hasRules = (typeof rulesData !== 'undefined' && rulesData.length > 0) || (cfg.rules && cfg.rules.length > 0);
-    const game3Type = cfg.game3 || (typeof riddlesGame !== 'undefined' ? 'riddles' : (hasRules ? 'riddles' : 'memory'));
 
-    // توليد أزرار التحفيز الفوري للمعلم
-    const teacherPraiseIconButtonsHtml = [
-        { icon: '⭐', color: '#f59e0b', bg: 'bg-amber-100', text: 'text-amber-500', hoverBg: 'hover:bg-amber-200', ariaKey: 'praise_star' },
-        { icon: '❤️', color: '#ef4444', bg: 'bg-rose-100', text: 'text-rose-500', hoverBg: 'hover:bg-rose-200', ariaKey: 'praise_heart' }
-    ].map(b => `<button onclick="app.triggerFeedback('${b.icon}', '${b.color}', true)" class="p-1 sm:p-1.5 ${b.bg} ${b.text} rounded-full ${b.hoverBg} hover:scale-110 transition-all shadow-sm text-base sm:text-lg leading-none" data-i18n-aria="${b.ariaKey}" data-i18n-title="${b.ariaKey}" aria-label="${escapeHTML(i18n.t(b.ariaKey))}" title="${escapeHTML(i18n.t(b.ariaKey))}"><span aria-hidden="true">${b.icon}</span></button>`).join('');
+    /**
+     * 1. توليد شريط أدوات التحفيز الفوري للمعلم
+     */
+    function renderTeacherToolbar() {
+        const iconButtons = [
+            { icon: '⭐', color: '#f59e0b', bg: 'bg-amber-100', text: 'text-amber-500', hoverBg: 'hover:bg-amber-200', ariaKey: 'praise_star' },
+            { icon: '❤️', color: '#ef4444', bg: 'bg-rose-100', text: 'text-rose-500', hoverBg: 'hover:bg-rose-200', ariaKey: 'praise_heart' }
+        ].map(b => `
+            <button onclick="app.triggerFeedback('${b.icon}', '${b.color}', true)" class="p-1 sm:p-1.5 ${b.bg} ${b.text} rounded-full ${b.hoverBg} hover:scale-110 transition-all shadow-sm text-base sm:text-lg leading-none" data-i18n-aria="${b.ariaKey}" data-i18n-title="${b.ariaKey}" aria-label="${escapeHTML(i18n.t(b.ariaKey))}" title="${escapeHTML(i18n.t(b.ariaKey))}">
+                <span aria-hidden="true">${b.icon}</span>
+            </button>`).join('');
 
-    const teacherPraiseTextButtonsHtml = [
-        { key: 'txt_perfect', icon: '🌟', color: '#8b5cf6', bg: 'bg-purple-100', text: 'text-purple-700', hoverBg: 'hover:bg-purple-200', ariaKey: 'praise_perfect' },
-        { key: 'txt_excellent', icon: '🏆', color: '#10b981', bg: 'bg-emerald-100', text: 'text-emerald-700', hoverBg: 'hover:bg-emerald-200', ariaKey: 'praise_excellent' }
-    ].map(b => `<button onclick="app.triggerFeedback(i18n.t('${b.key}') + ' ${b.icon}', '${b.color}', true)" class="px-2 py-0.5 ${b.bg} ${b.text} rounded-md font-black text-[10px] sm:text-xs ${b.hoverBg} transition-colors" data-i18n="${b.key}" data-i18n-aria="${b.ariaKey}" aria-label="${escapeHTML(i18n.t(b.ariaKey))}">${escapeHTML(i18n.t(b.key))}</button>`).join('');
+        const textButtons = [
+            { key: 'txt_perfect', icon: '🌟', color: '#8b5cf6', bg: 'bg-purple-100', text: 'text-purple-700', hoverBg: 'hover:bg-purple-200', ariaKey: 'praise_perfect' },
+            { key: 'txt_excellent', icon: '🏆', color: '#10b981', bg: 'bg-emerald-100', text: 'text-emerald-700', hoverBg: 'hover:bg-emerald-200', ariaKey: 'praise_excellent' }
+        ].map(b => `
+            <button onclick="app.triggerFeedback(i18n.t('${b.key}') + ' ${b.icon}', '${b.color}', true)" class="px-2 py-0.5 ${b.bg} ${b.text} rounded-md font-black text-[10px] sm:text-xs ${b.hoverBg} transition-colors" data-i18n="${b.key}" data-i18n-aria="${b.ariaKey}" aria-label="${escapeHTML(i18n.t(b.ariaKey))}">
+                ${escapeHTML(i18n.t(b.key))}
+            </button>`).join('');
 
-    // توليد تبويبات ألعاب Wordwall بنمط WAI-ARIA
-    const wordwallTabsHtml = [
-        { mode: 'box', icon: '🎁', key: 'game_box_tab', active: true },
-        { mode: 'curtain', icon: '🎭', key: 'game_curtain_tab' },
-        { mode: 'ladder', icon: '🪜', key: 'game_ladder_tab' },
-        { mode: 'wheel', icon: '🎡', key: 'game_wheel_tab' },
-        { mode: 'cards', icon: '🃏', key: 'game_cards_tab' },
-        { mode: 'tiles', icon: '🀄', key: 'game_tiles_tab' },
-        { mode: 'honeycomb', icon: '⬡', key: 'game_honeycomb_tab' }
-    ].map(tab => {
-        const label = i18n.t(tab.key);
-        const containerId = (tab.mode === 'box' || tab.mode === 'curtain') ? 'ww-box-container' : `ww-${tab.mode}-container`;
         return `
-                    <button role="tab" onclick="wordwallRoom.switchMode('${tab.mode}')" id="tab-${tab.mode}" aria-selected="${tab.active ? 'true' : 'false'}" aria-controls="${containerId}" tabindex="${tab.active ? '0' : '-1'}" class="game-tab ${tab.active ? 'active ' : ''}py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" data-i18n-aria="${tab.key}" aria-label="${escapeHTML(label)}">
-                        <span class="text-base sm:text-lg" aria-hidden="true">${tab.icon}</span> <span class="hidden sm:inline" data-i18n="${tab.key}">${escapeHTML(label)}</span>
-                    </button>`;
-    }).join('');
-
-    const rulesButtonHtml = hasRules ? `
-        <button onclick="app.jumpTo('rules')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3.5 px-6 rounded-[1.5rem] text-lg shadow-[0_4px_0_#3730a3] active:translate-y-1 active:shadow-none transition-all flex items-center justify-between" data-i18n-aria="aria_open_rules" aria-label="${escapeHTML(i18n.t('aria_open_rules'))}">
-            <span class="flex items-center gap-2"><span aria-hidden="true">📖</span> <span data-i18n="lesson_rules">${escapeHTML(i18n.t('lesson_rules'))}</span></span>
-            <span class="text-xl" aria-hidden="true">➡</span>
-        </button>` : '';
-
-    const ruleStageHtml = hasRules ? `
-        <!-- STAGE 0: LESSON RULES -->
-        <section id="rule-stage" class="hidden w-full h-full flex flex-col justify-center items-center gap-4 py-4 overflow-hidden shrink-0" role="region" data-i18n-aria="aria_rules_container" aria-label="${escapeHTML(i18n.t('aria_rules_container'))}">
-            <div class="text-center shrink-0">
-                <span id="rule-step-indicator" class="text-xs font-bold text-emerald-600 bg-emerald-100 px-3.5 py-1 rounded-full uppercase tracking-wider" aria-live="polite" data-i18n="lesson_rules">${escapeHTML(i18n.t('lesson_rules', 'قواعد الدرس'))}</span>
-                <h2 id="rule-title" class="text-2xl sm:text-3xl font-black text-slate-800 mt-2" data-i18n="lesson_rules">${escapeHTML(i18n.t('lesson_rules', 'عنوان القاعدة'))}</h2>
-                <p id="rule-desc" class="text-sm sm:text-base text-slate-500 max-w-md mx-auto mt-1 leading-relaxed"></p>
-            </div>
-            <div class="w-full max-w-3xl bg-white border-4 sm:border-8 border-emerald-400 rounded-[2.5rem] shadow-xl p-6 flex flex-col justify-center items-center h-[38vh] min-h-[200px] max-h-[340px]">
-                <span id="rule-big-text" class="quran-font text-center text-slate-800 leading-relaxed select-text px-4 w-full break-words" style="font-size: clamp(3rem, 10vh, 6.5rem);" role="region" data-i18n-aria="aria_current_word" aria-label="${escapeHTML(i18n.t('aria_current_word'))}" aria-live="polite">
-                </span>
-            </div>
-            <div class="flex justify-center gap-4 w-full max-w-sm mt-3 shrink-0">
-                <button id="rule-prev-btn" onclick="ruleManager.prev()" class="hidden bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3.5 px-6 rounded-2xl text-sm transition-colors shadow-sm" data-i18n-aria="aria_prev_rule" aria-label="${escapeHTML(i18n.t('aria_prev_rule'))}">
-                    <span aria-hidden="true">⬅</span> <span data-i18n="nav_prev_label">${escapeHTML(i18n.t('nav_prev_label', 'السابق'))}</span>
-                </button>
-                <button id="rule-next-btn" onclick="ruleManager.next()" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-black py-4 px-8 rounded-2xl text-sm shadow-[0_4px_0_#047857] active:translate-y-1 active:shadow-none transition-all flex-1" data-i18n-aria="aria_next_rule" aria-label="${escapeHTML(i18n.t('aria_next_rule'))}">
-                    <span data-i18n="start_challenge">${escapeHTML(i18n.t('start_challenge', 'بدء التحدي'))}</span> <span aria-hidden="true">🚀</span>
-                </button>
-            </div>
-        </section>` : '';
-
-    const game3StageHtml = (game3Type === 'riddles') ? `
-        <!-- STAGE 3C: MIDPOINT GAME 3 (SECRET RIDDLES) -->
-        <section id="riddles-stage" class="hidden w-full h-full flex flex-col justify-center items-center text-center p-4 sm:p-6 rounded-[2.5rem] shadow-2xl text-white bg-slate-900 shrink-0 z-10">
-            <h2 class="text-3xl sm:text-4xl font-black text-amber-400 mt-2"><span aria-hidden="true">👑</span> <span data-i18n="secret_riddles_title">${escapeHTML(i18n.t('secret_riddles_title', 'صندوق الفوازير السرية'))}</span> <span aria-hidden="true">👑</span></h2>
-            <div id="riddle-container" class="bg-white/10 p-5 rounded-3xl backdrop-blur-sm border border-white/20 min-h-[180px] w-full max-w-2xl flex flex-col justify-center gap-4 mt-3">
-                <p id="riddle-question" class="text-lg sm:text-2xl font-bold leading-normal"></p>
-                <div id="riddle-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3"></div>
-            </div>
-            <p id="riddle-feedback" class="text-lg sm:text-xl font-bold h-8 text-emerald-400 mt-3"></p>
-            <div class="flex flex-wrap justify-center gap-3 w-full mt-2 max-w-md">
-                <button onclick="riddlesGame.reset()" class="bg-purple-800/40 hover:bg-purple-800/60 border border-purple-400/30 text-white px-6 py-2.5 rounded-full font-bold text-sm backdrop-blur-sm" data-i18n-aria="reset" aria-label="${escapeHTML(i18n.t('reset'))}"><span data-i18n="reset">${escapeHTML(i18n.t('reset', 'إعادة ضبط'))}</span> <span aria-hidden="true">🔄</span></button>
-                <button id="riddles-resume-btn" onclick="app.resume(3)" class="bg-yellow-400 hover:bg-yellow-300 text-purple-900 px-8 py-2.5 rounded-full font-black text-sm shadow-md transition transform hover:-translate-y-0.5" data-i18n-aria="skip_and_read" aria-label="${escapeHTML(i18n.t('skip_and_read'))}"><span data-i18n="skip_and_read">${escapeHTML(i18n.t('skip_and_read', 'متابعة القراءة'))}</span> <span aria-hidden="true">⏭️</span></button>
-            </div>
-        </section>` : `
-        <!-- STAGE 3C: MIDPOINT GAME 3 (MEMORY MATCH) -->
-        <section id="memory-stage" class="hidden w-full h-full flex flex-col justify-center items-center text-center p-4 rounded-[2.5rem] shadow-2xl text-white bg-slate-900 relative overflow-hidden shrink-0 z-10">
-            <h2 class="text-2xl sm:text-3xl font-black text-amber-400 drop-shadow-md mt-1"><span data-i18n="game_memory">${escapeHTML(i18n.t('game_memory', 'تحدي الذاكرة'))}</span> <span aria-hidden="true">🧠</span></h2>
-            <div id="memory-board" class="mem-board mt-3"></div>
-            <div class="bg-black/20 py-1.5 px-6 rounded-full inline-block backdrop-blur-sm border border-white/10 shadow-sm mt-3">
-                <h3 id="memory-status" class="text-xs sm:text-sm font-bold text-white tracking-wide" aria-live="polite" data-i18n="prompt_memory">${escapeHTML(i18n.t('prompt_memory'))}</h3>
-            </div>
-            <div class="flex flex-wrap justify-center gap-3 w-full mt-4 max-w-md">
-                <button onclick="memoryGame.reset()" class="bg-purple-800/40 hover:bg-purple-800/60 border border-purple-400/30 text-white px-6 py-2.5 rounded-full font-bold text-sm backdrop-blur-sm" data-i18n-aria="reset" aria-label="${escapeHTML(i18n.t('reset'))}"><span data-i18n="reset">${escapeHTML(i18n.t('reset', 'إعادة ضبط'))}</span> <span aria-hidden="true">🔄</span></button>
-                <button id="memory-resume-btn" onclick="app.resume(3)" class="bg-yellow-400 hover:bg-yellow-300 text-purple-900 px-8 py-2.5 rounded-full font-black text-sm shadow-md transition transform hover:-translate-y-0.5" data-i18n-aria="skip_and_read" aria-label="${escapeHTML(i18n.t('skip_and_read'))}"><span data-i18n="skip_and_read">${escapeHTML(i18n.t('skip_and_read', 'متابعة القراءة'))}</span> <span aria-hidden="true">⏭️</span></button>
-            </div>
-        </section>`;
-
-    const fullHtml = `
-    <!-- Interactive Feedback Badge -->
-    <div id="badge-ui" class="feedback-badge bg-white shadow-xl px-8 py-3 rounded-full text-2xl sm:text-3xl font-black border-4 border-emerald-400 whitespace-nowrap" role="status" aria-live="assertive"></div>
-
-    <!-- Navigation Header with Interactive Progress Bar -->
-    <header id="top-nav" class="w-full bg-white/95 backdrop-blur-sm border-b border-slate-200/80 px-3 sm:px-6 py-2 flex justify-between items-center shadow-sm shrink-0 z-30 relative">
-        <div id="progress-bar" style="--progress: 0;" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" data-i18n-aria="progress_aria" aria-label="${escapeHTML(i18n.t('progress_aria'))}"></div>
-        <div class="w-full max-w-5xl mx-auto flex justify-between items-center gap-2">
-            <!-- Score & Timer Pill -->
-            <div class="flex items-center gap-2 sm:gap-3">
-                <div class="flex items-center gap-2 bg-emerald-50/80 border border-emerald-200 px-3 py-1 rounded-full shadow-inner">
-                    <span class="text-slate-600 text-[10px] sm:text-xs font-black uppercase tracking-wider" data-i18n="score">${escapeHTML(i18n.t('score'))}</span>
-                    <span id="score-val" class="text-base sm:text-lg font-black text-emerald-600 leading-none" aria-live="polite" data-i18n-aria="score" aria-label="${escapeHTML(i18n.t('score'))}">0</span>
-                </div>
-                <div id="challenge-timer" class="hidden bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full font-mono font-bold text-xs shadow-inner" role="timer">
-                    <span aria-hidden="true">⏱</span> <span id="timer-val">10.0</span>s
-                </div>
-                <div id="active-student-pill" class="flex items-center gap-1.5 bg-emerald-50/90 border border-emerald-200 px-2.5 sm:px-3 py-1 rounded-full shadow-inner text-xs sm:text-sm font-bold text-emerald-800" role="status" data-i18n-aria="active_badge" aria-label="${escapeHTML(i18n.t('active_badge'))}">
-                    <span id="active-student-avatar-icon" class="text-sm" aria-hidden="true">👤</span>
-                    <span id="active-student-name-text" class="max-w-[80px] sm:max-w-[120px] truncate font-black" data-i18n="general_session">${escapeHTML(i18n.t('general_session'))}</span>
-                </div>
-            </div>
-
-            <!-- Teacher Manual Feedback Triggers -->
-            <div class="flex items-center gap-1 sm:gap-1.5 bg-slate-50 px-1.5 sm:px-2.5 py-1 rounded-full border border-slate-200 shrink-0" role="toolbar" data-i18n-aria="aria_teacher_praise_toolbar" aria-label="${escapeHTML(i18n.t('aria_teacher_praise_toolbar'))}">
-                ${teacherPraiseIconButtonsHtml}
+            <div id="teacher-praise-bar" class="flex items-center gap-1 sm:gap-1.5 bg-slate-50 px-1.5 sm:px-2.5 py-1 rounded-full border border-slate-200 shrink-0" role="toolbar" data-i18n-aria="aria_teacher_praise_toolbar" aria-label="${escapeHTML(i18n.t('aria_teacher_praise_toolbar'))}">
+                ${iconButtons}
                 <div class="w-px h-4 bg-slate-200 mx-0.5 hidden md:block" aria-hidden="true"></div>
                 <div class="hidden md:flex items-center gap-1">
-                    ${teacherPraiseTextButtonsHtml}
+                    ${textButtons}
+                </div>
+            </div>`;
+    }
+
+    /**
+     * 2. توليد ترويسة التنقل وشريط التقدم والنقاط
+     */
+    function renderNavigationHeader(teacherToolbarHtml) {
+        return `
+        <header id="top-nav" class="w-full bg-white/95 backdrop-blur-sm border-b border-slate-200/80 px-3 sm:px-6 py-2 flex justify-between items-center shadow-sm shrink-0 z-30 relative">
+            <div id="progress-bar" style="--progress: 0;" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" data-i18n-aria="progress_aria" aria-label="${escapeHTML(i18n.t('progress_aria'))}"></div>
+            <div class="w-full max-w-5xl mx-auto flex justify-between items-center gap-2">
+                <!-- Score & Timer Pill -->
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <div class="flex items-center gap-2 bg-emerald-50/80 border border-emerald-200 px-3 py-1 rounded-full shadow-inner">
+                        <span class="text-slate-600 text-[10px] sm:text-xs font-black uppercase tracking-wider" data-i18n="score">${escapeHTML(i18n.t('score'))}</span>
+                        <span id="score-val" class="text-base sm:text-lg font-black text-emerald-600 leading-none" aria-live="polite" data-i18n-aria="score" aria-label="${escapeHTML(i18n.t('score'))}">0</span>
+                    </div>
+                    <div id="challenge-timer" class="hidden bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full font-mono font-bold text-xs shadow-inner" role="timer">
+                        <span aria-hidden="true">⏱</span> <span id="timer-val">10.0</span>s
+                    </div>
+                    <div id="active-student-pill" class="flex items-center gap-1.5 bg-emerald-50/90 border border-emerald-200 px-2.5 sm:px-3 py-1 rounded-full shadow-inner text-xs sm:text-sm font-bold text-emerald-800" role="status" data-i18n-aria="active_badge" aria-label="${escapeHTML(i18n.t('active_badge'))}">
+                        <span id="active-student-avatar-icon" class="text-sm" aria-hidden="true">👤</span>
+                        <span id="active-student-name-text" class="max-w-[80px] sm:max-w-[120px] truncate font-black" data-i18n="general_session">${escapeHTML(i18n.t('general_session'))}</span>
+                    </div>
+                </div>
+
+                <!-- Teacher Manual Feedback Triggers -->
+                ${teacherToolbarHtml}
+
+                <!-- Dropdown Navigator & Settings Button -->
+                <div class="flex items-center gap-1.5">
+                    <div id="selector-wrapper" class="flex items-center bg-slate-50 px-2 sm:px-3 py-1 rounded-full border border-slate-200 max-w-[130px] sm:max-w-[200px]">
+                        <select id="example-navigator" onchange="app.jumpTo(this.value)" class="bg-transparent text-emerald-700 font-bold text-xs sm:text-sm outline-none cursor-pointer w-full text-center truncate" data-i18n-aria="nav_section_aria" aria-label="${escapeHTML(i18n.t('nav_section_aria'))}">
+                        </select>
+                    </div>
+                    <button onclick="if(typeof settingsManager!=='undefined')settingsManager.open()" class="p-1.5 sm:p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition-colors shadow-sm text-sm sm:text-base leading-none cursor-pointer" data-i18n-aria="open_settings_btn" data-i18n-title="open_settings_btn" aria-label="${escapeHTML(i18n.t('open_settings_btn'))}" title="Teacher Settings"><span aria-hidden="true">⚙️</span></button>
                 </div>
             </div>
+        </header>`;
+    }
 
-            <!-- Dropdown Navigator & Settings Button & Language Switcher -->
-            <div class="flex items-center gap-1.5">
-                <div id="selector-wrapper" class="flex items-center bg-slate-50 px-2 sm:px-3 py-1 rounded-full border border-slate-200 max-w-[130px] sm:max-w-[200px]">
-                    <select id="example-navigator" onchange="app.jumpTo(this.value)" class="bg-transparent text-emerald-700 font-bold text-xs sm:text-sm outline-none cursor-pointer w-full text-center truncate" data-i18n-aria="nav_section_aria" aria-label="${escapeHTML(i18n.t('nav_section_aria'))}">
-                    </select>
-                </div>
-                <!-- زر تبديل اللغة السريع -->
-                <button id="top-nav-lang-btn" onclick="if(typeof i18n !== 'undefined') i18n.toggleLocale()" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-full transition-colors font-bold text-xs shadow-sm flex items-center gap-1 cursor-pointer" aria-label="${(typeof i18n !== 'undefined' && i18n.getLocale() === 'ar') ? 'التحويل إلى اللغة الإنجليزية' : 'Switch to Arabic language'}">
-                    <span aria-hidden="true">🌐</span>
-                    <span id="top-nav-lang-text">${(typeof i18n !== 'undefined' && i18n.getLocale() === 'ar') ? 'EN' : 'عربي'}</span>
-                </button>
-                <button onclick="if(typeof settingsManager!=='undefined')settingsManager.open()" class="p-1.5 sm:p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition-colors shadow-sm text-sm sm:text-base leading-none cursor-pointer" data-i18n-aria="open_settings_btn" data-i18n-title="open_settings_btn" aria-label="${escapeHTML(i18n.t('open_settings_btn'))}" title="Teacher Settings"><span aria-hidden="true">⚙️</span></button>
-            </div>
-        </div>
-    </header>
-
-    <main class="flex-1 w-full max-w-5xl px-3 sm:px-4 flex flex-col justify-center items-center overflow-hidden relative">
-
+    /**
+     * 3. توليد واجهة القائمة الرئيسية للدرس
+     */
+    function renderMainMenuStage(title, subtitle, rulesButtonHtml) {
+        return `
         <!-- STAGE -1: MAIN MENU -->
         <section id="main-menu-stage" class="w-full h-full flex flex-col justify-center items-center gap-3 sm:gap-4 py-3 overflow-y-auto shrink-0 custom-scrollbar">
             <div class="text-center mb-1">
@@ -203,24 +130,42 @@ function buildAppUI() {
                     <span class="text-2xl" aria-hidden="true">➡</span>
                 </button>
             </div>
-        </section>
+        </section>`;
+    }
 
-        ${ruleStageHtml}
-
-        <!-- STAGE 0.5: GAME TRANSITION -->
-        <section id="game-transition-stage" class="hidden w-full h-full flex flex-col justify-center items-center text-center p-6 rounded-[2.5rem] shadow-xl text-white bg-emerald-600 relative overflow-hidden shrink-0 z-20" role="dialog" aria-modal="true" aria-labelledby="transition-title">
-            <h2 id="transition-title" class="text-3xl sm:text-5xl font-black text-yellow-300 drop-shadow-md mb-3" data-i18n="amazing_job">${escapeHTML(i18n.t('amazing_job'))}</h2>
-            <p class="text-lg sm:text-2xl font-bold text-white mb-6" data-i18n="break_message">${escapeHTML(i18n.t('break_message'))}</p>
-            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full max-w-md">
-                <button id="btn-play-game" onclick="app.enterGame()" class="flex-1 bg-yellow-400 hover:bg-yellow-300 text-indigo-900 py-3.5 sm:py-4 rounded-2xl text-lg font-black shadow-[0_5px_0_#ca8a04] active:translate-y-[5px] active:shadow-none transition-all" data-i18n-aria="play_game" aria-label="${escapeHTML(i18n.t('play_game'))}">
-                    <span aria-hidden="true">🎮</span> <span data-i18n="play_game">${escapeHTML(i18n.t('play_game'))}</span>
+    /**
+     * 4. توليد واجهة عرض القواعد التعليمية والتجويدية
+     */
+    function renderRuleStage(hasRules) {
+        if (!hasRules) return '';
+        return `
+        <!-- STAGE 0: LESSON RULES -->
+        <section id="rule-stage" class="hidden w-full h-full flex flex-col justify-center items-center gap-4 py-4 overflow-hidden shrink-0" role="region" data-i18n-aria="aria_rules_container" aria-label="${escapeHTML(i18n.t('aria_rules_container'))}">
+            <div class="text-center shrink-0">
+                <span id="rule-step-indicator" class="text-xs font-bold text-emerald-600 bg-emerald-100 px-3.5 py-1 rounded-full uppercase tracking-wider" aria-live="polite" data-i18n="lesson_rules">${escapeHTML(i18n.t('lesson_rules', 'قواعد الدرس'))}</span>
+                <h2 id="rule-title" class="text-2xl sm:text-3xl font-black text-slate-800 mt-2" data-i18n="lesson_rules">${escapeHTML(i18n.t('lesson_rules', 'عنوان القاعدة'))}</h2>
+                <p id="rule-desc" class="text-sm sm:text-base text-slate-500 max-w-md mx-auto mt-1 leading-relaxed"></p>
+            </div>
+            <div class="w-full max-w-3xl bg-white border-4 sm:border-8 border-emerald-400 rounded-[2.5rem] shadow-xl p-6 flex flex-col justify-center items-center h-[38vh] min-h-[200px] max-h-[340px]">
+                <span id="rule-big-text" class="quran-font text-center text-slate-800 leading-relaxed select-text px-4 w-full break-words" style="font-size: clamp(3rem, 10vh, 6.5rem);" role="region" data-i18n-aria="aria_current_word" aria-label="${escapeHTML(i18n.t('aria_current_word'))}" aria-live="polite">
+                </span>
+            </div>
+            <div class="flex justify-center gap-4 w-full max-w-sm mt-3 shrink-0">
+                <button id="rule-prev-btn" onclick="ruleManager.prev()" class="hidden bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3.5 px-6 rounded-2xl text-sm transition-colors shadow-sm" data-i18n-aria="aria_prev_rule" aria-label="${escapeHTML(i18n.t('aria_prev_rule'))}">
+                    <span aria-hidden="true">⬅</span> <span data-i18n="nav_prev_label">${escapeHTML(i18n.t('nav_prev_label', 'السابق'))}</span>
                 </button>
-                <button id="btn-skip-game" onclick="app.resume(app.pendingGame)" class="flex-1 bg-white/20 hover:bg-white/30 text-white border-2 border-white/50 py-3.5 sm:py-4 rounded-2xl text-lg font-bold transition-all backdrop-blur-sm" data-i18n-aria="aria_skip_game" aria-label="${escapeHTML(i18n.t('aria_skip_game'))}">
-                    <span aria-hidden="true">⏭️</span> <span data-i18n="skip_and_read">${escapeHTML(i18n.t('skip_and_read'))}</span>
+                <button id="rule-next-btn" onclick="ruleManager.next()" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-black py-4 px-8 rounded-2xl text-sm shadow-[0_4px_0_#047857] active:translate-y-1 active:shadow-none transition-all flex-1" data-i18n-aria="aria_next_rule" aria-label="${escapeHTML(i18n.t('aria_next_rule'))}">
+                    <span data-i18n="start_challenge">${escapeHTML(i18n.t('start_challenge', 'بدء التحدي'))}</span> <span aria-hidden="true">🚀</span>
                 </button>
             </div>
-        </section>
+        </section>`;
+    }
 
+    /**
+     * 5. توليد واجهة تحدي القراءة الرئيسي
+     */
+    function renderLearningStage() {
+        return `
         <!-- STAGE 1: LEARNING / READING CHALLENGE -->
         <section id="learning-stage" class="hidden w-full flex flex-col justify-between items-center gap-2 py-2 flex-1 overflow-hidden relative">
             <div class="w-full max-w-4xl flex justify-between items-center px-4 shrink-0 h-8">
@@ -259,56 +204,38 @@ function buildAppUI() {
                     </button>
                 </div>
             </div>
-        </section>
+        </section>`;
+    }
 
-        <!-- STAGE 2: MIDPOINT GAME 1 (TIC-TAC-TOE) -->
-        <section id="xo-stage" class="hidden w-full h-full flex flex-col justify-center items-center text-center p-2 sm:p-4 rounded-[2.5rem] text-white bg-gradient-to-br from-teal-600 via-emerald-600 to-green-700 relative overflow-hidden shrink-0 z-10">
-            <div class="relative z-10 flex flex-col items-center justify-center h-full w-full max-w-3xl gap-2 sm:gap-3">
-                <div class="flex flex-col items-center gap-1">
-                    <h2 class="text-3xl sm:text-4xl font-black text-yellow-300 drop-shadow-md"><span data-i18n="game_xo">${escapeHTML(i18n.t('game_xo'))}</span> <span aria-hidden="true">🎮</span></h2>
-                    <!-- Controls Toolbar -->
-                    <div class="flex items-center justify-center gap-2 mt-1" role="toolbar" data-i18n-aria="aria_game_mode_controls" aria-label="${escapeHTML(i18n.t('aria_game_mode_controls'))}">
-                        <button id="xo-mode-btn" onclick="if(typeof gameAI!=='undefined')gameAI.toggleMode('xo')" class="bg-emerald-500/80 hover:bg-emerald-500 text-white border border-emerald-300/40 px-3.5 py-1.5 rounded-full font-bold text-xs shadow-sm transition-all" data-i18n-aria="aria_toggle_opponent" aria-label="${escapeHTML(i18n.t('aria_toggle_opponent'))}"><span aria-hidden="true">🤖</span> <span data-i18n="ai_mode_vs_computer">${escapeHTML(i18n.t('ai_mode_vs_computer'))}</span></button>
-                        <button id="xo-diff-btn" onclick="if(typeof gameAI!=='undefined')gameAI.toggleDifficulty()" class="bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold px-3 py-1.5 rounded-full text-xs shadow-sm transition-all" data-i18n-aria="aria_toggle_diff" aria-label="${escapeHTML(i18n.t('aria_toggle_diff'))}"><span data-i18n="diff_easy">${escapeHTML(i18n.t('diff_easy'))}</span></button>
-                    </div>
-                </div>
-                <div class="xo-board-container mt-1">
-                    <div id="xo-board" class="grid grid-cols-3 gap-2.5 sm:gap-3 bg-white/20 p-3 sm:p-4 rounded-[2rem] backdrop-blur-md shadow-inner border border-white/25 w-full h-full"></div>
-                </div>
-                <div class="bg-black/20 py-1.5 px-6 rounded-full inline-block backdrop-blur-sm border border-white/10 shadow-sm mt-1">
-                    <h3 id="xo-status" class="text-sm sm:text-base font-bold text-white tracking-wide" aria-live="polite" data-i18n="xo_default_turn">${escapeHTML(i18n.t('xo_default_turn'))}</h3>
-                </div>
-                <div class="flex flex-wrap justify-center gap-3 w-full mt-2">
-                    <button onclick="xoGame.reset()" class="bg-white/20 hover:bg-white/30 text-white border border-white/30 px-6 py-2.5 rounded-full font-bold text-sm transition-transform hover:scale-105 backdrop-blur-sm" data-i18n-aria="reset" aria-label="${escapeHTML(i18n.t('reset'))}"><span data-i18n="reset">${escapeHTML(i18n.t('reset'))}</span> <span aria-hidden="true">🔄</span></button>
-                    <button id="xo-resume-btn" onclick="app.resume(1)" class="bg-yellow-400 hover:bg-yellow-300 text-teal-900 px-8 py-2.5 rounded-full font-black text-sm shadow-md transform transition hover:-translate-y-0.5" data-i18n-aria="skip_and_read" aria-label="${escapeHTML(i18n.t('skip_and_read'))}"><span data-i18n="skip_and_read">${escapeHTML(i18n.t('skip_and_read'))}</span> <span aria-hidden="true">⏭️</span></button>
-                </div>
-            </div>
-        </section>
+    /**
+     * 6. توليد تبويبات ألعاب Wordwall
+     */
+    function renderWordwallTabs() {
+        const tabs = [
+            { mode: 'box', icon: '🎁', key: 'game_box_tab', active: true },
+            { mode: 'curtain', icon: '🎭', key: 'game_curtain_tab' },
+            { mode: 'ladder', icon: '🪜', key: 'game_ladder_tab' },
+            { mode: 'wheel', icon: '🎡', key: 'game_wheel_tab' },
+            { mode: 'cards', icon: '🃏', key: 'game_cards_tab' },
+            { mode: 'tiles', icon: '🀄', key: 'game_tiles_tab' },
+            { mode: 'honeycomb', icon: '⬡', key: 'game_honeycomb_tab' }
+        ];
 
-        <!-- STAGE 3B: MIDPOINT GAME 2 (CONNECT 4) -->
-        <section id="c4-stage" class="hidden w-full h-full flex flex-col justify-center items-center text-center p-3 sm:p-4 rounded-[2.5rem] shadow-xl text-white bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-700 relative overflow-hidden shrink-0 z-10">
-            <div class="relative z-10 flex flex-col items-center gap-2 sm:gap-3">
-                <div class="flex flex-col items-center gap-1">
-                    <h2 class="text-2xl sm:text-3xl font-black text-yellow-300 drop-shadow-md"><span data-i18n="game_c4">${escapeHTML(i18n.t('game_c4'))}</span> <span aria-hidden="true">🔴🟡</span></h2>
-                    <!-- Controls Toolbar -->
-                    <div class="flex items-center justify-center gap-2 mt-1" role="toolbar" data-i18n-aria="aria_game_mode_controls" aria-label="${escapeHTML(i18n.t('aria_game_mode_controls'))}">
-                        <button id="c4-mode-btn" onclick="if(typeof gameAI!=='undefined')gameAI.toggleMode('c4')" class="bg-sky-500/80 hover:bg-sky-500 text-white border border-sky-300/40 px-3.5 py-1.5 rounded-full font-bold text-xs shadow-sm transition-all" data-i18n-aria="aria_toggle_opponent" aria-label="${escapeHTML(i18n.t('aria_toggle_opponent'))}"><span aria-hidden="true">🤖</span> <span data-i18n="ai_mode_vs_computer">${escapeHTML(i18n.t('ai_mode_vs_computer'))}</span></button>
-                        <button id="c4-diff-btn" onclick="if(typeof gameAI!=='undefined')gameAI.toggleDifficulty()" class="bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold px-3 py-1.5 rounded-full text-xs shadow-sm transition-all" data-i18n-aria="aria_toggle_diff" aria-label="${escapeHTML(i18n.t('aria_toggle_diff'))}"><span data-i18n="diff_easy">${escapeHTML(i18n.t('diff_easy'))}</span></button>
-                    </div>
-                </div>
-                <div id="c4-board-container" class="c4-board-new grid-cols-7 mx-auto mt-1"></div>
-                <div class="bg-black/20 py-1.5 px-6 rounded-full inline-block backdrop-blur-sm border border-white/10 shadow-sm mt-2">
-                    <h3 id="c4-status" class="text-xs sm:text-sm font-bold text-white tracking-wide" aria-live="polite" data-i18n="c4_select_column">${escapeHTML(i18n.t('c4_select_column'))}</h3>
-                </div>
-                <div class="flex flex-wrap justify-center gap-3 w-full mt-3">
-                    <button onclick="c4Game.reset()" class="bg-blue-800/40 hover:bg-blue-800/60 border border-blue-400/30 text-white px-6 py-2.5 rounded-full font-bold text-sm backdrop-blur-sm" data-i18n-aria="reset" aria-label="${escapeHTML(i18n.t('reset'))}"><span data-i18n="reset">${escapeHTML(i18n.t('reset'))}</span> <span aria-hidden="true">🔄</span></button>
-                    <button id="c4-resume-btn" onclick="app.resume(2)" class="bg-yellow-400 hover:bg-yellow-300 text-blue-900 px-8 py-2.5 rounded-full font-black text-sm shadow-md transition transform hover:-translate-y-0.5" data-i18n-aria="skip_and_read" aria-label="${escapeHTML(i18n.t('skip_and_read'))}"><span data-i18n="skip_and_read">${escapeHTML(i18n.t('skip_and_read'))}</span> <span aria-hidden="true">⏭️</span></button>
-                </div>
-            </div>
-        </section>
+        return tabs.map(tab => {
+            const label = i18n.t(tab.key);
+            const containerId = (tab.mode === 'box' || tab.mode === 'curtain') ? 'ww-box-container' : `ww-${tab.mode}-container`;
+            return `
+                <button role="tab" onclick="wordwallRoom.switchMode('${tab.mode}')" id="tab-${tab.mode}" aria-selected="${tab.active ? 'true' : 'false'}" aria-controls="${containerId}" tabindex="${tab.active ? '0' : '-1'}" class="game-tab ${tab.active ? 'active ' : ''}py-1.5 px-3 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs sm:text-sm border border-transparent" data-i18n-aria="${tab.key}" aria-label="${escapeHTML(label)}">
+                    <span class="text-base sm:text-lg" aria-hidden="true">${tab.icon}</span> <span class="hidden sm:inline" data-i18n="${tab.key}">${escapeHTML(label)}</span>
+                </button>`;
+        }).join('');
+    }
 
-        ${game3StageHtml}
-
+    /**
+     * 7. توليد غرفة ألعاب Wordwall الشاملة
+     */
+    function renderWordwallPlayroom(wordwallTabsHtml) {
+        return `
         <!-- STAGE 4: WORDWALL PLAYROOM -->
         <section id="wordwall-stage" class="hidden w-full h-full flex flex-col items-center py-3 px-2 overflow-hidden bg-slate-50 rounded-3xl border border-slate-200 shadow-inner">
             <div class="w-full max-w-4xl flex flex-col sm:flex-row justify-between items-center mb-3 shrink-0 gap-3 px-3">
@@ -322,7 +249,7 @@ function buildAppUI() {
                     </button>
                 </div>
                 <nav id="wordwall-tabs" role="tablist" data-i18n-aria="games_room_title" aria-label="${escapeHTML(i18n.t('games_room_title'))}" class="bg-white p-1 rounded-2xl shadow-sm border border-slate-200 flex flex-nowrap gap-1 overflow-x-auto">
-${wordwallTabsHtml}
+                    ${wordwallTabsHtml}
                 </nav>
             </div>
 
@@ -335,10 +262,7 @@ ${wordwallTabsHtml}
                 </div>
 
                 <div id="ww-ladder-container" role="tabpanel" aria-labelledby="tab-ladder" class="hidden w-full h-full flex flex-col items-center justify-between p-2 max-w-4xl mx-auto overflow-y-auto custom-scrollbar" data-i18n-aria="aria_ladder_game" aria-label="${escapeHTML(i18n.t('aria_ladder_game'))}">
-                    <!-- Live Region for Blind Teacher: Announces step and word -->
                     <div id="ladder-live-announcer" class="sr-only" aria-live="assertive" aria-atomic="true"></div>
-
-                    <!-- Header with Round Selector & Step Counter -->
                     <div class="w-full flex justify-between items-center bg-white/80 border border-slate-200 rounded-2xl px-4 py-2 shrink-0 shadow-sm">
                         <div class="flex items-center gap-2">
                             <span class="text-xs font-black text-slate-500 uppercase tracking-wider" data-i18n="ladder_round_label">${escapeHTML(i18n.t('ladder_round_label'))}</span>
@@ -347,19 +271,12 @@ ${wordwallTabsHtml}
                         </div>
                         <span id="ladder-step-indicator" class="text-xs sm:text-sm font-black text-emerald-700 bg-emerald-100/80 px-3 py-1 rounded-full" aria-live="polite">الدرجة 0 من 5</span>
                     </div>
-
-                    <!-- Main Play Area: Ladder Visualization on Left, Big Word Card on Right -->
                     <div class="grid grid-cols-1 md:grid-cols-12 gap-3 w-full flex-1 my-2 min-h-0 items-center">
-                        <div class="md:col-span-4 flex flex-col gap-1.5 w-full max-h-[260px] md:max-h-[340px] overflow-y-auto custom-scrollbar p-2 bg-slate-100/80 rounded-2xl border border-slate-200" id="ladder-rungs" role="region" data-i18n-aria="aria_ladder_steps" aria-label="${escapeHTML(i18n.t('aria_ladder_steps'))}">
-                        </div>
-
+                        <div class="md:col-span-4 flex flex-col gap-1.5 w-full max-h-[260px] md:max-h-[340px] overflow-y-auto custom-scrollbar p-2 bg-slate-100/80 rounded-2xl border border-slate-200" id="ladder-rungs" role="region" data-i18n-aria="aria_ladder_steps" aria-label="${escapeHTML(i18n.t('aria_ladder_steps'))}"></div>
                         <div class="md:col-span-8 flex flex-col justify-center items-center bg-white border-4 border-emerald-400 rounded-3xl shadow-xl p-4 min-h-[180px] md:min-h-[280px] w-full">
-                            <div id="ladder-word-display" class="w-full flex-1 flex items-center justify-center text-center" role="region" data-i18n-aria="aria_ladder_challenge_word" aria-label="${escapeHTML(i18n.t('aria_ladder_challenge_word'))}" aria-live="polite">
-                            </div>
+                            <div id="ladder-word-display" class="w-full flex-1 flex items-center justify-center text-center" role="region" data-i18n-aria="aria_ladder_challenge_word" aria-label="${escapeHTML(i18n.t('aria_ladder_challenge_word'))}" aria-live="polite"></div>
                         </div>
                     </div>
-
-                    <!-- Control & Grading Buttons -->
                     <div class="w-full max-w-md shrink-0 space-y-2 pb-1">
                         <div class="grid grid-cols-2 gap-3">
                             <button onclick="ladderGame.grade(false)" class="bg-rose-500 hover:bg-rose-600 text-white py-3 rounded-2xl text-base font-black shadow-[0_4px_0_#be123c] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2" data-i18n-aria="aria_step_down" aria-label="${escapeHTML(i18n.t('aria_step_down'))}">
@@ -370,7 +287,7 @@ ${wordwallTabsHtml}
                             </button>
                         </div>
                         <div class="flex justify-center">
-                            <button id="ladder-reset-btn" onclick="ladderGame.reset()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 py-1.5 px-6 rounded-full text-xs font-bold transition-colors shadow-sm" data-i18n-aria="reset_ladder_round" aria-label="${escapeHTML(i18n.t('reset_ladder_round'))}">
+                            <button id="ladder-reset-btn" onclick="ladderGame.reset()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 py-2.5 px-6 rounded-full text-xs font-bold transition-colors shadow-sm cursor-pointer" data-i18n-aria="reset_ladder_round" aria-label="${escapeHTML(i18n.t('reset_ladder_round'))}">
                                 <span data-i18n="reset_ladder_round">${escapeHTML(i18n.t('reset_ladder_round'))}</span> <span aria-hidden="true">🔄</span>
                             </button>
                         </div>
@@ -441,8 +358,14 @@ ${wordwallTabsHtml}
                     <span data-i18n="view_final_report_btn">${escapeHTML(i18n.t('view_final_report_btn'))}</span> <span class="text-base" aria-hidden="true">🏆</span>
                 </button>
             </div>
-        </section>
+        </section>`;
+    }
 
+    /**
+     * 8. توليد النوافذ المنبثقة التفاعلية (Modals & Overlays)
+     */
+    function renderModals() {
+        return `
         <!-- GIGANTIC WORD DISPLAY MODAL OVERLAY -->
         <div id="word-overlay" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex flex-col justify-center items-center p-3 sm:p-6 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="revealed-info">
             <div class="giant-word-overlay bg-white rounded-[2.5rem] w-full max-w-3xl max-h-[90vh] p-5 sm:p-8 flex flex-col justify-between items-center shadow-2xl border-4 border-emerald-400 overflow-y-auto custom-scrollbar">
@@ -489,8 +412,14 @@ ${wordwallTabsHtml}
                     </button>
                 </div>
             </div>
-        </div>
+        </div>`;
+    }
 
+    /**
+     * 9. توليد شاشة التقرير النهائي للدرس
+     */
+    function renderSummaryScreen() {
+        return `
         <!-- STAGE 5: FINAL SUMMARY SCREEN -->
         <section id="summary-screen" class="hidden w-full max-w-2xl bg-white rounded-[2.5rem] p-6 sm:p-8 shadow-2xl text-center space-y-5 border-4 border-emerald-100 shrink-0 my-auto z-10" role="region" data-i18n-aria="aria_final_summary" aria-label="${escapeHTML(i18n.t('aria_final_summary'))}">
             <h2 class="text-3xl sm:text-4xl font-black text-slate-800" data-i18n="challenge_completed_title">${escapeHTML(i18n.t('challenge_completed_title'))}</h2>
@@ -511,24 +440,177 @@ ${wordwallTabsHtml}
                 <button onclick="app.jumpTo('ww_box')" class="bg-slate-200 text-slate-700 text-base font-bold py-3 px-6 rounded-full shadow-md hover:bg-slate-300 transition-all" data-i18n-aria="aria_open_games" aria-label="${escapeHTML(i18n.t('aria_open_games'))}"><span data-i18n="games_room_title">${escapeHTML(i18n.t('games_room_title'))}</span> <span aria-hidden="true">🎮</span></button>
                 <button onclick="location.reload()" class="bg-slate-900 text-white text-base font-bold py-3 px-8 rounded-full shadow-lg hover:bg-black transition-all" data-i18n-aria="aria_replay_challenge" aria-label="${escapeHTML(i18n.t('aria_replay_challenge'))}"><span data-i18n="play_again_btn">${escapeHTML(i18n.t('play_again_btn'))}</span></button>
             </div>
-        </section>
+        </section>`;
+    }
 
-    </main>
+    /**
+     * الدالة الرئيسية لتركيب وتصيير واجهة التطبيق
+     */
+    function buildAppUI() {
+        if (document.getElementById('learning-stage')) return; // تم البناء مسبقاً
 
-    <footer class="text-center text-[10px] text-slate-600 py-1 shrink-0 h-6">
-        ${footerText}
-    </footer>
-    `;
+        const cfg = window.PAGE_CONFIG || {};
+        const isAr = (typeof i18n !== 'undefined' && i18n.getLocale() === 'ar');
+        const title = escapeHTML(isAr ? (i18n.t('app_title') || 'نور البيان') : (cfg.title || 'Nour Al-Bayan'));
 
-    // Prepend to body before scripts
-    const container = document.createElement('div');
-    container.className = 'w-full h-full flex flex-col items-center overflow-hidden';
-    container.innerHTML = fullHtml;
-    document.body.insertBefore(container, document.body.firstChild);
+        let rawSub = cfg.subtitle || '';
+        if (isAr) {
+            const pageMatch = rawSub.match(/Page\s+(\d+)/i);
+            const arBracketMatch = rawSub.match(/\(([^)]+)\)/);
+            if (pageMatch && arBracketMatch) {
+                rawSub = `الصفحة ${pageMatch[1]} • ${arBracketMatch[1]}`;
+            } else if (arBracketMatch) {
+                rawSub = arBracketMatch[1];
+            }
+        }
+        const subtitle = escapeHTML(rawSub || (isAr ? 'تعليم القراءة وضبط الحركات' : 'Harakat & Reading Practice'));
+        const footerText = escapeHTML(isAr ? `منظومة نور البيان التعليمية • ${subtitle}` : (cfg.footer || 'Nour Al-Bayan Learning System'));
+        const hasRules = (typeof rulesData !== 'undefined' && rulesData.length > 0) ||
+                         (cfg.rules && cfg.rules.length > 0) ||
+                         (typeof ruleManager !== 'undefined' && typeof ruleManager.hasRules === 'function' && ruleManager.hasRules());
+        const game3Type = cfg.game3 || (typeof riddlesGame !== 'undefined' ? 'riddles' : (hasRules ? 'riddles' : 'memory'));
 
-    // Update active student pill automatically
-    updateActiveStudentPill();
+        const rulesButtonHtml = hasRules ? `
+            <button onclick="app.jumpTo('rules')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3.5 px-6 rounded-[1.5rem] text-lg shadow-[0_4px_0_#3730a3] active:translate-y-1 active:shadow-none transition-all flex items-center justify-between" data-i18n-aria="aria_open_rules" aria-label="${escapeHTML(i18n.t('aria_open_rules'))}">
+                <span class="flex items-center gap-2"><span aria-hidden="true">📖</span> <span data-i18n="lesson_rules">${escapeHTML(i18n.t('lesson_rules'))}</span></span>
+                <span class="text-xl" aria-hidden="true">➡</span>
+            </button>` : '';
 
-    // Setup Focus Trap & Restoration for modals
-    setupModalAccessibility();
-}
+        const game3StageHtml = (game3Type === 'riddles') ? `
+            <!-- STAGE 3C: MIDPOINT GAME 3 (SECRET RIDDLES) -->
+            <section id="riddles-stage" class="hidden w-full h-full flex flex-col justify-center items-center text-center p-4 sm:p-6 rounded-[2.5rem] shadow-2xl text-white bg-slate-900 shrink-0 z-10">
+                <h2 class="text-3xl sm:text-4xl font-black text-amber-400 mt-2"><span aria-hidden="true">👑</span> <span data-i18n="secret_riddles_title">${escapeHTML(i18n.t('secret_riddles_title', 'صندوق الفوازير السرية'))}</span> <span aria-hidden="true">👑</span></h2>
+                <div id="riddle-container" class="bg-white/10 p-5 rounded-3xl backdrop-blur-sm border border-white/20 min-h-[180px] w-full max-w-2xl flex flex-col justify-center gap-4 mt-3">
+                    <p id="riddle-question" class="text-lg sm:text-2xl font-bold leading-normal"></p>
+                    <div id="riddle-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3"></div>
+                </div>
+                <p id="riddle-feedback" class="text-lg sm:text-xl font-bold h-8 text-emerald-400 mt-3"></p>
+                <div class="flex flex-wrap justify-center gap-3 w-full mt-2 max-w-md">
+                    <button onclick="riddlesGame.reset()" class="bg-purple-800/40 hover:bg-purple-800/60 border border-purple-400/30 text-white px-6 py-2.5 rounded-full font-bold text-sm backdrop-blur-sm" data-i18n-aria="reset" aria-label="${escapeHTML(i18n.t('reset'))}"><span data-i18n="reset">${escapeHTML(i18n.t('reset', 'إعادة ضبط'))}</span> <span aria-hidden="true">🔄</span></button>
+                    <button id="riddles-resume-btn" onclick="app.resume(3)" class="bg-yellow-400 hover:bg-yellow-300 text-purple-900 px-8 py-2.5 rounded-full font-black text-sm shadow-md transition transform hover:-translate-y-0.5" data-i18n-aria="skip_and_read" aria-label="${escapeHTML(i18n.t('skip_and_read'))}"><span data-i18n="skip_and_read">${escapeHTML(i18n.t('skip_and_read', 'متابعة القراءة'))}</span> <span aria-hidden="true">⏭️</span></button>
+                </div>
+            </section>` : `
+            <!-- STAGE 3C: MIDPOINT GAME 3 (MEMORY MATCH) -->
+            <section id="memory-stage" class="hidden w-full h-full flex flex-col justify-center items-center text-center p-4 rounded-[2.5rem] shadow-2xl text-white bg-slate-900 relative overflow-hidden shrink-0 z-10">
+                <h2 class="text-2xl sm:text-3xl font-black text-amber-400 drop-shadow-md mt-1"><span data-i18n="game_memory">${escapeHTML(i18n.t('game_memory', 'تحدي الذاكرة'))}</span> <span aria-hidden="true">🧠</span></h2>
+                <div id="memory-board" class="mem-board mt-3"></div>
+                <div class="bg-black/20 py-1.5 px-6 rounded-full inline-block backdrop-blur-sm border border-white/10 shadow-sm mt-3">
+                    <h3 id="memory-status" class="text-xs sm:text-sm font-bold text-white tracking-wide" aria-live="polite" data-i18n="prompt_memory">${escapeHTML(i18n.t('prompt_memory'))}</h3>
+                </div>
+                <div class="flex flex-wrap justify-center gap-3 w-full mt-4 max-w-md">
+                    <button onclick="memoryGame.reset()" class="bg-purple-800/40 hover:bg-purple-800/60 border border-purple-400/30 text-white px-6 py-2.5 rounded-full font-bold text-sm backdrop-blur-sm" data-i18n-aria="reset" aria-label="${escapeHTML(i18n.t('reset'))}"><span data-i18n="reset">${escapeHTML(i18n.t('reset'))}</span> <span aria-hidden="true">🔄</span></button>
+                    <button id="memory-resume-btn" onclick="app.resume(3)" class="bg-yellow-400 hover:bg-yellow-300 text-purple-900 px-8 py-2.5 rounded-full font-black text-sm shadow-md transition transform hover:-translate-y-0.5" data-i18n-aria="skip_and_read" aria-label="${escapeHTML(i18n.t('skip_and_read'))}"><span data-i18n="skip_and_read">${escapeHTML(i18n.t('skip_and_read'))}</span> <span aria-hidden="true">⏭️</span></button>
+                </div>
+            </section>`;
+
+        const teacherToolbarHtml = renderTeacherToolbar();
+        const navHeaderHtml = renderNavigationHeader(teacherToolbarHtml);
+        const mainMenuHtml = renderMainMenuStage(title, subtitle, rulesButtonHtml);
+        const ruleStageHtml = renderRuleStage(hasRules);
+        const learningStageHtml = renderLearningStage();
+        const wordwallTabsHtml = renderWordwallTabs();
+        const wordwallStageHtml = renderWordwallPlayroom(wordwallTabsHtml);
+        const modalsHtml = renderModals();
+        const summaryScreenHtml = renderSummaryScreen();
+
+        const fullHtml = `
+        <!-- Interactive Feedback Badge -->
+        <div id="badge-ui" class="feedback-badge bg-white shadow-xl px-8 py-3 rounded-full text-2xl sm:text-3xl font-black border-4 border-emerald-400 whitespace-nowrap" role="status" aria-live="assertive"></div>
+
+        ${navHeaderHtml}
+
+        <main class="flex-1 w-full max-w-5xl px-3 sm:px-4 flex flex-col justify-center items-center overflow-hidden relative">
+            ${mainMenuHtml}
+            ${ruleStageHtml}
+
+            <!-- STAGE 0.5: GAME TRANSITION -->
+            <section id="game-transition-stage" class="hidden w-full h-full flex flex-col justify-center items-center text-center p-6 rounded-[2.5rem] shadow-xl text-white bg-emerald-600 relative overflow-hidden shrink-0 z-20" role="dialog" aria-modal="true" aria-labelledby="transition-title">
+                <h2 id="transition-title" class="text-3xl sm:text-5xl font-black text-yellow-300 drop-shadow-md mb-3" data-i18n="amazing_job">${escapeHTML(i18n.t('amazing_job'))}</h2>
+                <p class="text-lg sm:text-2xl font-bold text-white mb-6">
+                    <span data-i18n="break_message">${escapeHTML(i18n.t('break_message'))}</span>
+                    <span id="transition-game-name" class="block text-xl sm:text-3xl font-black text-amber-200 mt-2"></span>
+                </p>
+                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full max-w-md">
+                    <button id="btn-play-game" onclick="app.enterGame()" class="flex-1 bg-yellow-400 hover:bg-yellow-300 text-indigo-900 py-3.5 sm:py-4 rounded-2xl text-lg font-black shadow-[0_5px_0_#ca8a04] active:translate-y-[5px] active:shadow-none transition-all" data-i18n-aria="play_game" aria-label="${escapeHTML(i18n.t('play_game'))}">
+                        <span aria-hidden="true">🎮</span> <span data-i18n="play_game">${escapeHTML(i18n.t('play_game'))}</span>
+                    </button>
+                    <button id="btn-skip-game" onclick="app.resume(app.pendingGame)" class="flex-1 bg-white/20 hover:bg-white/30 text-white border-2 border-white/50 py-3.5 sm:py-4 rounded-2xl text-lg font-bold transition-all backdrop-blur-sm" data-i18n-aria="aria_skip_game" aria-label="${escapeHTML(i18n.t('aria_skip_game'))}">
+                        <span aria-hidden="true">⏭️</span> <span data-i18n="skip_and_read">${escapeHTML(i18n.t('skip_and_read'))}</span>
+                    </button>
+                </div>
+            </section>
+
+            ${learningStageHtml}
+
+            <!-- STAGE 2: MIDPOINT GAME 1 (TIC-TAC-TOE) -->
+            <section id="xo-stage" class="hidden w-full h-full flex flex-col justify-center items-center text-center p-2 sm:p-4 rounded-[2.5rem] text-white bg-gradient-to-br from-teal-600 via-emerald-600 to-green-700 relative overflow-hidden shrink-0 z-10">
+                <div class="relative z-10 flex flex-col items-center justify-center h-full w-full max-w-3xl gap-2 sm:gap-3">
+                    <div class="flex flex-col items-center gap-1">
+                        <h2 class="text-3xl sm:text-4xl font-black text-yellow-300 drop-shadow-md"><span data-i18n="game_xo">${escapeHTML(i18n.t('game_xo'))}</span> <span aria-hidden="true">🎮</span></h2>
+                        <div class="flex items-center justify-center gap-2 mt-1" role="toolbar" data-i18n-aria="aria_game_mode_controls" aria-label="${escapeHTML(i18n.t('aria_game_mode_controls'))}">
+                            <button id="xo-mode-btn" onclick="if(typeof gameAI!=='undefined')gameAI.toggleMode('xo')" class="bg-emerald-500/80 hover:bg-emerald-500 text-white border border-emerald-300/40 px-3.5 py-1.5 rounded-full font-bold text-xs shadow-sm transition-all" data-i18n-aria="aria_toggle_opponent" aria-label="${escapeHTML(i18n.t('aria_toggle_opponent'))}"><span aria-hidden="true">🤖</span> <span data-i18n="ai_mode_vs_computer">${escapeHTML(i18n.t('ai_mode_vs_computer'))}</span></button>
+                            <button id="xo-diff-btn" onclick="if(typeof gameAI!=='undefined')gameAI.toggleDifficulty()" class="bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold px-3 py-1.5 rounded-full text-xs shadow-sm transition-all" data-i18n-aria="aria_toggle_diff" aria-label="${escapeHTML(i18n.t('aria_toggle_diff'))}"><span data-i18n="diff_easy">${escapeHTML(i18n.t('diff_easy'))}</span></button>
+                        </div>
+                    </div>
+                    <div class="xo-board-container mt-1">
+                        <div id="xo-board" class="grid grid-cols-3 gap-2.5 sm:gap-3 bg-white/20 p-3 sm:p-4 rounded-[2rem] backdrop-blur-md shadow-inner border border-white/25 w-full h-full"></div>
+                    </div>
+                    <div class="bg-black/20 py-1.5 px-6 rounded-full inline-block backdrop-blur-sm border border-white/10 shadow-sm mt-1">
+                        <h3 id="xo-status" class="text-sm sm:text-base font-bold text-white tracking-wide" aria-live="polite" data-i18n="xo_default_turn">${escapeHTML(i18n.t('xo_default_turn'))}</h3>
+                    </div>
+                    <div class="flex flex-wrap justify-center gap-3 w-full mt-2">
+                        <button onclick="xoGame.reset()" class="bg-white/20 hover:bg-white/30 text-white border border-white/30 px-6 py-2.5 rounded-full font-bold text-sm transition-transform hover:scale-105 backdrop-blur-sm" data-i18n-aria="reset" aria-label="${escapeHTML(i18n.t('reset'))}"><span data-i18n="reset">${escapeHTML(i18n.t('reset'))}</span> <span aria-hidden="true">🔄</span></button>
+                        <button id="xo-resume-btn" onclick="app.resume(1)" class="bg-yellow-400 hover:bg-yellow-300 text-teal-900 px-8 py-2.5 rounded-full font-black text-sm shadow-md transform transition hover:-translate-y-0.5" data-i18n-aria="skip_and_read" aria-label="${escapeHTML(i18n.t('skip_and_read'))}"><span data-i18n="skip_and_read">${escapeHTML(i18n.t('skip_and_read'))}</span> <span aria-hidden="true">⏭️</span></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STAGE 3B: MIDPOINT GAME 2 (CONNECT 4) -->
+            <section id="c4-stage" class="hidden w-full h-full flex flex-col justify-center items-center text-center p-3 sm:p-4 rounded-[2.5rem] shadow-xl text-white bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-700 relative overflow-hidden shrink-0 z-10">
+                <div class="relative z-10 flex flex-col items-center gap-2 sm:gap-3">
+                    <div class="flex flex-col items-center gap-1">
+                        <h2 class="text-2xl sm:text-3xl font-black text-yellow-300 drop-shadow-md"><span data-i18n="game_c4">${escapeHTML(i18n.t('game_c4'))}</span> <span aria-hidden="true">🔴🟡</span></h2>
+                        <div class="flex items-center justify-center gap-2 mt-1" role="toolbar" data-i18n-aria="aria_game_mode_controls" aria-label="${escapeHTML(i18n.t('aria_game_mode_controls'))}">
+                            <button id="c4-mode-btn" onclick="if(typeof gameAI!=='undefined')gameAI.toggleMode('c4')" class="bg-sky-500/80 hover:bg-sky-500 text-white border border-sky-300/40 px-3.5 py-1.5 rounded-full font-bold text-xs shadow-sm transition-all" data-i18n-aria="aria_toggle_opponent" aria-label="${escapeHTML(i18n.t('aria_toggle_opponent'))}"><span aria-hidden="true">🤖</span> <span data-i18n="ai_mode_vs_computer">${escapeHTML(i18n.t('ai_mode_vs_computer'))}</span></button>
+                            <button id="c4-diff-btn" onclick="if(typeof gameAI!=='undefined')gameAI.toggleDifficulty()" class="bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold px-3 py-1.5 rounded-full text-xs shadow-sm transition-all" data-i18n-aria="aria_toggle_diff" aria-label="${escapeHTML(i18n.t('aria_toggle_diff'))}"><span data-i18n="diff_easy">${escapeHTML(i18n.t('diff_easy'))}</span></button>
+                        </div>
+                    </div>
+                    <div id="c4-board-container" class="c4-board-new grid-cols-7 mx-auto mt-1"></div>
+                    <div class="bg-black/20 py-1.5 px-6 rounded-full inline-block backdrop-blur-sm border border-white/10 shadow-sm mt-2">
+                        <h3 id="c4-status" class="text-xs sm:text-sm font-bold text-white tracking-wide" aria-live="polite" data-i18n="c4_select_column">${escapeHTML(i18n.t('c4_select_column'))}</h3>
+                    </div>
+                    <div class="flex flex-wrap justify-center gap-3 w-full mt-3">
+                        <button onclick="c4Game.reset()" class="bg-blue-800/40 hover:bg-blue-800/60 border border-blue-400/30 text-white px-6 py-2.5 rounded-full font-bold text-sm backdrop-blur-sm" data-i18n-aria="reset" aria-label="${escapeHTML(i18n.t('reset'))}"><span data-i18n="reset">${escapeHTML(i18n.t('reset'))}</span> <span aria-hidden="true">🔄</span></button>
+                        <button id="c4-resume-btn" onclick="app.resume(2)" class="bg-yellow-400 hover:bg-yellow-300 text-blue-900 px-8 py-2.5 rounded-full font-black text-sm shadow-md transition transform hover:-translate-y-0.5" data-i18n-aria="skip_and_read" aria-label="${escapeHTML(i18n.t('skip_and_read'))}"><span data-i18n="skip_and_read">${escapeHTML(i18n.t('skip_and_read'))}</span> <span aria-hidden="true">⏭️</span></button>
+                    </div>
+                </div>
+            </section>
+
+            ${game3StageHtml}
+            ${wordwallStageHtml}
+            ${modalsHtml}
+            ${summaryScreenHtml}
+        </main>
+
+        <footer class="text-center text-[10px] text-slate-600 py-1 shrink-0 h-6">
+            ${footerText}
+        </footer>`;
+
+        const container = document.createElement('div');
+        container.className = 'w-full h-full flex flex-col items-center overflow-hidden';
+        container.innerHTML = fullHtml;
+        document.body.insertBefore(container, document.body.firstChild);
+
+        if (typeof updateActiveStudentPill === 'function') {
+            updateActiveStudentPill();
+        }
+
+        if (typeof setupModalAccessibility === 'function') {
+            setupModalAccessibility();
+        }
+    }
+
+    global.escapeHTML = escapeHTML;
+    global.buildAppUI = buildAppUI;
+
+})(typeof window !== 'undefined' ? window : this);

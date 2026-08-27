@@ -123,11 +123,13 @@ const Sound = {
         this._unlockHandler = unlock;
         this._unlockBound = true;
 
-        window.addEventListener('pointerdown', unlock, { capture: true });
-        window.addEventListener('touchstart', unlock, { capture: true });
-        window.addEventListener('touchend', unlock, { capture: true });
-        window.addEventListener('keydown', unlock, { capture: true });
-        window.addEventListener('click', unlock, { capture: true });
+        if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+            window.addEventListener('pointerdown', unlock, { capture: true });
+            window.addEventListener('touchstart', unlock, { capture: true });
+            window.addEventListener('touchend', unlock, { capture: true });
+            window.addEventListener('keydown', unlock, { capture: true });
+            window.addEventListener('click', unlock, { capture: true });
+        }
     },
 
     // استخراج شدة الصوت الحقيقية مع تصحيح علة الصفر الزائف وتطبيق المنحنى الإدراكي
@@ -321,9 +323,11 @@ const Sound = {
 // تهيئة مستمعات اللمس وتحديث الصوت تلقائياً
 if (typeof window !== 'undefined') {
     Sound.setupUnlock();
-    window.addEventListener('storage', () => {
-        if (Sound.ctx && Sound.masterGain) Sound.updateMasterVolume();
-    });
+    if (typeof window.addEventListener === 'function') {
+        window.addEventListener('storage', () => {
+            if (Sound.ctx && Sound.masterGain) Sound.updateMasterVolume();
+        });
+    }
 }
 
 /**
@@ -366,3 +370,9 @@ function fireCelebration() {
 }
 
 const wordwallColors = ['#e11d48', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#6366f1', '#06b6d4', '#f97316', '#84cc16', '#a855f7', '#64748b', '#059669', '#d97706'];
+
+if (typeof window !== 'undefined') {
+    window.Sound = Sound;
+    window.fireCelebration = fireCelebration;
+    window.wordwallColors = wordwallColors;
+}

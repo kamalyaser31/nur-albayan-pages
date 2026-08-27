@@ -33,9 +33,12 @@ const app = {
             settingsManager.apply(s);
         } else {
             try {
-                const saved = localStorage.getItem('nb_teacher_settings') || localStorage.getItem('nour_enable_game_breaks');
-                if (saved !== null) this.enableGameBreaks = (saved === '1' || JSON.parse(saved).gameBreaksEnabled);
-            } catch(e) {}
+                const saved = localStorage.getItem('nb_teacher_settings');
+                if (saved !== null) {
+                    const parsed = JSON.parse(saved);
+                    this.enableGameBreaks = !!parsed.gameBreaksEnabled;
+                }
+            } catch (e) {}
         }
         const toggleEl = document.getElementById('toggle-game-breaks');
         if (toggleEl) toggleEl.checked = this.enableGameBreaks;
@@ -47,7 +50,7 @@ const app = {
         if (typeof memoryGame !== 'undefined' && document.getElementById('memory-stage')) memoryGame.init();
         if (typeof riddlesGame !== 'undefined' && document.getElementById('riddles-stage')) riddlesGame.init();
         if (typeof wordwallRoom !== 'undefined') wordwallRoom.init();
-        if (typeof ruleManager !== 'undefined' && typeof rulesData !== 'undefined' && rulesData.length > 0) ruleManager.init();
+        if (typeof ruleManager !== 'undefined' && typeof ruleManager.hasRules === 'function' && ruleManager.hasRules()) ruleManager.init();
 
         if (!this._localeBound) {
             this._localeBound = true;
@@ -371,91 +374,12 @@ const app = {
     },
 
     renderWordInto(container, item) {
-        if (!container || !item) return;
-        container.innerHTML = '';
-        const currentTheme = item.theme || 'pink';
-
-        const plain = this.getPlainWord(item);
-        const words = plain ? plain.split(/\s+/).filter(Boolean) : [];
-        const charCount = plain ? plain.replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g, '').length : 0;
-        let lengthClass = '';
-        if (charCount > 16 || words.length >= 4) {
-            lengthClass = 'text-xlong';
-        } else if (charCount > 10 || words.length === 3) {
-            lengthClass = 'text-long';
-        } else if (charCount > 5 || words.length === 2) {
-            lengthClass = 'text-medium';
-        }
-
-        if (item.segs && Array.isArray(item.segs)) {
-            const colorClasses = ['c-red', 'c-blue', 'c-black'];
-            const wrap = document.createElement('div');
-            wrap.className = 'segmented-container';
-            item.segs.forEach((ch, i) => {
-                const sb = document.createElement('div');
-                sb.className = `seg-box theme-${currentTheme} quran-font ${colorClasses[i % 3]}`;
-                sb.innerText = ch;
-                wrap.appendChild(sb);
-            });
-            container.appendChild(wrap);
-        } else if (item.boxes && Array.isArray(item.boxes)) {
-            const wrap = document.createElement('div');
-            wrap.className = 'segmented-container';
-            item.boxes.forEach(segments => {
-                const sb = document.createElement('div');
-                sb.className = `seg-box theme-${currentTheme} quran-font`;
-                sb.style.direction = 'rtl';
-                const inner = segments.map(([t, c]) => `<span class="color-${c}">${t}</span>`).join('');
-                this.setSafeHTML(sb, `<bdi style="white-space:nowrap">${inner}</bdi>`);
-                wrap.appendChild(sb);
-            });
-            container.appendChild(wrap);
-        } else if (item.multiBox && Array.isArray(item.w)) {
-            const wrap = document.createElement('div');
-            wrap.className = 'segmented-container';
-            item.w.forEach((char, i) => {
-                const sb = document.createElement('div');
-                sb.className = `seg-box theme-${currentTheme} quran-font color-${i % 3}`;
-                sb.innerText = char;
-                wrap.appendChild(sb);
-            });
-            container.appendChild(wrap);
-        } else if (item.groups && Array.isArray(item.groups)) {
-            const box = document.createElement('div');
-            box.className = `letter-box quran-font theme-${currentTheme} ${lengthClass}`.trim();
-            box.style.direction = 'rtl';
-            this.setSafeHTML(box, item.groups.map(g => `<span class="${g[1]}" style="margin:0 .25em">${g[0]}</span>`).join(''));
-            container.appendChild(box);
-        } else if (item.html) {
-            const box = document.createElement('div');
-            box.className = `letter-box quran-font theme-${currentTheme} ${lengthClass}`.trim();
-            box.style.direction = 'rtl';
-            this.setSafeHTML(box, item.html);
-            container.appendChild(box);
-        } else if (Array.isArray(item.w)) {
-            const box = document.createElement('div');
-            box.className = `letter-box quran-font theme-${currentTheme} ${lengthClass}`.trim();
-            box.style.direction = 'rtl';
-            const inner = item.w.map((seg, i) => `<span class="color-${i % 3}">${seg}</span>`).join('');
-            this.setSafeHTML(box, `<bdi style="white-space:nowrap">${inner}</bdi>`);
-            container.appendChild(box);
-        } else {
-            const box = document.createElement('div');
-            box.className = `letter-box theme-${currentTheme} ${lengthClass}`.trim();
-            this.setSafeHTML(box, `<span class="word-wrapper quran-font text-center">${item.w}</span>`);
-            container.appendChild(box);
-        }
+        if (typeof WordRenderer === 'undefined') return;
+        WordRenderer.renderInto(container, item);
     },
 
     getPlainWord(item) {
-        if (!item) return '';
-        if (item.plain) return item.plain;
-        if (item.html) return item.html.replace(/<[^>]+>/g, '').replace(/&zwj;/g, '').replace(/&nbsp;/g, ' ').trim();
-        if (Array.isArray(item.w)) return item.w.join('').replace(/<[^>]+>/g, '').replace(/&zwj;/g, '').replace(/&nbsp;/g, ' ').replace(/ـ/g, '').trim();
-        if (typeof item.w === 'string') return item.w.replace(/<[^>]+>/g, '').replace(/&zwj;/g, '').replace(/&nbsp;/g, ' ').trim();
-        if (item.boxes) return item.boxes.map(b => b.map(s => s[0]).join('')).join(' ').trim();
-        if (item.groups) return item.groups.map(g => g[0]).join('').trim();
-        return '';
+        return typeof WordRenderer !== 'undefined' ? WordRenderer.getPlainWord(item) : '';
     },
 
     render() {
@@ -831,8 +755,16 @@ const app = {
     }
 };
 
-// الاستماع لحدث تبديل الطالب لتحديث واجهة الدرس تلقائياً بدون تكرار
+// تصدير كائن التطبيق العام
 if (typeof window !== 'undefined') {
+    window.app = app;
+    if (window.NurAlBayan) {
+        window.NurAlBayan.app = app;
+    }
+}
+
+// الاستماع لحدث تبديل الطالب لتحديث واجهة الدرس تلقائياً بدون تكرار
+if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
     window.addEventListener(NBContracts.EVENTS.STUDENT_CHANGED, (e) => {
         if (typeof app !== 'undefined' && typeof app.onStudentChanged === 'function') {
             app.onStudentChanged(e && e.detail ? e.detail : null);
@@ -842,9 +774,15 @@ if (typeof window !== 'undefined') {
 
 // تشغيل التطبيق تلقائياً عند جاهزية DOM
 if (typeof document !== 'undefined') {
-    document.addEventListener('DOMContentLoaded', () => {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof app !== 'undefined') {
+                app.init();
+            }
+        });
+    } else {
         if (typeof app !== 'undefined') {
             app.init();
         }
-    });
+    }
 }

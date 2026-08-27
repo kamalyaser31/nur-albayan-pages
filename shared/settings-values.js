@@ -10,6 +10,7 @@
         defaultDifficulty: 'easy',
         timerDuration: 10,
         fontScale: 'normal',
+        themeMode: 'system',
         shuffleCards: false,
         noPenaltyMode: false,
         manualAdvance: false,
@@ -38,6 +39,7 @@
                 : defaults.timerDuration;
         }
         if ('fontScale' in input) clean.fontScale = ['normal', 'large', 'xlarge'].includes(input.fontScale) ? input.fontScale : defaults.fontScale;
+        if ('themeMode' in input) clean.themeMode = ['system', 'light', 'dark'].includes(input.themeMode) ? input.themeMode : defaults.themeMode;
         for (const key of ['shuffleCards', 'noPenaltyMode', 'manualAdvance']) {
             if (key in input) clean[key] = Boolean(input[key]);
         }

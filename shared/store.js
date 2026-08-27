@@ -455,7 +455,7 @@
         _dispatchStoreChanged(changes, currentState, options) {
             if (typeof window === 'undefined' || typeof window.dispatchEvent !== 'function') return;
 
-            window.dispatchEvent(new CustomEvent('nb:store-changed', {
+            window.dispatchEvent(new CustomEvent(NBContracts.EVENTS.STORE_CHANGED, {
                 detail: {
                     changes: _clone(changes),
                     slice: changes.length === 1 ? changes[0].slice : null,

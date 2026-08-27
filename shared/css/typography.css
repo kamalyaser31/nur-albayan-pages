@@ -3,11 +3,6 @@
  * Font family styling, Tajweed diacritic color tokens, WCAG AA contrast, and Arabic letter-spacing constraints.
  */
 
-/* Enforce strict prohibition of letter-spacing on Arabic & RTL text */
-:lang(ar),
-[dir="rtl"] {
-    letter-spacing: normal !important;
-}
 
 .quran-font,
 .quran-special-font {

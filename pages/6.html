@@ -36,7 +36,7 @@
         }
 
         .highlight {
-            color: #ef4444;
+            color: var(--color-quranic-red, #b91c1c);
             font-weight: bold;
         }
 
@@ -60,7 +60,6 @@
         <button id="nextBtn" class="bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-2 px-3 md:px-4 rounded-lg shadow flex items-center text-sm md:text-base">
             <span data-i18n="page6_next">التالي</span> <span aria-hidden="true">➡️</span>
         </button>
-        <button id="page6LangBtn" type="button" class="bg-white text-emerald-700 border-2 border-emerald-200 font-bold py-2 px-3 rounded-lg" data-i18n="page6_language_switch">Switch to English</button>
     </div>
 
     <!-- Main Content Area -->
@@ -420,7 +419,6 @@
                     handleSelectionChange();
                 }
             });
-            document.getElementById('page6LangBtn').addEventListener('click', () => i18n.toggleLocale());
             window.addEventListener(NBContracts.EVENTS.LOCALE_CHANGED, () => {
                 populateDropdown();
                 gameAI.updateUI();

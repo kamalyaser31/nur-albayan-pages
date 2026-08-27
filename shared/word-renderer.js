@@ -43,6 +43,16 @@
         });
     }
 
+    const ALLOWED_THEMES = new Set([
+        'amber', 'blue', 'danger', 'emerald', 'golden', 'green',
+        'pink', 'purple', 'yellow'
+    ]);
+
+    function _normalizeTheme(theme) {
+        const candidate = String(theme || '').trim().toLowerCase();
+        return ALLOWED_THEMES.has(candidate) ? candidate : 'pink';
+    }
+
     const WordRenderer = {
         /**
          * توليد شفرة HTML نقية تمثل الكلمة بكامل صناديقها وألوانها
@@ -55,11 +65,11 @@
 
             // إذا كان المدخل نصاً بسيطاً
             if (typeof item === 'string') {
-                const currentTheme = options.theme || 'pink';
+                const currentTheme = _normalizeTheme(options.theme);
                 return `<div class="letter-box theme-${currentTheme}"><span class="word-wrapper quran-font text-center">${_sanitizeHTML(item)}</span></div>`;
             }
 
-            const currentTheme = item.theme || options.theme || 'pink';
+            const currentTheme = _normalizeTheme(item.theme || options.theme);
             const plain = this.getPlainWord(item);
             const words = plain ? plain.split(/\s+/).filter(Boolean) : [];
             const charCount = plain ? plain.replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g, '').length : 0;

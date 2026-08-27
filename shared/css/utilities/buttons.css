@@ -8,7 +8,10 @@ button {
     outline: none;
     font-family: inherit;
     cursor: pointer;
+    min-width: 44px;
+    min-height: 44px;
 }
+select { min-height: 44px; }
 button:focus,
 select:focus,
 input:focus,
@@ -40,12 +43,14 @@ button[disabled],
 /* 3D Tactile Buttons */
 .shadow-\[0_4px_0_\#3730a3\] { box-shadow: 0 4px 0 #3730a3; }
 .shadow-\[0_4px_0_\#047857\] { box-shadow: 0 4px 0 #047857; }
+.shadow-\[0_4px_0_\#d97706\] { box-shadow: 0 4px 0 #d97706; }
 .shadow-\[0_4px_0_\#be123c\] { box-shadow: 0 4px 0 #be123c; }
 .shadow-\[0_5px_0_\#047857\] { box-shadow: 0 5px 0 #047857; }
 .shadow-\[0_5px_0_\#d97706\] { box-shadow: 0 5px 0 #d97706; }
 .shadow-\[0_5px_0_\#ca8a04\] { box-shadow: 0 5px 0 #ca8a04; }
 .shadow-\[0_5px_0_\#be123c\] { box-shadow: 0 5px 0 #be123c; }
 
+.active\:translate-y-0\.5:active { transform: translateY(2px); }
 .active\:translate-y-1:active { transform: translateY(0.25rem); }
 .active\:translate-y-\[5px\]:active { transform: translateY(5px); }
 .active\:shadow-none:active { box-shadow: none !important; }
@@ -65,16 +70,22 @@ button[disabled],
 .hover\:bg-black:hover { background-color: #000000; }
 .hover\:bg-gray-100:hover { background-color: #f3f4f6; }
 .hover\:bg-gray-200:hover { background-color: #e5e7eb; }
+.hover\:bg-emerald-200:hover { background-color: #a7f3d0; }
+.hover\:bg-emerald-500:hover { background-color: #10b981; }
 .hover\:bg-emerald-600:hover { background-color: #059669; }
+.hover\:bg-emerald-700:hover { background-color: #047857; }
 .hover\:bg-green-500:hover { background-color: #22c55e; }
 .hover\:bg-green-600:hover { background-color: #16a34a; }
 .hover\:bg-amber-50:hover { background-color: #fffbeb; }
 .hover\:bg-amber-200:hover { background-color: #fde68a; }
+.hover\:bg-amber-300:hover { background-color: #fcd34d; }
 .hover\:bg-yellow-50:hover { background-color: #fefce8; }
 .hover\:bg-yellow-300:hover { background-color: #fde047; }
+.hover\:bg-rose-50:hover { background-color: #fff1f2; }
 .hover\:bg-rose-100:hover { background-color: #ffe4e6; }
 .hover\:bg-rose-200:hover { background-color: #fecdd3; }
 .hover\:bg-rose-600:hover { background-color: #e11d48; }
+.hover\:bg-teal-700:hover { background-color: #0f766e; }
 .hover\:bg-indigo-50:hover { background-color: #eef2ff; }
 .hover\:bg-indigo-600:hover { background-color: #4f46e5; }
 .hover\:bg-indigo-700:hover { background-color: #4338ca; }
@@ -84,9 +95,11 @@ button[disabled],
 .hover\:bg-blue-100:hover { background-color: #dbeafe; }
 .hover\:bg-blue-600:hover { background-color: #2563eb; }
 .hover\:bg-blue-800\/60:hover { background-color: rgba(30, 64, 175, 0.6); }
+.hover\:bg-sky-500:hover { background-color: #0ea5e9; }
 .hover\:bg-orange-200:hover { background-color: #fed7aa; }
 .hover\:bg-orange-600:hover { background-color: #ea580c; }
 
 .hover\:border-indigo-400:hover { border-color: #818cf8; }
+.hover\:border-emerald-300:hover { border-color: #6ee7b7; }
 
 .hover\:text-rose-600:hover { color: #e11d48; }

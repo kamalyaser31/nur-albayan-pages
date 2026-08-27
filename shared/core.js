@@ -8,6 +8,29 @@
 (function () {
     'use strict';
 
+    const root = typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : this);
+
+    // الفضاء الاسمي المركزي الموحد لمنصة نور البيان
+    root.NurAlBayan = root.NurAlBayan || {
+        version: '2.0.0',
+        get i18n() { return root.i18n; },
+        get app() { return root.app; },
+        get rules() { return root.ruleManager; },
+        get rulesRegistry() { return root.RULES_REGISTRY; },
+        get roster() { return root.rosterManager; },
+        get studentManager() { return root.studentManager; },
+        get sound() { return root.Sound; },
+        get renderer() { return root.WordRenderer; },
+        get games() {
+            return {
+                wordwall: root.wordwallRoom,
+                xo: root.xoGame,
+                c4: root.c4Game,
+                ai: root.gameAI
+            };
+        }
+    };
+
     let basePath = '../shared/';
     const currentScript = document.currentScript;
 
@@ -51,6 +74,7 @@
         'games-board.js',
         'game-ai.js',
         'games-extra.js',
+        'rules-data.js',
         'rule-manager.js'
     ];
 

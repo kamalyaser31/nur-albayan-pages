@@ -78,7 +78,7 @@
   <div class="header-actions">
     <div class="stats-pill" id="count">
       <span aria-hidden="true">📚</span>
-      <span data-i18n="total_lessons_label">إجمالي الدروس: 34 صفحة تفاعلية</span>
+      <span data-i18n="total_lessons_label">إجمالي الدروس: 91 صفحة تفاعلية</span>
     </div>
 
     <!-- شريط عرض الطالب الحالي النشط -->
@@ -1153,7 +1153,12 @@
     window.addEventListener(NBContracts.EVENTS.LOCALE_CHANGED, updateIndexLanguage);
 
     // تسجيل عامل الخدمة لدعم تطبيقات الويب التقدمية (PWA Offline Support)
-    if ('serviceWorker' in navigator) {
+    // يُفعل حصرياً على بروتوكول HTTPS أو البيئات المحلية localhost لتجنب رفض المتصفح عند الفتح بـ file:///
+    const isSecureContextOrigin = window.location.protocol === 'https:' ||
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1';
+
+    if ('serviceWorker' in navigator && isSecureContextOrigin) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js').then((registration) => {
           const installing = registration.installing;

@@ -1,19 +1,31 @@
-# Agent State & Documentation Files
+# ==============================================================================
+# سجل التجاهل للملفات الداخلية والمؤقتة — منصة نور البيان
+# Nur Al-Bayan Platform — .gitignore
+# ==============================================================================
+
+# 1. ملفات تتبع حالة النماذج والمهام الداخلية (Agent State & Tasks)
 task.md
 project_state.md
 CHANGELOG.md
 
-# Staging, Extracted Data, Internal Scripts & Temporary Dirs
+# 2. ملفات ومجلدات التقارير الفنية والتدقيق الداخلي (Internal Docs & Reports)
+docs/
+rules_review.html
+
+# 3. قواعد البيانات الداخلية، المسودات، وصور المسح الضوئي (Internal Data & Scans)
 data/
-scripts/
-new pages/
-Extracted Pages/
+scratch/
 .tmp/
 .backups/
-scratch/
 
-# Python & Environment
+# 4. سكربتات الأتمتة والتدقيق الداخلي للبيئة المحلية (Internal Automation Scripts)
+scripts/
+
+# 5. ملفات بايثون المؤقتة وبيئة النظام (Python Cache & System Files)
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+.pytest_cache/
 .DS_Store
 Thumbs.db

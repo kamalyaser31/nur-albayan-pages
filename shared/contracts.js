@@ -25,7 +25,9 @@
         STUDENT_DELETED: 'nb:student-deleted',
         STUDENT_PROGRESS_UPDATED: 'nb:student-progress-updated',
         LESSON_COMPLETED: 'nb:lesson-completed',
-        LESSON_PROGRESS_DELETED: 'nb:lesson-progress-deleted'
+        LESSON_PROGRESS_DELETED: 'nb:lesson-progress-deleted',
+        RULE_COMPLETED: 'nb:rule-completed',
+        STORE_CHANGED: 'nb:store-changed'
     });
 
     /** @typedef {'best'|'latest'|'cumulative'} ScorePolicy */

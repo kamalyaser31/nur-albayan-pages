@@ -12,7 +12,6 @@ const settingsManager = {
     STORAGE_KEY: SettingsValues.STORAGE_KEY,
     _lastFocusedElement: null,
     get defaults() { return SettingsValues.defaults; },
-    get DEFAULTS() { return this.defaults; },
 
     // دالة مساعدة آمنة للترجمة والتعريب
     _t(key, fallback = '') {
@@ -42,9 +41,8 @@ const settingsManager = {
             SettingsValues.persist(updated);
         } catch (e) {
             console.warn('تعذر الحفظ الدائم في localStorage (جلسة خاصة):', e);
-            if (!options.silent) {
-                this.showToast(this._t('settings_save_failed', 'تعذر حفظ الإعدادات. لم يطبق التغيير.'));
-            }
+            this.syncFormWithSettings(current);
+            this.showToast(this._t('settings_save_failed', 'تعذر حفظ الإعدادات. لم يطبق التغيير.'));
             return current;
         }
 
@@ -92,6 +90,14 @@ const settingsManager = {
         // 1. تطبيق مقياس الخط القرآني
         document.documentElement.classList.remove('font-scale-normal', 'font-scale-large', 'font-scale-xlarge');
         document.documentElement.classList.add(`font-scale-${settings.fontScale || 'normal'}`);
+
+        // السمة اليدوية تعلو اختيار النظام، وغياب السمة يعيد التحكم للمتصفح.
+        const themeMode = settings.themeMode || 'system';
+        if (themeMode === 'system') {
+            document.documentElement.removeAttribute('data-theme');
+        } else {
+            document.documentElement.setAttribute('data-theme', themeMode);
+        }
 
         // 2. مزامنة استراحات الألعاب مع تطبيق الدرس
         const toggleBreaksEl = document.getElementById('toggle-game-breaks');
@@ -167,9 +173,9 @@ if (typeof nbStore !== 'undefined' && typeof nbStore.subscribe === 'function') {
 }
 
 // الاستماع لحدث تبديل اللغة لإعادة بناء هيكل النافذة باللغة الجديدة
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
     window.addEventListener(NBContracts.EVENTS.LOCALE_CHANGED, () => {
-        const existing = document.getElementById('nb-settings-modal');
+        const existing = (typeof document !== 'undefined') ? document.getElementById('nb-settings-modal') : null;
         if (existing) {
             const wasOpen = !existing.classList.contains('hidden');
             existing.remove();

@@ -54,7 +54,18 @@ body {
   gap: 8px 20px;
   margin-block-end: 0;
 }
-.guide-toc a { color: var(--text-main, #0f172a); }
+.guide-toc a {
+  color: var(--text-main, #0f172a);
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.guide-actions .action-btn,
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
 
 .guide-main { display: grid; gap: 20px; padding-block-end: 40px; }
 .guide-card { scroll-margin-block-start: 16px; padding: clamp(20px, 4vw, 32px); }

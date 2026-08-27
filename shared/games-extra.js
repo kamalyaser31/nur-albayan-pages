@@ -407,13 +407,15 @@ const riddlesGame = {
 
 // مستمع لحدث تغيير اللغة لإعادة رسم اللغز النشط مع تصفير أي مؤقت نشط لمنع تداخل الأسئلة
 if (typeof window !== 'undefined') {
-    window.addEventListener(NBContracts.EVENTS.LOCALE_CHANGED, () => {
-        const stage = document.getElementById('riddles-stage');
-        if (stage && !stage.classList.contains('hidden') && typeof riddlesGame !== 'undefined') {
-            riddlesGame.cleanup();
-            riddlesGame.loadNext();
-        }
-    });
+    if (typeof window.addEventListener === 'function') {
+        window.addEventListener(NBContracts.EVENTS.LOCALE_CHANGED, () => {
+            const stage = (typeof document !== 'undefined') ? document.getElementById('riddles-stage') : null;
+            if (stage && !stage.classList.contains('hidden') && typeof riddlesGame !== 'undefined') {
+                riddlesGame.cleanup();
+                riddlesGame.loadNext();
+            }
+        });
+    }
     window.memoryGame = memoryGame;
     window.riddlesGame = riddlesGame;
 }

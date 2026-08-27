@@ -802,6 +802,7 @@
             if (!student || !Array.isArray(student.mistakeBank)) return [];
 
             const cleanTarget = this._extractPlainWord(targetWord);
+            const previousState = this._snapshotState();
             student.mistakeBank = student.mistakeBank.filter(m => {
                 if (m.word !== cleanTarget) return true;
                 if (targetLessonId !== undefined && targetLessonId !== '') {
@@ -811,7 +812,9 @@
             });
             student.lastActive = Date.now();
 
-            this._saveToStorage();
+            if (!this._persistOrRollback(previousState)) {
+                return this.getMistakes(targetStudentId);
+            }
             this._dispatchEvent(NBContracts.EVENTS.STUDENT_PROGRESS_UPDATED, { studentId: targetStudentId });
 
             return this._clone(student.mistakeBank);
@@ -857,16 +860,15 @@
                 return { mastered: false, consecutiveCorrect: 0, remainingMistakes: student.mistakeBank.length };
             }
 
+            const previousState = this._snapshotState();
             let wasMastered = false;
             if (isCorrect) {
                 mistakeItem.consecutiveCorrect = (mistakeItem.consecutiveCorrect || 0) + 1;
-                student.totalScore = Math.max(0, (student.totalScore || 0) + 2); // نقطتان لكل قراءة صحيحة
 
                 if (mistakeItem.consecutiveCorrect >= 2) {
-                    // إتقان راسخ - حذف الكلمة من البنك ومنح مكافأة إضافية
+                    // الإتقان يعالج بنك الأخطاء ولا يبدل مجموع نتائج الدروس.
                     mistakeItem.mastered = true;
                     student.mistakeBank = student.mistakeBank.filter(m => m.word !== cleanTarget);
-                    student.totalScore += 3; // مكافأة إتمام الإتقان
                     wasMastered = true;
                 }
             } else {
@@ -877,7 +879,14 @@
             }
 
             student.lastActive = Date.now();
-            this._saveToStorage();
+            if (!this._persistOrRollback(previousState)) {
+                return {
+                    mastered: false,
+                    consecutiveCorrect: 0,
+                    remainingMistakes: this.getMistakes(targetStudentId).length,
+                    saved: false
+                };
+            }
 
             this._dispatchEvent(NBContracts.EVENTS.STUDENT_PROGRESS_UPDATED, {
                 studentId: student.id,
@@ -889,7 +898,8 @@
             return {
                 mastered: wasMastered,
                 consecutiveCorrect: wasMastered ? 2 : (mistakeItem.consecutiveCorrect || 0),
-                remainingMistakes: student.mistakeBank.length
+                remainingMistakes: student.mistakeBank.length,
+                saved: true
             };
         },
 
@@ -917,9 +927,10 @@
             const cleanTarget = this._extractPlainWord(targetWord);
             const mistake = student.mistakeBank.find(m => m.word === cleanTarget);
             if (mistake) {
+                const previousState = this._snapshotState();
                 mistake.mastered = true;
                 student.lastActive = Date.now();
-                this._saveToStorage();
+                if (!this._persistOrRollback(previousState)) return false;
                 this._dispatchEvent(NBContracts.EVENTS.STUDENT_PROGRESS_UPDATED, { studentId: targetStudentId });
                 return true;
             }
@@ -941,10 +952,11 @@
             if (!student) return false;
 
             const countBefore = Array.isArray(student.mistakeBank) ? student.mistakeBank.length : 0;
+            const previousState = this._snapshotState();
             student.mistakeBank = [];
             student.lastActive = Date.now();
 
-            this._saveToStorage();
+            if (!this._persistOrRollback(previousState)) return false;
             this._dispatchEvent(NBContracts.EVENTS.STUDENT_UPDATED, { student: this._clone(student) });
             this._dispatchEvent(NBContracts.EVENTS.STUDENT_PROGRESS_UPDATED, {
                 studentId: targetId,
@@ -1005,6 +1017,14 @@
 
                 if (validatedStudents.length === 0) {
                     throw new Error('الملف لا يحتوي على أي سجلات طلاب صالحة للاستيراد.');
+                }
+
+                const importedIds = new Set();
+                for (const student of validatedStudents) {
+                    if (importedIds.has(student.id)) {
+                        throw new Error(`معرف طالب مكرر في ملف الاستيراد: ${student.id}`);
+                    }
+                    importedIds.add(student.id);
                 }
 
                 this._state.students = validatedStudents;
