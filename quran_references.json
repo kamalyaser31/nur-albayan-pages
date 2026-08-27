@@ -10978,8 +10978,8 @@
         "ayah_number": 117
       },
       {
-        "word": "<span class='quran-special-font' dir='rtl'><span class='c-black'>شَجَرَةٍ</span><span class='c-red'>ۭ</span> <span class='c-red'>تَ</span><span class='c-red'>خ\\u06E1</span><span class='c-black'>رُجُ</span></span>",
-        "clean_word": "شَجَرَةٍۭ تَخ\\u06E1رُجُ",
+        "word": "<span class='quran-special-font' dir='rtl'><span class='c-black'>شَجَرَةٍ </span><span class='c-red'>تَ</span><span class='c-red'>خ\\u06E1</span><span class='c-black'>رُجُ</span></span>",
+        "clean_word": "شَجَرَةٍ تَخ\\u06E1رُجُ",
         "ayah": "",
         "surah_number": 0,
         "surah_name": "",
