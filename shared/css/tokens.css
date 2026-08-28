@@ -14,9 +14,10 @@
     --color-focus-ring: #047857;
     --color-bg: #fcfbf9;
     --color-bg-green: #f0fdf4;
-    --color-quranic-red: #b91c1c;
+    --color-quranic-red: #dc2626;
     --color-quranic-blue: #1d4ed8;
     --color-quranic-purple: #7e22ce;
+    --color-quranic-black: #090d16;
 
     /* 2. Semantic Surface & Text Design Tokens */
     --surface-page: #f8fafc;

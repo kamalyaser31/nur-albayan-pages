@@ -24,7 +24,7 @@
     max-height: clamp(260px, 48vh, 420px);
     height: auto;
     flex-direction: column;
-    font-size: calc(clamp(3rem, 8.5vw, 6.5rem) * var(--font-scale-factor, 1));
+    font-size: calc(clamp(3.2rem, 9vw, 6.8rem) * var(--font-scale-factor, 1));
     padding: clamp(0.75rem, 2vw, 1.5rem) clamp(1rem, 3vw, 2.5rem);
     line-height: 1.5;
     letter-spacing: normal !important;
@@ -33,17 +33,17 @@
 }
 
 .letter-box.text-medium {
-    font-size: calc(clamp(2.3rem, 6.2vw, 4.6rem) * var(--font-scale-factor, 1));
+    font-size: calc(clamp(2.5rem, 6.8vw, 5.0rem) * var(--font-scale-factor, 1));
     line-height: 1.5;
 }
 
 .letter-box.text-long {
-    font-size: calc(clamp(1.8rem, 4.6vw, 3.4rem) * var(--font-scale-factor, 1));
+    font-size: calc(clamp(2.1rem, 5.4vw, 4.0rem) * var(--font-scale-factor, 1));
     line-height: 1.45;
 }
 
 .letter-box.text-xlong {
-    font-size: calc(clamp(1.45rem, 3.6vw, 2.7rem) * var(--font-scale-factor, 1));
+    font-size: calc(clamp(1.65rem, 4.2vw, 3.2rem) * var(--font-scale-factor, 1));
     line-height: 1.4;
 }
 

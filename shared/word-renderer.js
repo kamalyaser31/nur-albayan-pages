@@ -71,14 +71,15 @@
 
             const currentTheme = _normalizeTheme(item.theme || options.theme);
             const plain = this.getPlainWord(item);
-            const words = plain ? plain.split(/\s+/).filter(Boolean) : [];
-            const charCount = plain ? plain.replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g, '').length : 0;
+            const cleanPlain = plain ? plain.replace(/[-ـ–—•]/g, ' ') : '';
+            const words = cleanPlain ? cleanPlain.split(/\s+/).filter(Boolean) : [];
+            const charCount = plain ? plain.replace(/[\u064B-\u065F\u0670\u06D6-\u06ED\s-ـ–—•]/g, '').length : 0;
             let lengthClass = '';
-            if (charCount > 16 || words.length >= 4) {
+            if (charCount > 18 || words.length >= 5) {
                 lengthClass = 'text-xlong';
-            } else if (charCount > 10 || words.length === 3) {
+            } else if (charCount > 12 || words.length >= 4) {
                 lengthClass = 'text-long';
-            } else if (charCount > 5 || words.length === 2) {
+            } else if (charCount > 7 || words.length >= 3) {
                 lengthClass = 'text-medium';
             }
 
