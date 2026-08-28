@@ -75,12 +75,18 @@
                 <!-- Teacher Manual Feedback Triggers -->
                 ${teacherToolbarHtml}
 
-                <!-- Dropdown Navigator & Settings Button -->
-                <div class="flex items-center gap-1.5">
-                    <div id="selector-wrapper" class="flex items-center bg-slate-50 px-2 sm:px-3 py-1 rounded-full border border-slate-200 max-w-[130px] sm:max-w-[200px]">
+                <!-- Dropdown Navigator, Quick Navigation Arrows & Settings Button -->
+                <div class="flex items-center gap-1 sm:gap-1.5">
+                    <button type="button" id="top-nav-prev-btn" onclick="app.prev()" class="p-1.5 sm:p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition-colors shadow-sm text-xs sm:text-sm leading-none cursor-pointer flex items-center justify-center" data-i18n-aria="prev_card_aria" data-i18n-title="prev_card_aria" aria-label="${escapeHTML(i18n.t('prev_card_aria'))}" title="${escapeHTML(i18n.t('prev_card_aria'))}">
+                        <span aria-hidden="true">⬅</span>
+                    </button>
+                    <div id="selector-wrapper" class="flex items-center bg-slate-50 px-2 sm:px-3 py-1 rounded-full border border-slate-200 max-w-[120px] sm:max-w-[190px]">
                         <select id="example-navigator" onchange="app.jumpTo(this.value)" class="bg-transparent text-emerald-700 font-bold text-xs sm:text-sm outline-none cursor-pointer w-full text-center truncate" data-i18n-aria="nav_section_aria" aria-label="${escapeHTML(i18n.t('nav_section_aria'))}">
                         </select>
                     </div>
+                    <button type="button" id="top-nav-next-btn" onclick="app.next()" class="p-1.5 sm:p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition-colors shadow-sm text-xs sm:text-sm leading-none cursor-pointer flex items-center justify-center" data-i18n-aria="next_card_aria" data-i18n-title="next_card_aria" aria-label="${escapeHTML(i18n.t('next_card_aria'))}" title="${escapeHTML(i18n.t('next_card_aria'))}">
+                        <span aria-hidden="true">➡</span>
+                    </button>
                     <button onclick="if(typeof settingsManager!=='undefined')settingsManager.open()" class="p-1.5 sm:p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition-colors shadow-sm text-sm sm:text-base leading-none cursor-pointer" data-i18n-aria="open_settings_btn" data-i18n-title="open_settings_btn" aria-label="${escapeHTML(i18n.t('open_settings_btn'))}" title="Teacher Settings"><span aria-hidden="true">⚙️</span></button>
                 </div>
             </div>

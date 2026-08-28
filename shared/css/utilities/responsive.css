@@ -42,6 +42,7 @@
     
     .sm\:max-w-md { max-width: 28rem; }
     .sm\:max-w-lg { max-width: 32rem; }
+    .sm\:max-w-\[190px\] { max-width: 190px; }
     .sm\:max-w-\[200px\] { max-width: 200px; }
     .sm\:inline { display: inline; }
     .sm\:block { display: block; }

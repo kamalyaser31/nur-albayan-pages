@@ -150,6 +150,18 @@
         }
 
         if (typeof dataset === 'undefined' || dataset.length === 0) return;
+        if (!this.order && Array.isArray(dataset)) {
+            this.order = Array.from({ length: dataset.length }, (_, i) => i);
+            const settings = (typeof settingsManager !== 'undefined') ? settingsManager.get() : {};
+            if (settings.shuffleCards) {
+                this.shuffle(this.order);
+            }
+        }
+        const stage = document.getElementById('learning-stage');
+        if (stage && stage.classList.contains('hidden')) {
+            if (typeof this.hideAll === 'function') this.hideAll();
+            stage.classList.remove('hidden');
+        }
         if (this.idx < dataset.length - 1) {
             const third1 = Math.floor(dataset.length / 3) - 1;
             const third2 = Math.floor((dataset.length * 2) / 3) - 1;
@@ -179,6 +191,19 @@
                 this.renderSessionDrill();
             }
             return;
+        }
+        if (typeof dataset === 'undefined' || dataset.length === 0) return;
+        if (!this.order && Array.isArray(dataset)) {
+            this.order = Array.from({ length: dataset.length }, (_, i) => i);
+            const settings = (typeof settingsManager !== 'undefined') ? settingsManager.get() : {};
+            if (settings.shuffleCards) {
+                this.shuffle(this.order);
+            }
+        }
+        const stage = document.getElementById('learning-stage');
+        if (stage && stage.classList.contains('hidden')) {
+            if (typeof this.hideAll === 'function') this.hideAll();
+            stage.classList.remove('hidden');
         }
         if (this.idx > 0) {
             this.idx--;

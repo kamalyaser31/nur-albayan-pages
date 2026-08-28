@@ -46,7 +46,7 @@
 }
 
 /* ==========================================================================
-   2. Active Student Header Pill
+   2. Top Navigation Controls (Student Pill, Navigator & Quick Arrows)
    ========================================================================== */
 #active-student-pill {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -56,6 +56,43 @@
 #active-student-pill:hover {
     background-color: rgba(209, 250, 229, 0.95);
     border-color: #6ee7b7;
+}
+
+#top-nav-prev-btn,
+#top-nav-next-btn {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+}
+
+#top-nav-prev-btn:hover,
+#top-nav-next-btn:hover {
+    background-color: #e2e8f0;
+    transform: scale(1.08);
+}
+
+#top-nav-prev-btn:active,
+#top-nav-next-btn:active {
+    transform: scale(0.92);
+}
+
+#top-nav-prev-btn:focus-visible,
+#top-nav-next-btn:focus-visible {
+    outline: 2px solid #059669;
+    outline-offset: 2px;
+}
+
+#selector-wrapper {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#selector-wrapper:hover {
+    background-color: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+#selector-wrapper:focus-within {
+    border-color: #059669;
+    box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.15);
 }
 
 /* ==========================================================================
