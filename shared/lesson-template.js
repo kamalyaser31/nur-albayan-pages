@@ -77,6 +77,10 @@
 
                 <!-- Dropdown Navigator, Quick Navigation Arrows & Settings Button -->
                 <div class="flex items-center gap-1 sm:gap-1.5">
+                    <div id="page-jumper-wrapper" class="flex items-center bg-emerald-50/90 px-1.5 sm:px-2.5 py-1 rounded-full border border-emerald-200 shadow-inner max-w-[85px] sm:max-w-[110px]" title="الانتقال المباشر لأي صفحة">
+                        <select id="page-jumper" onchange="if(this.value) window.location.href=this.value" class="bg-transparent text-emerald-800 font-black text-xs sm:text-sm outline-none cursor-pointer w-full text-center truncate" data-i18n-aria="nav_page_aria" aria-label="الانتقال إلى صفحة">
+                        </select>
+                    </div>
                     <button type="button" id="top-nav-prev-btn" onclick="app.prev()" class="p-1.5 sm:p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition-colors shadow-sm text-xs sm:text-sm leading-none cursor-pointer flex items-center justify-center" data-i18n-aria="prev_card_aria" data-i18n-title="prev_card_aria" aria-label="${escapeHTML(i18n.t('prev_card_aria'))}" title="${escapeHTML(i18n.t('prev_card_aria'))}">
                         <span aria-hidden="true">⬅</span>
                     </button>

@@ -44,6 +44,7 @@ const app = {
         if (toggleEl) toggleEl.checked = this.enableGameBreaks;
 
         this.populateSelector();
+        this.populatePageJumper();
         this.jumpTo('menu');
         if (typeof xoGame !== 'undefined') xoGame.init();
         if (typeof c4Game !== 'undefined') c4Game.init();
@@ -56,6 +57,7 @@ const app = {
             this._localeBound = true;
             window.addEventListener(NBContracts.EVENTS.LOCALE_CHANGED, () => {
                 this.populateSelector();
+                this.populatePageJumper();
                 if (typeof updateActiveStudentPill === 'function') {
                     updateActiveStudentPill();
                 }
@@ -312,6 +314,34 @@ const app = {
         selector.appendChild(wwGroup);
 
         if (currentVal) selector.value = currentVal;
+    },
+
+    populatePageJumper() {
+        const jumper = document.getElementById('page-jumper');
+        if (!jumper) return;
+        jumper.innerHTML = '';
+
+        const indexOpt = document.createElement('option');
+        indexOpt.value = '../index.html';
+        indexOpt.textContent = (typeof i18n !== 'undefined' && i18n.t && i18n.t('index_title')) ? i18n.t('index_title') : '📑 الفهرس';
+        jumper.appendChild(indexOpt);
+
+        const group = document.createElement('optgroup');
+        group.label = (typeof i18n !== 'undefined' && i18n.t && i18n.t('group_pages')) ? i18n.t('group_pages') : '📖 صفحات الكتاب';
+
+        const match = window.location.pathname.match(/(\d+)\.html$/);
+        const currentPageNum = match ? parseInt(match[1], 10) : 0;
+
+        for (let i = 1; i <= 95; i++) {
+            const opt = document.createElement('option');
+            opt.value = `${i}.html`;
+            opt.textContent = `ص ${i}`;
+            if (i === currentPageNum) {
+                opt.selected = true;
+            }
+            group.appendChild(opt);
+        }
+        jumper.appendChild(group);
     },
 
     updateDrillNavOption() {

@@ -81,6 +81,20 @@
     outline-offset: 2px;
 }
 
+#page-jumper-wrapper {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#page-jumper-wrapper:hover {
+    background-color: #ecfdf5;
+    border-color: #a7f3d0;
+}
+
+#page-jumper-wrapper:focus-within {
+    border-color: #059669;
+    box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2);
+}
+
 #selector-wrapper {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
