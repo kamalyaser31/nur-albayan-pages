@@ -332,7 +332,7 @@ const app = {
         const match = window.location.pathname.match(/(\d+)\.html$/);
         const currentPageNum = match ? parseInt(match[1], 10) : 0;
 
-        for (let i = 1; i <= 95; i++) {
+        for (let i = 6; i <= 95; i++) {
             const opt = document.createElement('option');
             opt.value = `${i}.html`;
             opt.textContent = `ص ${i}`;

@@ -75,11 +75,11 @@
             const words = cleanPlain ? cleanPlain.split(/\s+/).filter(Boolean) : [];
             const charCount = plain ? plain.replace(/[\u064B-\u065F\u0670\u06D6-\u06ED\s-ـ–—•]/g, '').length : 0;
             let lengthClass = '';
-            if (charCount > 18 || words.length >= 5) {
+            if (charCount > 18 || (words.length >= 5 && charCount > 12)) {
                 lengthClass = 'text-xlong';
-            } else if (charCount > 12 || words.length >= 4) {
+            } else if (charCount > 12 || (words.length >= 4 && charCount > 9)) {
                 lengthClass = 'text-long';
-            } else if (charCount > 7 || words.length >= 3) {
+            } else if (charCount > 7 || (words.length >= 3 && charCount > 6)) {
                 lengthClass = 'text-medium';
             }
 
