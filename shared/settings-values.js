@@ -10,6 +10,7 @@
         defaultDifficulty: 'easy',
         timerDuration: 10,
         fontScale: 'normal',
+        fontPreference: 'auto',
         themeMode: 'system',
         shuffleCards: false,
         noPenaltyMode: false,
@@ -39,6 +40,10 @@
                 : defaults.timerDuration;
         }
         if ('fontScale' in input) clean.fontScale = ['normal', 'large', 'xlarge'].includes(input.fontScale) ? input.fontScale : defaults.fontScale;
+        const allowedFontPrefs = (typeof NBContracts !== 'undefined' && NBContracts.FONT_PREFERENCES)
+            ? Object.values(NBContracts.FONT_PREFERENCES)
+            : ['auto', 'kfgqpc', 'noto', 'amiri'];
+        if ('fontPreference' in input) clean.fontPreference = allowedFontPrefs.includes(input.fontPreference) ? input.fontPreference : defaults.fontPreference;
         if ('themeMode' in input) clean.themeMode = ['system', 'light', 'dark'].includes(input.themeMode) ? input.themeMode : defaults.themeMode;
         for (const key of ['shuffleCards', 'noPenaltyMode', 'manualAdvance']) {
             if (key in input) clean[key] = Boolean(input[key]);

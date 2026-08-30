@@ -87,16 +87,49 @@ const settingsManager = {
     apply(settings) {
         if (!settings) settings = this.get();
 
-        // 1. تطبيق مقياس الخط القرآني
-        document.documentElement.classList.remove('font-scale-normal', 'font-scale-large', 'font-scale-xlarge');
-        document.documentElement.classList.add(`font-scale-${settings.fontScale || 'normal'}`);
+        const docEl = typeof document !== 'undefined' ? document.documentElement : null;
+        if (docEl && docEl.classList) {
+            docEl.classList.remove('font-scale-normal', 'font-scale-large', 'font-scale-xlarge');
+            docEl.classList.add(`font-scale-${settings.fontScale || 'normal'}`);
+        }
+
+        // 2. تطبيق نوع الخط المعتمد وتفضيل المراجعين
+        const urlParams = (typeof window !== 'undefined' && window.location && window.location.search) ? new URLSearchParams(window.location.search) : new URLSearchParams();
+        const urlFont = urlParams.get('font');
+        const fontPref = urlFont || settings.fontPreference || 'auto';
+
+        const pageConfig = (typeof window !== 'undefined' && window.PAGE_CONFIG) || {};
+        const fontType = pageConfig.fontType || 'quran';
+
+        if (docEl && docEl.style) {
+            if (fontPref === 'kfgqpc' && typeof docEl.style.setProperty === 'function') {
+                docEl.style.setProperty('--font-quran', "'KFGQPC Uthmanic Hafs', 'UthmanicHafs', serif");
+                docEl.style.setProperty('--font-dictation', "'KFGQPC Uthmanic Hafs', 'UthmanicHafs', serif");
+            } else if (fontPref === 'noto' && typeof docEl.style.setProperty === 'function') {
+                docEl.style.setProperty('--font-quran', "'Noto Naskh Arabic', 'Simplified Arabic', serif");
+                docEl.style.setProperty('--font-dictation', "'Noto Naskh Arabic', 'Simplified Arabic', serif");
+            } else if (fontPref === 'amiri' && typeof docEl.style.setProperty === 'function') {
+                docEl.style.setProperty('--font-quran', "'Amiri', serif");
+                docEl.style.setProperty('--font-dictation', "'Amiri', serif");
+            } else if (typeof docEl.style.removeProperty === 'function') {
+                docEl.style.removeProperty('--font-quran');
+                docEl.style.removeProperty('--font-dictation');
+            }
+        }
+
+        if (docEl && docEl.classList) {
+            docEl.classList.remove('page-font-quran', 'page-font-dictation', 'page-font-mixed');
+            docEl.classList.add(`page-font-${fontType}`);
+        }
 
         // السمة اليدوية تعلو اختيار النظام، وغياب السمة يعيد التحكم للمتصفح.
         const themeMode = settings.themeMode || 'system';
-        if (themeMode === 'system') {
-            document.documentElement.removeAttribute('data-theme');
-        } else {
-            document.documentElement.setAttribute('data-theme', themeMode);
+        if (docEl && typeof docEl.removeAttribute === 'function') {
+            if (themeMode === 'system') {
+                docEl.removeAttribute('data-theme');
+            } else {
+                docEl.setAttribute('data-theme', themeMode);
+            }
         }
 
         // 2. مزامنة استراحات الألعاب مع تطبيق الدرس

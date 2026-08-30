@@ -75,6 +75,10 @@ const studentManager = require('./shared/student-manager.js');
 assert.throws(() => NBContracts.cardEvaluationRequest({ lessonId: '7', isCorrect: 'yes' }), TypeError);
 assert.throws(() => NBContracts.cardEvaluationRequest({ lessonId: '7', isCorrect: true }), TypeError);
 assert.throws(() => NBContracts.requireScorePolicy('unknown'), TypeError);
+assert.deepStrictEqual(NBContracts.FONT_TYPES, { QURAN: 'quran', DICTATION: 'dictation', MIXED: 'mixed' });
+assert.deepStrictEqual(NBContracts.FONT_PREFERENCES, { AUTO: 'auto', KFGQPC: 'kfgqpc', NOTO: 'noto', AMIRI: 'amiri' });
+assert.ok(Object.isFrozen(NBContracts.FONT_TYPES));
+assert.ok(Object.isFrozen(NBContracts.FONT_PREFERENCES));
 
 // 2. إنشاء واستيراد وتنشيط الطالب
 assert.strictEqual(studentManager.importJSON({ students: [{ id: 's1', name: 'أحمد' }] }).success, true);
@@ -199,6 +203,10 @@ assert.strictEqual(SettingsValues.persist({ volume: 200 }).volume, 100);
 assert.strictEqual(SettingsValues.persist({ volume: -50 }).volume, 0);
 assert.strictEqual(SettingsValues.persist({ themeMode: 'dark' }).themeMode, 'dark');
 assert.strictEqual(SettingsValues.persist({ themeMode: 'invalid' }).themeMode, 'system');
+assert.strictEqual(SettingsValues.persist({ fontPreference: 'kfgqpc' }).fontPreference, 'kfgqpc');
+assert.strictEqual(SettingsValues.persist({ fontPreference: 'noto' }).fontPreference, 'noto');
+assert.strictEqual(SettingsValues.persist({ fontPreference: 'amiri' }).fontPreference, 'amiri');
+assert.strictEqual(SettingsValues.persist({ fontPreference: 'invalid' }).fontPreference, 'auto');
 rejectWrites = true;
 assert.throws(() => SettingsValues.persist({ volume: 20 }));
 assert.strictEqual(SettingsValues.get().themeMode, 'system');
@@ -342,6 +350,14 @@ assert.ok(sanitized.includes('سَلَامٌ'), 'Safe text content missing after
 const themeInjection = WordRenderer.toHTML({ w: 'آمِن', theme: 'x\" onmouseover=\"alert(1)' });
 assert.ok(themeInjection.includes('theme-pink'), 'Unknown theme did not fall back');
 assert.ok(!themeInjection.includes('onmouseover'), 'Theme attribute injection was not rejected');
+
+// 6. فحص ازدواجية الخطوط وتوجيه fontType
+const quranHtml = WordRenderer.toHTML('كَتَبَ', { fontType: 'quran' });
+assert.ok(quranHtml.includes('quran-font'), 'Quran font class missing for quran fontType');
+const dictationHtml = WordRenderer.toHTML('كَتَبَ', { fontType: 'dictation' });
+assert.ok(dictationHtml.includes('dictation-font'), 'Dictation font class missing for dictation fontType');
+const mixedHtml = WordRenderer.toHTML('كَتَبَ', { fontType: 'mixed' });
+assert.ok(mixedHtml.includes('dictation-font'), 'Dictation font class missing for mixed fontType base card');
 """
     run_node_scenario(scenario)
 
@@ -450,6 +466,9 @@ try {{
         eval(scriptMatch[1] + '\\n;globalThis.__lessonDataset = typeof dataset !== "undefined" ? dataset : null;');
         const cfg = window.PAGE_CONFIG || {{}};
         if (!cfg.title && !code.includes('remediation')) throw new Error('Missing title in PAGE_CONFIG');
+        if (cfg.fontType && !['quran', 'dictation', 'mixed'].includes(cfg.fontType)) {{
+            throw new Error('Invalid fontType in PAGE_CONFIG: ' + cfg.fontType);
+        }}
         const lessonDataset = globalThis.__lessonDataset;
         if (!Array.isArray(lessonDataset) && !code.includes('remediation')) throw new Error('Dataset was not exported');
         if (Array.isArray(lessonDataset)) {{
@@ -548,6 +567,17 @@ def test_static_asset_and_relative_link_integrity() -> None:
     assert not broken_links, "Found broken asset/page links:\n" + "\n".join(
         broken_links
     )
+
+    # التحقق من وجود ملفات الخطوط المحلية الأساسية
+    fonts_dir = ROOT / "shared" / "vendor" / "fonts"
+    for required_font in [
+        "kfgqpc-uthmanic-hafs.woff2",
+        "noto-naskh-regular.woff2",
+        "noto-naskh-bold.woff2",
+        "amiri-regular.woff2",
+        "amiri-bold.woff2"
+    ]:
+        assert (fonts_dir / required_font).is_file(), f"Missing required local font asset: {required_font}"
 
 
 # ==============================================================================

@@ -5,7 +5,7 @@
  * - Cache-First with Dynamic Runtime Fallback for Static Assets & Offline Fonts
  */
 
-const CACHE_VERSION = 'v6';
+const CACHE_VERSION = 'v7';
 const CACHE_STATIC_NAME = `nur-albayan-static-${CACHE_VERSION}`;
 const CACHE_RUNTIME_NAME = `nur-albayan-runtime-${CACHE_VERSION}`;
 
@@ -75,6 +75,9 @@ const PRECACHE_ASSETS = [
     './shared/vendor/confetti.browser.min.js',
     './shared/vendor/icon.png',
     // Optimized Offline Fonts (Unique, De-duplicated)
+    './shared/vendor/fonts/kfgqpc-uthmanic-hafs.woff2',
+    './shared/vendor/fonts/noto-naskh-regular.woff2',
+    './shared/vendor/fonts/noto-naskh-bold.woff2',
     './shared/vendor/fonts/amiri-regular.woff2',
     './shared/vendor/fonts/amiri-bold.woff2',
     './shared/vendor/fonts/fredoka-regular.woff2',

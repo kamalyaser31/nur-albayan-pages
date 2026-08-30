@@ -47,6 +47,7 @@
             { id: 'cfg-game-diff', prop: 'defaultDifficulty' },
             { id: 'cfg-timer-duration', prop: 'timerDuration' },
             { id: 'cfg-font-scale', prop: 'fontScale' },
+            { id: 'cfg-font-pref', prop: 'fontPreference' },
             { id: 'cfg-theme-mode', prop: 'themeMode' },
             { id: 'cfg-shuffle-cards', prop: 'shuffleCards', check: true },
             { id: 'cfg-no-penalty', prop: 'noPenaltyMode', check: true },
@@ -157,6 +158,15 @@
                                     <option value="normal" data-i18n="font_normal">${t("font_normal", "افتراضي (100%)")}</option>
                                     <option value="large" data-i18n="font_large">${t("font_large", "كبير (122%)")}</option>
                                     <option value="xlarge" data-i18n="font_xlarge">${t("font_xlarge", "كبير جداً (145%)")}</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="cfg-font-pref" data-i18n="font_pref_label" class="block text-xs font-bold text-slate-600 mb-1">${t("font_pref_label", "نوع الخط المعتمد")}</label>
+                                <select id="cfg-font-pref" onchange="settingsManager.save({fontPreference: this.value}, {silent: true})" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 font-bold text-xs text-slate-700 outline-none focus:border-emerald-500">
+                                    <option value="auto" data-i18n="font_opt_auto">${t("font_opt_auto", "تلقائي ذكي (مصحف + إملاء)")}</option>
+                                    <option value="kfgqpc" data-i18n="font_opt_kfgqpc">${t("font_opt_kfgqpc", "مصحف المدينة (مجمع الملك فهد)")}</option>
+                                    <option value="noto" data-i18n="font_opt_noto">${t("font_opt_noto", "نوتو نسخ (المدرسي المستوي)")}</option>
+                                    <option value="amiri" data-i18n="font_opt_amiri">${t("font_opt_amiri", "خط أميري (التراثي)")}</option>
                                 </select>
                             </div>
                             <div>

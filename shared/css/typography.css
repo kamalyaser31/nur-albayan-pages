@@ -4,9 +4,15 @@
  */
 
 
+:root {
+    --font-quran: 'KFGQPC Uthmanic Hafs', 'UthmanicHafs', 'Amiri', 'Traditional Arabic', serif;
+    --font-dictation: 'Noto Naskh Arabic', 'Simplified Arabic', 'Segoe UI', serif;
+}
+
 .quran-font,
-.quran-special-font {
-    font-family: var(--font-quran, 'Amiri', 'Amiri Quran', 'Scheherazade New', 'Traditional Arabic', serif);
+.quran-special-font,
+.font-quran {
+    font-family: var(--font-quran);
     font-weight: 700;
     font-feature-settings: "calt" 0, "liga" 0, "dlig" 0, "hlig" 0, "mkmk" 1, "mark" 1, "ccmp" 1;
     text-rendering: optimizeLegibility;
@@ -16,6 +22,28 @@
     letter-spacing: normal !important;
     direction: rtl;
     unicode-bidi: isolate;
+}
+
+.dictation-font,
+.font-dictation {
+    font-family: var(--font-dictation);
+    font-weight: 600;
+    text-rendering: optimizeLegibility;
+    line-height: 2.0;
+    letter-spacing: normal !important;
+    direction: rtl;
+    unicode-bidi: isolate;
+}
+
+/* Page Root Font Inheritance */
+html.page-font-quran, body.page-font-quran {
+    font-family: var(--font-quran);
+}
+html.page-font-dictation, body.page-font-dictation {
+    font-family: var(--font-dictation);
+}
+html.page-font-mixed, body.page-font-mixed {
+    font-family: var(--font-dictation);
 }
 
 /* Word Diacritic Colors (Linked to Central Tokens) */

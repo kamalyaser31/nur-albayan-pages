@@ -63,10 +63,14 @@
         toHTML(item, options = {}) {
             if (!item) return '';
 
+            const pageConfig = (typeof window !== 'undefined' && window.PAGE_CONFIG) || {};
+            const fontType = options.fontType || (item && item.fontType) || pageConfig.fontType || 'quran';
+            const fontClass = (fontType === 'dictation' || fontType === 'mixed') ? 'dictation-font' : 'quran-font';
+
             // إذا كان المدخل نصاً بسيطاً
             if (typeof item === 'string') {
                 const currentTheme = _normalizeTheme(options.theme);
-                return `<div class="letter-box theme-${currentTheme}"><span class="word-wrapper quran-font text-center">${_sanitizeHTML(item)}</span></div>`;
+                return `<div class="letter-box theme-${currentTheme}"><span class="word-wrapper ${fontClass} text-center">${_sanitizeHTML(item)}</span></div>`;
             }
 
             const currentTheme = _normalizeTheme(item.theme || options.theme);
@@ -87,7 +91,7 @@
                 const colorClasses = ['c-red', 'c-blue', 'c-black'];
                 const segsHtml = item.segs.map((ch, i) => {
                     const colorClass = colorClasses[i % 3];
-                    return `<div class="seg-box theme-${currentTheme} quran-font ${colorClass}">${_escapeHTML(ch)}</div>`;
+                    return `<div class="seg-box theme-${currentTheme} ${fontClass} ${colorClass}">${_escapeHTML(ch)}</div>`;
                 }).join('');
                 return `<div class="segmented-container">${segsHtml}</div>`;
             }
@@ -95,37 +99,37 @@
             if (item.boxes && Array.isArray(item.boxes)) {
                 const boxesHtml = item.boxes.map(segments => {
                     const inner = segments.map(([t, c]) => `<span class="color-${_escapeHTML(c)}">${_escapeHTML(t)}</span>`).join('');
-                    return `<div class="seg-box theme-${currentTheme} quran-font" style="direction: rtl;"><bdi style="white-space:nowrap">${inner}</bdi></div>`;
+                    return `<div class="seg-box theme-${currentTheme} ${fontClass}" style="direction: rtl;"><bdi style="white-space:nowrap">${inner}</bdi></div>`;
                 }).join('');
                 return `<div class="segmented-container">${boxesHtml}</div>`;
             }
 
             if (item.multiBox && Array.isArray(item.w)) {
                 const boxesHtml = item.w.map((char, i) => {
-                    return `<div class="seg-box theme-${currentTheme} quran-font color-${i % 3}">${_escapeHTML(char)}</div>`;
+                    return `<div class="seg-box theme-${currentTheme} ${fontClass} color-${i % 3}">${_escapeHTML(char)}</div>`;
                 }).join('');
                 return `<div class="segmented-container">${boxesHtml}</div>`;
             }
 
             if (item.groups && Array.isArray(item.groups)) {
                 const inner = item.groups.map(g => `<span class="${_escapeHTML(g[1])}" style="margin:0 .25em">${_escapeHTML(g[0])}</span>`).join('');
-                return `<div class="letter-box quran-font theme-${currentTheme} ${lengthClass}" style="direction: rtl;">${inner}</div>`;
+                return `<div class="letter-box ${fontClass} theme-${currentTheme} ${lengthClass}" style="direction: rtl;">${inner}</div>`;
             }
 
             if (item.html) {
-                return `<div class="letter-box quran-font theme-${currentTheme} ${lengthClass}" style="direction: rtl;">${_sanitizeHTML(item.html)}</div>`;
+                return `<div class="letter-box ${fontClass} theme-${currentTheme} ${lengthClass}" style="direction: rtl;">${_sanitizeHTML(item.html)}</div>`;
             }
 
             if (Array.isArray(item.w)) {
                 const inner = item.w.map((seg, i) => `<span class="color-${i % 3}">${_sanitizeHTML(seg)}</span>`).join('');
-                return `<div class="letter-box quran-font theme-${currentTheme} ${lengthClass}" style="direction: rtl;"><bdi style="white-space:nowrap">${inner}</bdi></div>`;
+                return `<div class="letter-box ${fontClass} theme-${currentTheme} ${lengthClass}" style="direction: rtl;"><bdi style="white-space:nowrap">${inner}</bdi></div>`;
             }
 
             if (item.w) {
-                return `<div class="letter-box theme-${currentTheme} ${lengthClass}"><span class="word-wrapper quran-font text-center">${_sanitizeHTML(item.w)}</span></div>`;
+                return `<div class="letter-box theme-${currentTheme} ${lengthClass}"><span class="word-wrapper ${fontClass} text-center">${_sanitizeHTML(item.w)}</span></div>`;
             }
 
-            return `<div class="letter-box theme-${currentTheme}"><span class="word-wrapper quran-font text-center">${_escapeHTML(plain)}</span></div>`;
+            return `<div class="letter-box theme-${currentTheme}"><span class="word-wrapper ${fontClass} text-center">${_escapeHTML(plain)}</span></div>`;
         },
 
         /**

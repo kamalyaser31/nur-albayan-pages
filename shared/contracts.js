@@ -16,6 +16,19 @@
         COMPUTER: 'computer'
     });
 
+    const FONT_TYPES = Object.freeze({
+        QURAN: 'quran',
+        DICTATION: 'dictation',
+        MIXED: 'mixed'
+    });
+
+    const FONT_PREFERENCES = Object.freeze({
+        AUTO: 'auto',
+        KFGQPC: 'kfgqpc',
+        NOTO: 'noto',
+        AMIRI: 'amiri'
+    });
+
     const EVENTS = Object.freeze({
         LOCALE_CHANGED: 'nb:locale-changed',
         SETTINGS_CHANGED: 'nb:settings-changed',
@@ -125,6 +138,8 @@
         EVENTS,
         GAME_MODES,
         SCORE_POLICIES,
+        FONT_TYPES,
+        FONT_PREFERENCES,
         cardEvaluationRequest,
         normalizeScorePolicy,
         requireScorePolicy

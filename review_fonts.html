@@ -6,19 +6,27 @@
     <title>مختبر الخطوط والتدقيق البصري — منصة نور البيان</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Noto Naskh Arabic & Scheherazade New & Amiri -->
+    <!-- Google Fonts: Noto Naskh Arabic & Amiri -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="shared/core.css">
     
     <style>
         /* 1. King Fahd Complex Quran Font (مجمع الملك فهد لطباعة المصحف الشريف) */
         @font-face {
             font-family: 'KFGQPC Uthmanic Hafs';
-            src: url('https://fonts.qurancomplex.gov.sa/wp-content/uploads/2021/06/UthmanicHafs_v20.woff2') format('woff2'),
-                 url('https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/fonts/kfgqpc-uthman-taha-naskh.woff2') format('woff2'),
-                 local('KFGQPC Uthman Taha Naskh'), local('KFGQPC Uthmanic Script HAFS Regular');
+            src: local('KFGQPC Uthmanic Hafs'), local('KFGQPC Uthman Taha Naskh'), local('UthmanicHafs1Ver18'),
+                 url('shared/vendor/fonts/kfgqpc-uthmanic-hafs.woff2') format('woff2'),
+                 url('https://verses.quran.foundation/fonts/quran/hafs/uthmanic_hafs/UthmanicHafs1Ver18.woff2') format('woff2'),
+                 url('https://fonts.qurancomplex.gov.sa/wp-content/uploads/2021/06/UthmanicHafs_v20.woff2') format('woff2');
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Noto Naskh Arabic';
+            src: local('Noto Naskh Arabic'), local('Noto Naskh Arabic Regular'),
+                 url('shared/vendor/fonts/noto-naskh-regular.woff2') format('woff2');
             font-display: swap;
         }
 
@@ -30,9 +38,6 @@
         }
         .font-kfgqpc {
             font-family: 'KFGQPC Uthmanic Hafs', 'KFGQPC Uthman Taha Naskh', serif;
-        }
-        .font-scheherazade {
-            font-family: 'Scheherazade New', serif;
         }
         
         .word-card {
@@ -74,19 +79,16 @@
                 <!-- Live Control Panel -->
                 <div class="flex flex-wrap items-center gap-2.5">
                     
-                    <!-- Font Selector (4 Fonts) -->
+                    <!-- Font Selector (3 Core Fonts) -->
                     <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs sm:text-sm font-medium overflow-x-auto">
                         <button onclick="setFont('font-amiri')" id="btn-amiri" class="font-btn px-2.5 sm:px-3 py-1.5 rounded-lg transition bg-white text-emerald-700 shadow-sm font-bold">
-                            أميري (الحالي)
+                            أميري (التراثي)
                         </button>
                         <button onclick="setFont('font-kfgqpc')" id="btn-kfgqpc" class="font-btn px-2.5 sm:px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-slate-900">
                             مصحف المدينة (مجمع الملك فهد)
                         </button>
                         <button onclick="setFont('font-noto')" id="btn-noto" class="font-btn px-2.5 sm:px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-slate-900">
                             نوتو نسخ (المدرسي)
-                        </button>
-                        <button onclick="setFont('font-scheherazade')" id="btn-scheherazade" class="font-btn px-2.5 sm:px-3 py-1.5 rounded-lg transition text-slate-600 hover:text-slate-900">
-                            شهرزاد
                         </button>
                     </div>
 
@@ -222,8 +224,7 @@
             const btnMap = {
                 'font-amiri': 'btn-amiri',
                 'font-kfgqpc': 'btn-kfgqpc',
-                'font-noto': 'btn-noto',
-                'font-scheherazade': 'btn-scheherazade'
+                'font-noto': 'btn-noto'
             };
             const activeId = btnMap[fontClass] || 'btn-amiri';
             document.getElementById(activeId).className = 'font-btn px-2.5 sm:px-3 py-1.5 rounded-lg transition bg-white text-emerald-700 shadow-sm font-bold';
@@ -231,8 +232,7 @@
             const names = {
                 'font-amiri': 'خط النسخ الأميري (Bulaq Heritage)',
                 'font-kfgqpc': 'خط مجمع الملك فهد لطباعة المصحف الشريف (KFGQPC Hafs V20)',
-                'font-noto': 'خط نوتو نسخ المدرسي (Noto Naskh Arabic)',
-                'font-scheherazade': 'خط شهرزاد القرآني (Scheherazade New)'
+                'font-noto': 'خط نوتو نسخ المدرسي (Noto Naskh Arabic)'
             };
             document.getElementById('current-font-name').innerText = names[fontClass] || fontClass;
 

@@ -5,6 +5,30 @@
 
 /* 1. Local Font Declarations */
 @font-face {
+    font-family: 'KFGQPC Uthmanic Hafs';
+    font-style: normal;
+    font-weight: 400 700;
+    src: local('KFGQPC Uthmanic Hafs'), local('KFGQPC Uthman Taha Naskh'), local('UthmanicHafs1Ver18'),
+         url('../vendor/fonts/kfgqpc-uthmanic-hafs.woff2') format('woff2');
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Noto Naskh Arabic';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Noto Naskh Arabic'), local('Noto Naskh Arabic Regular'),
+         url('../vendor/fonts/noto-naskh-regular.woff2') format('woff2');
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Noto Naskh Arabic';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Noto Naskh Arabic Bold'),
+         url('../vendor/fonts/noto-naskh-bold.woff2') format('woff2');
+    font-display: swap;
+}
+@font-face {
     font-family: 'Amiri';
     font-style: normal;
     font-weight: 400;

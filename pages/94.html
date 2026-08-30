@@ -9,10 +9,12 @@
 <body class="flex flex-col items-center select-none bg-emerald-50/40">
     <script>
         window.PAGE_CONFIG = {
+
             title: 'Nour Al-Bayan',
             subtitle: 'Page 94 • General Review 2 (مراجعة عامة • آيات وأحاديث ٢)',
             footer: 'Nour Al-Bayan Learning System • Page 94 (General Review 2 / مراجعة عامة • آيات وأحاديث ٢)',
-            game3: 'memory'
+            game3: 'memory',
+            fontType: 'mixed'
         };
 
         const dataset = [
@@ -23,10 +25,10 @@
             {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>فَأَ</span><span class='c-red'>نشَ</span><span class='c-black'>أ\u06E1نَا لَكُم </span><span class='c-red'>بِ</span><span class='c-black'>هِ</span><span class='c-red'>ۦ</span> <span class='c-black'>جَ</span><span class='c-red'>نَّ</span><span class='c-black'>ـٰتٍ </span><span class='c-red'>مِّ</span><span class='c-red'>ن </span><span class='c-red'>نَّ</span><span class='c-black'>خِ</span><span class='c-red'>ي</span><span class='c-black'>لٍ </span><span class='c-red'>وَ</span><span class='c-black'>أَ</span><span class='c-red'>ع\u06E1</span><span class='c-black'>نَـ</span><span class='c-red'>ٰ</span><span class='c-black'>بٍ </span><span class='c-red'>لَّ</span><span class='c-black'>كُ</span><span class='c-red'>م\u06E1</span> <span class='c-black'>فِ</span><span class='c-red'>ي</span><span class='c-black'>هَا فَوَٰكِهُ كَثِ</span><span class='c-red'>ي</span><span class='c-black'>رَةٌ </span><span class='c-red'>وَ</span><span class='c-black'>مِ</span><span class='c-red'>ن\u06E1</span><span class='c-black'>هَا تَ</span><span class='c-red'>أ\u06E1</span><span class='c-black'>كُلُ</span><span class='c-red'>و</span><span class='c-black'>نَ</span></span>", info: "آيات كريمة للمراجعة", theme: "pink", t: "danger"},
 
             // Hadiths
-            {w: "<span dir='rtl'><span class='c-black'>قَالَ رَسُولُ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ : \"إِنَّمَا بُعِثْتُ لِأُتَمِّمَ صَالِحَ الْـأَخْلَاقِ\"</span></span>", info: "حديث شريف", theme: "green", t: "golden"},
-            {w: "<span dir='rtl'><span class='c-black'>قَالَ رَسُولُ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ : \"مَا مِنْ شَيْءٍ أَثْقَلُ فِي مِيزَانِ الْـمُؤْمِنِ يَوْمَ الْـقِيَامَةِ مِنْ حُسْنِ الْـخُلُقِ\"</span></span>", info: "حديث شريف", theme: "green", t: "normal"},
-            {w: "<span dir='rtl'><span class='c-black'>قَالَ رَسُولُ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ : \"اتَّقِ اللَّهَ حَيْثُمَا كُنْتَ ، وَأَتْبِعِ السَّيِّئَةَ الْـحَسَنَةَ تَمْحُهَا ، وَخَالِقِ النَّاسَ بِخُلُقٍ حَسَنٍ\"</span></span>", info: "حديث شريف", theme: "green", t: "speed"},
-            {w: "<span dir='rtl'><span class='c-black'>قَالَ رَسُولُ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ : \"طَلَبُ الْـعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ\"</span></span>", info: "حديث شريف", theme: "green", t: "golden"}
+            {w: "<span class='dictation-font' dir='rtl'><span class='c-black'>قَالَ رَسُولُ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ : \"إِنَّمَا بُعِثْتُ لِأُتَمِّمَ صَالِحَ الْـأَخْلَاقِ\"</span></span>", info: "حديث شريف", theme: "green", t: "golden"},
+            {w: "<span class='dictation-font' dir='rtl'><span class='c-black'>قَالَ رَسُولُ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ : \"مَا مِنْ شَيْءٍ أَثْقَلُ فِي مِيزَانِ الْـمُؤْمِنِ يَوْمَ الْـقِيَامَةِ مِنْ حُسْنِ الْـخُلُقِ\"</span></span>", info: "حديث شريف", theme: "green", t: "normal"},
+            {w: "<span class='dictation-font' dir='rtl'><span class='c-black'>قَالَ رَسُولُ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ : \"اتَّقِ اللَّهَ حَيْثُمَا كُنْتَ ، وَأَتْبِعِ السَّيِّئَةَ الْـحَسَنَةَ تَمْحُهَا ، وَخَالِقِ النَّاسَ بِخُلُقٍ حَسَنٍ\"</span></span>", info: "حديث شريف", theme: "green", t: "speed"},
+            {w: "<span class='dictation-font' dir='rtl'><span class='c-black'>قَالَ رَسُولُ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ : \"طَلَبُ الْـعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ\"</span></span>", info: "حديث شريف", theme: "green", t: "golden"}
         ];
     </script>
     <script src="../shared/core.js"></script>
