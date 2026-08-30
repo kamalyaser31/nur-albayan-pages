@@ -9,56 +9,47 @@
 <body class="flex flex-col items-center select-none bg-emerald-50/40">
     <script>
 window.PAGE_CONFIG = {
-            title: 'Nour Al-Bayan',
-            subtitle: 'Page 18 • Segmented Letters (الحروف المجزأة)',
-            footer: 'Nour Al-Bayan Learning System • Page 18 (Segmented Letters (الحروف المجزأة))',
+            title: 'نور البيان',
+            subtitle: '٣ـ الحروف بحركة الضم — المقارنات الثنائية والثلاثية',
+            lessonNumber: 1,
+            pageNumber: 18,
+            fontType: 'dictation',
             game3: 'memory'
         };
 
         const D = "<span class='sep-bar mx-1'>-</span>";
         const dataset = [
-            // الجزء الأول: الحروف في آخر الكلمة مع الضمة
-            {w: [`<span class='text-rose-500'>ـأُ</span>`], t: "normal"},
-            {w: [`<span class='text-indigo-900'>ـبُ</span>`], t: "speed"},
-            {w: [`<span class='text-teal-500'>ـتُ</span>`], t: "normal"},
-            {w: [`<span class='text-slate-800'>ـثُ</span>`], t: "golden"},
-            {w: [`<span class='text-rose-500'>ـجُ</span>`], t: "normal"},
-            {w: [`<span class='text-indigo-900'>ـحُ</span>`], t: "danger"},
-            {w: [`<span class='text-teal-500'>ـخُ</span>`], t: "normal"},
-            {w: [`<span class='text-slate-800'>ـدُ</span>`], t: "speed"},
-            {w: [`<span class='text-rose-500'>ـذُ</span>`], t: "normal"},
-            {w: [`<span class='text-indigo-900'>ـرُ</span>`], t: "golden"},
+            // الجزء الأول: الحروف بحركة الضم مفردة
+            {w: [`<span class='c-red'>أُ</span>`], t: "normal"},
+            {w: [`<span class='c-blue'>بُـ</span>`], t: "speed"},
+            {w: [`<span class='c-emerald'>تُـ</span>`], t: "normal"},
+            {w: [`<span class='c-black'>ثُـ</span>`], t: "golden"},
+            {w: [`<span class='c-red'>جُـ</span>`], t: "normal"},
+            {w: [`<span class='c-blue'>حُـ</span>`], t: "danger"},
+            {w: [`<span class='c-emerald'>خُـ</span>`], t: "normal"},
+            {w: [`<span class='c-black'>دُ</span>`], t: "speed"},
+            {w: [`<span class='c-red'>ذُ</span>`], t: "normal"},
+            {w: [`<span class='c-blue'>رُ</span>`], t: "golden"},
 
-            // الجزء الثاني: الحروف السابقة (كما هي)
-            {w: [`<span class='text-rose-500'>زَ</span>${D}<span class='text-indigo-900'>ـزِ</span>${D}<span class='text-teal-500'>ـزُ</span>`], t: "normal"},
-            {w: [`<span class='text-rose-500'>سَـ</span>${D}<span class='text-indigo-900'>ـسِـ</span>${D}<span class='text-teal-500'>ـسُ</span>`], t: "speed"},
-            {w: [`<span class='text-teal-500'>شَـ</span>${D}<span class='text-indigo-900'>ـشِـ</span>${D}<span class='text-rose-500'>ـشُ</span>`], t: "danger"},
-            {w: [`<span class='text-rose-500'>صَـ</span>${D}<span class='text-indigo-900'>ـصِـ</span>${D}<span class='text-teal-500'>ـصُ</span>`], t: "normal"},
-            {w: [`<span class='text-teal-500'>ضَـ</span>${D}<span class='text-indigo-900'>ـضِـ</span>${D}<span class='text-rose-500'>ـضُ</span>`], t: "golden"},
-            {w: [`<span class='text-rose-500'>طَـ</span>${D}<span class='text-indigo-900'>ـطِـ</span>${D}<span class='text-teal-500'>ـطُ</span>`], t: "normal"},
-            {w: [`<span class='text-teal-500'>ظَـ</span>${D}<span class='text-indigo-900'>ـظِـ</span>${D}<span class='text-rose-500'>ـظُ</span>`], t: "speed"},
-            {w: [`<span class='text-rose-500'>عَـ</span>${D}<span class='text-indigo-900'>ـعِـ</span>${D}<span class='text-teal-500'>ـعُ</span>`], t: "danger"},
-            {w: [`<span class='text-teal-500'>غَـ</span>${D}<span class='text-indigo-900'>ـغِـ</span>${D}<span class='text-rose-500'>ـغُ</span>`], t: "normal"},
-            {w: [`<span class='text-rose-500'>فَـ</span>${D}<span class='text-indigo-900'>ـفِـ</span>${D}<span class='text-teal-500'>ـفُ</span>`], t: "golden"},
-            
-            // التعديلات الجديدة تبدأ من هنا (قاف إلى ياء):
-            
-            // قاف: كسرة - ضمة - فتحة
-            {w: [`<span class='text-teal-500'>قِـ</span>${D}<span class='text-indigo-900'>ـقُـ</span>${D}<span class='text-rose-500'>ـقَ</span>`], t: "normal"},
-            // كاف: فتحة - ضمة - كسرة
-            {w: [`<span class='text-rose-500'>كَـ</span>${D}<span class='text-indigo-900'>ـكُـ</span>${D}<span class='text-teal-500'>ـكِ</span>`], t: "speed"},
-            // لام: ضمة - فتحة - كسرة
-            {w: [`<span class='text-teal-500'>لُـ</span>${D}<span class='text-indigo-900'>ـلَـ</span>${D}<span class='text-rose-500'>ـلِ</span>`], t: "danger"},
-            // ميم: كسرة - ضمة - فتحة
-            {w: [`<span class='text-rose-500'>مِـ</span>${D}<span class='text-indigo-900'>ـمُـ</span>${D}<span class='text-teal-500'>ـمَ</span>`], t: "normal"},
-            // نون: كسرة - ضمة - فتحة
-            {w: [`<span class='text-teal-500'>نِـ</span>${D}<span class='text-indigo-900'>ـنُـ</span>${D}<span class='text-rose-500'>ـنَ</span>`], t: "golden"},
-            // هاء: ضمة - فتحة - كسرة
-            {w: [`<span class='text-rose-500'>هُـ</span>${D}<span class='text-indigo-900'>ـهَـ</span>${D}<span class='text-teal-500'>ـهِ</span>`], t: "normal"},
-            // واو: كسرة - ضمة - فتحة
-            {w: [`<span class='text-teal-500'>وِ</span>${D}<span class='text-indigo-900'>ـوُ</span>${D}<span class='text-rose-500'>ـوَ</span>`], t: "speed"},
-            // ياء: فتحة - ضمة - كسرة
-            {w: [`<span class='text-rose-500'>يَـ</span>${D}<span class='text-indigo-900'>ـيُـ</span>${D}<span class='text-teal-500'>ـيِ</span>`], t: "normal"}
+            // الجزء الثاني: مقارنات الحركات الثلاث
+            {w: [`<span class='c-red'>زَ</span>${D}<span class='c-blue'>زِ</span>${D}<span class='c-emerald'>زُ</span>`], t: "normal"},
+            {w: [`<span class='c-red'>سَـ</span>${D}<span class='c-blue'>سِـ</span>${D}<span class='c-emerald'>سُـ</span>`], t: "speed"},
+            {w: [`<span class='c-emerald'>شَـ</span>${D}<span class='c-blue'>شِـ</span>${D}<span class='c-red'>شُـ</span>`], t: "danger"},
+            {w: [`<span class='c-red'>صَـ</span>${D}<span class='c-blue'>صِـ</span>${D}<span class='c-emerald'>صُـ</span>`], t: "normal"},
+            {w: [`<span class='c-emerald'>ضَـ</span>${D}<span class='c-blue'>ضِـ</span>${D}<span class='c-red'>ضُـ</span>`], t: "golden"},
+            {w: [`<span class='c-red'>طَـ</span>${D}<span class='c-blue'>طِـ</span>${D}<span class='c-emerald'>طُـ</span>`], t: "normal"},
+            {w: [`<span class='c-emerald'>ظَـ</span>${D}<span class='c-blue'>ظِـ</span>${D}<span class='c-red'>ظُـ</span>`], t: "speed"},
+            {w: [`<span class='c-red'>عَـ</span>${D}<span class='c-blue'>عِـ</span>${D}<span class='c-emerald'>عُـ</span>`], t: "danger"},
+            {w: [`<span class='c-emerald'>غَـ</span>${D}<span class='c-blue'>غِـ</span>${D}<span class='c-red'>غُـ</span>`], t: "normal"},
+            {w: [`<span class='c-red'>فَـ</span>${D}<span class='c-blue'>فِـ</span>${D}<span class='c-emerald'>فُـ</span>`], t: "golden"},
+            {w: [`<span class='c-red'>قَـ</span>${D}<span class='c-blue'>قُـ</span>${D}<span class='c-emerald'>قِـ</span>`], t: "normal"},
+            {w: [`<span class='c-red'>كَـ</span>${D}<span class='c-blue'>كُـ</span>${D}<span class='c-emerald'>كِـ</span>`], t: "speed"},
+            {w: [`<span class='c-emerald'>لُـ</span>${D}<span class='c-blue'>لَـ</span>${D}<span class='c-red'>لِـ</span>`], t: "danger"},
+            {w: [`<span class='c-red'>مِـ</span>${D}<span class='c-blue'>مُـ</span>${D}<span class='c-emerald'>مَـ</span>`], t: "normal"},
+            {w: [`<span class='c-red'>نَـ</span>${D}<span class='c-blue'>نُـ</span>${D}<span class='c-emerald'>نِـ</span>`], t: "golden"},
+            {w: [`<span class='c-red'>هُـ</span>${D}<span class='c-blue'>هَـ</span>${D}<span class='c-emerald'>هِـ</span>`], t: "normal"},
+            {w: [`<span class='c-red'>وَ</span>${D}<span class='c-blue'>وُ</span>${D}<span class='c-emerald'>وِ</span>`], t: "speed"},
+            {w: [`<span class='c-red'>يَـ</span>${D}<span class='c-blue'>يُـ</span>${D}<span class='c-emerald'>يِـ</span>`], t: "normal"}
         ];
         const _themes = ["pink","green","blue","yellow"];
         dataset.forEach((item, i) => {

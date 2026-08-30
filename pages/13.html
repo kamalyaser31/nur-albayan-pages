@@ -3,56 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nour Al-Bayan - Page 13</title>
+    <title>نور البيان - صفحة 13</title>
     <link rel="stylesheet" href="../shared/core.css">
 </head>
 <body class="flex flex-col items-center select-none bg-emerald-50/40">
     <script>
-window.PAGE_CONFIG = {
-            title: 'Nour Al-Bayan',
-            subtitle: 'Page 13 • Segmented Letters (الحروف المجزأة)',
-            footer: 'Nour Al-Bayan Learning System • Page 13 (Segmented Letters (الحروف المجزأة))',
+        window.PAGE_CONFIG = {
+            title: 'نور البيان',
+            subtitle: '٢ـ الحروف بحركة الكسر — المقارنات الثنائية',
+            lessonNumber: 1,
+            pageNumber: 13,
+            fontType: 'dictation',
             game3: 'memory'
         };
 
         const _themes = ["pink","green","blue","yellow"];
-        const R = "#ef4444", B = "#2563eb", G = "#10b981", P = "#9333ea", O = "#f97316", L = "#84cc16", D = "#1e293b";
         const _raw = [
-            [`<span style="color:${R}">ـئِـ</span>`,"normal"],
-            [`<span style="color:${G}">ـبِـ</span>`,"normal"],
-            [`<span style="color:${B}">ـتِـ</span>`,"speed"],
-            [`<span style="color:${P}">ـثِـ</span>`,"normal"],
-            [`<span style="color:${O}">ـجِـ</span>`,"golden"],
-            [`<span style="color:${L}">ـحِـ</span>`,"normal"],
-            [`<span style="color:${R}">ـخِـ</span>`,"normal"],
-            [`<span style="color:${B}">ـدِ</span>`,"danger"],
-            [`<span style="color:${G}">ـذِ</span>`,"normal"],
-            [`<span style="color:${P}">ـرِ</span>`,"normal"],
-            [`<span style="color:${D}">ـزِ</span>`,"golden"],
-            [`<span style="color:${R}">ـسِـ</span>`,"normal"],
-            [`<span style="color:${O}">ـشِـ</span>`,"speed"],
-            [`<span style="color:${R}">صَـ</span><span style="color:${B}">ـصِـ</span>`,"normal"],
-            [`<span style="color:${R}">ضَـ</span><span style="color:${B}">ـضِـ</span>`,"normal"],
-            [`<span style="color:${R}">طَـ</span><span style="color:${B}">ـطِـ</span>`,"danger"],
-            [`<span style="color:${R}">ظَـ</span><span style="color:${B}">ـظِـ</span>`,"normal"],
-            [`<span style="color:${R}">عَـ</span><span style="color:${B}">ـعِـ</span>`,"golden"],
-            [`<span style="color:${R}">غَـ</span><span style="color:${B}">ـغِـ</span>`,"normal"],
-            [`<span style="color:${R}">فَـ</span><span style="color:${B}">ـفِـ</span>`,"speed"],
-            [`<span style="color:${R}">قَـ</span><span style="color:${B}">ـقِـ</span>`,"normal"],
-            [`<span style="color:${R}">كَـ</span><span style="color:${B}">ـكِـ</span>`,"normal"],
-            [`<span style="color:${R}">لِـ</span><span style="color:${B}">ـلَـ</span>`,"danger"],
-            [`<span style="color:${R}">مَـ</span><span style="color:${B}">ـمِـ</span>`,"normal"],
-            [`<span style="color:${R}">نَـ</span><span style="color:${B}">ـنِـ</span>`,"golden"],
-            [`<span style="color:${R}">هِـ</span><span style="color:${B}">ـهَـ</span>`,"normal"],
-            [`<span style="color:${R}">وَ</span><span style="color:${B}">وِ</span>`,"speed"],
-            [`<span style="color:${R}">يِـ</span><span style="color:${B}">ـيَـ</span>`,"normal"],
-            [`<span style="color:${R}">يَـ</span><span style="color:${B}">ـيِـ</span>`,"normal"],
-            [`<span style="color:${R}">تِـ</span><span style="color:${B}">ـبَـ</span>`,"normal"],
-            [`<span style="color:${R}">نَـ</span><span style="color:${B}">ـبِـ</span>`,"golden"],
-            [`<span style="color:${R}">غِـ</span><span style="color:${B}">ـعَـ</span>`,"danger"],
-            [`<span style="color:${R}">ضَـ</span><span style="color:${B}">ـطِـ</span>`,"speed"]
+            // الأسطر 1–3: الحروف المكسورة مفردة
+            [`<span class="c-purple">ئِـ</span>`, "normal"],
+            [`<span class="c-emerald">بِـ</span>`, "normal"],
+            [`<span class="c-blue">تِـ</span>`, "speed"],
+            [`<span class="c-purple">ثِـ</span>`, "normal"],
+            [`<span class="c-amber">جِـ</span>`, "golden"],
+            [`<span class="c-emerald">حِـ</span>`, "normal"],
+            [`<span class="c-red">خِـ</span>`, "normal"],
+            [`<span class="c-blue">دِ</span>`, "danger"],
+            [`<span class="c-emerald">ذِ</span>`, "normal"],
+            [`<span class="c-purple">رِ</span>`, "normal"],
+            [`<span class="c-darkblue">زِ</span>`, "golden"],
+            [`<span class="c-red">سِـ</span>`, "normal"],
+            [`<span class="c-amber">شِـ</span>`, "speed"],
+
+            // الأسطر 4–8: المقارنات الثنائية
+            [`<span class="c-red">صَـ</span> <span class="c-blue">صِـ</span>`, "normal"],
+            [`<span class="c-red">ضَـ</span> <span class="c-blue">ضِـ</span>`, "normal"],
+            [`<span class="c-red">طَـ</span> <span class="c-blue">طِـ</span>`, "danger"],
+            [`<span class="c-red">ظَـ</span> <span class="c-blue">ظِـ</span>`, "normal"],
+            [`<span class="c-red">عَـ</span> <span class="c-blue">عِـ</span>`, "golden"],
+            [`<span class="c-red">غَـ</span> <span class="c-blue">غِـ</span>`, "normal"],
+            [`<span class="c-red">فَـ</span> <span class="c-blue">فِـ</span>`, "speed"],
+            [`<span class="c-red">قَـ</span> <span class="c-blue">قِـ</span>`, "normal"],
+            [`<span class="c-red">كَـ</span> <span class="c-blue">كِـ</span>`, "normal"],
+            [`<span class="c-red">لَـ</span> <span class="c-blue">لِـ</span>`, "danger"],
+            [`<span class="c-red">مَـ</span> <span class="c-blue">مِـ</span>`, "normal"],
+            [`<span class="c-red">نَـ</span> <span class="c-blue">نِـ</span>`, "golden"],
+            [`<span class="c-red">هَـ</span> <span class="c-blue">هِـ</span>`, "normal"],
+            [`<span class="c-red">وَ</span> <span class="c-blue">وِ</span>`, "speed"],
+            [`<span class="c-red">يَـ</span> <span class="c-blue">يِـ</span>`, "normal"],
+            [`<span class="c-red">يِـ</span> <span class="c-blue">يَـ</span>`, "normal"],
+            [`<span class="c-red">تَـ</span> <span class="c-blue">بِـ</span>`, "normal"],
+            [`<span class="c-red">نَـ</span> <span class="c-blue">بِـ</span>`, "golden"],
+            [`<span class="c-red">غَـ</span> <span class="c-blue">عِـ</span>`, "danger"],
+            [`<span class="c-red">ضَـ</span> <span class="c-blue">طِـ</span>`, "speed"]
         ];
-        const dataset = _raw.map((r,i)=>({html:r[0], t:r[1], theme:_themes[Math.floor(i/4)%4], w:[r[0].replace(/<[^>]+>/g,'')]}));
+        const dataset = _raw.map((r,i)=>({html:r[0], t:r[1], theme:_themes[Math.floor(i/4)%4], w: r[0].replace(/<[^>]+>/g,'')}));
     </script>
     <script src="../shared/core.js"></script>
 </body>

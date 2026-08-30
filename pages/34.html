@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nour Al-Bayan - Page 34</title>
+    <title>نور البيان - صفحة 34</title>
     <link rel="stylesheet" href="../shared/core.css">
 </head>
 <body class="flex flex-col items-center select-none bg-emerald-50/40">
     <script>
-window.PAGE_CONFIG = {
-            title: 'Nour Al-Bayan',
-            subtitle: 'Page 34 • Madd of Waw Training (تدريب المد بالواو)',
-            footer: 'Nour Al-Bayan Learning System • Page 34 (Madd of Waw Training (تدريب المد بالواو))',
+        window.PAGE_CONFIG = {
+            title: 'نور البيان',
+            subtitle: 'الْمَدُّ بِالْوَاوِ — تدريب (٣) على الرسم الإملائي',
+            lessonNumber: 18,
+            pageNumber: 34,
+            fontType: 'dictation',
             game3: 'memory'
         };
 
@@ -70,8 +72,7 @@ window.PAGE_CONFIG = {
         
         const dataset = rawWords.map((wordHTML, index) => {
             return {
-                w: `<span class='quran-special-font' dir="rtl">${wordHTML}</span>`,
-                info: "Madd of Waw",
+                w: wordHTML,
                 theme: themesArr[index % themesArr.length],
                 t: typesArr[index % typesArr.length]
             };

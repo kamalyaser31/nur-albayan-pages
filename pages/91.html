@@ -3,52 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nour Al-Bayan - Page 91</title>
+    <title>نور البيان - صفحة 91</title>
     <link rel="stylesheet" href="../shared/core.css">
 </head>
 <body class="flex flex-col items-center select-none bg-emerald-50/40">
     <script>
         window.PAGE_CONFIG = {
-
-            title: 'Nour Al-Bayan',
-            subtitle: 'Page 91 • Middle Hamza: Nabrah & Waw (الهمزة على النبرة والواو)',
-            footer: 'Nour Al-Bayan Learning System • Page 91 (Middle Hamza: Nabrah & Waw / الهمزة على النبرة والواو)',
-            game3: 'riddles',
-            fontType: 'dictation'
+            title: 'نور البيان',
+            subtitle: 'الرسم القرآني والإملائي — ٣ـ الهمزة في وسط الكلمة',
+            lessonNumber: 75,
+            pageNumber: 91,
+            fontType: 'mixed',
+            game3: 'memory'
         };
 
         const dataset = [
-            // Pair 1
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>وَإِذَا ٱلۡمَ</span><span class='c-red'>و\u06E1</span><span class='c-black'>ءُ</span><span class='c-red'>ۥ</span><span class='c-black'>دَةُ سُئِلَ</span><span class='c-red'>ت\u06E1</span></span>", info: "رسم قرآني (سئلت)", theme: "pink", t: "golden"},
-            {w: "<span dir='rtl'><span class='c-black'>سُئِلَ الْـمُعَلِّمُ عَنِ الْـمَسْأَلَةِ</span></span>", info: "رسم إملائي (سئل)", theme: "pink", t: "normal"},
+            // 1. الهمزة على نبرة
+            {w: "<span class='c-black'>كَم </span><span class='c-red'>مِّ</span><span class='c-red'>ن </span><span class='c-black'>فِ</span><span class='c-red'>ئَ</span><span class='c-black'>ةٖ قَلِ</span><span class='c-red'>ي</span><span class='c-black'>لَةٍ غَلَبَ</span><span class='c-red'>تۡ</span> <span class='c-black'>فِ</span><span class='c-red'>ئَ</span><span class='c-black'>ةٗ كَثِ</span><span class='c-red'>ي</span><span class='c-black'>رَةَۢ</span>", fontType: "quran", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>نَأْمُلُ أَنْ يَسُودَ الْوِ</span><span class='c-red'>ئَ</span><span class='c-black'>امُ</span>", fontType: "dictation", theme: "pink", t: "normal"},
 
-            // Pair 2
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>وَجِ</span><span class='c-red'>ا۟ىٓ</span><span class='c-black'>ءَ يَ</span><span class='c-red'>و\u06E1</span><span class='c-black'>مَئِذِ</span><span class='c-red'>ۭ</span> <span class='c-black'>بِجَهَ</span><span class='c-red'>نَّ</span><span class='c-black'>مَ</span></span>", info: "رسم قرآني (يومئذ)", theme: "pink", t: "speed"},
-            {w: "<span dir='rtl'><span class='c-black'>يَوْمَئِذٍ يُفْلِحُ الصَّادِقُونَ</span></span>", info: "رسم إملائي (يومئذ)", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>أَلَا بِذِ</span><span class='c-red'>كۡ</span><span class='c-black'>رِ ٱللَّهِ تَ</span><span class='c-red'>طۡ</span><span class='c-black'>مَ</span><span class='c-red'>ئِ</span><span class='c-red'>نُّ</span> <span class='c-black'>ٱلۡقُلُ</span><span class='c-red'>و</span><span class='c-black'>بُ</span>", fontType: "quran", theme: "pink", t: "speed"},
+            {w: "<span class='c-black'>زَ</span><span class='c-red'>ئِ</span><span class='c-black'>يرُ الْأَسَدِ قَوِيٌّ</span>", fontType: "dictation", theme: "pink", t: "normal"},
 
-            // Pair 3
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>يَ</span><span class='c-red'>ح\u06E1</span><span class='c-black'>سَبُهُمُ ٱلۡجَاهِلُ أَ</span><span class='c-red'>غ\u06E1</span><span class='c-black'>نِيَ</span><span class='c-red'>آ</span><span class='c-black'>ءَ مِنَ ٱلـ</span><span class='c-red'>تَّـ</span><span class='c-black'>عَ</span><span class='c-red'>فُّ</span><span class='c-black'>فِ</span></span>", info: "رسم قرآني (أغنياء)", theme: "green", t: "golden"},
-            {w: "<span dir='rtl'><span class='c-black'>أَنْفَقَ الْـأَغْنِيَاءُ أَمْوَالَهُمْ فِي الْـخَيْرِ</span></span>", info: "رسم إملائي (الأغنياء)", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>ٱلۡيَ</span><span class='c-red'>وۡ</span><span class='c-black'>مَ يَ</span><span class='c-red'>ئِ</span><span class='c-black'>سَ ٱلَّذِ</span><span class='c-red'>ي</span><span class='c-black'>نَ كَفَرُ</span><span class='c-red'>و</span><span class='c-black'>اْ مِن دِ</span><span class='c-red'>ي</span><span class='c-black'>نِكُ</span><span class='c-red'>مۡ</span>", fontType: "quran", theme: "green", t: "golden"},
+            {w: "<span class='c-black'>أَنْتِ تَقْرَ</span><span class='c-red'>ئِ</span><span class='c-black'>ينَ كَثِيرًا</span>", fontType: "dictation", theme: "green", t: "normal"},
 
-            // Pair 4
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>فَوَسَ</span><span class='c-red'>ط\u06E1</span><span class='c-black'>نَ بِهِ</span><span class='c-red'>ۦ</span> <span class='c-black'>جَ</span><span class='c-red'>م\u06E1</span><span class='c-black'>عًا</span></span>", info: "رسم قرآني (فوسطن)", theme: "green", t: "speed"},
-            {w: "<span dir='rtl'><span class='c-black'>وَقَفَ الْـقَائِدُ فِي وَسَطِ الْـجَيْشِ</span></span>", info: "رسم إملائي (القائد)", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>بِ</span><span class='c-red'>ئۡ</span><span class='c-black'>سَ ٱلِٱسۡمُ ٱلۡفُسُ</span><span class='c-red'>و</span><span class='c-black'>قُ بَ</span><span class='c-red'>عۡ</span><span class='c-black'>دَ ٱلۡإِ</span><span class='c-red'>ي</span><span class='c-black'>مَـ</span><span class='c-red'>ٰ</span><span class='c-black'>نِ</span>", fontType: "quran", theme: "green", t: "speed"},
+            {w: "<span class='c-black'>جِ</span><span class='c-red'>ئْ</span><span class='c-black'>تُ مِنَ السَّفَرِ</span>", fontType: "dictation", theme: "green", t: "normal"},
 
-            // Pair 5
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>وَأَ</span><span class='c-red'>م\u06E1</span><span class='c-black'>رُهُ</span><span class='c-red'>م\u06E1</span> <span class='c-black'>شُ</span><span class='c-red'>و</span><span class='c-black'>رَ</span><span class='c-red'>ىٰ</span> <span class='c-black'>بَ</span><span class='c-red'>ي\u06E1</span><span class='c-black'>نَهُ</span><span class='c-red'>م\u06E1</span></span>", info: "رسم قرآني", theme: "blue", t: "golden"},
-            {w: "<span dir='rtl'><span class='c-black'>شَاوَرَ الرَّئِيسُ وُزَرَاءَهُ فِي الْـأَمْرِ</span></span>", info: "رسم إملائي (الرئيس)", theme: "blue", t: "normal"},
+            // 2. الهمزة على الواو
+            {w: "<span class='c-black'>قَ</span><span class='c-red'>دۡ</span> <span class='c-black'>أَ</span><span class='c-red'>فۡ</span><span class='c-black'>لَحَ ٱلۡمُ</span><span class='c-red'>ؤۡ</span><span class='c-black'>مِنُ</span><span class='c-red'>و</span><span class='c-black'>نَ</span>", fontType: "quran", theme: "blue", t: "golden"},
+            {w: "<span class='c-black'>يُ</span><span class='c-red'>ؤْ</span><span class='c-black'>جَرُ الْمُسْلِمُ عَلَى قِرَاءَةِ الْقُرْآنِ</span>", fontType: "dictation", theme: "blue", t: "normal"},
 
-            // Pair 6
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>إِ</span><span class='c-red'>نَّ</span><span class='c-black'>مَا ٱلۡمُ</span><span class='c-red'>ؤ\u06E1</span><span class='c-black'>مِنُ</span><span class='c-red'>و</span><span class='c-black'>نَ إِ</span><span class='c-red'>خ\u06E1</span><span class='c-black'>وَةٌ</span></span>", info: "رسم قرآني (المؤمنون)", theme: "blue", t: "speed"},
-            {w: "<span dir='rtl'><span class='c-black'>الْـمُؤْمِنُ مِرْآةُ أَخِيهِ</span></span>", info: "رسم إملائي (المؤمن)", theme: "blue", t: "golden"},
+            {w: "<span class='c-black'>يَ</span><span class='c-red'>ؤُ</span><span class='c-black'>مُّ الْمُصَلِّينَ أَقْرَ</span><span class='c-red'>ؤُ</span><span class='c-black'>هُمْ لِلْقُرْآنِ</span>", fontType: "dictation", theme: "blue", t: "speed"},
+            {w: "<span class='c-black'>الْمُسْلِمُ الصَّادِقُ يُ</span><span class='c-red'>ؤَ</span><span class='c-black'>دِّي وَاجِبَهُ</span>", fontType: "dictation", theme: "blue", t: "normal"},
 
-            // Pair 7
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>يَـ</span><span class='c-red'>ٰٓ</span><span class='c-black'>أَيُّهَا ٱلَّذِ</span><span class='c-red'>ي</span><span class='c-black'>نَ ءَامَنُ</span><span class='c-red'>و</span><span class='c-black'>ا۟ لَا تَ</span><span class='c-red'>س\u06E1</span><span class='c-black'>ـَٔلُ</span><span class='c-red'>و</span><span class='c-black'>ا۟ عَ</span><span class='c-red'>ن\u06E1</span> <span class='c-black'>أَ</span><span class='c-red'>ش\u06E1</span><span class='c-black'>يَ</span><span class='c-red'>آ</span><span class='c-black'>ءَ</span></span>", info: "رسم قرآني (تسئلوا)", theme: "yellow", t: "speed"},
-            {w: "<span dir='rtl'><span class='c-black'>لَا تَسْأَلْ عَمَّا لَا يَعْنِيكَ</span></span>", info: "رسم إملائي (تسأل)", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>الصَّدِيقُ يُ</span><span class='c-red'>ؤَ</span><span class='c-black'>ثِّرُ فِي صَدِيقِهِ</span>", fontType: "dictation", theme: "yellow", t: "golden"},
+            {w: "<span class='c-black'>مُحَمَّدٌ مَبْدَ</span><span class='c-red'>ؤُ</span><span class='c-black'>هُ الصِّدْقُ</span>", fontType: "dictation", theme: "yellow", t: "normal"},
 
-            // Pair 8
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>فَمَن </span><span class='c-red'>يَ</span><span class='c-red'>ع\u06E1</span><span class='c-black'>مَ</span><span class='c-red'>ل\u06E1</span> <span class='c-black'>مِ</span><span class='c-red'>ث\u06E1</span><span class='c-black'>قَالَ ذَ</span><span class='c-red'>رَّ</span><span class='c-black'>ةٍ خَ</span><span class='c-red'>ي\u06E1</span><span class='c-black'>رًا </span><span class='c-red'>يَ</span><span class='c-black'>رَهُ</span><span class='c-red'>ۥ</span></span>", info: "رسم قرآني", theme: "yellow", t: "golden"},
-            {w: "<span dir='rtl'><span class='c-black'>يُؤَاخِذُ اللَّهُ النَّاسَ بِأَعْمَالِهِمْ</span></span>", info: "رسم إملائي (يؤاخذ)", theme: "yellow", t: "danger"}
+            {w: "<span class='c-black'>يَرَ</span><span class='c-red'>ؤُ</span><span class='c-black'>فُ الْكَبِيرُ بِالصَّغِيرِ</span>", fontType: "dictation", theme: "yellow", t: "speed"},
+            {w: "<span class='c-black'>لَا تُ</span><span class='c-red'>ؤْ</span><span class='c-black'>ذِ الْحَيَوَانَ أَبَدًا</span>", fontType: "dictation", theme: "yellow", t: "danger"}
         ];
     </script>
     <script src="../shared/core.js"></script>

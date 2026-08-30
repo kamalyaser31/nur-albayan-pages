@@ -3,16 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nour Al-Bayan - Page 35</title>
+    <title>نور البيان - صفحة 35</title>
     <link rel="stylesheet" href="../shared/core.css">
 </head>
 <body class="flex flex-col items-center select-none bg-emerald-50/40">
     <script>
         window.PAGE_CONFIG = {
-            title: 'Nour Al-Bayan',
-            subtitle: 'Page 35 • Small Sillah Waw (الواو الصغيرة والصلة)',
-            footer: 'Nour Al-Bayan Learning System • Page 35 (Small Sillah Waw (الواو الصغيرة والصلة))',
-            game3: 'riddles'
+            title: 'نور البيان',
+            subtitle: 'الْمَدُّ بِالْوَاوِ — الواو المدية الصغيرة ومد الصلة بالرسم القرآني',
+            lessonNumber: 19,
+            pageNumber: 35,
+            fontType: 'quran',
+            game3: 'memory'
         };
 
         const rawWords = [
@@ -52,20 +54,12 @@
             "<span class='c-black'>قَ</span><span class='c-red'>ا</span><span class='c-black'>لَ لَهُ</span><span class='c-red'>ۥ</span> <span class='c-black'>صَ</span><span class='c-red'>ا</span><span class='c-black'>حِبُهُ</span><span class='c-red'>ۥ</span>"
         ];
 
-        // Apply Red Color dynamically to ALL Tashkeel and Small Letters
-        // Range \u064B-\u0653 captures all Arabic Harakat (Fatha, Damma, Kasra, Sukoon, etc.)
-        // \u0670 is Small Alif (ٰ), \u06E5 is Small Waw (ۥ), \u06E6 is Small Yaa (ۦ)
-        const processedWords = rawWords.map(wordHTML => {
-            return wordHTML.replace(/([\u064B-\u0653\u0670\u06E5\u06E6])/g, "<span class='c-red'>$1</span>");
-        });
-
         const typesArr = ['normal', 'speed', 'normal', 'danger', 'normal', 'golden', 'normal', 'speed'];
         const themesArr = ['pink', 'green', 'blue', 'yellow'];
         
-        const dataset = processedWords.map((wordHTML, index) => {
+        const dataset = rawWords.map((wordHTML, index) => {
             return {
-                w: `<span class='quran-special-font' dir="rtl">${wordHTML}</span>`,
-                info: "Madd of Sillah",
+                w: wordHTML,
                 theme: themesArr[index % themesArr.length],
                 t: typesArr[index % typesArr.length]
             };

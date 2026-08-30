@@ -3,74 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nour Al-Bayan - Page 56</title>
+    <title>نور البيان - صفحة 56</title>
     <link rel="stylesheet" href="../shared/core.css">
 </head>
 <body class="flex flex-col items-center select-none bg-emerald-50/40">
     <script>
         window.PAGE_CONFIG = {
-            title: 'Nour Al-Bayan',
-            subtitle: 'Page 56 • Damma Tanween (تنوين الضم • الضمتان)',
-            footer: 'Nour Al-Bayan Learning System • Page 56 (Damma Tanween / تنوين الضم • الضمتان)',
-            game3: 'riddles'
+            title: 'نور البيان',
+            subtitle: 'التنوين — ٣ـ تنوين الضم (ـٌ) الضمتان',
+            lessonNumber: 40,
+            pageNumber: 56,
+            fontType: 'quran',
+            game3: 'memory'
         };
 
         const dataset = [
             // Row 1
-            {w: "<span dir='rtl'><span class='c-black'>ثُ</span><span class='c-red'>نْ</span> ـ <span class='c-black'>ثٌ</span></span>", info: "تأسيس تنوين الضم", theme: "pink", t: "golden"},
-            {w: "<span dir='rtl'><span class='c-black'>خُ</span><span class='c-red'>نْ</span> ـ <span class='c-black'>خٌ</span></span>", info: "تأسيس تنوين الضم", theme: "pink", t: "speed"},
-            {w: "<span dir='rtl'><span class='c-black'>رُ</span><span class='c-red'>نْ</span> ـ <span class='c-black'>رٌ</span></span>", info: "تأسيس تنوين الضم", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>ثُ</span><span class='c-red'>نْ</span> = <span class='c-black'>ثٌ</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>خُ</span><span class='c-red'>نْ</span> = <span class='c-black'>خٌ</span>", theme: "pink", t: "speed"},
+            {w: "<span class='c-black'>رُ</span><span class='c-red'>نْ</span> = <span class='c-black'>رٌ</span>", theme: "pink", t: "normal"},
 
             // Row 2
-            {w: "<span dir='rtl'><span class='c-black'>بٌ</span></span>", info: "حروف تنوين الضم", theme: "green", t: "normal"},
-            {w: "<span dir='rtl'><span class='c-black'>تٌ</span></span>", info: "حروف تنوين الضم", theme: "green", t: "danger"},
-            {w: "<span dir='rtl'><span class='c-black'>جٌ</span></span>", info: "حروف تنوين الضم", theme: "green", t: "normal"},
-            {w: "<span dir='rtl'><span class='c-black'>حٌ</span></span>", info: "حروف تنوين الضم", theme: "green", t: "speed"},
-            {w: "<span dir='rtl'><span class='c-black'>دٌ</span></span>", info: "حروف تنوين الضم", theme: "green", t: "golden"},
-            {w: "<span dir='rtl'><span class='c-black'>زٌ</span></span>", info: "حروف تنوين الضم", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>بٌ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>تٌ</span>", theme: "green", t: "danger"},
+            {w: "<span class='c-black'>جٌ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>حٌ</span>", theme: "green", t: "speed"},
+            {w: "<span class='c-black'>دٌ</span>", theme: "green", t: "golden"},
+            {w: "<span class='c-black'>زٌ</span>", theme: "green", t: "normal"},
 
             // Row 3
-            {w: "<span dir='rtl'><span class='c-black'>سٌ</span></span>", info: "حروف تنوين الضم", theme: "blue", t: "normal"},
-            {w: "<span dir='rtl'><span class='c-black'>صٌ</span></span>", info: "حروف تنوين الضم", theme: "blue", t: "speed"},
-            {w: "<span dir='rtl'><span class='c-black'>عٌ</span></span>", info: "حروف تنوين الضم", theme: "blue", t: "normal"},
-            {w: "<span dir='rtl'><span class='c-black'>لٌ</span></span>", info: "حروف تنوين الضم", theme: "blue", t: "danger"},
-            {w: "<span dir='rtl'><span class='c-black'>ـهٌ</span></span>", info: "حروف تنوين الضم", theme: "blue", t: "normal"},
-            {w: "<span dir='rtl'><span class='c-black'>يٌ</span></span>", info: "حروف تنوين الضم", theme: "blue", t: "golden"},
+            {w: "<span class='c-black'>سٌ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>صٌ</span>", theme: "blue", t: "speed"},
+            {w: "<span class='c-black'>عٌ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>لٌ</span>", theme: "blue", t: "danger"},
+            {w: "<span class='c-black'>ـهٌ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>يٌ</span>", theme: "blue", t: "golden"},
 
             // Row 4
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ظَمَأٌ</span></span>", info: "أمثلة تنوين الضم", theme: "yellow", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>خُشُبٌ</span></span>", info: "أمثلة تنوين الضم", theme: "yellow", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>فُرَ</span><span class='c-red'>ا</span><span class='c-black'>تٌ</span></span>", info: "أمثلة تنوين الضم", theme: "yellow", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ثَ</span><span class='c-red'>ا</span><span class='c-black'>بِتٌ</span></span>", info: "أمثلة تنوين الضم", theme: "yellow", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>حَرَجٌ</span></span>", info: "أمثلة تنوين الضم", theme: "yellow", t: "danger"},
+            {w: "<span class='c-black'>ظَمَأٌ</span>", theme: "yellow", t: "golden"},
+            {w: "<span class='c-black'>خُشُبٌ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>فُرَ</span><span class='c-red'>ا</span><span class='c-black'>تٌ</span>", theme: "yellow", t: "speed"},
+            {w: "<span class='c-black'>ثَ</span><span class='c-red'>ا</span><span class='c-black'>بِتٌ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>حَرَجٌ</span>", theme: "yellow", t: "danger"},
 
             // Row 5
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>كَ</span><span class='c-red'>ا</span><span class='c-black'>دِحٌ</span></span>", info: "أمثلة تنوين الضم", theme: "pink", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>شَ</span><span class='c-red'>ي\u06E1</span><span class='c-black'>خٌ</span></span>", info: "أمثلة تنوين الضم", theme: "pink", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>عَ</span><span class='c-red'>ا</span><span class='c-black'>بِدٌ</span></span>", info: "أمثلة تنوين الضم", theme: "pink", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>شَ</span><span class='c-red'>ا</span><span class='c-black'>كِرٌ</span></span>", info: "أمثلة تنوين الضم", theme: "pink", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>صَ</span><span class='c-red'>ب\u06E1</span><span class='c-black'>رً</span><span class='c-red'>ا</span></span>", info: "مقارنة التنوين", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>كَ</span><span class='c-red'>ا</span><span class='c-black'>دِحٌ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>شَ</span><span class='c-red'>يۡ</span><span class='c-black'>خٌ</span>", theme: "pink", t: "speed"},
+            {w: "<span class='c-black'>عَ</span><span class='c-red'>ا</span><span class='c-black'>بِدٌ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>شَ</span><span class='c-red'>ا</span><span class='c-black'>كِرٌ</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>صَ</span><span class='c-red'>بۡ</span><span class='c-black'>رً</span><span class='c-red'>ا</span>", theme: "pink", t: "normal"},
 
             // Row 6
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ذَ</span><span class='c-red'>ر\u06E1</span><span class='c-black'>عً</span><span class='c-red'>ا</span></span>", info: "مقارنة التنوين", theme: "green", t: "danger"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>عَ</span><span class='c-red'>ر\u06E1</span><span class='c-black'>شٌ</span></span>", info: "أمثلة تنوين الضم", theme: "green", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>قِصَ</span><span class='c-red'>ا</span><span class='c-black'>صٌ</span></span>", info: "أمثلة تنوين الضم", theme: "green", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>يَ</span><span class='c-red'>و\u06E1</span><span class='c-black'>مَئِذٍ</span></span>", info: "مقارنة التنوين", theme: "green", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>مَعَ</span><span class='c-red'>ا</span><span class='c-black'>دٍ</span></span>", info: "مقارنة التنوين", theme: "green", t: "golden"},
+            {w: "<span class='c-black'>ذَ</span><span class='c-red'>رۡ</span><span class='c-black'>عً</span><span class='c-red'>ا</span>", theme: "green", t: "danger"},
+            {w: "<span class='c-black'>عَ</span><span class='c-red'>رۡ</span><span class='c-black'>شٌ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>قِصَ</span><span class='c-red'>ا</span><span class='c-black'>صٌ</span>", theme: "green", t: "speed"},
+            {w: "<span class='c-black'>يَ</span><span class='c-red'>وۡ</span><span class='c-black'>مَىِٕذٍ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>مَعَ</span><span class='c-red'>ا</span><span class='c-black'>دٍ</span>", theme: "green", t: "golden"},
 
             // Row 7
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>شُوَ</span><span class='c-red'>ا</span><span class='c-black'>ظٌ</span></span>", info: "أمثلة تنوين الضم", theme: "blue", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>مَتَـ</span><span class='c-red'>ٰ</span><span class='c-black'>عٌ</span></span>", info: "أمثلة تنوين الضم", theme: "blue", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>مَ</span><span class='c-red'>ك\u06E1</span><span class='c-red'>رُ</span><span class='c-red'>و</span><span class='c-black'>هً</span><span class='c-red'>ا</span></span>", info: "مقارنة التنوين", theme: "blue", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>عَ</span><span class='c-red'>ا</span><span class='c-black'>صِفٌ</span></span>", info: "أمثلة تنوين الضم", theme: "blue", t: "danger"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>زَ</span><span class='c-red'>ا</span><span class='c-black'>هِقٌ</span></span>", info: "أمثلة تنوين الضم", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>شُوَ</span><span class='c-red'>ا</span><span class='c-black'>ظٌ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>مَتَـ</span><span class='c-red'>ٰ</span><span class='c-black'>عٌ</span>", theme: "blue", t: "speed"},
+            {w: "<span class='c-black'>مَ</span><span class='c-red'>كۡ</span><span class='c-black'>رُ</span><span class='c-red'>و</span><span class='c-black'>هً</span><span class='c-red'>ا</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>عَ</span><span class='c-red'>ا</span><span class='c-black'>صِفٍ</span>", theme: "blue", t: "danger"},
+            {w: "<span class='c-black'>زَ</span><span class='c-red'>ا</span><span class='c-black'>هِقٌ</span>", theme: "blue", t: "normal"},
 
             // Row 8
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>قَ</span><span class='c-red'>ر\u06E1</span><span class='c-black'>يَةٍ</span></span>", info: "مقارنة التنوين", theme: "yellow", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>رِجَ</span><span class='c-red'>ا</span><span class='c-black'>لٌ</span></span>", info: "أمثلة تنوين الضم", theme: "yellow", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>أُمَمٌ</span></span>", info: "أمثلة تنوين الضم", theme: "yellow", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>كَرِ</span><span class='c-red'>ي</span><span class='c-black'>مً</span><span class='c-red'>ا</span></span>", info: "مقارنة التنوين", theme: "yellow", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>رَ</span><span class='c-red'>ب\u06E1</span><span class='c-black'>وَةٍ</span></span>", info: "مقارنة التنوين", theme: "yellow", t: "danger"}
+            {w: "<span class='c-black'>قَ</span><span class='c-red'>رۡ</span><span class='c-black'>يَةٍ</span>", theme: "yellow", t: "golden"},
+            {w: "<span class='c-black'>رِجَ</span><span class='c-red'>ا</span><span class='c-black'>لٌ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>أُمَمٌ</span>", theme: "yellow", t: "speed"},
+            {w: "<span class='c-black'>كَرِ</span><span class='c-red'>ي</span><span class='c-black'>مً</span><span class='c-red'>ا</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>رَ</span><span class='c-red'>بۡ</span><span class='c-black'>وَةٍ</span>", theme: "yellow", t: "danger"}
         ];
     </script>
     <script src="../shared/core.js"></script>

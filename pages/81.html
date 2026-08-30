@@ -3,59 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nour Al-Bayan - Page 81</title>
+    <title>نور البيان - صفحة 81</title>
     <link rel="stylesheet" href="../shared/core.css">
 </head>
 <body class="flex flex-col items-center select-none bg-emerald-50/40">
     <script>
         window.PAGE_CONFIG = {
-            title: 'Nour Al-Bayan',
-            subtitle: 'Page 81 • Tajweed: Iqlab & Ikhfa (الإقلاب والإخفاء وشواذ النون)',
-            footer: 'Nour Al-Bayan Learning System • Page 81 (Tajweed: Iqlab & Ikhfa / الإقلاب والإخفاء وشواذ النون)',
-            game3: 'riddles'
+            title: 'نور البيان',
+            subtitle: 'أحكام النون الساكنة والتنوين — الإقلاب والإخفاء',
+            lessonNumber: 65,
+            pageNumber: 81,
+            fontType: 'quran',
+            game3: 'memory'
         };
 
         const dataset = [
             // 4. الإقلاب
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>مِ</span><span class='c-red'>نۢ</span> <span class='c-black'>بَ</span><span class='c-red'>ع\u06E1</span><span class='c-black'>دِ</span></span>", info: "الإقلاب عند الباء", theme: "pink", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>مُ</span><span class='c-red'>نۢ</span><span class='c-black'>بَ</span><span class='c-red'>ثًّ</span><span class='c-red'>ا</span></span>", info: "الإقلاب عند الباء", theme: "pink", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>مُسَ</span><span class='c-red'>خَّ</span><span class='c-black'>رَٰتٍ</span><span class='c-red'>ۭ</span> <span class='c-black'>بِأَ</span><span class='c-red'>م\u06E1</span><span class='c-black'>رِهِ</span><span class='c-red'>ۦ</span></span>", info: "الإقلاب عند الباء", theme: "pink", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>مُ</span><span class='c-red'>س\u06E1</span><span class='c-black'>تَ</span><span class='c-red'>خ\u06E1</span><span class='c-black'>فٍ</span><span class='c-red'>ۭ</span> <span class='c-black'>بِٱلـ</span><span class='c-red'>لَّـ</span><span class='c-black'>ي\u06E1لِ</span></span>", info: "الإقلاب عند الباء", theme: "pink", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>مَ</span><span class='c-red'>س\u06E1</span><span class='c-black'>حً</span><span class='c-red'>ۢ</span><span class='c-black'>ا بِٱلـ</span><span class='c-red'>سُّ</span><span class='c-black'>و</span><span class='c-black'>قِ</span></span>", info: "الإقلاب عند الباء", theme: "pink", t: "danger"},
+            {w: "<span class='c-black'>مِ</span><span class='c-red'>نۢ</span> <span class='c-black'>بَ</span><span class='c-red'>عۡ</span><span class='c-black'>دِ</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>مُ</span><span class='c-red'>نۢ</span><span class='c-black'>بَ</span><span class='c-red'>ثًّ</span><span class='c-red'>ا</span>", theme: "pink", t: "speed"},
+            {w: "<span class='c-black'>مُسَ</span><span class='c-red'>خَّ</span><span class='c-black'>رَٰتِ</span><span class='c-red'>ۭ</span> <span class='c-black'>بِأَ</span><span class='c-red'>مۡ</span><span class='c-black'>رِهِ</span><span class='c-red'>ۦ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>مُّ</span><span class='c-red'>سۡ</span><span class='c-black'>تَ</span><span class='c-red'>خۡ</span><span class='c-black'>فِ</span><span class='c-red'>ۭ</span> <span class='c-black'>بِٱلَّ</span><span class='c-black'>يۡلِ</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>مَ</span><span class='c-red'>سۡ</span><span class='c-black'>حَ</span><span class='c-red'>ۢ</span><span class='c-black'>ا بِٱل</span><span class='c-red'>سُّ</span><span class='c-black'>و</span><span class='c-black'>قِ</span>", theme: "pink", t: "danger"},
 
             // 5. الإخفاء الحقيقي
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>وَمَن </span><span class='c-red'>تَ</span><span class='c-black'>طَ</span><span class='c-red'>وَّ</span><span class='c-black'>عَ</span></span>", info: "الإخفاء عند التاء", theme: "green", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>كُ</span><span class='c-red'>نتَ</span></span>", info: "الإخفاء عند التاء", theme: "green", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>شَجَرَةٍ </span><span class='c-red'>تَ</span><span class='c-red'>خ\u06E1</span><span class='c-black'>رُجُ</span></span>", info: "الإخفاء عند التاء", theme: "green", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>لِيَ</span><span class='c-red'>و\u06E1</span><span class='c-black'>مٍ </span><span class='c-red'>تَ</span><span class='c-red'>ش\u06E1</span><span class='c-black'>خَصُ</span></span>", info: "الإخفاء عند التاء", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>وَمَن </span><span class='c-red'>تَ</span><span class='c-black'>طَ</span><span class='c-red'>وَّ</span><span class='c-black'>عَ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>كُ</span><span class='c-red'>نتَ</span>", theme: "green", t: "speed"},
+            {w: "<span class='c-black'>شَجَرَةٞ </span><span class='c-red'>تَ</span><span class='c-red'>خۡ</span><span class='c-black'>رُجُ</span>", theme: "green", t: "golden"},
+            {w: "<span class='c-black'>لِيَ</span><span class='c-red'>وۡ</span><span class='c-black'>مٖ </span><span class='c-red'>تَ</span><span class='c-red'>شۡ</span><span class='c-black'>خَصُ</span>", theme: "green", t: "normal"},
 
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>مَن </span><span class='c-red'>جَ</span><span class='c-red'>آ</span><span class='c-black'>ءَ</span></span>", info: "الإخفاء عند الجيم", theme: "green", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>وَأَ</span><span class='c-red'>نجَ</span><span class='c-red'>ي\u06E1</span><span class='c-black'>نَا</span></span>", info: "الإخفاء عند الجيم", theme: "green", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>عَ</span><span class='c-red'>ي\u06E1</span><span class='c-black'>نٌ </span><span class='c-red'>جَ</span><span class='c-black'>ارِيَةٌ</span></span>", info: "الإخفاء عند الجيم", theme: "green", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>قَ</span><span class='c-red'>و\u06E1</span><span class='c-black'>مًا </span><span class='c-red'>جَ</span><span class='c-red'>بَّ</span><span class='c-black'>ارِ</span><span class='c-red'>ي</span><span class='c-black'>نَ</span></span>", info: "الإخفاء عند الجيم", theme: "green", t: "danger"},
+            {w: "<span class='c-black'>مَن </span><span class='c-red'>جَ</span><span class='c-red'>آ</span><span class='c-black'>ءَ</span>", theme: "green", t: "golden"},
+            {w: "<span class='c-black'>وَأَ</span><span class='c-red'>نجَ</span><span class='c-red'>يۡ</span><span class='c-black'>نَا</span>", theme: "green", t: "speed"},
+            {w: "<span class='c-black'>عَ</span><span class='c-red'>يۡ</span><span class='c-black'>نٞ </span><span class='c-red'>جَ</span><span class='c-black'>ارِيَةٞ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>قَ</span><span class='c-red'>وۡ</span><span class='c-black'>مٗا </span><span class='c-red'>جَ</span><span class='c-red'>بَّ</span><span class='c-black'>ارِ</span><span class='c-red'>ي</span><span class='c-black'>نَ</span>", theme: "green", t: "danger"},
 
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>وَمَن </span><span class='c-red'>صَ</span><span class='c-black'>لَحَ</span></span>", info: "الإخفاء عند الصاد", theme: "blue", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>مَ</span><span class='c-red'>نصُ</span><span class='c-red'>و</span><span class='c-black'>رً</span><span class='c-red'>ا</span></span>", info: "الإخفاء عند الصاد", theme: "blue", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>مِائَةٌ </span><span class='c-red'>صَ</span><span class='c-black'>ابِرَةٌ</span></span>", info: "الإخفاء عند الصاد", theme: "blue", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>مَ</span><span class='c-red'>آ</span><span class='c-black'>ءٍ </span><span class='c-red'>صَ</span><span class='c-black'>دِ</span><span class='c-red'>ي</span><span class='c-black'>دٍ</span></span>", info: "الإخفاء عند الصاد", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>وَمَن </span><span class='c-red'>صَ</span><span class='c-black'>لَحَ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>مَ</span><span class='c-red'>نصُ</span><span class='c-red'>و</span><span class='c-black'>رً</span><span class='c-red'>ا</span>", theme: "blue", t: "golden"},
+            {w: "<span class='c-black'>مِاْئَةٞ </span><span class='c-red'>صَ</span><span class='c-black'>ابِرَةٞ</span>", theme: "blue", t: "speed"},
+            {w: "<span class='c-black'>مَّ</span><span class='c-red'>آ</span><span class='c-black'>ءٖ </span><span class='c-red'>صَ</span><span class='c-black'>دِ</span><span class='c-red'>ي</span><span class='c-black'>دٖ</span>", theme: "blue", t: "normal"},
 
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>مَن </span><span class='c-red'>كَ</span><span class='c-black'>سَبَ</span></span>", info: "الإخفاء عند الكاف", theme: "blue", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>أَ</span><span class='c-red'>نكَا</span><span class='c-black'>ثًا</span></span>", info: "الإخفاء عند الكاف", theme: "blue", t: "danger"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>يَ</span><span class='c-red'>و\u06E1</span><span class='c-black'>مًا </span><span class='c-red'>كَ</span><span class='c-black'>انَ</span></span>", info: "الإخفاء عند الكاف", theme: "blue", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>مَلِكٌ </span><span class='c-red'>كَ</span><span class='c-black'>رِ</span><span class='c-red'>ي</span><span class='c-black'>مٌ</span></span>", info: "الإخفاء عند الكاف", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>مَن </span><span class='c-red'>كَ</span><span class='c-black'>سَبَ</span>", theme: "blue", t: "golden"},
+            {w: "<span class='c-black'>أَ</span><span class='c-red'>نكـ</span><span class='c-red'>ٰ</span><span class='c-black'>ثٗا</span>", theme: "blue", t: "danger"},
+            {w: "<span class='c-black'>يَ</span><span class='c-red'>وۡ</span><span class='c-black'>مٗا </span><span class='c-red'>كَ</span><span class='c-black'>انَ</span>", theme: "blue", t: "speed"},
+            {w: "<span class='c-black'>مَلَكٞ </span><span class='c-red'>كَ</span><span class='c-black'>رِ</span><span class='c-red'>ي</span><span class='c-black'>مٌ</span>", theme: "blue", t: "normal"},
 
             // 6. الإظهار المطلق
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>بُ</span><span class='c-red'>ن\u06E1</span><span class='c-black'>يَـ</span><span class='c-red'>ٰ</span><span class='c-black'>نٌ</span></span>", info: "الإظهار المطلق في كلمة واحدة", theme: "yellow", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>صِ</span><span class='c-red'>ن\u06E1</span><span class='c-black'>وَ</span><span class='c-red'>ا</span><span class='c-black'>نٌ</span></span>", info: "الإظهار المطلق في كلمة واحدة", theme: "yellow", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>قِ</span><span class='c-red'>ن\u06E1</span><span class='c-black'>وَ</span><span class='c-red'>ا</span><span class='c-black'>نٌ</span></span>", info: "الإظهار المطلق في كلمة واحدة", theme: "yellow", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ٱلـ</span><span class='c-red'>دُّ</span><span class='c-red'>ن\u06E1</span><span class='c-black'>يَا</span></span>", info: "الإظهار المطلق في كلمة واحدة", theme: "yellow", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>بُ</span><span class='c-red'>ن\u06E1</span><span class='c-black'>يَـ</span><span class='c-red'>ٰ</span><span class='c-black'>نَهُ</span><span class='c-red'>ۥ</span></span>", info: "الإظهار المطلق في كلمة واحدة", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>بُ</span><span class='c-red'>نۡ</span><span class='c-black'>يَـ</span><span class='c-red'>ٰ</span><span class='c-black'>نٌ</span>", theme: "yellow", t: "golden"},
+            {w: "<span class='c-black'>صِ</span><span class='c-red'>نۡ</span><span class='c-black'>وَ</span><span class='c-red'>ا</span><span class='c-black'>نٌ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>قِ</span><span class='c-red'>نۡ</span><span class='c-black'>وَ</span><span class='c-red'>ا</span><span class='c-black'>نٌ</span>", theme: "yellow", t: "speed"},
+            {w: "<span class='c-black'>ٱل</span><span class='c-red'>دُّ</span><span class='c-red'>نۡ</span><span class='c-black'>يَا</span>", theme: "yellow", t: "golden"},
+            {w: "<span class='c-black'>بُ</span><span class='c-red'>نۡ</span><span class='c-black'>يَـ</span><span class='c-red'>ٰ</span><span class='c-black'>نَهُ</span><span class='c-red'>ۥ</span>", theme: "yellow", t: "normal"},
 
             // 7. التنوين مع همزة الوصل
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>سَوَ</span><span class='c-red'>آ</span><span class='c-black'>ءً ٱلۡعَـ</span><span class='c-red'>ٰ</span><span class='c-black'>كِفُ</span></span>", info: "كسر التنوين لالتقاء الساكنين", theme: "pink", t: "danger"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>خَ</span><span class='c-red'>ي\u06E1</span><span class='c-black'>رًا ٱ</span><span class='c-red'>ه\u06E1</span><span class='c-black'>بِطُ</span><span class='c-red'>و</span><span class='c-black'>ا۟</span></span>", info: "كسر التنوين لالتقاء الساكنين", theme: "pink", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>لُ</span><span class='c-red'>و</span><span class='c-black'>طٍ ٱلۡمُ</span><span class='c-red'>ر\u06E1</span><span class='c-black'>سَلِ</span><span class='c-red'>ي</span><span class='c-black'>نَ</span></span>", info: "كسر التنوين لالتقاء الساكنين", theme: "pink", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>وَرَ</span><span class='c-red'>ه\u06E1</span><span class='c-black'>بَانِ</span><span class='c-red'>يَّ</span><span class='c-black'>ةً ٱ</span><span class='c-red'>ب\u06E1</span><span class='c-black'>تَدَعُ</span><span class='c-red'>و</span><span class='c-black'>هَا</span></span>", info: "كسر التنوين لالتقاء الساكنين", theme: "pink", t: "golden"}
+            {w: "<span class='c-black'>سَوَ</span><span class='c-red'>آ</span><span class='c-black'>ءً ٱلۡعَـ</span><span class='c-red'>ٰ</span><span class='c-black'>كِفُ</span>", theme: "pink", t: "danger"},
+            {w: "<span class='c-black'>خَ</span><span class='c-red'>يۡ</span><span class='c-black'>رًا ٱ</span><span class='c-red'>هۡ</span><span class='c-black'>بِطُ</span><span class='c-red'>و</span><span class='c-black'>اْ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>لُ</span><span class='c-red'>و</span><span class='c-black'>طٍ ٱلۡمُ</span><span class='c-red'>رۡ</span><span class='c-black'>سَلِ</span><span class='c-red'>ي</span><span class='c-black'>نَ</span>", theme: "pink", t: "speed"},
+            {w: "<span class='c-black'>وَرَ</span><span class='c-red'>هۡ</span><span class='c-black'>بَانِ</span><span class='c-red'>يَّ</span><span class='c-black'>ةً ٱ</span><span class='c-red'>بۡ</span><span class='c-black'>تَدَعُ</span><span class='c-red'>و</span><span class='c-black'>هَا</span>", theme: "pink", t: "golden"}
         ];
     </script>
     <script src="../shared/core.js"></script>

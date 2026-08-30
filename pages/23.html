@@ -3,33 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nour Al-Bayan - Page 23</title>
+    <title>نور البيان - صفحة 23</title>
     <link rel="stylesheet" href="../shared/core.css">
 </head>
 <body class="flex flex-col items-center select-none bg-emerald-50/40">
     <script>
-window.PAGE_CONFIG = {
-            title: 'Nour Al-Bayan',
-            subtitle: 'Page 23 • Reading Sentences (جمل القراءة)',
-            footer: 'Nour Al-Bayan Learning System • Page 23 (Reading Sentences (جمل القراءة))',
+        window.PAGE_CONFIG = {
+            title: 'نور البيان',
+            subtitle: 'مراجعة على الحركات — تدريب (٢) جمل القراءة',
+            lessonNumber: 7,
+            pageNumber: 23,
+            fontType: 'dictation',
             game3: 'memory'
         };
 
         const dataset = [
-            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-red\'>عُمَرُ</span></span>', info: 'Reading Sentences', theme: 'pink', t: 'golden'},
-            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-red\'>خَرَجَ</span> <span class=\'c-blue\'>عُمَرُ</span> <span class=\'c-black\'>وَدَخَلَ</span></span>', info: 'Reading Sentences', theme: 'green', t: 'normal'},
-            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-red\'>وَبَسَطَ</span> <span class=\'c-blue\'>فُرُشَهُ</span> <span class=\'c-black\'>فَقَعَدَ</span></span>', info: 'Reading Sentences', theme: 'green', t: 'speed'},
-            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-red\'>شَرِبَ</span> <span class=\'c-black\'>فَذَهَبَ</span> <span class=\'c-blue\'>ظَمَؤُهُ</span></span>', info: 'Reading Sentences', theme: 'green', t: 'normal'},
-            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-red\'>نَصَبَ</span> <span class=\'c-blue\'>سُرُرَهُ</span> <span class=\'c-black\'>بِغُرَفِهِ</span></span>', info: 'Reading Sentences', theme: 'green', t: 'normal'},
-            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-red\'>مَرِضَ</span> <span class=\'c-black\'>فَضَعُفَ</span> <span class=\'c-blue\'>بَدَنُهُ</span></span>', info: 'Reading Sentences', theme: 'green', t: 'danger'},
-            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-red\'>رَكِبَ</span> <span class=\'c-black\'>جَمَلَهُ</span> <span class=\'c-blue\'>لِيَصِلَ</span> <span class=\'c-black\'>رَحِمَهُ</span></span>', info: 'Reading Sentences', theme: 'green', t: 'normal'},
-            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-red\'>كَرَمُ</span></span>', info: 'Reading Sentences', theme: 'green', t: 'golden'},
-            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-red\'>كَتَبَ</span> <span class=\'c-blue\'>وَرَقَهُ</span> <span class=\'c-black\'>بِقَلَمِهِ</span></span>', info: 'Reading Sentences', theme: 'pink', t: 'normal'},
-            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-red\'>وَقَرَأَ</span> <span class=\'c-blue\'>كُتُبَهُ</span> <span class=\'c-black\'>فَعَلِمَ</span></span>', info: 'Reading Sentences', theme: 'pink', t: 'speed'},
-            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-red\'>وَسَلَكَ</span> <span class=\'c-black\'>طُرُقَ</span> <span class=\'c-blue\'>سَلَفِهِ</span> <span class=\'c-black\'>فَهُدِيَ</span></span>', info: 'Reading Sentences', theme: 'pink', t: 'normal'},
-            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-red\'>وَنَجَحَ</span> <span class=\'c-blue\'>وَلَدُهُ</span> <span class=\'c-black\'>فَفَرِحَ</span></span>', info: 'Reading Sentences', theme: 'pink', t: 'normal'},
-            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-black\'>ظُلِمَ</span> <span class=\'c-blue\'>فَصَبَرَ</span> <span class=\'c-red\'>فَنُصِرَ</span></span>', info: 'Reading Sentences', theme: 'pink', t: 'danger'},
-            {w: '<span class=\'quran-special-font\' dir=\'rtl\'><span class=\'c-red\'>كَمُلَ</span> <span class=\'c-blue\'>أَدَبُهُ</span> <span class=\'c-black\'>فَحَسُنَ</span> <span class=\'c-blue\'>خُلُقُهُ</span></span>', info: 'Reading Sentences', theme: 'pink', t: 'golden'}
+            {w: "<span class='c-red'>عُمَرُ</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-red'>خَرَجَ</span> <span class='c-blue'>عُمَرُ</span> <span class='c-black'>وَدَخَلَ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-red'>وَبَسَطَ</span> <span class='c-blue'>فُرُشَهُ</span> <span class='c-black'>فَقَعَدَ</span>", theme: "green", t: "speed"},
+            {w: "<span class='c-red'>شَرِبَ</span> <span class='c-black'>فَذَهَبَ</span> <span class='c-blue'>ظَمَؤُهُ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-red'>نَصَبَ</span> <span class='c-blue'>سُرُرَهُ</span> <span class='c-black'>بِغُرَفِهِ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-red'>مَرِضَ</span> <span class='c-black'>فَضَعُفَ</span> <span class='c-blue'>بَدَنُهُ</span>", theme: "green", t: "danger"},
+            {w: "<span class='c-red'>رَكِبَ</span> <span class='c-black'>جَمَلَهُ</span> <span class='c-blue'>لِيَصِلَ</span> <span class='c-black'>رَحِمَهُ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-red'>كَرَمُ</span>", theme: "green", t: "golden"},
+            {w: "<span class='c-red'>كَتَبَ</span> <span class='c-blue'>وَرَقَهُ</span> <span class='c-black'>بِقَلَمِهِ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-red'>وَقَرَأَ</span> <span class='c-blue'>كُتُبَهُ</span> <span class='c-black'>فَعَلِمَ</span>", theme: "pink", t: "speed"},
+            {w: "<span class='c-red'>وَسَلَكَ</span> <span class='c-black'>طُرُقَ</span> <span class='c-blue'>سَلَفِهِ</span> <span class='c-black'>فَهُدِيَ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-red'>وَنَجَحَ</span> <span class='c-blue'>وَلَدُهُ</span> <span class='c-black'>فَفَرِحَ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>ظُلِمَ</span> <span class='c-blue'>فَصَبَرَ</span> <span class='c-red'>فَنُصِرَ</span>", theme: "pink", t: "danger"},
+            {w: "<span class='c-red'>كَمُلَ</span> <span class='c-blue'>أَدَبُهُ</span> <span class='c-black'>فَحَسُنَ</span> <span class='c-blue'>خُلُقُهُ</span>", theme: "pink", t: "golden"}
         ];
     </script>
     <script src="../shared/core.js"></script>

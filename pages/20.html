@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nour Al-Bayan - Page 20</title>
+    <title>نور البيان - صفحة 20</title>
     <link rel="stylesheet" href="../shared/core.css">
 </head>
 <body class="flex flex-col items-center select-none bg-emerald-50/40">
     <script>
-window.PAGE_CONFIG = {
-            title: 'Nour Al-Bayan',
-            subtitle: 'Page 20 • Harakat Examples (أمثلة الحركات)',
-            footer: 'Nour Al-Bayan Learning System • Page 20 (Harakat Examples (أمثلة الحركات))',
+        window.PAGE_CONFIG = {
+            title: 'نور البيان',
+            subtitle: 'حركة الضم — كلمات مدمجة ومجمعة',
+            lessonNumber: 3,
+            pageNumber: 20,
+            fontType: 'dictation',
             game3: 'memory'
         };
 
@@ -51,8 +53,7 @@ window.PAGE_CONFIG = {
             ["<span class='c0'>زَ</span><span class='c1'>مَ&zwj;</span><span class='c2'>&zwj;نُ</span>", "normal"]
         ];
         const dataset = rawData.map((row, i) => ({
-            w: `<span class='quran-special-font' dir='rtl'>${row[0]}</span>`,
-            info: "Harakat Examples",
+            w: `<span dir='rtl'>${row[0]}</span>`,
             theme: themes[Math.floor(i / 4) % themes.length],
             t: row[1]
         }));

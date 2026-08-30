@@ -3,53 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nour Al-Bayan - Page 83</title>
+    <title>نور البيان - صفحة 83</title>
     <link rel="stylesheet" href="../shared/core.css">
 </head>
 <body class="flex flex-col items-center select-none bg-emerald-50/40">
     <script>
         window.PAGE_CONFIG = {
-            title: 'Nour Al-Bayan',
-            subtitle: 'Page 83 • Tajweed: Meem Sakinah & Shaddah (أحكام الميم الساكنة والمشددة)',
-            footer: 'Nour Al-Bayan Learning System • Page 83 (Tajweed: Meem Sakinah & Shaddah / أحكام الميم الساكنة والمشددة)',
-            game3: 'riddles'
+            title: 'نور البيان',
+            subtitle: 'أحكام ترتيل القرآن — ٣ـ أحكام الميم الساكنة والميم والنون المشددتين',
+            lessonNumber: 67,
+            pageNumber: 83,
+            fontType: 'quran',
+            game3: 'memory'
         };
 
         const dataset = [
             // 1. الإخفاء الشفوي
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>هُم </span><span class='c-red'>بِ</span><span class='c-black'>هِ</span><span class='c-red'>ۦ</span></span>", info: "الإخفاء الشفوي", theme: "pink", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>وَهُم </span><span class='c-red'>بَ</span><span class='c-black'>دَءُ</span><span class='c-red'>و</span><span class='c-black'>كُ</span><span class='c-red'>م\u06E1</span></span>", info: "الإخفاء الشفوي", theme: "pink", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>لَكُم </span><span class='c-red'>بَ</span><span class='c-black'>رَ</span><span class='c-red'>آ</span><span class='c-black'>ءَةٌ</span></span>", info: "الإخفاء الشفوي", theme: "pink", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>أَ</span><span class='c-red'>ج\u06E1</span><span class='c-black'>رَهُ</span><span class='c-red'>م </span><span class='c-red'>بِ</span><span class='c-black'>أَ</span><span class='c-red'>ح\u06E1</span><span class='c-black'>سَنِ</span></span>", info: "الإخفاء الشفوي", theme: "pink", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>أَم </span><span class='c-red'>بِ</span><span class='c-black'>ظَـ</span><span class='c-red'>ٰ</span><span class='c-black'>هِرٍ</span></span>", info: "الإخفاء الشفوي", theme: "pink", t: "danger"},
+            {w: "<span class='c-black'>هُم </span><span class='c-red'>بِ</span><span class='c-black'>هِ</span><span class='c-red'>ۦ</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>وَهُم </span><span class='c-red'>بَ</span><span class='c-black'>دَءُ</span><span class='c-red'>و</span><span class='c-black'>كُ</span><span class='c-red'>مۡ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>لَكُم </span><span class='c-red'>بَ</span><span class='c-black'>رَ</span><span class='c-red'>آ</span><span class='c-black'>ءَةٌ</span>", theme: "pink", t: "speed"},
+            {w: "<span class='c-black'>أَ</span><span class='c-red'>جۡ</span><span class='c-black'>رُهُ</span><span class='c-red'>م </span><span class='c-red'>بِ</span><span class='c-black'>أَ</span><span class='c-red'>حۡ</span><span class='c-black'>سَنِ</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>أَم </span><span class='c-red'>بِ</span><span class='c-black'>ظَـ</span><span class='c-red'>ٰ</span><span class='c-black'>هِرٍ</span>", theme: "pink", t: "danger"},
 
             // 2. الإدغام الصغير / المتماثلين
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>وَهُم </span><span class='c-red'>مُّ</span><span class='c-red'>ه\u06E1</span><span class='c-black'>تَدُ</span><span class='c-red'>و</span><span class='c-black'>نَ</span></span>", info: "إدغام المتماثلين الشفوي", theme: "green", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>لَّهُم </span><span class='c-red'>مَّ</span><span class='c-red'>غ\u06E1</span><span class='c-black'>فِرَةٌ</span></span>", info: "إدغام المتماثلين الشفوي", theme: "green", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>وَءَامَنَهُ</span><span class='c-red'>م </span><span class='c-red'>مِّ</span><span class='c-red'>ن\u06E1</span></span>", info: "إدغام المتماثلين الشفوي", theme: "green", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>وَهُم </span><span class='c-red'>مُّ</span><span class='c-red'>ع\u06E1</span><span class='c-black'>رِضُ</span><span class='c-red'>و</span><span class='c-black'>نَ</span></span>", info: "إدغام المتماثلين الشفوي", theme: "green", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>وَلَكُم </span><span class='c-red'>مَّ</span><span class='c-black'>ا كَسَ</span><span class='c-red'>ب\u06E1</span><span class='c-black'>تُ</span><span class='c-red'>م\u06E1</span></span>", info: "إدغام المتماثلين الشفوي", theme: "green", t: "danger"},
+            {w: "<span class='c-black'>وَهُم </span><span class='c-red'>مُّ</span><span class='c-red'>هۡ</span><span class='c-black'>تَدُ</span><span class='c-red'>و</span><span class='c-black'>نَ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>لَّهُم </span><span class='c-red'>مَّ</span><span class='c-red'>غۡ</span><span class='c-black'>فِرَةٌ</span>", theme: "green", t: "speed"},
+            {w: "<span class='c-black'>وَءَامَنَهُ</span><span class='c-red'>م </span><span class='c-red'>مِّ</span><span class='c-red'>نۡ</span>", theme: "green", t: "golden"},
+            {w: "<span class='c-black'>وَهُم </span><span class='c-red'>مُّ</span><span class='c-red'>عۡ</span><span class='c-black'>رِضُ</span><span class='c-red'>و</span><span class='c-black'>نَ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>وَلَكُم </span><span class='c-red'>مَّ</span><span class='c-black'>ا كَسَ</span><span class='c-red'>بۡ</span><span class='c-black'>تُ</span><span class='c-red'>مۡ</span>", theme: "green", t: "danger"},
 
             // 3. الإظهار الشفوي
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>وَهُ</span><span class='c-red'>م\u06E1</span> <span class='c-black'>أُلُ</span><span class='c-red'>و</span><span class='c-black'>فٌ</span></span>", info: "الإظهار الشفوي", theme: "blue", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>لَهُ</span><span class='c-red'>م\u06E1</span> <span class='c-black'>ذِ</span><span class='c-red'>ك\u06E1</span><span class='c-black'>رً</span><span class='c-red'>ا</span></span>", info: "الإظهار الشفوي", theme: "blue", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>أَلَ</span><span class='c-red'>م\u06E1</span> <span class='c-black'>تَرَ</span></span>", info: "الإظهار الشفوي", theme: "blue", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>هُ</span><span class='c-red'>م\u06E1</span> <span class='c-black'>فِ</span><span class='c-red'>ي</span><span class='c-black'>هَا</span></span>", info: "الإظهار الشفوي", theme: "blue", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>هُ</span><span class='c-red'>م\u06E1</span> <span class='c-black'>وُقُ</span><span class='c-red'>و</span><span class='c-black'>دُ</span></span>", info: "الإظهار الشفوي", theme: "blue", t: "danger"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>أَيُّكُ</span><span class='c-red'>م\u06E1</span> <span class='c-black'>زَادَ</span><span class='c-red'>ت\u06E1</span><span class='c-black'>هُ</span></span>", info: "الإظهار الشفوي", theme: "blue", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>عَ</span><span class='c-red'>ن\u06E1</span><span class='c-black'>هُ</span><span class='c-red'>م\u06E1</span> <span class='c-black'>وَرَضُ</span><span class='c-red'>و</span><span class='c-black'>ا۟</span></span>", info: "الإظهار الشفوي", theme: "blue", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>قَالَ لَهُ</span><span class='c-red'>م\u06E1</span> <span class='c-black'>هَـ</span><span class='c-red'>ٰ</span><span class='c-black'>رُ</span><span class='c-red'>و</span><span class='c-black'>نُ</span></span>", info: "الإظهار الشفوي", theme: "blue", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>أَ</span><span class='c-red'>ن\u06E1</span><span class='c-black'>عَ</span><span class='c-red'>م\u06E1</span><span class='c-black'>تَ</span></span>", info: "الإظهار الشفوي", theme: "blue", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ٱلۡحَ</span><span class='c-red'>م\u06E1</span><span class='c-black'>دُ</span></span>", info: "الإظهار الشفوي", theme: "blue", t: "golden"},
+            {w: "<span class='c-black'>وَهُ</span><span class='c-red'>مۡ</span> <span class='c-black'>أُلُ</span><span class='c-red'>و</span><span class='c-black'>فٌ</span>", theme: "blue", t: "golden"},
+            {w: "<span class='c-black'>لَهُ</span><span class='c-red'>مۡ</span> <span class='c-black'>ذِ</span><span class='c-red'>كۡ</span><span class='c-black'>رً</span><span class='c-red'>ا</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>أَلَ</span><span class='c-red'>مۡ</span> <span class='c-black'>تَرَ</span>", theme: "blue", t: "speed"},
+            {w: "<span class='c-black'>هُ</span><span class='c-red'>مۡ</span> <span class='c-black'>فِ</span><span class='c-red'>ي</span><span class='c-black'>هَا</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>هُ</span><span class='c-red'>مۡ</span> <span class='c-black'>وَقُ</span><span class='c-red'>و</span><span class='c-black'>دُ</span>", theme: "blue", t: "danger"},
+            {w: "<span class='c-black'>أَيُّكُ</span><span class='c-red'>مۡ</span> <span class='c-black'>زَادَ</span><span class='c-red'>تۡ</span><span class='c-black'>هُ</span>", theme: "blue", t: "speed"},
+            {w: "<span class='c-black'>عَ</span><span class='c-red'>نۡ</span><span class='c-black'>هُ</span><span class='c-red'>مۡ</span> <span class='c-black'>وَرَضُ</span><span class='c-red'>و</span><span class='c-black'>اْ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>قَالَ لَهُ</span><span class='c-red'>مۡ</span> <span class='c-black'>هَـ</span><span class='c-red'>ٰ</span><span class='c-black'>رُ</span><span class='c-red'>و</span><span class='c-black'>نُ</span>", theme: "blue", t: "golden"},
+            {w: "<span class='c-black'>أَ</span><span class='c-red'>نۡ</span><span class='c-black'>عَ</span><span class='c-red'>مۡ</span><span class='c-black'>تَ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>ٱلۡحَ</span><span class='c-red'>مۡ</span><span class='c-black'>دُ</span>", theme: "blue", t: "golden"},
 
             // 4. النون والميم المشددتان
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>أَ</span><span class='c-red'>مَّ</span></span>", info: "الميم المشددة (غنة حركتان)", theme: "yellow", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>عَ</span><span class='c-red'>مَّ</span></span>", info: "الميم المشددة (غنة حركتان)", theme: "yellow", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>مِ</span><span class='c-red'>مَّ</span><span class='c-black'>ا</span></span>", info: "الميم المشددة (غنة حركتان)", theme: "yellow", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>إِ</span><span class='c-red'>نَّ</span></span>", info: "النون المشددة (غنة حركتان)", theme: "yellow", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>كُ</span><span class='c-red'>نَّ</span><span class='c-black'>ا</span></span>", info: "النون المشددة (غنة حركتان)", theme: "yellow", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>أَ</span><span class='c-red'>نَّ</span><span class='c-black'>ا</span></span>", info: "النون المشددة (غنة حركتان)", theme: "yellow", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ثُ</span><span class='c-red'>مَّ</span></span>", info: "الميم المشددة (غنة حركتان)", theme: "yellow", t: "danger"}
+            {w: "<span class='c-black'>أَ</span><span class='c-red'>مَّ</span>", theme: "yellow", t: "golden"},
+            {w: "<span class='c-black'>عَ</span><span class='c-red'>مَّ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>مِ</span><span class='c-red'>مَّ</span><span class='c-black'>ا</span>", theme: "yellow", t: "speed"},
+            {w: "<span class='c-black'>إِ</span><span class='c-red'>نَّ</span>", theme: "yellow", t: "golden"},
+            {w: "<span class='c-black'>كُ</span><span class='c-red'>نَّ</span><span class='c-black'>ا</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>أَ</span><span class='c-red'>نَّ</span><span class='c-black'>ا</span>", theme: "yellow", t: "speed"},
+            {w: "<span class='c-black'>ثُ</span><span class='c-red'>مَّ</span>", theme: "yellow", t: "danger"}
         ];
     </script>
     <script src="../shared/core.js"></script>

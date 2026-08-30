@@ -3,20 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nour Al-Bayan - Page 12</title>
+    <title>نور البيان - صفحة 12</title>
     <link rel="stylesheet" href="../shared/core.css">
 </head>
 <body class="flex flex-col items-center select-none bg-emerald-50/40">
     <script>
-window.PAGE_CONFIG = {
-            title: 'Nour Al-Bayan',
-            subtitle: 'Page 12 • Segmented Letters (الحروف المجزأة)',
-            footer: 'Nour Al-Bayan Learning System • Page 12 (Segmented Letters (الحروف المجزأة))',
+        window.PAGE_CONFIG = {
+            title: 'نور البيان',
+            subtitle: 'حركة الفتح — جمل بالفتح',
+            lessonNumber: 10,
+            pageNumber: 12,
+            fontType: 'dictation',
             game3: 'memory'
         };
 
         const _themes = ["pink","green","blue","yellow"];
-        const C_R = "color-0", C_D = "color-2"; // red / dark
+        const C_R = "c-red", C_B = "c-blue", C_D = "c-darkblue";
         const _raw = [
             [[["رَكَعَ",C_R],["وَسَجَدَ",C_D]],"normal"],
             [[["دَخَلَ",C_R],["وَجَلَسَ",C_D]],"speed"],
@@ -32,10 +34,10 @@ window.PAGE_CONFIG = {
             [[["عَبَدَ",C_D],["فَشَكَرَ",C_R]],"golden"],
             [[["قَفَزَ",C_R],["فَوَقَعَ",C_D]],"normal"],
             [[["عَبَسَ",C_R],["وَبَسَرَ",C_D]],"normal"],
-            [[["قَرَأَ",C_R],["وَكَتَبَ",C_D],["فَنَجَحَ",C_D]],"speed"],
-            [[["حَكَمَ",C_R],["وَعَدَلَ",C_D],["فَصَدَقَ",C_D]],"danger"],
-            [[["قَطَعَ",C_R],["وَنَشَرَ",C_D],["فَصَنَعَ",C_D]],"normal"],
-            [[["طَحَنَ",C_R],["وَنَخَلَ",C_D],["فَعَجَنَ",C_D]],"golden"]
+            [[["قَرَأَ",C_R],["وَكَتَبَ",C_D],["فَنَجَحَ",C_B]],"speed"],
+            [[["حَكَمَ",C_R],["وَعَدَلَ",C_B],["فَصَدَقَ",C_D]],"danger"],
+            [[["قَطَعَ",C_D],["وَنَشَرَ",C_B],["فَصَنَعَ",C_R]],"normal"],
+            [[["طَحَنَ",C_D],["وَنَخَلَ",C_R],["فَعَجَنَ",C_B]],"golden"]
         ];
         const dataset = _raw.map((r,i)=>({groups:r[0], t:r[1], theme:_themes[Math.floor(i/4)%4], w:r[0].map(g=>g[0])}));
     </script>

@@ -3,60 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nour Al-Bayan - Page 64</title>
+    <title>نور البيان - صفحة 64</title>
     <link rel="stylesheet" href="../shared/core.css">
 </head>
 <body class="flex flex-col items-center select-none bg-emerald-50/40">
     <script>
         window.PAGE_CONFIG = {
-            title: 'Nour Al-Bayan',
-            subtitle: 'Page 64 • Shaddah & Sun Lam (الشدة واللام الشمسية)',
-            footer: 'Nour Al-Bayan Learning System • Page 64 (Shaddah & Sun Lam / الشدة واللام الشمسية)',
-            game3: 'riddles'
+            title: 'نور البيان',
+            subtitle: 'الشدة — اللام الشَّمْسِيَّةُ — تدريب (٣)',
+            lessonNumber: 48,
+            pageNumber: 64,
+            fontType: 'quran',
+            game3: 'memory'
         };
 
         const dataset = [
             // Row 1
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ٱلـ</span><span class='c-red'>طَّـ</span><span class='c-black'>ا</span><span class='c-black'>رِقِ</span></span>", info: "اللام الشمسية", theme: "pink", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ٱلـ</span><span class='c-red'>ثَّـ</span><span class='c-black'>وَّ</span><span class='c-black'>ا</span><span class='c-black'>بُ</span></span>", info: "اللام الشمسية", theme: "pink", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ٱلـ</span><span class='c-red'>صَّـ</span><span class='c-red'>ٰ</span><span class='c-black'>عِقَةُ</span></span>", info: "اللام الشمسية", theme: "pink", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ٱلـ</span><span class='c-red'>رَّ</span><span class='c-black'>أ\u06E1سُ</span></span>", info: "اللام الشمسية", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>ٱل</span><span class='c-red'>طَّ</span><span class='c-black'>ارِقِ</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>ٱل</span><span class='c-red'>تَّ</span><span class='c-black'>وَّابُ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>ٱل</span><span class='c-red'>صَّ</span><span class='c-red'>ٰ</span><span class='c-black'>عِقَةُ</span>", theme: "pink", t: "speed"},
+            {w: "<span class='c-black'>ٱل</span><span class='c-red'>رَّ</span><span class='c-black'>أۡسُ</span>", theme: "pink", t: "normal"},
 
             // Row 2
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ٱلـ</span><span class='c-red'>تَّـ</span><span class='c-black'>ق\u06E1وَ</span><span class='c-red'>ىٰ</span></span>", info: "اللام الشمسية", theme: "green", t: "danger"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ٱلـ</span><span class='c-red'>تَّـ</span><span class='c-black'>رَ</span><span class='c-black'>ا</span><span class='c-black'>قِ</span><span class='c-red'>يَ</span></span>", info: "اللام الشمسية", theme: "green", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ٱلـ</span><span class='c-red'>لَّـ</span><span class='c-black'>طِ</span><span class='c-red'>ي</span><span class='c-black'>فُ</span></span>", info: "اللام الشمسية", theme: "green", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ٱلـ</span><span class='c-red'>ذُّ</span><span class='c-black'>بَ</span><span class='c-red'>ا</span><span class='c-black'>بُ</span></span>", info: "اللام الشمسية", theme: "green", t: "golden"},
+            {w: "<span class='c-black'>ٱل</span><span class='c-red'>تَّ</span><span class='c-black'>قۡوَ</span><span class='c-red'>ىٰ</span>", theme: "green", t: "danger"},
+            {w: "<span class='c-black'>ٱل</span><span class='c-red'>تَّ</span><span class='c-black'>رَاقِ</span><span class='c-red'>يَ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>ٱل</span><span class='c-red'>لَّ</span><span class='c-black'>طِ</span><span class='c-red'>ي</span><span class='c-black'>فُ</span>", theme: "green", t: "speed"},
+            {w: "<span class='c-black'>ٱل</span><span class='c-red'>ذُّ</span><span class='c-black'>بَابُ</span>", theme: "green", t: "golden"},
 
             // Row 3
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ٱلـ</span><span class='c-red'>زَّ</span><span class='c-black'>بَدُ</span></span>", info: "اللام الشمسية", theme: "blue", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ٱلـ</span><span class='c-red'>سَّـ</span><span class='c-red'>ٰ</span><span class='c-black'>جِدُ</span><span class='c-red'>و</span><span class='c-black'>نَ</span></span>", info: "اللام الشمسية", theme: "blue", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ٱلـ</span><span class='c-red'>رَّ</span><span class='c-black'>ا</span><span class='c-black'>جِفَةُ</span></span>", info: "اللام الشمسية", theme: "blue", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ٱلـ</span><span class='c-red'>دَّ</span><span class='c-black'>ه\u06E1رُ</span></span>", info: "اللام الشمسية", theme: "blue", t: "danger"},
+            {w: "<span class='c-black'>ٱل</span><span class='c-red'>زَّ</span><span class='c-black'>بَدُ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>ٱل</span><span class='c-red'>سَّ</span><span class='c-red'>ٰ</span><span class='c-black'>جِدُ</span><span class='c-red'>و</span><span class='c-black'>نَ</span>", theme: "blue", t: "speed"},
+            {w: "<span class='c-black'>ٱل</span><span class='c-red'>رَّ</span><span class='c-black'>اجِفَةُ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>ٱل</span><span class='c-red'>دَّ</span><span class='c-black'>هۡرُ</span>", theme: "blue", t: "danger"},
 
             // Row 4
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ٱلـ</span><span class='c-red'>نَّـ</span><span class='c-black'>ا</span><span class='c-black'>سِ</span></span>", info: "اللام الشمسية", theme: "yellow", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>لِلـ</span><span class='c-red'>زَّ</span><span class='c-black'>كَ</span><span class='c-red'>و\u0670</span><span class='c-black'>ةِ</span></span>", info: "اللام الشمسية", theme: "yellow", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>لِلـ</span><span class='c-red'>صَّـ</span><span class='c-black'>لَ</span><span class='c-red'>و\u0670</span><span class='c-black'>ةِ</span></span>", info: "اللام الشمسية", theme: "yellow", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>لِلـ</span><span class='c-red'>ذِّ</span><span class='c-black'>ك\u06E1رِ</span></span>", info: "اللام الشمسية", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>ٱل</span><span class='c-red'>نَّ</span><span class='c-black'>اسِ</span>", theme: "yellow", t: "golden"},
+            {w: "<span class='c-black'>لِل</span><span class='c-red'>زَّ</span><span class='c-black'>كَ</span><span class='c-red'>وٰ</span><span class='c-black'>ةِ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>لِل</span><span class='c-red'>صَّ</span><span class='c-black'>لَ</span><span class='c-red'>وٰ</span><span class='c-black'>ةِ</span>", theme: "yellow", t: "speed"},
+            {w: "<span class='c-black'>لِل</span><span class='c-red'>ذِّ</span><span class='c-black'>كۡرِ</span>", theme: "yellow", t: "normal"},
 
             // Row 5
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ٱلـ</span><span class='c-red'>ضَّـ</span><span class='c-black'>أ\u06E1نِ</span></span>", info: "اللام الشمسية", theme: "pink", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ٱلـ</span><span class='c-red'>ثَّـ</span><span class='c-black'>قَلَ</span><span class='c-red'>ا</span><span class='c-black'>نِ</span></span>", info: "اللام الشمسية", theme: "pink", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ٱلـ</span><span class='c-red'>صَّـ</span><span class='c-black'>ر\u06E1حَ</span></span>", info: "اللام الشمسية", theme: "pink", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ٱلـ</span><span class='c-red'>ظَّـ</span><span class='c-red'>ٰ</span><span class='c-black'>لِمِ</span><span class='c-red'>ي</span><span class='c-black'>نَ</span></span>", info: "اللام الشمسية", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>ٱل</span><span class='c-red'>ضَّ</span><span class='c-black'>أۡنِ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>ٱل</span><span class='c-red'>ثَّ</span><span class='c-black'>قَلَانِ</span>", theme: "pink", t: "speed"},
+            {w: "<span class='c-black'>ٱل</span><span class='c-red'>صَّ</span><span class='c-black'>رۡحَ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>ٱل</span><span class='c-red'>ظَّ</span><span class='c-red'>ٰ</span><span class='c-black'>لِمِ</span><span class='c-red'>ي</span><span class='c-black'>نَ</span>", theme: "pink", t: "golden"},
 
             // Row 6
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>يُ</span><span class='c-red'>و</span><span class='c-black'>لِجُ ٱلـ</span><span class='c-red'>لَّـ</span><span class='c-black'>ي\u06E1لَ فِ</span><span class='c-red'>ى</span> <span class='c-black'>ٱلـ</span><span class='c-red'>نَّـ</span><span class='c-black'>هَ</span><span class='c-red'>ا</span><span class='c-black'>رِ</span></span>", info: "أمثلة قرآنية على اللام الشمسية", theme: "green", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>لَعَلَّنَا نَتَّبِعُ ٱلـ</span><span class='c-red'>سَّـ</span><span class='c-black'>حَرَةَ</span></span>", info: "أمثلة قرآنية على اللام الشمسية", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>يُ</span><span class='c-red'>و</span><span class='c-black'>لِجُ ٱل</span><span class='c-red'>لَّ</span><span class='c-black'>يۡلَ فِ</span><span class='c-red'>ى</span> <span class='c-black'>ٱل</span><span class='c-red'>نَّ</span><span class='c-black'>هَارِ</span>", theme: "green", t: "speed"},
+            {w: "<span class='c-black'>لَّعَلَّنَا نَتَّبِعُ ٱل</span><span class='c-red'>سَّ</span><span class='c-black'>حَرَةَ</span>", theme: "green", t: "normal"},
 
             // Row 7
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>وَإِ</span><span class='c-red'>نَّ</span><span class='c-black'>هُ</span><span class='c-red'>ۥ</span> <span class='c-black'>لَمِنَ ٱلـ</span><span class='c-red'>صَّـ</span><span class='c-red'>ٰ</span><span class='c-black'>دِقِ</span><span class='c-red'>ي</span><span class='c-black'>نَ</span></span>", info: "أمثلة قرآنية على اللام الشمسية", theme: "blue", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>هُوَ ٱلـ</span><span class='c-red'>تَّـ</span><span class='c-black'>وَّ</span><span class='c-red'>ا</span><span class='c-black'>بُ ٱلـ</span><span class='c-red'>رَّ</span><span class='c-black'>حِ</span><span class='c-red'>ي</span><span class='c-black'>مُ</span></span>", info: "أمثلة قرآنية على اللام الشمسية", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>وَإِ</span><span class='c-red'>نَّ</span><span class='c-black'>هُ</span><span class='c-red'>ۥ</span> <span class='c-black'>لَمِنَ ٱل</span><span class='c-red'>صَّ</span><span class='c-red'>ٰ</span><span class='c-black'>دِقِ</span><span class='c-red'>ي</span><span class='c-black'>نَ</span>", theme: "blue", t: "golden"},
+            {w: "<span class='c-black'>هُوَ ٱل</span><span class='c-red'>تَّ</span><span class='c-black'>وَّابُ ٱل</span><span class='c-red'>رَّ</span><span class='c-black'>حِ</span><span class='c-red'>ي</span><span class='c-black'>مُ</span>", theme: "blue", t: "normal"},
 
             // Row 8
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>وَٱلَّذِ</span><span class='c-red'>ي</span><span class='c-black'>نَ هُ</span><span class='c-red'>م\u06E1</span> <span class='c-black'>لِلـ</span><span class='c-red'>زَّ</span><span class='c-black'>كَ</span><span class='c-red'>و\u0670</span><span class='c-black'>ةِ فَـ</span><span class='c-red'>ٰ</span><span class='c-black'>عِلُ</span><span class='c-red'>و</span><span class='c-black'>نَ</span></span>", info: "أمثلة قرآنية على اللام الشمسية", theme: "yellow", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ٱلـ</span><span class='c-red'>شَّـ</span><span class='c-black'>ه\u06E1رُ ٱلۡحَرَ</span><span class='c-red'>ا</span><span class='c-black'>مُ بِٱلـ</span><span class='c-red'>شَّـ</span><span class='c-black'>ه\u06E1رِ ٱلۡحَرَ</span><span class='c-red'>ا</span><span class='c-black'>مِ</span></span>", info: "أمثلة قرآنية على اللام الشمسية والقمرية", theme: "yellow", t: "golden"}
+            {w: "<span class='c-black'>وَٱلَّذِ</span><span class='c-red'>ي</span><span class='c-black'>نَ هُ</span><span class='c-red'>مۡ</span> <span class='c-black'>لِل</span><span class='c-red'>زَّ</span><span class='c-black'>كَ</span><span class='c-red'>وٰ</span><span class='c-black'>ةِ فَـ</span><span class='c-red'>ٰ</span><span class='c-black'>عِلُ</span><span class='c-red'>و</span><span class='c-black'>نَ</span>", theme: "yellow", t: "speed"},
+            {w: "<span class='c-black'>ٱل</span><span class='c-red'>شَّ</span><span class='c-black'>هۡرُ ٱلۡحَرَامُ بِٱل</span><span class='c-red'>شَّ</span><span class='c-black'>هۡرِ ٱلۡحَرَامِ</span>", theme: "yellow", t: "golden"}
         ];
     </script>
     <script src="../shared/core.js"></script>

@@ -3,67 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nour Al-Bayan - Page 70</title>
+    <title>نور البيان - صفحة 70</title>
     <link rel="stylesheet" href="../shared/core.css">
 </head>
 <body class="flex flex-col items-center select-none bg-emerald-50/40">
     <script>
         window.PAGE_CONFIG = {
-            title: 'Nour Al-Bayan',
-            subtitle: 'Page 70 • Shaddah with Damma & Waw (الشدة مع الضمة والمد بالواو)',
-            footer: 'Nour Al-Bayan Learning System • Page 70 (Shaddah with Damma & Waw / الشدة مع الضمة والمد بالواو)',
-            game3: 'riddles'
+            title: 'نور البيان',
+            subtitle: 'الوحدة الخامسة: الشَّدَّةُ — ٣ـ الشدة مع الضمة والمد بالواو',
+            lessonNumber: 54,
+            pageNumber: 70,
+            fontType: 'quran',
+            game3: 'memory'
         };
 
         const dataset = [
             // Row 1
-            {w: "<span dir='rtl'><span class='c-black'>أُفْفُ</span> = <span class='c-black'>أُ</span><span class='c-red'>فُّ</span></span>", info: "تأسيس الشدة بالضم", theme: "pink", t: "golden"},
-            {w: "<span dir='rtl'><span class='c-black'>عَدْدُو</span> = <span class='c-black'>عَ</span><span class='c-red'>دُّ</span><span class='c-black'>و</span></span>", info: "تأسيس الشدة بالضم والمد بالواو", theme: "pink", t: "speed"},
+            {w: "<span class='c-black'>أُفْفُ</span> = <span class='c-black'>أُ</span><span class='c-red'>فُّ</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>عَدْدُو</span> = <span class='c-black'>عَ</span><span class='c-red'>دُّ</span><span class='c-black'>و</span>", theme: "pink", t: "speed"},
 
             // Row 2
-            {w: "<span dir='rtl'><span class='c-black'>أَ</span><span class='c-red'>يُّ</span></span>", info: "أمثلة الشدة بالضم", theme: "pink", t: "normal"},
-            {w: "<span dir='rtl'><span class='c-black'>جُ</span><span class='c-red'>دُّ</span></span>", info: "أمثلة الشدة بالضم", theme: "pink", t: "golden"},
-            {w: "<span dir='rtl'><span class='c-black'>حَ</span><span class='c-red'>قُّ</span></span>", info: "أمثلة الشدة بالضم", theme: "pink", t: "danger"},
-            {w: "<span dir='rtl'><span class='c-black'>فُ</span><span class='c-red'>كُّ</span></span>", info: "أمثلة الشدة بالضم", theme: "pink", t: "normal"},
-            {w: "<span dir='rtl'><span class='c-black'>حِ</span><span class='c-red'>جُّ</span></span>", info: "أمثلة الشدة بالضم", theme: "pink", t: "speed"},
+            {w: "<span class='c-black'>أَ</span><span class='c-red'>يُّ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>جُ</span><span class='c-red'>دُّ</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>حَ</span><span class='c-red'>قُّ</span>", theme: "pink", t: "danger"},
+            {w: "<span class='c-black'>فُ</span><span class='c-red'>كُّ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>حِ</span><span class='c-red'>جُّ</span>", theme: "pink", t: "speed"},
 
             // Row 3
-            {w: "<span dir='rtl'><span class='c-black'>عِ</span><span class='c-red'>زُّ</span></span>", info: "أمثلة الشدة بالضم", theme: "green", t: "normal"},
-            {w: "<span dir='rtl'><span class='c-black'>مِ</span><span class='c-red'>تُّ</span></span>", info: "أمثلة الشدة بالضم", theme: "green", t: "golden"},
-            {w: "<span dir='rtl'><span class='c-black'>صَ</span><span class='c-red'>مُّ</span><span class='c-black'>وا</span></span>", info: "الشدة مع المد بالواو", theme: "green", t: "speed"},
-            {w: "<span dir='rtl'><span class='c-black'>خَ</span><span class='c-red'>رُّ</span><span class='c-black'>وا</span></span>", info: "الشدة مع المد بالواو", theme: "green", t: "normal"},
-            {w: "<span dir='rtl'><span class='c-black'>صَ</span><span class='c-red'>لُّ</span><span class='c-black'>وا</span></span>", info: "الشدة مع المد بالواو", theme: "green", t: "danger"},
+            {w: "<span class='c-black'>عِ</span><span class='c-red'>زُّ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>مِ</span><span class='c-red'>تُّ</span>", theme: "green", t: "golden"},
+            {w: "<span class='c-black'>صَ</span><span class='c-red'>مُّ</span><span class='c-black'>واْ</span>", theme: "green", t: "speed"},
+            {w: "<span class='c-black'>خَ</span><span class='c-red'>رُّ</span><span class='c-black'>واْ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>صَ</span><span class='c-red'>لُّ</span><span class='c-black'>واْ</span>", theme: "green", t: "danger"},
 
             // Row 4
-            {w: "<span dir='rtl'><span class='c-black'>صَبَّ</span> ← <span class='c-black'>يَصُ</span><span class='c-red'>بُّ</span></span>", info: "مقارنة الفعل الماضي والمضارع المشدد", theme: "blue", t: "normal"},
-            {w: "<span dir='rtl'><span class='c-black'>دَقَّ</span> ← <span class='c-black'>يَدُ</span><span class='c-red'>قُّ</span></span>", info: "مقارنة الفعل الماضي والمضارع المشدد", theme: "blue", t: "speed"},
-            {w: "<span dir='rtl'><span class='c-black'>حَجَّ</span> ← <span class='c-black'>يَحُ</span><span class='c-red'>جُّ</span></span>", info: "مقارنة الفعل الماضي والمضارع المشدد", theme: "blue", t: "golden"},
+            {w: "<span class='c-black'>صَبَّ</span> = <span class='c-black'>يَصُ</span><span class='c-red'>بُّ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>دَقَّ</span> = <span class='c-black'>يَدُ</span><span class='c-red'>قُّ</span>", theme: "blue", t: "speed"},
+            {w: "<span class='c-black'>حَجَّ</span> = <span class='c-black'>يَحُ</span><span class='c-red'>جُّ</span>", theme: "blue", t: "golden"},
 
             // Row 5
-            {w: "<span dir='rtl'><span class='c-black'>لَفَّ</span> ← <span class='c-black'>يَلُ</span><span class='c-red'>فُّ</span></span>", info: "مقارنة الفعل الماضي والمضارع المشدد", theme: "blue", t: "normal"},
-            {w: "<span dir='rtl'><span class='c-black'>يَخُ</span><span class='c-red'>طُّ</span> ← <span class='c-black'>خَطَّ</span></span>", info: "مقارنة المضارع والماضي المشدد", theme: "blue", t: "danger"},
-            {w: "<span dir='rtl'><span class='c-black'>يَفِ</span><span class='c-red'>رُّ</span> ← <span class='c-black'>فَرَّ</span></span>", info: "مقارنة المضارع والماضي المشدد", theme: "blue", t: "speed"},
+            {w: "<span class='c-black'>لَفَّ</span> = <span class='c-black'>يَلُ</span><span class='c-red'>فُّ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>يَخُ</span><span class='c-red'>طُّ</span> = <span class='c-black'>خَطَّ</span>", theme: "blue", t: "danger"},
+            {w: "<span class='c-black'>يَفِ</span><span class='c-red'>رُّ</span> = <span class='c-black'>فَرَّ</span>", theme: "blue", t: "speed"},
 
             // Row 6
-            {w: "<span dir='rtl'><span class='c-black'>يَوَ</span><span class='c-red'>دُّ</span></span>", info: "أمثلة الشدة بالضم", theme: "yellow", t: "normal"},
-            {w: "<span dir='rtl'><span class='c-black'>يَكُ</span><span class='c-red'>فَّ</span></span>", info: "مقارنة الشدة بالفتح", theme: "yellow", t: "golden"},
-            {w: "<span dir='rtl'><span class='c-black'>يَحِ</span><span class='c-red'>لُّ</span></span>", info: "أمثلة الشدة بالضم", theme: "yellow", t: "speed"},
-            {w: "<span dir='rtl'><span class='c-black'>فَوَ</span><span class='c-red'>لِّ</span></span>", info: "مقارنة الشدة بالكسر", theme: "yellow", t: "normal"},
-            {w: "<span dir='rtl'><span class='c-black'>يُمِ</span><span class='c-red'>لَّ</span></span>", info: "مقارنة الشدة بالفتح", theme: "yellow", t: "danger"},
+            {w: "<span class='c-black'>يَوَ</span><span class='c-red'>دُّ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>يَكُ</span><span class='c-red'>فُّ</span>", theme: "yellow", t: "golden"},
+            {w: "<span class='c-black'>يَحُ</span><span class='c-red'>لُّ</span>", theme: "yellow", t: "speed"},
+            {w: "<span class='c-black'>فَوَ</span><span class='c-red'>لِّ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>يُمِ</span><span class='c-red'>لَّ</span>", theme: "yellow", t: "danger"},
 
             // Row 7
-            {w: "<span dir='rtl'><span class='c-black'>تَرَ</span><span class='c-red'>بُّ</span><span class='c-black'>صُ</span></span>", info: "أمثلة الشدة بالضم", theme: "pink", t: "normal"},
-            {w: "<span dir='rtl'><span class='c-black'>يُدَ</span><span class='c-red'>بِّ</span><span class='c-black'>رُ</span></span>", info: "مقارنة الشدة بالكسر", theme: "pink", t: "speed"},
-            {w: "<span dir='rtl'><span class='c-black'>زَ</span><span class='c-red'>قُّ</span><span class='c-black'>و</span><span class='c-black'>مٍ</span></span>", info: "الشدة مع المد بالواو والتنوين", theme: "pink", t: "golden"},
-            {w: "<span dir='rtl'><span class='c-black'>زُ</span><span class='c-red'>يِّ</span><span class='c-black'>نَ</span></span>", info: "مقارنة الشدة بالكسر", theme: "pink", t: "normal"},
-            {w: "<span dir='rtl'><span class='c-black'>تُ</span><span class='c-red'>بَّ</span><span class='c-black'>عٍ</span></span>", info: "مقارنة الشدة بالفتح والتنوين", theme: "pink", t: "danger"},
+            {w: "<span class='c-black'>تَرَ</span><span class='c-red'>بُّ</span><span class='c-black'>صُ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>يُدَ</span><span class='c-red'>بِّ</span><span class='c-black'>رُ</span>", theme: "pink", t: "speed"},
+            {w: "<span class='c-black'>زَ</span><span class='c-red'>قُّ</span><span class='c-black'>و</span><span class='c-black'>مٍ</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>زُ</span><span class='c-red'>يِّ</span><span class='c-black'>نَ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>تُ</span><span class='c-red'>بَّ</span><span class='c-black'>عٍ</span>", theme: "pink", t: "danger"},
 
             // Row 8
-            {w: "<span dir='rtl'><span class='c-black'>وَوَ</span><span class='c-red'>دُّ</span><span class='c-black'>واْ</span></span>", info: "الشدة مع المد بالواو", theme: "green", t: "golden"},
-            {w: "<span dir='rtl'><span class='c-black'>وَسَ</span><span class='c-red'>بِّ</span><span class='c-black'>حْهُ</span></span>", info: "مقارنة الشدة بالكسر", theme: "green", t: "normal"},
-            {w: "<span dir='rtl'><span class='c-black'>بِخُمُرِهِ</span><span class='c-red'>نَّ</span></span>", info: "أمثلة النون المشددة", theme: "green", t: "speed"},
-            {w: "<span dir='rtl'><span class='c-black'>تَ</span><span class='c-red'>بۡ</span><span class='c-black'>يَ</span><span class='c-red'>ضُّ</span></span>", info: "أمثلة الشدة بالضم", theme: "green", t: "normal"},
-            {w: "<span dir='rtl'><span class='c-black'>صَ</span><span class='c-red'>دُّ</span><span class='c-black'>وكُمْ</span></span>", info: "الشدة مع المد بالواو", theme: "green", t: "danger"}
+            {w: "<span class='c-black'>وَوَ</span><span class='c-red'>دُّ</span><span class='c-black'>واْ</span>", theme: "green", t: "golden"},
+            {w: "<span class='c-black'>وَسَ</span><span class='c-red'>بِّ</span><span class='c-black'>حۡهُ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>بِخُمُرِهِ</span><span class='c-red'>نَّ</span>", theme: "green", t: "speed"},
+            {w: "<span class='c-black'>تَ</span><span class='c-red'>بۡ</span><span class='c-black'>يَ</span><span class='c-red'>ضُّ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>صَ</span><span class='c-red'>دُّ</span><span class='c-black'>وكُمۡ</span>", theme: "green", t: "danger"}
         ];
     </script>
     <script src="../shared/core.js"></script>

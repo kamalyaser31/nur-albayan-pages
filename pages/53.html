@@ -3,72 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nour Al-Bayan - Page 53</title>
+    <title>نور البيان - صفحة 53</title>
     <link rel="stylesheet" href="../shared/core.css">
 </head>
 <body class="flex flex-col items-center select-none bg-emerald-50/40">
     <script>
         window.PAGE_CONFIG = {
-            title: 'Nour Al-Bayan',
-            subtitle: 'Page 53 • Kasra Tanween (تنوين الكسر • الكسرتان)',
-            footer: 'Nour Al-Bayan Learning System • Page 53 (Kasra Tanween / تنوين الكسر • الكسرتان)',
-            game3: 'riddles'
+            title: 'نور البيان',
+            subtitle: 'التنوين — ٢ـ تنوين الكسر (ـٍ) الكسرتان',
+            lessonNumber: 37,
+            pageNumber: 53,
+            fontType: 'quran',
+            game3: 'memory'
         };
 
         const dataset = [
             // Row 1
-            {w: "<span dir='rtl'><span class='c-black'>تَ</span><span class='c-red'>نْ</span> = <span class='c-black'>تٍ</span></span>", info: "تأسيس تنوين الكسر", theme: "pink", t: "golden"},
-            {w: "<span dir='rtl'><span class='c-black'>جَ</span><span class='c-red'>نْ</span> = <span class='c-black'>جٍ</span></span>", info: "تأسيس تنوين الكسر", theme: "pink", t: "speed"},
-            {w: "<span dir='rtl'><span class='c-black'>ذَ</span><span class='c-red'>نْ</span> = <span class='c-black'>ذٍ</span></span>", info: "تأسيس تنوين الكسر", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>تِ</span><span class='c-red'>نْ</span> = <span class='c-black'>تٍ</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>جِ</span><span class='c-red'>نْ</span> = <span class='c-black'>جٍ</span>", theme: "pink", t: "speed"},
+            {w: "<span class='c-black'>ذِ</span><span class='c-red'>نْ</span> = <span class='c-black'>ذٍ</span>", theme: "pink", t: "normal"},
 
             // Row 2
-            {w: "<span dir='rtl'><span class='c-black'>بٍ</span></span>", info: "حروف تنوين الكسر", theme: "green", t: "normal"},
-            {w: "<span dir='rtl'><span class='c-black'>ثٍ</span></span>", info: "حروف تنوين الكسر", theme: "green", t: "danger"},
-            {w: "<span dir='rtl'><span class='c-black'>خٍ</span></span>", info: "حروف تنوين الكسر", theme: "green", t: "normal"},
-            {w: "<span dir='rtl'><span class='c-black'>رٍ</span></span>", info: "حروف تنوين الكسر", theme: "green", t: "speed"},
-            {w: "<span dir='rtl'><span class='c-black'>يٍ</span></span>", info: "حروف تنوين الكسر", theme: "green", t: "golden"},
+            {w: "<span class='c-black'>بٍ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>ثٍ</span>", theme: "green", t: "danger"},
+            {w: "<span class='c-black'>خٍ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>رٍ</span>", theme: "green", t: "speed"},
+            {w: "<span class='c-black'>يٍ</span>", theme: "green", t: "golden"},
 
             // Row 3
-            {w: "<span dir='rtl'><span class='c-black'>ضٍ</span></span>", info: "حروف تنوين الكسر", theme: "blue", t: "normal"},
-            {w: "<span dir='rtl'><span class='c-black'>غٍ</span></span>", info: "حروف تنوين الكسر", theme: "blue", t: "speed"},
-            {w: "<span dir='rtl'><span class='c-black'>شٍ</span></span>", info: "حروف تنوين الكسر", theme: "blue", t: "normal"},
-            {w: "<span dir='rtl'><span class='c-black'>قٍ</span></span>", info: "حروف تنوين الكسر", theme: "blue", t: "danger"},
-            {w: "<span dir='rtl'><span class='c-black'>فٍ</span></span>", info: "حروف تنوين الكسر", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>ضٍ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>غٍ</span>", theme: "blue", t: "speed"},
+            {w: "<span class='c-black'>شٍ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>قٍ</span>", theme: "blue", t: "danger"},
+            {w: "<span class='c-black'>فٍ</span>", theme: "blue", t: "normal"},
 
             // Row 4
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>نَبَإٍ</span></span>", info: "أمثلة تنوين الكسر", theme: "yellow", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>حَمَإٍ</span></span>", info: "أمثلة تنوين الكسر", theme: "yellow", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>شُعَبٍ</span></span>", info: "أمثلة تنوين الكسر", theme: "yellow", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>بَ</span><span class='c-red'>ي\u06E1</span><span class='c-black'>تٍ</span></span>", info: "أمثلة تنوين الكسر", theme: "yellow", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>مُ</span><span class='c-red'>ك\u06E1</span><span class='c-black'>ثٍ</span></span>", info: "أمثلة تنوين الكسر", theme: "yellow", t: "danger"},
+            {w: "<span class='c-black'>نَبَإٍ</span>", theme: "yellow", t: "golden"},
+            {w: "<span class='c-black'>حَمَإٍ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>شُعَبٍ</span>", theme: "yellow", t: "speed"},
+            {w: "<span class='c-black'>بَ</span><span class='c-red'>يۡ</span><span class='c-black'>تٍ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>مُ</span><span class='c-red'>كۡ</span><span class='c-black'>ثٍ</span>", theme: "yellow", t: "danger"},
 
             // Row 5
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>بَهِ</span><span class='c-red'>ي</span><span class='c-black'>جٍ</span></span>", info: "أمثلة تنوين الكسر", theme: "pink", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>حِ</span><span class='c-red'>ل\u06E1</span><span class='c-black'>يَةٍ</span></span>", info: "أمثلة تنوين الكسر", theme: "pink", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>أَ</span><span class='c-red'>ي\u06E1</span><span class='c-black'>دٍ</span></span>", info: "أمثلة تنوين الكسر", theme: "pink", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>حَنِ</span><span class='c-red'>ي</span><span class='c-black'>ذٍ</span></span>", info: "أمثلة تنوين الكسر", theme: "pink", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>سُوَرٍ</span></span>", info: "أمثلة تنوين الكسر", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>بَهِ</span><span class='c-red'>ي</span><span class='c-black'>جٍ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>حِ</span><span class='c-red'>لۡ</span><span class='c-black'>يَةٍ</span>", theme: "pink", t: "speed"},
+            {w: "<span class='c-black'>أَ</span><span class='c-red'>يۡ</span><span class='c-black'>دٍ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>حَنِ</span><span class='c-red'>ي</span><span class='c-black'>ذٍ</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>سُ</span><span class='c-red'>و</span><span class='c-black'>رٍ</span>", theme: "pink", t: "normal"},
 
             // Row 6
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>زَنِ</span><span class='c-red'>ي</span><span class='c-black'>مٍ</span></span>", info: "أمثلة تنوين الكسر", theme: "green", t: "danger"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>أُنَ</span><span class='c-red'>ا</span><span class='c-black'>سٍ</span></span>", info: "أمثلة تنوين الكسر", theme: "green", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>غَوَ</span><span class='c-red'>ا</span><span class='c-black'>شٍ</span></span>", info: "أمثلة تنوين الكسر", theme: "green", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>هُزُوً</span><span class='c-red'>ا</span></span>", info: "مقارنة التنوين", theme: "green", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>وَ</span><span class='c-red'>ز\u06E1</span><span class='c-black'>نً</span><span class='c-red'>ا</span></span>", info: "مقارنة التنوين", theme: "green", t: "golden"},
+            {w: "<span class='c-black'>زَنِ</span><span class='c-red'>ي</span><span class='c-black'>مٍ</span>", theme: "green", t: "danger"},
+            {w: "<span class='c-black'>أُنَ</span><span class='c-red'>ا</span><span class='c-black'>سٍ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>غَوَ</span><span class='c-red'>ا</span><span class='c-black'>شٍ</span>", theme: "green", t: "speed"},
+            {w: "<span class='c-black'>هُزُوً</span><span class='c-red'>ا</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>وَ</span><span class='c-red'>زۡ</span><span class='c-black'>نً</span><span class='c-red'>ا</span>", theme: "green", t: "golden"},
 
             // Row 7
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>لُ</span><span class='c-red'>و</span><span class='c-black'>طٍ</span></span>", info: "أمثلة تنوين الكسر", theme: "blue", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>حَفِ</span><span class='c-red'>ي</span><span class='c-black'>ظٍ</span></span>", info: "أمثلة تنوين الكسر", theme: "blue", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>جُ</span><span class='c-red'>و</span><span class='c-black'>عٍ</span></span>", info: "أمثلة تنوين الكسر", theme: "blue", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>سَبَبً</span><span class='c-red'>ا</span></span>", info: "مقارنة التنوين", theme: "blue", t: "danger"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>جُرُفٍ</span></span>", info: "أمثلة تنوين الكسر", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>لُ</span><span class='c-red'>و</span><span class='c-black'>طٍ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>حَفِ</span><span class='c-red'>ي</span><span class='c-black'>ظٍ</span>", theme: "blue", t: "speed"},
+            {w: "<span class='c-black'>جُ</span><span class='c-red'>و</span><span class='c-black'>عٍ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>سَبَبً</span><span class='c-red'>ا</span>", theme: "blue", t: "danger"},
+            {w: "<span class='c-black'>جُرُفٍ</span>", theme: "blue", t: "normal"},
 
             // Row 8
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>عَلَقَةٍ</span></span>", info: "أمثلة تنوين الكسر", theme: "yellow", t: "golden"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>مَدَدً</span><span class='c-red'>ا</span></span>", info: "مقارنة التنوين", theme: "yellow", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>ظَلِ</span><span class='c-red'>ي</span><span class='c-black'>لٍ</span></span>", info: "أمثلة تنوين الكسر", theme: "yellow", t: "speed"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>مَ</span><span class='c-red'>ع\u06E1</span><span class='c-black'>رُ</span><span class='c-red'>و</span><span class='c-black'>فٍ</span></span>", info: "أمثلة تنوين الكسر", theme: "yellow", t: "normal"},
-            {w: "<span class='quran-special-font' dir='rtl'><span class='c-black'>تَ</span><span class='c-red'>د\u06E1</span><span class='c-black'>مِ</span><span class='c-red'>ي</span><span class='c-black'>رً</span><span class='c-red'>ا</span></span>", info: "مقارنة التنوين", theme: "yellow", t: "danger"}
+            {w: "<span class='c-black'>عَلَقَةٍ</span>", theme: "yellow", t: "golden"},
+            {w: "<span class='c-black'>مَدَدً</span><span class='c-red'>ا</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>ظَلِ</span><span class='c-red'>ي</span><span class='c-black'>لٍ</span>", theme: "yellow", t: "speed"},
+            {w: "<span class='c-black'>مَّ</span><span class='c-red'>عۡ</span><span class='c-black'>رُ</span><span class='c-red'>و</span><span class='c-black'>فٍ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>تَ</span><span class='c-red'>دۡ</span><span class='c-black'>مِ</span><span class='c-red'>ي</span><span class='c-black'>رً</span><span class='c-red'>ا</span>", theme: "yellow", t: "danger"}
         ];
     </script>
     <script src="../shared/core.js"></script>
