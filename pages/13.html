@@ -17,46 +17,55 @@
             game3: 'memory'
         };
 
-        const _themes = ["pink","green","blue","yellow"];
-        const _raw = [
+        const dataset = [
             // الأسطر 1–3: الحروف المكسورة مفردة
-            [`<span class="c-purple">ئِـ</span>`, "normal"],
-            [`<span class="c-emerald">بِـ</span>`, "normal"],
-            [`<span class="c-blue">تِـ</span>`, "speed"],
-            [`<span class="c-purple">ثِـ</span>`, "normal"],
-            [`<span class="c-amber">جِـ</span>`, "golden"],
-            [`<span class="c-emerald">حِـ</span>`, "normal"],
-            [`<span class="c-red">خِـ</span>`, "normal"],
-            [`<span class="c-blue">دِ</span>`, "danger"],
-            [`<span class="c-emerald">ذِ</span>`, "normal"],
-            [`<span class="c-purple">رِ</span>`, "normal"],
-            [`<span class="c-darkblue">زِ</span>`, "golden"],
-            [`<span class="c-red">سِـ</span>`, "normal"],
-            [`<span class="c-amber">شِـ</span>`, "speed"],
+            {w: "<span class='c-purple'>ئِـ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-emerald'>بِـ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-blue'>تِـ</span>", theme: "pink", t: "speed"},
+            {w: "<span class='c-purple'>ثِـ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-amber'>جِـ</span>", theme: "pink", t: "golden"},
 
-            // الأسطر 4–8: المقارنات الثنائية
-            [`<span class="c-red">صَـ</span> <span class="c-blue">صِـ</span>`, "normal"],
-            [`<span class="c-red">ضَـ</span> <span class="c-blue">ضِـ</span>`, "normal"],
-            [`<span class="c-red">طَـ</span> <span class="c-blue">طِـ</span>`, "danger"],
-            [`<span class="c-red">ظَـ</span> <span class="c-blue">ظِـ</span>`, "normal"],
-            [`<span class="c-red">عَـ</span> <span class="c-blue">عِـ</span>`, "golden"],
-            [`<span class="c-red">غَـ</span> <span class="c-blue">غِـ</span>`, "normal"],
-            [`<span class="c-red">فَـ</span> <span class="c-blue">فِـ</span>`, "speed"],
-            [`<span class="c-red">قَـ</span> <span class="c-blue">قِـ</span>`, "normal"],
-            [`<span class="c-red">كَـ</span> <span class="c-blue">كِـ</span>`, "normal"],
-            [`<span class="c-red">لَـ</span> <span class="c-blue">لِـ</span>`, "danger"],
-            [`<span class="c-red">مَـ</span> <span class="c-blue">مِـ</span>`, "normal"],
-            [`<span class="c-red">نَـ</span> <span class="c-blue">نِـ</span>`, "golden"],
-            [`<span class="c-red">هَـ</span> <span class="c-blue">هِـ</span>`, "normal"],
-            [`<span class="c-red">وَ</span> <span class="c-blue">وِ</span>`, "speed"],
-            [`<span class="c-red">يَـ</span> <span class="c-blue">يِـ</span>`, "normal"],
-            [`<span class="c-red">يِـ</span> <span class="c-blue">يَـ</span>`, "normal"],
-            [`<span class="c-red">تَـ</span> <span class="c-blue">بِـ</span>`, "normal"],
-            [`<span class="c-red">نَـ</span> <span class="c-blue">بِـ</span>`, "golden"],
-            [`<span class="c-red">غَـ</span> <span class="c-blue">عِـ</span>`, "danger"],
-            [`<span class="c-red">ضَـ</span> <span class="c-blue">طِـ</span>`, "speed"]
+            {w: "<span class='c-emerald'>حِـ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-red'>خِـ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-blue'>دِ</span>", theme: "green", t: "danger"},
+            {w: "<span class='c-emerald'>ذِ</span>", theme: "green", t: "normal"},
+
+            {w: "<span class='c-purple'>رِ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-darkblue'>زِ</span>", theme: "yellow", t: "golden"},
+            {w: "<span class='c-red'>سِـ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-amber'>شِـ</span>", theme: "yellow", t: "speed"},
+
+            // الأسطر 4–8: المقارنات الثنائية المتصلة
+            // Row 4
+            {w: "<span class='c-red'>صَ</span><span class='c-blue'>صِ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-red'>ضَ</span><span class='c-blue'>ضِ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-red'>طَ</span><span class='c-blue'>طِ</span>", theme: "pink", t: "danger"},
+            {w: "<span class='c-red'>ظَ</span><span class='c-blue'>ظِ</span>", theme: "pink", t: "normal"},
+
+            // Row 5
+            {w: "<span class='c-red'>عَ</span><span class='c-blue'>عِ</span>", theme: "green", t: "golden"},
+            {w: "<span class='c-red'>غَ</span><span class='c-blue'>غِ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-red'>فَ</span><span class='c-blue'>فِ</span>", theme: "green", t: "speed"},
+            {w: "<span class='c-red'>قَ</span><span class='c-blue'>قِ</span>", theme: "green", t: "normal"},
+
+            // Row 6
+            {w: "<span class='c-red'>كَ</span><span class='c-blue'>كِ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-red'>لَ</span><span class='c-blue'>لِ</span>", theme: "yellow", t: "danger"},
+            {w: "<span class='c-red'>مَ</span><span class='c-blue'>مِ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-red'>نَ</span><span class='c-blue'>نِ</span>", theme: "yellow", t: "golden"},
+
+            // Row 7
+            {w: "<span class='c-red'>هَ</span><span class='c-blue'>هِ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-red'>وَ</span> <span class='c-blue'>وِ</span>", theme: "pink", t: "speed"},
+            {w: "<span class='c-red'>يَ</span><span class='c-blue'>يِ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-blue'>يِ</span><span class='c-red'>يَ</span>", theme: "pink", t: "normal"},
+
+            // Row 8
+            {w: "<span class='c-red'>تَ</span><span class='c-blue'>بِ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-red'>نَ</span><span class='c-blue'>بِ</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-red'>غَ</span><span class='c-blue'>عِ</span>", theme: "pink", t: "danger"},
+            {w: "<span class='c-red'>ضَ</span><span class='c-blue'>طِ</span>", theme: "pink", t: "speed"}
         ];
-        const dataset = _raw.map((r,i)=>({html:r[0], t:r[1], theme:_themes[Math.floor(i/4)%4], w: r[0].replace(/<[^>]+>/g,'')}));
     </script>
     <script src="../shared/core.js"></script>
 </body>

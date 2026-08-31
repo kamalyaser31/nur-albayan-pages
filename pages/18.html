@@ -17,48 +17,51 @@ window.PAGE_CONFIG = {
             game3: 'memory'
         };
 
-        const D = "<span class='sep-bar mx-1'>-</span>";
         const dataset = [
             // الجزء الأول: الحروف بحركة الضم مفردة
-            {w: [`<span class='c-red'>أُ</span>`], t: "normal"},
-            {w: [`<span class='c-blue'>بُـ</span>`], t: "speed"},
-            {w: [`<span class='c-emerald'>تُـ</span>`], t: "normal"},
-            {w: [`<span class='c-black'>ثُـ</span>`], t: "golden"},
-            {w: [`<span class='c-red'>جُـ</span>`], t: "normal"},
-            {w: [`<span class='c-blue'>حُـ</span>`], t: "danger"},
-            {w: [`<span class='c-emerald'>خُـ</span>`], t: "normal"},
-            {w: [`<span class='c-black'>دُ</span>`], t: "speed"},
-            {w: [`<span class='c-red'>ذُ</span>`], t: "normal"},
-            {w: [`<span class='c-blue'>رُ</span>`], t: "golden"},
+            {w: "<span class='c-red'>أُ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-blue'>بُـ</span>", theme: "blue", t: "speed"},
+            {w: "<span class='c-emerald'>تُـ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>ثُـ</span>", theme: "blue", t: "golden"},
+            {w: "<span class='c-red'>جُـ</span>", theme: "blue", t: "normal"},
 
-            // الجزء الثاني: مقارنات الحركات الثلاث
-            {w: [`<span class='c-red'>زَ</span>${D}<span class='c-blue'>زِ</span>${D}<span class='c-emerald'>زُ</span>`], t: "normal"},
-            {w: [`<span class='c-red'>سَـ</span>${D}<span class='c-blue'>سِـ</span>${D}<span class='c-emerald'>سُـ</span>`], t: "speed"},
-            {w: [`<span class='c-emerald'>شَـ</span>${D}<span class='c-blue'>شِـ</span>${D}<span class='c-red'>شُـ</span>`], t: "danger"},
-            {w: [`<span class='c-red'>صَـ</span>${D}<span class='c-blue'>صِـ</span>${D}<span class='c-emerald'>صُـ</span>`], t: "normal"},
-            {w: [`<span class='c-emerald'>ضَـ</span>${D}<span class='c-blue'>ضِـ</span>${D}<span class='c-red'>ضُـ</span>`], t: "golden"},
-            {w: [`<span class='c-red'>طَـ</span>${D}<span class='c-blue'>طِـ</span>${D}<span class='c-emerald'>طُـ</span>`], t: "normal"},
-            {w: [`<span class='c-emerald'>ظَـ</span>${D}<span class='c-blue'>ظِـ</span>${D}<span class='c-red'>ظُـ</span>`], t: "speed"},
-            {w: [`<span class='c-red'>عَـ</span>${D}<span class='c-blue'>عِـ</span>${D}<span class='c-emerald'>عُـ</span>`], t: "danger"},
-            {w: [`<span class='c-emerald'>غَـ</span>${D}<span class='c-blue'>غِـ</span>${D}<span class='c-red'>غُـ</span>`], t: "normal"},
-            {w: [`<span class='c-red'>فَـ</span>${D}<span class='c-blue'>فِـ</span>${D}<span class='c-emerald'>فُـ</span>`], t: "golden"},
-            {w: [`<span class='c-red'>قَـ</span>${D}<span class='c-blue'>قُـ</span>${D}<span class='c-emerald'>قِـ</span>`], t: "normal"},
-            {w: [`<span class='c-red'>كَـ</span>${D}<span class='c-blue'>كُـ</span>${D}<span class='c-emerald'>كِـ</span>`], t: "speed"},
-            {w: [`<span class='c-emerald'>لُـ</span>${D}<span class='c-blue'>لَـ</span>${D}<span class='c-red'>لِـ</span>`], t: "danger"},
-            {w: [`<span class='c-red'>مِـ</span>${D}<span class='c-blue'>مُـ</span>${D}<span class='c-emerald'>مَـ</span>`], t: "normal"},
-            {w: [`<span class='c-red'>نَـ</span>${D}<span class='c-blue'>نُـ</span>${D}<span class='c-emerald'>نِـ</span>`], t: "golden"},
-            {w: [`<span class='c-red'>هُـ</span>${D}<span class='c-blue'>هَـ</span>${D}<span class='c-emerald'>هِـ</span>`], t: "normal"},
-            {w: [`<span class='c-red'>وَ</span>${D}<span class='c-blue'>وُ</span>${D}<span class='c-emerald'>وِ</span>`], t: "speed"},
-            {w: [`<span class='c-red'>يَـ</span>${D}<span class='c-blue'>يُـ</span>${D}<span class='c-emerald'>يِـ</span>`], t: "normal"}
+            {w: "<span class='c-blue'>حُـ</span>", theme: "blue", t: "danger"},
+            {w: "<span class='c-emerald'>خُـ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>دُ</span>", theme: "blue", t: "speed"},
+            {w: "<span class='c-red'>ذُ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-blue'>رُ</span>", theme: "blue", t: "golden"},
+
+            // الجزء الثاني: مقارنات الحركات الثلاث وأشكال الحروف (أول - وسط - آخر)
+            // Row 3
+            {w: "<span class='c-red'>زَ</span> | <span class='c-black'>زِ</span> | <span class='c-blue'>زُ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-red'>سَـ</span> | <span class='c-black'>ـسِـ</span> | <span class='c-blue'>ـسُ</span>", theme: "yellow", t: "speed"},
+            {w: "<span class='c-red'>شَـ</span> | <span class='c-black'>ـشِـ</span> | <span class='c-blue'>ـشُ</span>", theme: "yellow", t: "danger"},
+
+            // Row 4
+            {w: "<span class='c-red'>صَـ</span> | <span class='c-black'>ـصِـ</span> | <span class='c-blue'>ـصُ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-red'>ضَـ</span> | <span class='c-black'>ـضِـ</span> | <span class='c-blue'>ـضُ</span>", theme: "yellow", t: "golden"},
+            {w: "<span class='c-red'>طَـ</span> | <span class='c-black'>ـطِـ</span> | <span class='c-blue'>ـطُ</span>", theme: "yellow", t: "normal"},
+
+            // Row 5
+            {w: "<span class='c-red'>ظَـ</span> | <span class='c-black'>ـظِـ</span> | <span class='c-blue'>ـظُ</span>", theme: "pink", t: "speed"},
+            {w: "<span class='c-red'>عَـ</span> | <span class='c-black'>ـعِـ</span> | <span class='c-blue'>ـعُ</span>", theme: "pink", t: "danger"},
+            {w: "<span class='c-red'>غَـ</span> | <span class='c-black'>ـغِـ</span> | <span class='c-blue'>ـغُ</span>", theme: "pink", t: "normal"},
+
+            // Row 6
+            {w: "<span class='c-red'>فَـ</span> | <span class='c-black'>ـفِـ</span> | <span class='c-blue'>ـفُ</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-red'>قَـ</span> | <span class='c-blue'>ـقُـ</span> | <span class='c-black'>ـقِ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-red'>كَـ</span> | <span class='c-blue'>ـكُـ</span> | <span class='c-black'>ـكِ</span>", theme: "pink", t: "speed"},
+
+            // Row 7
+            {w: "<span class='c-blue'>لُ</span> | <span class='c-red'>ـلَـ</span> | <span class='c-black'>ـلِ</span>", theme: "yellow", t: "danger"},
+            {w: "<span class='c-black'>مِـ</span> | <span class='c-blue'>ـمُـ</span> | <span class='c-red'>ـمَ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-red'>نَـ</span> | <span class='c-blue'>ـنُـ</span> | <span class='c-black'>ـنِ</span>", theme: "yellow", t: "golden"},
+
+            // Row 8
+            {w: "<span class='c-blue'>هـُ</span> | <span class='c-red'>ـهَـ</span> | <span class='c-black'>ـهِ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-red'>وَ</span> | <span class='c-blue'>وُ</span> | <span class='c-black'>وِ</span>", theme: "yellow", t: "speed"},
+            {w: "<span class='c-red'>يَـ</span> | <span class='c-blue'>ـيُـ</span> | <span class='c-black'>ـيِ</span>", theme: "yellow", t: "normal"}
         ];
-        const _themes = ["pink","green","blue","yellow"];
-        dataset.forEach((item, i) => {
-            item.theme = _themes[Math.floor(i/4) % 4];
-            if (!item.html) {
-                if (item.w.length === 1) item.html = item.w[0];
-                else item.html = item.w.map((s,j) => `<span class="color-${j%3}">${s}</span>`).join('');
-            }
-        });
     </script>
     <script src="../shared/core.js"></script>
 </body>
