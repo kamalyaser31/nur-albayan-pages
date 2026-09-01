@@ -51,6 +51,9 @@ html.page-font-mixed, body.page-font-mixed {
 .c-blue, .c1, .color-1 { color: var(--color-quranic-blue, #1d4ed8); }
 .c-black, .c2, .color-2 { color: var(--color-quranic-black, #090d16); font-weight: 800; }
 .c-purple { color: #7e22ce; }
+.c-emerald { color: #059669; }
+.c-amber { color: #d97706; }
+.c-darkblue { color: #1e3a8a; }
 
 /* Separator bar with WCAG 2.1 AA compliant contrast (4.63:1 against white) */
 .sep-bar {

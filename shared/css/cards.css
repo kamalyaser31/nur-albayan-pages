@@ -90,16 +90,21 @@
 }
 
 .word-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 0.1em 0.35em;
+    display: inline-block;
     direction: rtl;
     white-space: normal;
+    text-align: center;
     max-width: 100%;
+    vertical-align: middle;
     letter-spacing: normal !important;
-    line-height: inherit;
+    line-height: 2.1;
+    word-break: normal;
+    overflow-wrap: normal;
+}
+
+.word-wrapper > span {
+    display: inline;
+    letter-spacing: normal !important;
 }
 
 /* Multi-layered Themed Elevation */
