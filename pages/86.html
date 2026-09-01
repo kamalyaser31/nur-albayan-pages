@@ -18,61 +18,61 @@
         };
 
         const dataset = [
-            // 1. القلقلة
-            {w: "<span class='c-black'>ٱ</span><span class='c-red'>قۡ</span><span class='c-black'>تَرَبَ</span>", theme: "pink", t: "golden"},
-            {w: "<span class='c-black'>فَوَسَ</span><span class='c-red'>طۡ</span><span class='c-black'>نَ</span>", theme: "pink", t: "normal"},
-            {w: "<span class='c-black'>أَ</span><span class='c-red'>جۡ</span><span class='c-black'>دَرُ</span>", theme: "pink", t: "speed"},
-            {w: "<span class='c-black'>يُ</span><span class='c-red'>دۡ</span><span class='c-black'>خِلۡ</span>", theme: "pink", t: "normal"},
-            {w: "<span class='c-black'>ٱلۡحَ</span><span class='c-red'>قُّ</span>", theme: "pink", t: "danger"},
-            {w: "<span class='c-black'>يَ</span><span class='c-red'>بۡ</span><span class='c-black'>حَثُ</span>", theme: "pink", t: "golden"},
+            // 1. القلقلة (Blue)
+            {w: "<span class='c-black'>ٱ</span><span class='c-red'>قۡ</span><span class='c-black'>تَرَبَ</span>", theme: "blue", t: "golden"},
+            {w: "<span class='c-black'>فَوَسَ</span><span class='c-red'>طۡ</span><span class='c-black'>نَ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>أَ</span><span class='c-red'>جۡ</span><span class='c-black'>دَرُ</span>", theme: "blue", t: "speed"},
+            {w: "<span class='c-black'>يُ</span><span class='c-red'>دۡ</span><span class='c-black'>خِلۡ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>ٱلۡحَ</span><span class='c-red'>قُّ</span>", theme: "blue", t: "danger"},
+            {w: "<span class='c-black'>يَ</span><span class='c-red'>بۡ</span><span class='c-black'>حَثُ</span>", theme: "blue", t: "golden"},
 
-            // 2. أحكام الراء (ترقيق وتفخيم)
-            {w: "<span class='c-black'>رِ</span><span class='c-red'>زۡ</span><span class='c-black'>قًا</span>", theme: "green", t: "normal"},
-            {w: "<span class='c-black'>شِ</span><span class='c-red'>رۡ</span><span class='c-black'>عَةٗ</span>", theme: "green", t: "speed"},
-            {w: "<span class='c-black'>ٱل</span><span class='c-red'>ذِّ</span><span class='c-red'>كۡ</span><span class='c-black'>رَ</span>", theme: "green", t: "normal"},
-            {w: "<span class='c-black'>فَٱ</span><span class='c-red'>صۡ</span><span class='c-black'>بِ</span><span class='c-red'>رۡ</span> <span class='c-black'>صَ</span><span class='c-red'>بۡ</span><span class='c-black'>رً</span><span class='c-red'>ا</span>", theme: "green", t: "golden"},
-            {w: "<span class='c-black'>مَّ</span><span class='c-red'>جۡ</span><span class='c-black'>رٜىٰهَا</span>", theme: "green", t: "danger"},
-            {w: "<span class='c-black'>خَبِ</span><span class='c-red'>ي</span><span class='c-black'>رٞ</span>", theme: "green", t: "speed"},
-            {w: "<span class='c-black'>خَ</span><span class='c-red'>يۡ</span><span class='c-black'>رٞ</span>", theme: "green", t: "normal"},
+            // 2. أحكام الراء (ترقيق وتفخيم) (Pink)
+            {w: "<span class='c-red'>رِ</span><span class='c-black'>زۡقًا</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>شِ</span><span class='c-red'>رۡ</span><span class='c-black'>عَةٗ</span>", theme: "pink", t: "speed"},
+            {w: "<span class='c-black'>ٱلذِّكۡ</span><span class='c-red'>رَ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>فَٱصۡبِ</span><span class='c-red'>رۡ</span><span class='c-black'> صَبۡرًا</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>مَّجۡ</span><span class='c-red'>رٜىٰ</span><span class='c-black'>هَا</span>", theme: "pink", t: "danger"},
+            {w: "<span class='c-black'>خَبِي</span><span class='c-red'>رٌ</span>", theme: "pink", t: "speed"},
+            {w: "<span class='c-black'>خَيۡ</span><span class='c-red'>رٌ</span>", theme: "pink", t: "normal"},
 
-            {w: "<span class='c-black'>رَ</span><span class='c-red'>بَّ</span><span class='c-black'>نَا</span>", theme: "blue", t: "golden"},
-            {w: "<span class='c-black'>أَ</span><span class='c-red'>رۡ</span><span class='c-black'>سَ</span><span class='c-red'>لۡ</span><span class='c-black'>نَا</span>", theme: "blue", t: "normal"},
-            {w: "<span class='c-black'>رُحَمَ</span><span class='c-red'>آ</span><span class='c-black'>ءُ</span>", theme: "blue", t: "speed"},
-            {w: "<span class='c-black'>تُ</span><span class='c-red'>رۡ</span><span class='c-black'>جَعُ ٱلۡأُمُ</span><span class='c-red'>و</span><span class='c-black'>رُ</span>", theme: "blue", t: "golden"},
-            {w: "<span class='c-black'>قُ</span><span class='c-red'>رۡ</span><span class='c-black'>ءَانًا</span>", theme: "blue", t: "normal"},
-            {w: "<span class='c-black'>ٱ</span><span class='c-red'>رۡ</span><span class='c-black'>جِعِ</span><span class='c-red'>ىٓ</span>", theme: "blue", t: "danger"},
-            {w: "<span class='c-black'>مِ</span><span class='c-red'>رۡ</span><span class='c-black'>صَادٗا</span>", theme: "blue", t: "speed"},
+            {w: "<span class='c-red'>رَ</span><span class='c-black'>بَّنَا</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>أَ</span><span class='c-red'>رۡ</span><span class='c-black'>سَلۡنَا</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-red'>رُ</span><span class='c-black'>حَمَآءُ</span>", theme: "pink", t: "speed"},
+            {w: "<span class='c-black'>تُ</span><span class='c-red'>رۡ</span><span class='c-black'>جَعُ ٱلۡأُمُورُ</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>قُ</span><span class='c-red'>رۡ</span><span class='c-black'>ءَانًا</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>ٱ</span><span class='c-red'>رۡ</span><span class='c-black'>جِعِىٓ</span>", theme: "pink", t: "danger"},
+            {w: "<span class='c-black'>مِ</span><span class='c-red'>رۡ</span><span class='c-black'>صَادًا</span>", theme: "pink", t: "speed"},
 
-            // 3. الصفر المستدير والمستطيل
+            // 3. الصفر المستدير والمستطيل (Yellow)
             // الصفر المستدير
-            {w: "<span class='c-black'>أُ</span><span class='c-red'>وْ</span><span class='c-black'>لَـ</span><span class='c-red'>ٰٓ</span><span class='c-black'>ئِكَ</span>", theme: "yellow", t: "golden"},
-            {w: "<span class='c-black'>قَالُ</span><span class='c-red'>و</span><span class='c-black'>اْ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>أُ</span><span class='c-red'>وْ</span><span class='c-black'>لَـٰٓئِكَ</span>", theme: "yellow", t: "golden"},
+            {w: "<span class='c-black'>قَالُو</span><span class='c-red'>اْ</span>", theme: "yellow", t: "normal"},
             {w: "<span class='c-black'>وَجِ</span><span class='c-red'>اْ</span><span class='c-black'>ىٓءَ</span>", theme: "yellow", t: "speed"},
-            {w: "<span class='c-black'>نَبَ</span><span class='c-red'>إِيْ</span>", theme: "yellow", t: "normal"},
-            {w: "<span class='c-black'>بِأَ</span><span class='c-red'>ييِّ</span><span class='c-black'>كُ</span><span class='c-red'>مُ</span>", theme: "yellow", t: "golden"},
+            {w: "<span class='c-black'>نَبَإِ</span><span class='c-red'>يْ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>بِأَ</span><span class='c-red'>ي</span><span class='c-black'>يِّكُمُ</span>", theme: "yellow", t: "golden"},
             {w: "<span class='c-black'>سَأُ</span><span class='c-red'>وْ</span><span class='c-black'>رِيكُمۡ</span>", theme: "yellow", t: "normal"},
 
             // الصفر المستطيل
             {w: "<span class='c-black'>أَنَ</span><span class='c-red'>ا۠</span>", theme: "yellow", t: "speed"},
-            {w: "<span class='c-black'>ٱل</span><span class='c-red'>ظُّ</span><span class='c-black'>نُ</span><span class='c-red'>و</span><span class='c-black'>نَـ</span><span class='c-red'>ا۠</span>", theme: "yellow", t: "golden"},
-            {w: "<span class='c-black'>ٱل</span><span class='c-red'>رَّ</span><span class='c-black'>سُ</span><span class='c-red'>و</span><span class='c-black'>لَـ</span><span class='c-red'>ا۠</span>", theme: "yellow", t: "normal"},
-            {w: "<span class='c-black'>لَّـ</span><span class='c-red'>ٰ</span><span class='c-black'>كِ</span><span class='c-red'>نَّ</span><span class='c-black'>ا۠</span>", theme: "yellow", t: "danger"},
-            {w: "<span class='c-black'>ٱل</span><span class='c-red'>سَّ</span><span class='c-black'>بِ</span><span class='c-red'>ي</span><span class='c-black'>لَـ</span><span class='c-red'>ا۠</span>", theme: "yellow", t: "speed"},
-            {w: "<span class='c-black'>قَوَا</span><span class='c-red'>رِ</span><span class='c-black'>يرَ</span><span class='c-red'>ا۠</span>", theme: "yellow", t: "golden"},
+            {w: "<span class='c-black'>ٱلظُّنُونـ</span><span class='c-red'>َا۠</span>", theme: "yellow", t: "golden"},
+            {w: "<span class='c-black'>ٱلرَّسُولـ</span><span class='c-red'>َا۠</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>لَّـٰكِنَّ</span><span class='c-red'>ا۠</span>", theme: "yellow", t: "danger"},
+            {w: "<span class='c-black'>ٱلسَّبِيلـ</span><span class='c-red'>َا۠</span>", theme: "yellow", t: "speed"},
+            {w: "<span class='c-black'>قَوَارِير</span><span class='c-red'>َا۠</span>", theme: "yellow", t: "golden"},
 
-            // 4. سقوط حرف المد قبل الساكن
-            {w: "<span class='c-black'>ذَاقَا ٱل</span><span class='c-red'>شَّ</span><span class='c-black'>جَرَةَ</span>", theme: "pink", t: "normal"},
-            {w: "<span class='c-black'>ٱ</span><span class='c-red'>دۡ</span><span class='c-black'>خُلَا ٱل</span><span class='c-red'>نَّ</span><span class='c-black'>ارَ</span>", theme: "pink", t: "golden"},
-            {w: "<span class='c-black'>فِ</span><span class='c-red'>ى</span> <span class='c-black'>ٱل</span><span class='c-red'>نَّ</span><span class='c-black'>هَارِ</span>", theme: "pink", t: "speed"},
-            {w: "<span class='c-black'>أُوتُ</span><span class='c-red'>و</span><span class='c-black'>اْ ٱلۡكِتَـٰبَ</span>", theme: "pink", t: "normal"},
+            // 4. سقوط حرف المد قبل الساكن (Pink)
+            {w: "<span class='c-black'>ذَاقَ</span><span class='c-red'>ا ٱ</span><span class='c-black'>لشَّجَرَةَ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>ٱدۡخُلَ</span><span class='c-red'>ا ٱ</span><span class='c-black'>لنَّارَ</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>فِ</span><span class='c-red'>ى ٱ</span><span class='c-black'>لنَّهَارِ</span>", theme: "pink", t: "speed"},
+            {w: "<span class='c-black'>أُوتُ</span><span class='c-red'>واْ ٱ</span><span class='c-black'>لۡكِتَـٰبَ</span>", theme: "pink", t: "normal"},
 
-            // 5. حكم همزة الوصل
-            {w: "<span class='c-black'>ٱلۡقَمَرُ</span>", theme: "green", t: "golden"},
-            {w: "<span class='c-black'>ٱ</span><span class='c-red'>دۡ</span><span class='c-black'>عُ</span>", theme: "green", t: "normal"},
-            {w: "<span class='c-black'>ٱ</span><span class='c-red'>قۡ</span><span class='c-black'>رَ</span><span class='c-red'>أۡ</span>", theme: "green", t: "speed"},
-            {w: "<span class='c-black'>ٱ</span><span class='c-red'>هۡ</span><span class='c-black'>دِنَا</span>", theme: "green", t: "normal"},
-            {w: "<span class='c-black'>وَٱ</span><span class='c-red'>ضۡ</span><span class='c-black'>رِ</span><span class='c-red'>بۡ</span>", theme: "green", t: "danger"},
-            {w: "<span class='c-black'>وَٱ</span><span class='c-red'>جۡ</span><span class='c-black'>عَ</span><span class='c-red'>لۡ</span>", theme: "green", t: "golden"}
+            // 5. حكم همزة الوصل (Green)
+            {w: "<span class='c-red'>ٱ</span><span class='c-black'>لۡقَمَرُ</span>", theme: "green", t: "golden"},
+            {w: "<span class='c-red'>ٱ</span><span class='c-black'>دۡعُ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-red'>ٱ</span><span class='c-black'>قۡرَأۡ</span>", theme: "green", t: "speed"},
+            {w: "<span class='c-red'>ٱ</span><span class='c-black'>هۡدِنَا</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>وَ</span><span class='c-red'>ٱ</span><span class='c-black'>ضۡرِبۡ</span>", theme: "green", t: "danger"},
+            {w: "<span class='c-black'>وَ</span><span class='c-red'>ٱ</span><span class='c-black'>جۡعَلۡ</span>", theme: "green", t: "golden"}
         ];
     </script>
     <script src="../shared/core.js"></script>

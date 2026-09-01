@@ -19,49 +19,56 @@
 
         const dataset = [
             // Row 1
-            {w: "<span class='c-black'>بَ - بِ - بُ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>بَـ - بِـ - بُـ</span>", theme: "green", t: "normal"},
             {w: "<span class='c-black'>أَ</span><span class='c-red'>بۡ</span>", theme: "green", t: "speed"},
             {w: "<span class='c-black'>تَا - تِى - تُو</span>", theme: "pink", t: "normal"},
             {w: "<span class='c-black'>أَ</span><span class='c-red'>تۡ</span>", theme: "pink", t: "normal"},
+
             // Row 2
-            {w: "<span class='c-black'>ثَـ - ثِـ - ثُـ</span>", theme: "blue", t: "normal"},
-            {w: "<span class='c-black'>أَ</span><span class='c-red'>ثۡ</span>", theme: "blue", t: "speed"},
-            {w: "<span class='c-black'>جَا - جِى - جُو</span>", theme: "yellow", t: "normal"},
-            {w: "<span class='c-black'>أَ</span><span class='c-red'>جۡ</span>", theme: "yellow", t: "danger"},
+            {w: "<span class='c-black'>ثَـ - ثِـ - ثُـ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>أَ</span><span class='c-red'>ثۡ</span>", theme: "green", t: "speed"},
+            {w: "<span class='c-black'>جَا - جِى - جُو</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>أَ</span><span class='c-red'>جۡ</span>", theme: "pink", t: "danger"},
+
             // Row 3
             {w: "<span class='c-black'>حَـ - حِـ - حُـ</span>", theme: "green", t: "normal"},
             {w: "<span class='c-black'>بَ</span><span class='c-red'>حۡ</span>", theme: "green", t: "golden"},
             {w: "<span class='c-black'>خَا - خِى - خُو</span>", theme: "pink", t: "normal"},
             {w: "<span class='c-black'>أَ</span><span class='c-red'>خۡ</span>", theme: "pink", t: "speed"},
+
             // Row 4
-            {w: "<span class='c-black'>عَـ - عِـ - عُـ</span>", theme: "blue", t: "normal"},
-            {w: "<span class='c-black'>أَ</span><span class='c-red'>عۡ</span>", theme: "blue", t: "danger"},
-            {w: "<span class='c-black'>لَا - لِى - لُو</span>", theme: "yellow", t: "normal"},
-            {w: "<span class='c-black'>أَ</span><span class='c-red'>لۡ</span>", theme: "yellow", t: "golden"},
+            {w: "<span class='c-black'>عَـ - عِـ - عُـ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>أَ</span><span class='c-red'>عۡ</span>", theme: "green", t: "danger"},
+            {w: "<span class='c-black'>لَا - لِى - لُو</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>أَ</span><span class='c-red'>لۡ</span>", theme: "pink", t: "golden"},
+
             // Row 5
             {w: "<span class='c-black'>أَ</span><span class='c-red'>نۡ</span>", theme: "pink", t: "normal"},
             {w: "<span class='c-black'>هَ</span><span class='c-red'>بۡ</span>", theme: "pink", t: "speed"},
             {w: "<span class='c-black'>قَ</span><span class='c-red'>طۡ</span>", theme: "pink", t: "normal"},
             {w: "<span class='c-black'>بَ</span><span class='c-red'>سۡ</span>", theme: "pink", t: "danger"},
             {w: "<span class='c-black'>صَ</span><span class='c-red'>هۡ</span>", theme: "pink", t: "golden"},
+
             // Row 6
-            {w: "<span class='c-black'>صِ</span><span class='c-red'>لۡ</span>", theme: "green", t: "normal"},
-            {w: "<span class='c-black'>سِ</span><span class='c-red'>رۡ</span>", theme: "green", t: "speed"},
-            {w: "<span class='c-black'>إِ</span><span class='c-red'>ذۡ</span>", theme: "green", t: "normal"},
-            {w: "<span class='c-black'>عِ</span><span class='c-red'>ظۡ</span>", theme: "green", t: "danger"},
-            {w: "<span class='c-black'>هِ</span><span class='c-red'>مۡ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>صِ</span><span class='c-red'>لۡ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>سِ</span><span class='c-red'>رۡ</span>", theme: "pink", t: "speed"},
+            {w: "<span class='c-black'>إِ</span><span class='c-red'>ذۡ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>عِ</span><span class='c-red'>ظۡ</span>", theme: "pink", t: "danger"},
+            {w: "<span class='c-black'>هِ</span><span class='c-red'>مۡ</span>", theme: "pink", t: "normal"},
+
             // Row 7
             {w: "<span class='c-black'>ذُ</span><span class='c-red'>قۡ</span>", theme: "blue", t: "normal"},
             {w: "<span class='c-black'>شُ</span><span class='c-red'>دۡ</span>", theme: "blue", t: "speed"},
             {w: "<span class='c-black'>رُ</span><span class='c-red'>جۡ</span>", theme: "blue", t: "golden"},
             {w: "<span class='c-black'>فُ</span><span class='c-red'>زۡ</span>", theme: "blue", t: "normal"},
             {w: "<span class='c-black'>كُ</span><span class='c-red'>لۡ</span>", theme: "blue", t: "danger"},
+
             // Row 8
-            {w: "<span class='c-black'>رِ</span><span class='c-red'>كۡ</span>", theme: "yellow", t: "normal"},
-            {w: "<span class='c-black'>عِ</span><span class='c-red'>شۡ</span>", theme: "yellow", t: "speed"},
-            {w: "<span class='c-black'>صَ</span><span class='c-red'>غۡ</span>", theme: "yellow", t: "normal"},
-            {w: "<span class='c-black'>كَ</span><span class='c-red'>ىۡ</span>", theme: "yellow", t: "danger"},
-            {w: "<span class='c-black'>لَ</span><span class='c-red'>وۡ</span>", theme: "yellow", t: "golden"}
+            {w: "<span class='c-black'>رِ</span><span class='c-red'>كۡ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>عِ</span><span class='c-red'>شۡ</span>", theme: "blue", t: "speed"},
+            {w: "<span class='c-black'>صَ</span><span class='c-red'>غۡ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>كَ</span><span class='c-red'>ىۡ</span>", theme: "blue", t: "danger"},
+            {w: "<span class='c-black'>لَ</span><span class='c-red'>وۡ</span>", theme: "blue", t: "golden"}
         ];
     </script>
     <script src="../shared/core.js"></script>

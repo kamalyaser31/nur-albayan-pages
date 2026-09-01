@@ -19,37 +19,37 @@
 
         const dataset = [
             // 1. المتماثلان
-            {w: "<span class='c-black'>لَّكُم </span><span class='c-red'>مَّ</span><span class='c-red'>وۡ</span><span class='c-black'>عِدٗا</span>", theme: "pink", t: "golden"},
-            {w: "<span class='c-black'>كَانَت </span><span class='c-red'>تَّ</span><span class='c-red'>أۡ</span><span class='c-black'>تِ</span><span class='c-red'>ي</span><span class='c-black'>هِ</span><span class='c-red'>مۡ</span>", theme: "pink", t: "normal"},
-            {w: "<span class='c-black'>ٱ</span><span class='c-red'>ضۡ</span><span class='c-black'>رِب </span><span class='c-red'>بِّ</span><span class='c-black'>عَصَاكَ</span>", theme: "pink", t: "speed"},
-            {w: "<span class='c-black'>بَل </span><span class='c-red'>لَّ</span><span class='c-red'>جُّ</span><span class='c-black'>و</span><span class='c-black'>اْ</span>", theme: "pink", t: "danger"},
+            {w: "<span class='c-black'>لَّكُم </span><span class='c-red'>مَّ</span><span class='c-black'>وۡعِدًا</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>كَانَت </span><span class='c-red'>تَّ</span><span class='c-black'>أۡتِيهِمۡ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>ٱضۡرِب </span><span class='c-red'>بِّ</span><span class='c-black'>عَصَاكَ</span>", theme: "pink", t: "speed"},
+            {w: "<span class='c-black'>بَل </span><span class='c-red'>لَّ</span><span class='c-black'>جُّواْ</span>", theme: "pink", t: "danger"},
 
-            {w: "<span class='c-black'>وَٱ</span><span class='c-red'>ذۡ</span><span class='c-black'>كُر </span><span class='c-red'>رَّ</span><span class='c-red'>بَّ</span><span class='c-black'>كَ</span>", theme: "green", t: "normal"},
-            {w: "<span class='c-black'>ٱتَّقَواْ </span><span class='c-red'>وَّ</span><span class='c-black'>ءَامَنُ</span><span class='c-red'>و</span><span class='c-black'>اْ</span>", theme: "green", t: "golden"},
-            {w: "<span class='c-black'>يُ</span><span class='c-red'>سۡ</span><span class='c-black'>رِف </span><span class='c-red'>فِّ</span><span class='c-red'>ى</span>", theme: "green", t: "speed"},
-            {w: "<span class='c-black'>تَ</span><span class='c-red'>سۡ</span><span class='c-black'>طِع </span><span class='c-red'>عَّ</span><span class='c-black'>لَ</span><span class='c-red'>يۡ</span><span class='c-black'>هِ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>وَٱذۡكُر </span><span class='c-red'>رَّ</span><span class='c-black'>بَّكَ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>ٱتَّقَواْ </span><span class='c-red'>وَّ</span><span class='c-black'>ءَامَنُواْ</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>يُسۡرِف </span><span class='c-red'>فِّ</span><span class='c-black'>ى</span>", theme: "pink", t: "speed"},
+            {w: "<span class='c-black'>تَسۡطِع </span><span class='c-red'>عَّ</span><span class='c-black'>لَيۡهِ</span>", theme: "pink", t: "normal"},
 
-            {w: "<span class='c-black'>وَقَد </span><span class='c-red'>دَّ</span><span class='c-black'>خَلُ</span><span class='c-red'>و</span><span class='c-black'>اْ</span>", theme: "blue", t: "golden"},
-            {w: "<span class='c-black'>يُوَ</span><span class='c-red'>جِّ</span><span class='c-black'>ه</span><span class='c-red'>هُّ</span>", theme: "blue", t: "speed"},
-            {w: "<span class='c-black'>يُ</span><span class='c-red'>دۡ</span><span class='c-black'>رِك</span><span class='c-red'>كُّ</span><span class='c-black'>مُ</span>", theme: "blue", t: "normal"},
-            {w: "<span class='c-black'>بِأَ</span><span class='c-red'>ييِّ</span><span class='c-black'>كُ</span><span class='c-red'>مُ</span>", theme: "blue", t: "danger"},
+            {w: "<span class='c-black'>وَقَد </span><span class='c-red'>دَّ</span><span class='c-black'>خَلُواْ</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>يُوَجِّه</span><span class='c-red'>هُّ</span>", theme: "pink", t: "speed"},
+            {w: "<span class='c-black'>يُدۡرِك</span><span class='c-red'>كُّ</span><span class='c-black'>مُ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>بِأَي</span><span class='c-red'>يِّ</span><span class='c-black'>كُمُ</span>", theme: "pink", t: "danger"},
 
             // 2. المتقاربان
-            {w: "<span class='c-black'>أَلَ</span><span class='c-red'>مۡ</span> <span class='c-black'>نَ</span><span class='c-red'>خۡ</span><span class='c-black'>لُق</span><span class='c-red'>كُّ</span><span class='c-black'>م</span>", theme: "yellow", t: "golden"},
+            {w: "<span class='c-black'>أَلَمۡ نَخۡلُ</span><span class='c-red'>قكُّ</span><span class='c-black'>م</span>", theme: "yellow", t: "golden"},
             {w: "<span class='c-black'>بَل </span><span class='c-red'>رَّ</span><span class='c-black'>فَعَهُ</span>", theme: "yellow", t: "speed"},
-            {w: "<span class='c-black'>بَل </span><span class='c-red'>رَّ</span><span class='c-red'>بُّ</span><span class='c-black'>كُ</span><span class='c-red'>مۡ</span>", theme: "yellow", t: "normal"},
-            {w: "<span class='c-black'>وَقُل </span><span class='c-red'>رَّ</span><span class='c-red'>بِّ</span>", theme: "yellow", t: "golden"},
+            {w: "<span class='c-black'>بَل </span><span class='c-red'>رَّ</span><span class='c-black'>بُّكُمۡ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>وَقُل </span><span class='c-red'>رَّ</span><span class='c-black'>بِّ</span>", theme: "yellow", t: "golden"},
 
             // 3. المتجانسان
-            {w: "<span class='c-black'>قَد </span><span class='c-red'>تَّ</span><span class='c-black'>بَ</span><span class='c-red'>يَّ</span><span class='c-black'>نَ</span>", theme: "pink", t: "normal"},
-            {w: "<span class='c-black'>أَرَ</span><span class='c-red'>د</span><span class='c-red'>تُّ</span><span class='c-black'>مۡ</span>", theme: "pink", t: "speed"},
-            {w: "<span class='c-black'>وَقَالَت </span><span class='c-red'>طَّ</span><span class='c-red'>آ</span><span class='c-black'>ئِفَةٞ</span>", theme: "pink", t: "golden"},
-            {w: "<span class='c-black'>أَ</span><span class='c-black'>حَ</span><span class='c-red'>ط</span><span class='c-black'>تُ</span>", theme: "pink", t: "danger"},
+            {w: "<span class='c-black'>قَد </span><span class='c-red'>تَّ</span><span class='c-black'>بَيَّنَ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>أَرَ</span><span class='c-red'>دتُّ</span><span class='c-black'>مۡ</span>", theme: "green", t: "speed"},
+            {w: "<span class='c-black'>وَقَالَت </span><span class='c-red'>طَّ</span><span class='c-black'>آئِفَةٌ</span>", theme: "green", t: "golden"},
+            {w: "<span class='c-black'>أَحَ</span><span class='c-red'>طتُ</span>", theme: "green", t: "danger"},
 
-            {w: "<span class='c-black'>يَ</span><span class='c-red'>لۡ</span><span class='c-black'>هَث </span><span class='c-red'>ذَّ</span><span class='c-red'>ٰ</span><span class='c-black'>لِكَ</span>", theme: "green", t: "normal"},
-            {w: "<span class='c-black'>إِذ </span><span class='c-red'>ظَّ</span><span class='c-black'>لَمُ</span><span class='c-red'>وٓ</span><span class='c-black'>اْ</span>", theme: "green", t: "speed"},
-            {w: "<span class='c-black'>ٱ</span><span class='c-red'>رۡ</span><span class='c-black'>كَب </span><span class='c-red'>مَّ</span><span class='c-black'>عَنَا</span>", theme: "green", t: "golden"},
-            {w: "<span class='c-black'>يَ</span><span class='c-red'>وۡ</span><span class='c-black'>مَ وُلِ</span><span class='c-red'>د</span><span class='c-red'>تُّ</span>", theme: "green", t: "normal"}
+            {w: "<span class='c-black'>يَلۡهَث </span><span class='c-red'>ذَّ</span><span class='c-black'>ٰلِكَ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>إِذ </span><span class='c-red'>ظَّ</span><span class='c-black'>لَمُوٓاْ</span>", theme: "green", t: "speed"},
+            {w: "<span class='c-black'>ٱرۡكَب </span><span class='c-red'>مَّ</span><span class='c-black'>عَنَا</span>", theme: "green", t: "golden"},
+            {w: "<span class='c-black'>يَوۡمَ وُلِ</span><span class='c-red'>دتُّ</span>", theme: "green", t: "normal"}
         ];
     </script>
     <script src="../shared/core.js"></script>

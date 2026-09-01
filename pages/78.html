@@ -19,24 +19,33 @@
 
         const dataset = [
             // 5. المد العارض للسكون ومد اللين
-            {w: "<span class='c-black'>نَ</span><span class='c-red'>سۡ</span><span class='c-black'>تَعِ</span><span class='c-red'>ي</span><span class='c-black'>نُ</span>", theme: "pink", t: "golden"},
-            {w: "<span class='c-black'>ٱل</span><span class='c-red'>نَّ</span><span class='c-black'>ا</span><span class='c-black'>سِ</span>", theme: "pink", t: "normal"},
-            {w: "<span class='c-black'>ٱلۡمُ</span><span class='c-red'>فۡ</span><span class='c-black'>لِحُ</span><span class='c-red'>و</span><span class='c-black'>نَ</span>", theme: "pink", t: "speed"},
-            {w: "<span class='c-black'>هَـ</span><span class='c-red'>ٰ</span><span class='c-black'>ذَا ٱلۡبَ</span><span class='c-red'>يۡ</span><span class='c-black'>تِ</span>", theme: "pink", t: "normal"},
-            {w: "<span class='c-black'>مِ</span><span class='c-red'>نۡ</span> <span class='c-black'>خَ</span><span class='c-red'>وۡ</span><span class='c-black'>فِۭ</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>نَسۡتَعِ</span><span class='c-red'>ي</span><span class='c-black'>نُ</span>", theme: "blue", t: "golden"},
+            {w: "<span class='c-black'>ٱلنَّ</span><span class='c-red'>ا</span><span class='c-black'>سِ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>ٱلۡمُفۡلِحُ</span><span class='c-red'>و</span><span class='c-black'>نَ</span>", theme: "blue", t: "speed"},
+            {w: "<span class='c-black'>هَـٰذَا ٱلۡبَ</span><span class='c-red'>يۡ</span><span class='c-black'>تِ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>مِنۡ خَ</span><span class='c-red'>وۡ</span><span class='c-black'>فِۭ</span>", theme: "blue", t: "golden"},
 
-            // 6. المد اللازم الكلمي
-            {w: "<span class='c-black'>ٱل</span><span class='c-red'>ضَّ</span><span class='c-red'>آ</span><span class='c-black'>لِّ</span><span class='c-red'>ي</span><span class='c-black'>نَ</span>", theme: "green", t: "golden"},
-            {w: "<span class='c-black'>ٱلۡحَ</span><span class='c-red'>آ</span><span class='c-black'>قَّةُ</span>", theme: "green", t: "danger"},
-            {w: "<span class='c-black'>حَ</span><span class='c-red'>آ</span><span class='c-black'>جَّ</span>", theme: "green", t: "speed"},
-            {w: "<span class='c-black'>دَ</span><span class='c-red'>آ</span><span class='c-black'>بَّةٍ</span>", theme: "green", t: "normal"},
-            {w: "<span class='c-black'>ءَ</span><span class='c-red'>آ</span><span class='c-black'>لۡـَٔـ</span><span class='c-red'>ٰ</span><span class='c-black'>نَ</span>", theme: "green", t: "golden"},
+            // 6. المد اللازم الكلمي المثقل والمخفف
+            {w: "<span class='c-black'>ٱلضَّ</span><span class='c-red'>آ</span><span class='c-red'>لِّ</span><span class='c-black'>ينَ</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>ٱلۡحَ</span><span class='c-red'>آ</span><span class='c-red'>قَّ</span><span class='c-black'>ةُ</span>", theme: "pink", t: "danger"},
+            {w: "<span class='c-black'>حَ</span><span class='c-red'>آ</span><span class='c-red'>جَّ</span>", theme: "pink", t: "speed"},
+            {w: "<span class='c-black'>دَ</span><span class='c-red'>آ</span><span class='c-red'>بَّ</span><span class='c-black'>ةٍ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>ءَ</span><span class='c-red'>آ</span><span class='c-red'>لۡ</span><span class='c-black'>ـَٔـٰنَ</span>", theme: "pink", t: "golden"},
 
             // 7. الحروف المقطعة وفواتح السور
-            {w: "<span class='c-black'>الٓمٓ • الٓمٓصٓ • الٓمٓرۚ • طسٓمٓ • يسٓ • حمٓ • قٓ</span>", theme: "blue", t: "golden"},
-            {w: "<span class='c-black'>كٓهيعٓصٓ ۝١ ذِ</span><span class='c-red'>كۡ</span><span class='c-black'>رُ رَ</span><span class='c-red'>حۡ</span><span class='c-black'>مَتِ رَ</span><span class='c-red'>بِّ</span><span class='c-black'>كَ عَ</span><span class='c-red'>بۡ</span><span class='c-black'>دَهُ</span><span class='c-red'>ۥ</span> <span class='c-black'>زَكَرِ</span><span class='c-red'>يَّ</span><span class='c-red'>آ</span>", theme: "blue", t: "speed"},
-            {w: "<span class='c-black'>حمٓ ۝١ عٓسٓقٓ ۝٢ كَذَ</span><span class='c-red'>ٰ</span><span class='c-black'>لِكَ يُ</span><span class='c-red'>و</span><span class='c-black'>حِ</span><span class='c-red'>ىٓ</span> <span class='c-black'>إِلَ</span><span class='c-red'>يۡ</span><span class='c-black'>كَ</span>", theme: "blue", t: "golden"},
-            {w: "<span class='c-black'>الٓرۚ تِ</span><span class='c-red'>لۡ</span><span class='c-black'>كَ ءَايَـ</span><span class='c-red'>ٰ</span><span class='c-black'>تُ ٱلۡكِتَـ</span><span class='c-red'>ٰ</span><span class='c-black'>بِ ٱلۡحَكِ</span><span class='c-red'>ي</span><span class='c-black'>مِ • صٓۚ وَٱلۡقُ</span><span class='c-red'>رۡ</span><span class='c-black'>ءَانِ ذِى ٱل</span><span class='c-red'>ذِّ</span><span class='c-red'>كۡ</span><span class='c-black'>رِ</span>", theme: "yellow", t: "normal"}
+            {w: "<span class='c-black'>ا</span><span class='c-red'>لٓ</span><span class='c-red'>مٓ</span>", theme: "yellow", t: "golden"},
+            {w: "<span class='c-black'>ا</span><span class='c-red'>لٓ</span><span class='c-red'>مٓ</span><span class='c-red'>صٓ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>ا</span><span class='c-red'>لٓ</span><span class='c-red'>مٓ</span><span class='c-black'>رۚ</span>", theme: "yellow", t: "speed"},
+            {w: "<span class='c-black'>ط</span><span class='c-red'>سٓ</span><span class='c-red'>مٓ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>ي</span><span class='c-red'>سٓ</span>", theme: "yellow", t: "golden"},
+            {w: "<span class='c-black'>ح</span><span class='c-red'>مٓ</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-red'>قٓ</span>", theme: "yellow", t: "speed"},
+
+            // فواتح السور المركبة
+            {w: "<span class='c-red'>كٓ</span><span class='c-black'>هي</span><span class='c-red'>عٓ</span><span class='c-red'>صٓ</span> ۝١ <span class='c-black'>ذِكۡرُ رَحۡمَتِ رَبِّكَ عَبۡدَهُۥ زَكَرِيَّآ</span>", theme: "green", t: "speed"},
+            {w: "<span class='c-black'>ح</span><span class='c-red'>مٓ</span> ۝١ <span class='c-red'>عٓ</span><span class='c-red'>سٓ</span><span class='c-red'>قٓ</span> ۝٢ <span class='c-black'>كَذَٰلِكَ يُوحِىٓ إِلَيۡكَ</span>", theme: "green", t: "golden"},
+            {w: "<span class='c-black'>ا</span><span class='c-red'>لٓ</span><span class='c-black'>رۚ تِلۡكَ ءَايَـٰتُ ٱلۡكِتَـٰبِ ٱلۡحَكِيمِ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-red'>صٓ</span>ۚ <span class='c-black'>وَٱلۡقُرۡءَانِ ذِى ٱلذِّكۡرِ</span>", theme: "green", t: "golden"}
         ];
     </script>
     <script src="../shared/core.js"></script>

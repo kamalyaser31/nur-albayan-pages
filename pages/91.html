@@ -19,30 +19,38 @@
 
         const dataset = [
             // 1. الهمزة على نبرة
-            {w: "<span class='c-black'>كَم </span><span class='c-red'>مِّ</span><span class='c-red'>ن </span><span class='c-black'>فِ</span><span class='c-red'>ئَ</span><span class='c-black'>ةٖ قَلِ</span><span class='c-red'>ي</span><span class='c-black'>لَةٍ غَلَبَ</span><span class='c-red'>تۡ</span> <span class='c-black'>فِ</span><span class='c-red'>ئَ</span><span class='c-black'>ةٗ كَثِ</span><span class='c-red'>ي</span><span class='c-black'>رَةَۢ</span>", fontType: "quran", theme: "pink", t: "golden"},
+            // Pair 1 (Pink)
+            {w: "<span class='c-black'>كَم مِّن </span><span class='c-red'>فِئَ</span><span class='c-black'>ةٖ قَلِيلَةٍ غَلَبَتۡ </span><span class='c-red'>فِئَ</span><span class='c-black'>ةٗ كَثِيرَةَۢ</span>", fontType: "quran", theme: "pink", t: "golden"},
             {w: "<span class='c-black'>نَأْمُلُ أَنْ يَسُودَ الْوِ</span><span class='c-red'>ئَ</span><span class='c-black'>امُ</span>", fontType: "dictation", theme: "pink", t: "normal"},
 
-            {w: "<span class='c-black'>أَلَا بِذِ</span><span class='c-red'>كۡ</span><span class='c-black'>رِ ٱللَّهِ تَ</span><span class='c-red'>طۡ</span><span class='c-black'>مَ</span><span class='c-red'>ئِ</span><span class='c-red'>نُّ</span> <span class='c-black'>ٱلۡقُلُ</span><span class='c-red'>و</span><span class='c-black'>بُ</span>", fontType: "quran", theme: "pink", t: "speed"},
+            // Pair 2 (Pink)
+            {w: "<span class='c-black'>أَلَا بِذِكۡرِ ٱللَّهِ تَطۡمَ</span><span class='c-red'>ئِ</span><span class='c-black'>نُّ ٱلۡقُلُوبُ</span>", fontType: "quran", theme: "pink", t: "speed"},
             {w: "<span class='c-black'>زَ</span><span class='c-red'>ئِ</span><span class='c-black'>يرُ الْأَسَدِ قَوِيٌّ</span>", fontType: "dictation", theme: "pink", t: "normal"},
 
-            {w: "<span class='c-black'>ٱلۡيَ</span><span class='c-red'>وۡ</span><span class='c-black'>مَ يَ</span><span class='c-red'>ئِ</span><span class='c-black'>سَ ٱلَّذِ</span><span class='c-red'>ي</span><span class='c-black'>نَ كَفَرُ</span><span class='c-red'>و</span><span class='c-black'>اْ مِن دِ</span><span class='c-red'>ي</span><span class='c-black'>نِكُ</span><span class='c-red'>مۡ</span>", fontType: "quran", theme: "green", t: "golden"},
+            // Pair 3 (Green)
+            {w: "<span class='c-black'>ٱلۡيَوۡمَ يَ</span><span class='c-red'>ئِ</span><span class='c-black'>سَ ٱلَّذِينَ كَفَرُواْ مِن دِينِكُمۡ</span>", fontType: "quran", theme: "green", t: "golden"},
             {w: "<span class='c-black'>أَنْتِ تَقْرَ</span><span class='c-red'>ئِ</span><span class='c-black'>ينَ كَثِيرًا</span>", fontType: "dictation", theme: "green", t: "normal"},
 
-            {w: "<span class='c-black'>بِ</span><span class='c-red'>ئۡ</span><span class='c-black'>سَ ٱلِٱسۡمُ ٱلۡفُسُ</span><span class='c-red'>و</span><span class='c-black'>قُ بَ</span><span class='c-red'>عۡ</span><span class='c-black'>دَ ٱلۡإِ</span><span class='c-red'>ي</span><span class='c-black'>مَـ</span><span class='c-red'>ٰ</span><span class='c-black'>نِ</span>", fontType: "quran", theme: "green", t: "speed"},
+            // Pair 4 (Green)
+            {w: "<span class='c-black'>بِ</span><span class='c-red'>ئۡ</span><span class='c-black'>سَ ٱلِٱسۡمُ ٱلۡفُسُوقُ بَعۡدَ ٱلۡإِيمَـٰنِ</span>", fontType: "quran", theme: "green", t: "speed"},
             {w: "<span class='c-black'>جِ</span><span class='c-red'>ئْ</span><span class='c-black'>تُ مِنَ السَّفَرِ</span>", fontType: "dictation", theme: "green", t: "normal"},
 
             // 2. الهمزة على الواو
-            {w: "<span class='c-black'>قَ</span><span class='c-red'>دۡ</span> <span class='c-black'>أَ</span><span class='c-red'>فۡ</span><span class='c-black'>لَحَ ٱلۡمُ</span><span class='c-red'>ؤۡ</span><span class='c-black'>مِنُ</span><span class='c-red'>و</span><span class='c-black'>نَ</span>", fontType: "quran", theme: "blue", t: "golden"},
+            // Pair 5 (Blue)
+            {w: "<span class='c-black'>قَدۡ أَفۡلَحَ ٱلۡمُ</span><span class='c-red'>ؤۡ</span><span class='c-black'>مِنُونَ</span>", fontType: "quran", theme: "blue", t: "golden"},
             {w: "<span class='c-black'>يُ</span><span class='c-red'>ؤْ</span><span class='c-black'>جَرُ الْمُسْلِمُ عَلَى قِرَاءَةِ الْقُرْآنِ</span>", fontType: "dictation", theme: "blue", t: "normal"},
 
+            // Pair 6 (Blue)
             {w: "<span class='c-black'>يَ</span><span class='c-red'>ؤُ</span><span class='c-black'>مُّ الْمُصَلِّينَ أَقْرَ</span><span class='c-red'>ؤُ</span><span class='c-black'>هُمْ لِلْقُرْآنِ</span>", fontType: "dictation", theme: "blue", t: "speed"},
             {w: "<span class='c-black'>الْمُسْلِمُ الصَّادِقُ يُ</span><span class='c-red'>ؤَ</span><span class='c-black'>دِّي وَاجِبَهُ</span>", fontType: "dictation", theme: "blue", t: "normal"},
 
-            {w: "<span class='c-black'>الصَّدِيقُ يُ</span><span class='c-red'>ؤَ</span><span class='c-black'>ثِّرُ فِي صَدِيقِهِ</span>", fontType: "dictation", theme: "yellow", t: "golden"},
-            {w: "<span class='c-black'>مُحَمَّدٌ مَبْدَ</span><span class='c-red'>ؤُ</span><span class='c-black'>هُ الصِّدْقُ</span>", fontType: "dictation", theme: "yellow", t: "normal"},
+            // Pair 7 (Blue)
+            {w: "<span class='c-black'>الصَّدِيقُ يُ</span><span class='c-red'>ؤَ</span><span class='c-black'>ثِّرُ فِي صَدِيقِهِ</span>", fontType: "dictation", theme: "blue", t: "golden"},
+            {w: "<span class='c-black'>مُحَمَّدٌ مَبْدَ</span><span class='c-red'>ؤُ</span><span class='c-black'>هُ الصِّدْقُ</span>", fontType: "dictation", theme: "blue", t: "normal"},
 
-            {w: "<span class='c-black'>يَرَ</span><span class='c-red'>ؤُ</span><span class='c-black'>فُ الْكَبِيرُ بِالصَّغِيرِ</span>", fontType: "dictation", theme: "yellow", t: "speed"},
-            {w: "<span class='c-black'>لَا تُ</span><span class='c-red'>ؤْ</span><span class='c-black'>ذِ الْحَيَوَانَ أَبَدًا</span>", fontType: "dictation", theme: "yellow", t: "danger"}
+            // Pair 8 (Blue)
+            {w: "<span class='c-black'>يَرَ</span><span class='c-red'>ؤُ</span><span class='c-black'>فُ الْكَبِيرُ بِالصَّغِيرِ</span>", fontType: "dictation", theme: "blue", t: "speed"},
+            {w: "<span class='c-black'>لَا تُ</span><span class='c-red'>ؤْ</span><span class='c-black'>ذِ الْحَيَوَانَ أَبَدًا</span>", fontType: "dictation", theme: "blue", t: "danger"}
         ];
     </script>
     <script src="../shared/core.js"></script>

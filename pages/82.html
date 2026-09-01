@@ -18,36 +18,38 @@
         };
 
         const dataset = [
-            // Top Card
-            {w: "<span class='c-black'>رَّضِىَ ٱللَّهُ عَ</span><span class='c-red'>نۡ</span><span class='c-black'>هُ</span><span class='c-red'>مۡ</span> <span class='c-black'>وَرَضُ</span><span class='c-red'>و</span><span class='c-black'>اْ عَ</span><span class='c-red'>نۡ</span><span class='c-black'>هُۚ ذَ</span><span class='c-red'>ٰ</span><span class='c-black'>لِكَ لِمَ</span><span class='c-red'>نۡ</span> <span class='c-black'>خَشِىَ رَ</span><span class='c-red'>بَّ</span><span class='c-black'>هُ</span><span class='c-red'>ۥ</span>", theme: "pink", t: "golden"},
+            // Top Box (Yellow)
+            {w: "<span class='c-black'>رَّضِىَ ٱللَّهُ عَ</span><span class='c-red'>نۡه</span><span class='c-black'>ُمۡ وَرَضُواْ عَ</span><span class='c-red'>نۡه</span><span class='c-black'>ُۚ ذَٰلِكَ لِمَ</span><span class='c-red'>نۡ خَ</span><span class='c-black'>شِىَ رَبَّهُۥ</span>", theme: "yellow", t: "golden"},
 
-            // Grid
-            {w: "<span class='c-black'>ذَرۡنِ</span><span class='c-red'>ى</span> <span class='c-black'>وَمَ</span><span class='c-red'>نۡ</span> <span class='c-black'>خَلَ</span><span class='c-red'>قۡ</span><span class='c-black'>تُ وَحِ</span><span class='c-red'>ي</span><span class='c-black'>دٗا</span>", theme: "pink", t: "normal"},
-            {w: "<span class='c-black'>وُجُ</span><span class='c-red'>و</span><span class='c-black'>هٞ </span><span class='c-red'>يَ</span><span class='c-red'>وۡ</span><span class='c-black'>مَئِذٖ </span><span class='c-red'>مُّ</span><span class='c-red'>سۡ</span><span class='c-black'>فِرَةٞ</span>", theme: "pink", t: "speed"},
+            // Middle Grid - Part 1 (Yellow)
+            {w: "<span class='c-black'>ذَرۡنِى وَمَ</span><span class='c-red'>نۡ خَ</span><span class='c-black'>لَقۡتُ وَحِيدًا</span>", theme: "yellow", t: "normal"},
+            {w: "<span class='c-black'>وُجُوهٌۭ </span><span class='c-red'>يَ</span><span class='c-black'>وۡمَئِذٍۢ </span><span class='c-red'>مُّ</span><span class='c-black'>سۡفِرَةٌ</span>", theme: "yellow", t: "speed"},
 
-            {w: "<span class='c-black'>فَ</span><span class='c-red'>عَّ</span><span class='c-black'>الٞ </span><span class='c-red'>لِّ</span><span class='c-black'>مَا يُرِ</span><span class='c-red'>ي</span><span class='c-black'>دُ</span>", theme: "green", t: "golden"},
-            {w: "<span class='c-black'>وَمَا هُوَ بِقَ</span><span class='c-red'>وۡ</span><span class='c-black'>لِ شَ</span><span class='c-red'>يۡ</span><span class='c-black'>طَـ</span><span class='c-red'>ٰ</span><span class='c-black'>نٍ </span><span class='c-red'>رَّ</span><span class='c-black'>جِ</span><span class='c-red'>ي</span><span class='c-black'>مٍ</span>", theme: "green", t: "normal"},
+            {w: "<span class='c-black'>فَعَّالٌۭ </span><span class='c-red'>لِّ</span><span class='c-black'>مَا يُرِيدُ</span>", theme: "yellow", t: "golden"},
+            {w: "<span class='c-black'>وَمَا هُوَ بِقَوۡلِ شَيۡطَـٰنٍۢ </span><span class='c-red'>رَّ</span><span class='c-black'>جِيمٍ</span>", theme: "yellow", t: "normal"},
 
-            {w: "<span class='c-black'>فَأَ</span><span class='c-red'>نۢ</span><span class='c-black'>بَ</span><span class='c-red'>تۡ</span><span class='c-black'>نَا فِ</span><span class='c-red'>ي</span><span class='c-black'>هَا حَ</span><span class='c-red'>بًّ</span><span class='c-red'>ا</span>", theme: "green", t: "speed"},
-            {w: "<span class='c-black'>وَوُجُ</span><span class='c-red'>و</span><span class='c-black'>هٞ </span><span class='c-red'>يَ</span><span class='c-red'>وۡ</span><span class='c-black'>مَئِذِ</span><span class='c-red'>ۭ</span> <span class='c-black'>بَاسِرَةٞ</span>", theme: "green", t: "danger"},
+            {w: "<span class='c-black'>فَأَ</span><span class='c-red'>نۢبَ</span><span class='c-black'>تۡنَا فِيهَا حَبًّا</span>", theme: "yellow", t: "speed"},
+            {w: "<span class='c-black'>وَوُجُوهٌۭ </span><span class='c-red'>يَ</span><span class='c-black'>وۡمَئِ</span><span class='c-red'>ذِۭ بَ</span><span class='c-black'>اسِرَةٌ</span>", theme: "yellow", t: "danger"},
 
-            {w: "<span class='c-black'>يَ</span><span class='c-red'>خۡ</span><span class='c-black'>رُجُ مِ</span><span class='c-red'>نۢ</span> <span class='c-black'>بَ</span><span class='c-red'>يۡ</span><span class='c-black'>نِ ٱل</span><span class='c-red'>صُّ</span><span class='c-red'>لۡ</span><span class='c-black'>بِ وَٱل</span><span class='c-red'>تَّ</span><span class='c-black'>رَ</span><span class='c-red'>آ</span><span class='c-black'>ئِبِ</span>", theme: "blue", t: "golden"},
-            {w: "<span class='c-black'>ٱل</span><span class='c-red'>سَّ</span><span class='c-black'>مَ</span><span class='c-red'>آ</span><span class='c-black'>ءُ مُ</span><span class='c-red'>نفَ</span><span class='c-black'>طِرُ</span><span class='c-red'>ۢ</span> <span class='c-black'>بِهِ</span><span class='c-red'>ۦ</span>", theme: "blue", t: "speed"},
+            // Middle Grid - Part 2 (Blue)
+            {w: "<span class='c-black'>يَخۡرُجُ مِ</span><span class='c-red'>نۢ بَ</span><span class='c-black'>يۡنِ ٱلصُّلۡبِ وَٱلتَّرَآئِبِ</span>", theme: "blue", t: "golden"},
+            {w: "<span class='c-black'>ٱلسَّمَآءُ مُ</span><span class='c-red'>نفَ</span><span class='c-black'>طِ</span><span class='c-red'>رُۢ بِ</span><span class='c-black'>هِۦ</span>", theme: "blue", t: "speed"},
 
-            {w: "<span class='c-black'>وَأَ</span><span class='c-red'>نزَ</span><span class='c-red'>لۡ</span><span class='c-black'>نَا مِنَ ٱلۡمُ</span><span class='c-red'>عۡ</span><span class='c-black'>صِرَٰتِ مَ</span><span class='c-red'>آ</span><span class='c-black'>ءٗ </span><span class='c-red'>ثَ</span><span class='c-red'>جَّ</span><span class='c-black'>اجٗا</span>", theme: "blue", t: "normal"},
-            {w: "<span class='c-black'>فَتُ</span><span class='c-red'>صۡ</span><span class='c-black'>بِحَ صَعِ</span><span class='c-red'>ي</span><span class='c-black'>دٗا </span><span class='c-red'>زَ</span><span class='c-black'>لَقًا</span>", theme: "blue", t: "golden"},
+            {w: "<span class='c-black'>وَأَ</span><span class='c-red'>نزَ</span><span class='c-black'>لۡنَا مِنَ ٱلۡمُعۡصِرَٰتِ مَآءًۭ </span><span class='c-red'>ثَ</span><span class='c-black'>جَّاجًا</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>فَتُصۡبِحَ صَعِيدًۭا </span><span class='c-red'>زَ</span><span class='c-black'>لَقًا</span>", theme: "blue", t: "golden"},
 
-            {w: "<span class='c-black'>فِ</span><span class='c-red'>ي</span><span class='c-black'>هَا كُتُبٞ </span><span class='c-red'>قَ</span><span class='c-red'>يِّ</span><span class='c-black'>مَةٌ</span>", theme: "yellow", t: "normal"},
-            {w: "<span class='c-black'>فِ</span><span class='c-red'>ي</span><span class='c-black'>هَا عَ</span><span class='c-red'>يۡ</span><span class='c-black'>نٞ </span><span class='c-red'>جَ</span><span class='c-black'>ارِيَةٞ</span>", theme: "yellow", t: "speed"},
+            {w: "<span class='c-black'>فِيهَا كُتُبٌۭ </span><span class='c-red'>قَ</span><span class='c-black'>يِّمَةٌ</span>", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>فِيهَا عَيۡنٌۭ </span><span class='c-red'>جَ</span><span class='c-black'>ارِيَةٌ</span>", theme: "blue", t: "speed"},
 
-            {w: "<span class='c-black'>وَنَخِ</span><span class='c-red'>ي</span><span class='c-black'>لٞ صِ</span><span class='c-red'>نۡ</span><span class='c-black'>وَ</span><span class='c-red'>ا</span><span class='c-black'>نٞ وَغَ</span><span class='c-red'>يۡ</span><span class='c-black'>رُ صِ</span><span class='c-red'>نۡ</span><span class='c-black'>وَ</span><span class='c-red'>ا</span><span class='c-black'>نٖ</span>", theme: "yellow", t: "golden"},
-            {w: "<span class='c-black'>إِ</span><span class='c-red'>نَّ</span><span class='c-black'>مَا ٱلۡحَيَ</span><span class='c-red'>وٰ</span><span class='c-black'>ةُ ٱل</span><span class='c-red'>دُّ</span><span class='c-red'>نۡ</span><span class='c-black'>يَا لَعِبٞ </span><span class='c-red'>وَ</span><span class='c-black'>لَ</span><span class='c-red'>هۡ</span><span class='c-black'>وٞ</span>", theme: "yellow", t: "normal"},
+            // Middle Grid - Part 3 (Pink)
+            {w: "<span class='c-black'>وَنَخِيلٌۭ صِ</span><span class='c-red'>نۡوَ</span><span class='c-black'>انٌۭ وَغَيۡرُ صِ</span><span class='c-red'>نۡوَ</span><span class='c-black'>انٍ</span>", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>إِنَّمَا ٱلۡحَيَوٰةُ ٱلدُّ</span><span class='c-red'>نۡيَ</span><span class='c-black'>ا لَعِبٌۭ </span><span class='c-red'>وَ</span><span class='c-black'>لَهۡوٌ</span>", theme: "pink", t: "normal"},
 
-            {w: "<span class='c-black'>وَإِ</span><span class='c-red'>نۡ</span> <span class='c-black'>أَصَابَ</span><span class='c-red'>تۡ</span><span class='c-black'>هُ فِ</span><span class='c-red'>تۡ</span><span class='c-black'>نَةٌ ٱنقَلَبَ عَلَ</span><span class='c-red'>ىٰ</span> <span class='c-black'>وَ</span><span class='c-red'>جۡ</span><span class='c-black'>هِهِ</span><span class='c-red'>ۦ</span>", theme: "pink", t: "danger"},
-            {w: "<span class='c-black'>كَ</span><span class='c-red'>ذَّ</span><span class='c-black'>بَ</span><span class='c-red'>تۡ</span> <span class='c-black'>قَ</span><span class='c-red'>وۡ</span><span class='c-black'>مُ نُ</span><span class='c-red'>و</span><span class='c-black'>حٍ ٱلۡمُ</span><span class='c-red'>رۡ</span><span class='c-black'>سَلِ</span><span class='c-red'>ي</span><span class='c-black'>نَ</span>", theme: "pink", t: "normal"},
+            {w: "<span class='c-black'>وَإِ</span><span class='c-red'>نۡ أَ</span><span class='c-black'>صَابَتۡهُ فِتۡنَ</span><span class='c-red'>ةٌ ٱ</span><span class='c-black'>ن</span><span class='c-red'>قَ</span><span class='c-black'>لَبَ عَلَىٰ وَجۡهِهِۦ</span>", theme: "pink", t: "danger"},
+            {w: "<span class='c-black'>كَذَّبَتۡ قَوۡمُ نُو</span><span class='c-red'>حٍ ٱ</span><span class='c-black'>لۡمُرۡسَلِينَ</span>", theme: "pink", t: "normal"},
 
-            // Bottom Card
-            {w: "<span class='c-black'>فَكَأَ</span><span class='c-red'>يِّ</span><span class='c-black'>ن </span><span class='c-red'>مِّ</span><span class='c-black'>ن قَ</span><span class='c-red'>رۡ</span><span class='c-black'>يَةٍ أَ</span><span class='c-red'>هۡ</span><span class='c-black'>لَ</span><span class='c-red'>كۡ</span><span class='c-black'>نَـ</span><span class='c-red'>ٰ</span><span class='c-black'>هَا وَهِىَ ظَالِمَةٞ فَهِىَ خَاوِيَةٌ عَلَىٰ عُرُوشِهَا وَبِ</span><span class='c-red'>ئۡ</span><span class='c-black'>رٖ </span><span class='c-red'>مُّ</span><span class='c-black'>عَ</span><span class='c-red'>طَّ</span><span class='c-black'>لَةٖ وَقَ</span><span class='c-red'>صۡ</span><span class='c-black'>رٖ </span><span class='c-red'>مَّ</span><span class='c-black'>شِ</span><span class='c-red'>ي</span><span class='c-black'>دٍ</span>", theme: "pink", t: "golden"}
+            // Bottom Box (Pink)
+            {w: "<span class='c-black'>فَكَأَيِّن </span><span class='c-red'>مِّ</span><span class='c-black'>ن </span><span class='c-red'>قَ</span><span class='c-black'>رۡيَ</span><span class='c-red'>ةٍ أَ</span><span class='c-black'>هۡلَكۡنَـٰهَا وَهِىَ ظَالِمَةٌۭ فَهِىَ خَاوِيَةٌ عَلَىٰ عُرُوشِهَا وَبِئۡرٍۢ </span><span class='c-red'>مُّ</span><span class='c-black'>عَطَّلَةٍۢ وَقَصۡرٍۢ </span><span class='c-red'>مَّ</span><span class='c-black'>شِيدٍ</span>", theme: "pink", t: "golden"}
         ];
     </script>
     <script src="../shared/core.js"></script>

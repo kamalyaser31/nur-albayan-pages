@@ -18,33 +18,33 @@
         };
 
         const dataset = [
-            // 1. السكون
-            {w: "<span class='c-black'>وَأَ</span><span class='c-red'>وۡ</span><span class='c-black'>حَ</span><span class='c-red'>يۡ</span><span class='c-black'>نَ</span><span class='c-red'>آ</span> <span class='c-black'>إِلَ</span><span class='c-red'>يۡ</span><span class='c-black'>هِ</span><span class='c-red'>مۡ</span> <span class='c-black'>فِ</span><span class='c-red'>عۡ</span><span class='c-black'>لَ ٱلۡخَ</span><span class='c-red'>يۡ</span><span class='c-black'>رَٰتِ</span>", fontType: "quran", theme: "pink", t: "golden"},
-            {w: "<span class='c-black'>يَسْ</span><span class='c-red'>تَيْ</span><span class='c-black'>قِظُ عُمَرُ مِنْ نَوْمِهِ عِنْدَ الْفَجْرِ</span>", fontType: "dictation", theme: "pink", t: "normal"},
+            // 1. السكون (Blue)
+            {w: "<span class='c-black'>وَأَ</span><span class='c-red'>وۡ</span><span class='c-black'>حَ</span><span class='c-red'>يۡ</span><span class='c-black'>نَآ إِلَ</span><span class='c-red'>يۡ</span><span class='c-black'>هِ</span><span class='c-red'>مۡ</span> <span class='c-black'>فِ</span><span class='c-red'>عۡ</span><span class='c-black'>لَ ٱلۡخَ</span><span class='c-red'>يۡ</span><span class='c-black'>رَٰتِ</span>", fontType: "quran", theme: "blue", t: "golden"},
+            {w: "<span class='c-black'>يَ</span><span class='c-red'>سْ</span><span class='c-black'>تَ</span><span class='c-red'>يْ</span><span class='c-black'>قِظُ عُمَرُ مِ</span><span class='c-red'>نْ</span> <span class='c-black'>نَ</span><span class='c-red'>وْ</span><span class='c-black'>مِهِ عِ</span><span class='c-red'>نْ</span><span class='c-black'>دَ ا</span><span class='c-red'>لْ</span><span class='c-black'>فَ</span><span class='c-red'>جْ</span><span class='c-black'>رِ</span>", fontType: "dictation", theme: "blue", t: "normal"},
 
-            // 2. التنوين
-            {w: "<span class='c-black'>عَلِ</span><span class='c-red'>ي</span><span class='c-black'>مٌ حَكِ</span><span class='c-red'>ي</span><span class='c-black'>مٌ <span class='sep-bar'>-</span> سَمِ</span><span class='c-red'>ي</span><span class='c-black'>عُ</span><span class='c-red'>ۢ</span> <span class='c-black'>بَصِ</span><span class='c-red'>ي</span><span class='c-black'>رُ</span><span class='c-red'>ۢ</span>", fontType: "quran", theme: "green", t: "golden"},
-            {w: "<span class='c-black'>رَجُلٌ صَادِقٌ كَرِيمٌ</span>", fontType: "dictation", theme: "green", t: "normal"},
+            // 2. التنوين (Pink)
+            {w: "<span class='c-black'>عَلِي</span><span class='c-red'>مٌ</span> <span class='c-black'>حَكِي</span><span class='c-red'>مٌ</span> <span class='sep-bar'>-</span> <span class='c-black'>سَمِي</span><span class='c-red'>عُۢ</span> <span class='c-black'>بَصِي</span><span class='c-red'>رُۢ</span>", fontType: "quran", theme: "pink", t: "golden"},
+            {w: "<span class='c-black'>رَجُ</span><span class='c-red'>لٌ</span> <span class='c-black'>صَادِ</span><span class='c-red'>قٌ</span> <span class='c-black'>كَرِي</span><span class='c-red'>مٌ</span>", fontType: "dictation", theme: "pink", t: "normal"},
 
-            // 3. الشدة
-            {w: "<span class='c-black'>وَسَ</span><span class='c-red'>بِّ</span><span class='c-black'>حۡ بِحَ</span><span class='c-red'>مۡ</span><span class='c-black'>دِ رَ</span><span class='c-red'>بِّ</span><span class='c-black'>كَ بِٱلۡعَشِ</span><span class='c-red'>ىِّ</span> <span class='c-black'>وَٱلۡإِ</span><span class='c-red'>بۡ</span><span class='c-black'>كَـٰرِ</span>", fontType: "quran", theme: "blue", t: "speed"},
-            {w: "<span class='c-black'>سُؤَالُ الْمَيِّتِ فِي قَبْرِهِ حَقٌّ</span>", fontType: "dictation", theme: "blue", t: "normal"},
+            // 3. الشدة (Blue)
+            {w: "<span class='c-black'>وَسَ</span><span class='c-red'>بِّ</span><span class='c-black'>حۡ بِحَمۡدِ رَ</span><span class='c-red'>بِّ</span><span class='c-black'>كَ بِٱلۡعَشِ</span><span class='c-red'>ىِّ</span> <span class='c-black'>وَٱلۡإِبۡكَـٰرِ</span>", fontType: "quran", theme: "blue", t: "speed"},
+            {w: "<span class='c-black'>سُؤَالُ الْمَ</span><span class='c-red'>يِّ</span><span class='c-black'>تِ فِي قَبْرِهِ حَ</span><span class='c-red'>قٌّ</span>", fontType: "dictation", theme: "blue", t: "normal"},
 
-            // 4. ألف الوصل
-            {w: "<span class='c-black'>ٱلۡمَلِكُ ٱلۡقُ</span><span class='c-red'>دُّ</span><span class='c-black'>و</span><span class='c-black'>سُ ٱل</span><span class='c-red'>سَّ</span><span class='c-black'>لَـٰمُ</span>", fontType: "quran", theme: "yellow", t: "golden"},
-            {w: "<span class='c-black'>السَّاعِي عَلَى الْأَرْمَلَةِ وَالْمِسْكِينِ كَالْمُجَاهِدِ</span>", fontType: "dictation", theme: "yellow", t: "normal"},
+            // 4. ألف الوصل (Pink)
+            {w: "<span class='c-red'>ٱ</span><span class='c-black'>لۡمَلِكُ </span><span class='c-red'>ٱ</span><span class='c-black'>لۡقُدُّوسُ </span><span class='c-red'>ٱ</span><span class='c-black'>لسَّلَـٰمُ</span>", fontType: "quran", theme: "pink", t: "golden"},
+            {w: "<span class='c-red'>ا</span><span class='c-black'>لسَّاعِي عَلَى </span><span class='c-red'>ا</span><span class='c-black'>لْأَرْمَلَةِ وَ</span><span class='c-red'>ا</span><span class='c-black'>لْمِسْكِينِ كَ</span><span class='c-red'>ا</span><span class='c-black'>لْمُجَاهِدِ</span>", fontType: "dictation", theme: "pink", t: "normal"},
 
-            // 5. ألف المد
-            {w: "<span class='c-black'>ءَامَنَ ٱل</span><span class='c-red'>رَّ</span><span class='c-black'>سُ</span><span class='c-red'>و</span><span class='c-black'>لُ بِمَ</span><span class='c-red'>آ</span> <span class='c-black'>أُ</span><span class='c-red'>نزِ</span><span class='c-black'>لَ إِلَ</span><span class='c-red'>يۡ</span><span class='c-black'>هِ <span class='sep-bar'>•</span> وَٱل</span><span class='c-red'>سَّ</span><span class='c-black'>مَ</span><span class='c-red'>آ</span><span class='c-black'>ءِ ذَاتِ ٱلۡبُرُ</span><span class='c-red'>و</span><span class='c-black'>جِ</span>", fontType: "quran", theme: "pink", t: "speed"},
-            {w: "<span class='c-black'>آمَنَ مُحَمَّدٌ وَصَدَقَ فِي إِيمَانِهِ</span>", fontType: "dictation", theme: "pink", t: "golden"},
+            // 5. ألف المد (Pink)
+            {w: "<span class='c-red'>ءَ</span><span class='c-black'>امَنَ ٱلرَّسُولُ بِ</span><span class='c-red'>مَآ</span> <span class='c-black'>أُنزِلَ إِلَيۡهِ <span class='sep-bar'>•</span> وَٱلسَّ</span><span class='c-red'>مَآ</span><span class='c-black'>ءِ ذَاتِ ٱلۡبُرُوجِ</span>", fontType: "quran", theme: "pink", t: "speed"},
+            {w: "<span class='c-red'>آ</span><span class='c-black'>مَنَ مُحَمَّدٌ وَصَدَقَ فِي إِيمَانِهِ</span>", fontType: "dictation", theme: "pink", t: "golden"},
 
-            // 6. الألف اللينة على صورة الياء
-            {w: "<span class='c-black'>وَٱل</span><span class='c-red'>ضُّ</span><span class='c-black'>حَ</span><span class='c-red'>ىٰ</span> <span class='c-black'>۝١ وَٱل</span><span class='c-red'>لَّ</span><span class='c-red'>يۡ</span><span class='c-black'>لِ إِذَا سَجَ</span><span class='c-red'>ىٰ</span>", fontType: "quran", theme: "green", t: "normal"},
-            {w: "<span class='c-black'>سَعَى الْمُصْلِحُونَ فِي الْخَيْرِ</span>", fontType: "dictation", theme: "green", t: "golden"},
+            // 6. الألف اللينة على صورة الياء (Blue)
+            {w: "<span class='c-black'>وَٱلضُّ</span><span class='c-red'>حَىٰ</span> <span class='c-black'>۝١ وَٱلَّيۡلِ إِذَا سَ</span><span class='c-red'>جَىٰ</span>", fontType: "quran", theme: "blue", t: "normal"},
+            {w: "<span class='c-black'>سَ</span><span class='c-red'>عَى</span> <span class='c-black'>الْمُصْلِحُونَ فِي الْخَيْرِ</span>", fontType: "dictation", theme: "blue", t: "golden"},
 
-            // 7. ياء المد
-            {w: "<span class='c-black'>وَلَا تُ</span><span class='c-red'>رۡ</span><span class='c-black'>هِ</span><span class='c-red'>قۡ</span><span class='c-black'>نِ</span><span class='c-red'>ى</span> <span class='c-black'>مِ</span><span class='c-red'>نۡ</span> <span class='c-black'>أَ</span><span class='c-red'>مۡ</span><span class='c-black'>رِ</span><span class='c-red'>ى</span> <span class='c-black'>عُ</span><span class='c-red'>سۡ</span><span class='c-black'>رٗا</span>", fontType: "quran", theme: "blue", t: "speed"},
-            {w: "<span class='c-black'>سَافَرَ أَخِي مَعَ أَبِي</span>", fontType: "dictation", theme: "blue", t: "normal"}
+            // 7. ياء المد (Pink)
+            {w: "<span class='c-black'>وَلَا تُرۡهِقۡ</span><span class='c-red'>نِى</span> <span class='c-black'>مِنۡ أَمۡ</span><span class='c-red'>رِى</span> <span class='c-black'>عُسۡرٗا</span>", fontType: "quran", theme: "pink", t: "speed"},
+            {w: "<span class='c-black'>سَافَرَ أَ</span><span class='c-red'>خِي</span> <span class='c-black'>مَعَ أَ</span><span class='c-red'>بِي</span>", fontType: "dictation", theme: "pink", t: "normal"}
         ];
     </script>
     <script src="../shared/core.js"></script>
