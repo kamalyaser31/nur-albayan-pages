@@ -14,9 +14,9 @@
 .font-quran {
     font-family: var(--font-quran);
     font-weight: 700;
-    font-feature-settings: "calt" 0, "liga" 0, "dlig" 0, "hlig" 0, "mkmk" 1, "mark" 1, "ccmp" 1;
+    font-feature-settings: "calt" 0, "liga" 1, "dlig" 0, "hlig" 0, "mkmk" 1, "mark" 1, "ccmp" 1;
     text-rendering: optimizeLegibility;
-    font-variant-ligatures: none;
+    font-variant-ligatures: normal;
     font-synthesis: none;
     line-height: 2.1;
     letter-spacing: normal !important;

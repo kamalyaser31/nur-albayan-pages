@@ -5,7 +5,7 @@
  * - Cache-First with Dynamic Runtime Fallback for Static Assets & Offline Fonts
  */
 
-const CACHE_VERSION = 'v7';
+const CACHE_VERSION = 'v8';
 const CACHE_STATIC_NAME = `nur-albayan-static-${CACHE_VERSION}`;
 const CACHE_RUNTIME_NAME = `nur-albayan-runtime-${CACHE_VERSION}`;
 

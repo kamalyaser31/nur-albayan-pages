@@ -489,7 +489,7 @@
                 <span class="text-xl" aria-hidden="true">➡</span>
             </button>` : '';
 
-        const game3StageHtml = (game3Type === 'riddles') ? `
+        const game3StageHtml = `
             <!-- STAGE 3C: MIDPOINT GAME 3 (SECRET RIDDLES) -->
             <section id="riddles-stage" class="hidden w-full h-full flex flex-col justify-center items-center text-center p-4 sm:p-6 rounded-[2.5rem] shadow-2xl text-white bg-slate-900 shrink-0 z-10">
                 <h2 class="text-3xl sm:text-4xl font-black text-amber-400 mt-2"><span aria-hidden="true">👑</span> <span data-i18n="secret_riddles_title">${escapeHTML(i18n.t('secret_riddles_title', 'صندوق الفوازير السرية'))}</span> <span aria-hidden="true">👑</span></h2>
@@ -502,7 +502,7 @@
                     <button onclick="riddlesGame.reset()" class="bg-purple-800/40 hover:bg-purple-800/60 border border-purple-400/30 text-white px-6 py-2.5 rounded-full font-bold text-sm backdrop-blur-sm" data-i18n-aria="reset" aria-label="${escapeHTML(i18n.t('reset'))}"><span data-i18n="reset">${escapeHTML(i18n.t('reset', 'إعادة ضبط'))}</span> <span aria-hidden="true">🔄</span></button>
                     <button id="riddles-resume-btn" onclick="app.resume(3)" class="bg-yellow-400 hover:bg-yellow-300 text-purple-900 px-8 py-2.5 rounded-full font-black text-sm shadow-md transition transform hover:-translate-y-0.5" data-i18n-aria="skip_and_read" aria-label="${escapeHTML(i18n.t('skip_and_read'))}"><span data-i18n="skip_and_read">${escapeHTML(i18n.t('skip_and_read', 'متابعة القراءة'))}</span> <span aria-hidden="true">⏭️</span></button>
                 </div>
-            </section>` : `
+            </section>
             <!-- STAGE 3C: MIDPOINT GAME 3 (MEMORY MATCH) -->
             <section id="memory-stage" class="hidden w-full h-full flex flex-col justify-center items-center text-center p-4 rounded-[2.5rem] shadow-2xl text-white bg-slate-900 relative overflow-hidden shrink-0 z-10">
                 <h2 class="text-2xl sm:text-3xl font-black text-amber-400 drop-shadow-md mt-1"><span data-i18n="game_memory">${escapeHTML(i18n.t('game_memory', 'تحدي الذاكرة'))}</span> <span aria-hidden="true">🧠</span></h2>

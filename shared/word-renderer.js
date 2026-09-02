@@ -113,11 +113,11 @@
 
             if (item.groups && Array.isArray(item.groups)) {
                 const inner = item.groups.map(g => `<span class="${_escapeHTML(g[1])}" style="margin:0 .25em">${_escapeHTML(g[0])}</span>`).join('');
-                return `<div class="letter-box ${fontClass} theme-${currentTheme} ${lengthClass}" style="direction: rtl;">${inner}</div>`;
+                return `<div class="letter-box theme-${currentTheme} ${lengthClass}"><span class="word-wrapper ${fontClass} text-center">${inner}</span></div>`;
             }
 
             if (item.html) {
-                return `<div class="letter-box ${fontClass} theme-${currentTheme} ${lengthClass}" style="direction: rtl;">${_sanitizeHTML(item.html)}</div>`;
+                return `<div class="letter-box theme-${currentTheme} ${lengthClass}"><span class="word-wrapper ${fontClass} text-center">${_sanitizeHTML(item.html)}</span></div>`;
             }
 
             if (Array.isArray(item.w)) {
