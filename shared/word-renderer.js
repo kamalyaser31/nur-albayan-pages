@@ -15,13 +15,56 @@
             .replace(/'/g, '&#39;');
     }
 
+    /**
+     * معالجة وترميم عيوب التجزئة في الحروف والخطوط القرآنية
+     * 1. دمج مركب اللام-ألف (لا) إذا شطرته وسوم span لمنع ظهوره كـ (لـا)
+     * 2. دمج الألف الخنجرية والمدود المعزولة مع الحرف السابق لها لمنع سقوطها على السطر
+     * 3. إزالة الكشيدات الزائدة الفاصلة قبل الألف الخنجرية (ـٰ -> ٰ)
+     * 4. تغليف الصفر المستدير (۟) بفئة quran-zero لضبط تموضعه وحجمه
+     */
+    function _healQuranicTypography(htmlStr) {
+        if (!htmlStr && htmlStr !== 0) return '';
+        let html = String(htmlStr);
+
+        // 1. دمج مركب اللام-ألف (لا) المتشظي عبر وسوم span
+        const lamAlifRegex = /<span\s+class=['"]([^'"]*)['"]>([^<]*?)ل([َُِّْ]*)<\/span>\s*<span\s+class=['"]([^'"]*)['"]>([اأإآآ][^<]*?)<\/span>/gi;
+        let prev = '';
+        while (prev !== html) {
+            prev = html;
+            html = html.replace(lamAlifRegex, (match, cls1, pre, haraka, cls2, alifAndRest) => {
+                const ligature = 'ل' + haraka + alifAndRest;
+                return pre ? (`<span class="${cls1}">${pre}</span><span class="${cls2}">${ligature}</span>`) : (`<span class="${cls2}">${ligature}</span>`);
+            });
+        }
+
+        // 2. دمج الألف الخنجرية وعلامات المد المعزولة مع الحرف السابق لها
+        const daggerRegex = /<span\s+class=['"]([^'"]*)['"]>([^<]*?)([\u0621-\u064A][\u064B-\u065F]*)ـ?<\/span>\s*<span\s+class=['"]([^'"]*)['"]>ـ?([\u0670\u06E5\u06E6][\u064B-\u065F]*)<\/span>/gi;
+        prev = '';
+        while (prev !== html) {
+            prev = html;
+            html = html.replace(daggerRegex, (match, cls1, pre, letter, cls2, mark) => {
+                const cleanMark = mark.replace(/ـ/g, '');
+                const combined = letter.replace(/ـ/g, '') + cleanMark;
+                return pre ? (`<span class="${cls1}">${pre}</span><span class="${cls2}">${combined}</span>`) : (`<span class="${cls2}">${combined}</span>`);
+            });
+        }
+
+        // 3. تطهير الكشيدات الزائدة الفاصلة قبل الألف الخنجرية وعلامات الصلة
+        html = html.replace(/ـ([\u0670\u06E5\u06E6])/g, '$1');
+
+        // 4. ضبط تموضع الصفر المستدير القرآني (۟)
+        html = html.replace(/([\u06DF])/g, '<span class="quran-zero">$1</span>');
+
+        return html;
+    }
+
     function _sanitizeHTML(htmlStr) {
         if (!htmlStr && htmlStr !== 0) return '';
         const allowedTags = ['span', 'bdi', 'bdo', 'div', 'p', 'strong', 'em', 'small', 'sup', 'sub'];
         const allowedAttrs = ['class', 'style', 'dir', 'lang', 'aria-label', 'aria-hidden'];
         const tagPattern = /<\/?([a-zA-Z0-9]+)([^>]*)>/gi;
 
-        return String(htmlStr).replace(tagPattern, (match, tagName, attrs) => {
+        const clean = String(htmlStr).replace(tagPattern, (match, tagName, attrs) => {
             const lowerTag = tagName.toLowerCase();
             if (!allowedTags.includes(lowerTag)) return '';
             if (match.startsWith('</')) return `</${lowerTag}>`;
@@ -41,6 +84,8 @@
             }
             return `<${lowerTag}${cleanAttrs}>`;
         });
+
+        return _healQuranicTypography(clean);
     }
 
     const ALLOWED_THEMES = new Set([

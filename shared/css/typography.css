@@ -14,7 +14,7 @@
 .font-quran {
     font-family: var(--font-quran);
     font-weight: 700;
-    font-feature-settings: "calt" 0, "liga" 1, "dlig" 0, "hlig" 0, "mkmk" 1, "mark" 1, "ccmp" 1;
+    font-feature-settings: "calt" 1, "liga" 1, "dlig" 0, "hlig" 0, "mkmk" 1, "mark" 1, "ccmp" 1;
     text-rendering: optimizeLegibility;
     font-variant-ligatures: normal;
     font-synthesis: none;
@@ -55,11 +55,22 @@ html.page-font-mixed, body.page-font-mixed {
 .c-amber { color: #d97706; }
 .c-darkblue { color: #1e3a8a; }
 
+/* Quranic Rounded Zero (الصفر المستدير) */
+.quran-zero {
+    display: inline;
+    font-size: 0.85em;
+    vertical-align: 0.15em;
+    line-height: 0;
+    opacity: 0.9;
+}
+
 /* Separator bar with WCAG 2.1 AA compliant contrast (4.63:1 against white) */
 .sep-bar {
     color: #64748b;
     margin-inline: 4px;
     font-weight: 400;
+    font-size: 0.75em;
+    vertical-align: middle;
 }
 
 /* Custom Scrollbar */

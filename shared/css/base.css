@@ -7,7 +7,15 @@
 @font-face {
     font-family: 'KFGQPC Uthmanic Hafs';
     font-style: normal;
-    font-weight: 400 700;
+    font-weight: 400;
+    src: local('KFGQPC Uthmanic Hafs'), local('KFGQPC Uthman Taha Naskh'), local('UthmanicHafs1Ver18'),
+         url('../vendor/fonts/kfgqpc-uthmanic-hafs.woff2') format('woff2');
+    font-display: swap;
+}
+@font-face {
+    font-family: 'KFGQPC Uthmanic Hafs';
+    font-style: normal;
+    font-weight: 700;
     src: local('KFGQPC Uthmanic Hafs'), local('KFGQPC Uthman Taha Naskh'), local('UthmanicHafs1Ver18'),
          url('../vendor/fonts/kfgqpc-uthmanic-hafs.woff2') format('woff2');
     font-display: swap;
