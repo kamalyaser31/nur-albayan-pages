@@ -504,8 +504,27 @@ const ladderGame = {
                 ? (isReached ? 'bg-amber-400 text-slate-900 border-2 border-amber-300 shadow-lg scale-105' : (isTarget ? 'bg-amber-200 text-amber-950 border-2 border-amber-400 ring-4 ring-amber-300 animate-pulse scale-105 font-black' : 'bg-amber-100 text-amber-800 border-2 border-amber-300/60'))
                 : (isReached ? 'bg-emerald-500 text-white shadow-md' : (isTarget ? 'bg-emerald-100 text-emerald-950 border-2 border-emerald-400 ring-4 ring-emerald-300 scale-102 font-black shadow-sm' : 'bg-white/60 text-slate-400 border border-slate-200'));
 
-            rung.className = `rung-step flex items-center justify-between p-2.5 rounded-xl font-bold text-xs transition-all duration-300 ${bgClass}`;
+            rung.className = `rung-step flex items-center justify-between p-2.5 rounded-xl font-bold text-xs transition-all duration-300 cursor-pointer select-none hover:opacity-95 active:scale-98 ${bgClass}`;
             rung.id = `ladder-rung-${s}`;
+            rung.setAttribute('role', 'button');
+            rung.tabIndex = 0;
+
+            rung.onclick = () => {
+                if (this.isCompleted) return;
+                if (s > this.currentStep) {
+                    this.grade(true);
+                } else {
+                    this.grade(false);
+                }
+            };
+            rung.onkeydown = (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    if (this.isCompleted) return;
+                    if (s > this.currentStep) this.grade(true);
+                    else this.grade(false);
+                }
+            };
 
             const stepAriaKey = isCrown ? (isReached ? 'aria_step_crown' : 'aria_step_unreached') : (isReached ? 'aria_step_reached' : 'aria_step_unreached');
             const stepAriaText = (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(stepAriaKey, null, { step: s }) : `Step ${s}`;
@@ -516,11 +535,11 @@ const ladderGame = {
             const stepIcon = isReached ? (isCrown ? '🏆' : '✔') : (isTarget ? '🎯' : '🔒');
 
             rung.innerHTML = `
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 pointer-events-none">
                     <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs ${isReached ? 'bg-white text-emerald-700 font-black' : (isTarget ? 'bg-emerald-600 text-white font-black' : 'bg-slate-200 text-slate-600')}">${s}</span>
                     <span>${isCrown ? crownLabel : stepLabel}</span>
                 </div>
-                <span class="text-sm">${stepIcon}</span>
+                <span class="text-sm pointer-events-none">${stepIcon}</span>
             `;
             fragment.appendChild(rung);
         }

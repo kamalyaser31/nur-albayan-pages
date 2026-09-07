@@ -120,17 +120,17 @@ const app = {
 
                 if (isOverlayOpen) {
                     if (e.key === 'Escape') app.closeOverlay();
-                    else if (e.key === '1' || e.key === 'ArrowUp') { e.preventDefault(); app.gradeResult(false); }
-                    else if (e.key === '2' || e.key === 'Enter' || e.key === ' ') { e.preventDefault(); app.gradeResult(true); }
+                    else if (e.key === '1' || e.key === '١' || e.key === 'ArrowUp') { e.preventDefault(); app.gradeResult(false); }
+                    else if (e.key === '2' || e.key === '٢' || e.key === 'Enter' || e.key === ' ') { e.preventDefault(); app.gradeResult(true); }
                     return;
                 }
 
                 const wwStage = document.getElementById('wordwall-stage');
                 const isWordwall = wwStage && !wwStage.classList.contains('hidden');
                 if (isWordwall && typeof wordwallRoom !== 'undefined' && wordwallRoom.mode === 'ladder' && typeof ladderGame !== 'undefined') {
-                    if (e.key === '1' || e.key === 'ArrowDown') { e.preventDefault(); ladderGame.grade(false); }
-                    else if (e.key === '2' || e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ladderGame.grade(true); }
-                    else if (e.key === 'r' || e.key === 'R') ladderGame.reset();
+                    if (e.key === '1' || e.key === '١' || e.key === 'ArrowDown') { e.preventDefault(); ladderGame.grade(false); }
+                    else if (e.key === '2' || e.key === '٢' || e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ladderGame.grade(true); }
+                    else if (e.key === 'r' || e.key === 'R' || e.key === 'ق') ladderGame.reset();
                     return;
                 }
 
@@ -141,10 +141,10 @@ const app = {
                     } else if (e.key === 'ArrowLeft' || e.key === 'PageDown' || e.key === 'n' || e.key === 'N') {
                         e.preventDefault();
                         app.next();
-                    } else if (e.key === '1' || e.key === 'ArrowDown') {
+                    } else if (e.key === '1' || e.key === '١' || e.key === 'ArrowDown') {
                         e.preventDefault();
                         app.evaluate(false);
-                    } else if (e.key === '2' || e.key === ' ' || e.key === 'Enter') {
+                    } else if (e.key === '2' || e.key === '٢' || e.key === ' ' || e.key === 'Enter') {
                         e.preventDefault();
                         app.evaluate(true);
                     }
